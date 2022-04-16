@@ -42,7 +42,7 @@ Player >> getShip [
 Player >> initilizeWithName: aName andShip: aShip [
 
 	name := aName.
-	ship := aShip
+	ship := aShip.
 ]
 
 { #category : #'as yet unclassified' }
