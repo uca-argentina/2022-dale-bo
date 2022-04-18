@@ -29,6 +29,11 @@ Board >> changeState: aState [
 	state:= aState.
 ]
 
+{ #category : #'as yet unclassified' }
+Board >> getState [
+	^ state.
+]
+
 { #category : #initialization }
 Board >> initializeWith: aNumberOfBoxes [
 	boxes := aNumberOfBoxes.

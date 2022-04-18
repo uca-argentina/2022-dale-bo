@@ -40,6 +40,14 @@ GameMaster >> getPlayers [
 	 ^ players.
 ]
 
+{ #category : #'as yet unclassified' }
+GameMaster >> getPositions [
+		| dict |
+	dict:=Dictionary new.
+	self getPlayers do:[:each | dict at:each put:((each getShip) getPosition)].
+	^ dict.
+]
+
 { #category : #initialization }
 GameMaster >> initializeWithPlayers: anArrayOfPlayers andInitWithBoard:aBoard [
 	players := anArrayOfPlayers.
@@ -50,8 +58,10 @@ GameMaster >> initializeWithPlayers: anArrayOfPlayers andInitWithBoard:aBoard [
 { #category : #'as yet unclassified' }
 GameMaster >> whoPlays [
 	| activePlayer |
+	(board getState) ifFalse:[Error signal: 'Game has ended'].
 	activePlayer := (players at: turn).
 	turn := turn +1.
+	
 	(turn > players size) ifTrue: [ turn:=1 ].
 	^ activePlayer.
 ]
