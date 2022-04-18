@@ -2,7 +2,8 @@ Class {
 	#name : #Board,
 	#superclass : #Object,
 	#instVars : [
-		'boxes'
+		'boxes',
+		'state'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -23,9 +24,15 @@ Board >> boxes [
 	^boxes
 ]
 
+{ #category : #accesing }
+Board >> changeState: aState [
+	state:= aState.
+]
+
 { #category : #initialization }
 Board >> initializeWith: aNumberOfBoxes [
 	boxes := aNumberOfBoxes.
+	state:= true.
 ]
 
 { #category : #accesing }
