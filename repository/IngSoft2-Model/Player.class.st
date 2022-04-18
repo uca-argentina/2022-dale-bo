@@ -49,3 +49,8 @@ Player >> initilizeWithName: aName andShip: aShip [
 Player >> moveItsShip:aSum [
 	ship changePositionTo: aSum.
 ]
+
+{ #category : #'as yet unclassified' }
+Player >> roll: aDiceCup [ 
+	^ aDiceCup roll.
+]

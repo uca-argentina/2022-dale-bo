@@ -21,8 +21,9 @@ PlayerTest >> should: aBlock raise: anError withMessage: anErrorMessage [
 { #category : #tests }
 PlayerTest >> testPlayerIsCreatedWithANameAndOneShip [
 
-	| player1  ship1  |
-	ship1:= Ship initialize.
+	| player1  ship1  aBoard |
+	aBoard:= Board with:10.
+	ship1 := Ship withBoard:aBoard.
 	player1:=Player withName:'Valen' withShip:ship1.
 	
 	self assert:(player1 getName sameAs: 'Valen').
@@ -41,8 +42,9 @@ PlayerTest >> testPlayerIsCreatedWithNameAndNoShip [
 
 { #category : #tests }
 PlayerTest >> testPlayerIsCreatedWithNoNameAndOneShip [
-	| ship1 |
-	ship1 := Ship initialize.
+	| ship1 aBoard |
+	aBoard:= Board with:10.
+	ship1 := Ship withBoard:aBoard.
 	
 	self 
 		should: [ Player withName:'' withShip:ship1]
@@ -53,10 +55,15 @@ PlayerTest >> testPlayerIsCreatedWithNoNameAndOneShip [
 { #category : #tests }
 PlayerTest >> testPlayerMovesHisShip [
 
-	| player1 ship1 |
-	ship1:= Ship initialize.
+	| player1 ship1 aBoard dieOne dieTwo dieThree aDiceCup |
+	aBoard:= Board with:10.
+	ship1 := Ship withBoard:aBoard.
 	player1:=Player withName:'Valen' withShip:ship1.
-	player1 moveItsShip:4.
-	self assert: (ship1 getPosition = 4).
+	dieOne := LoadedDie with: 1.
+	dieTwo := LoadedDie with: 2.
+	dieThree := LoadedDie with: 3.
+	aDiceCup := DiceCup withAll: { dieOne. dieTwo. dieThree }.
+	player1 moveItsShip:(player1 roll:aDiceCup).
+	self assert: (ship1 getPosition = 6).
 
 ]

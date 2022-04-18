@@ -3,7 +3,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'players',
-		'turn'
+		'turn',
+		'board'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -20,11 +21,18 @@ GameMaster class >> assertArrayOfPlayersIsFullOfPlayersObjects:anArrayOfPlayers 
 
 ]
 
+{ #category : #asserting }
+GameMaster class >> assertBoardIsValid: aBoard [ 
+	aBoard className = 'Board' ifFalse: [ 
+		Error signal: 'GameMaster must have a board']
+]
+
 { #category : #'as yet unclassified' }
-GameMaster class >> withPlayers: anArrayOfPlayers [
+GameMaster class >> withPlayers: anArrayOfPlayers andBoard: aBoard [ 
 	self assertArrayOfPlayersIsAnArrayWithMoreThanOneSize:anArrayOfPlayers.
 	self assertArrayOfPlayersIsFullOfPlayersObjects:anArrayOfPlayers.
-	^self new initializeWithPlayers: anArrayOfPlayers.
+	self assertBoardIsValid: aBoard.
+	^self new initializeWithPlayers: anArrayOfPlayers andInitWithBoard:aBoard.
 ]
 
 { #category : #'as yet unclassified' }
@@ -33,9 +41,10 @@ GameMaster >> getPlayers [
 ]
 
 { #category : #initialization }
-GameMaster >> initializeWithPlayers: anArrayOfPlayers [
+GameMaster >> initializeWithPlayers: anArrayOfPlayers andInitWithBoard:aBoard [
 	players := anArrayOfPlayers.
 	turn := 1.
+	board:= aBoard.
 ]
 
 { #category : #'as yet unclassified' }

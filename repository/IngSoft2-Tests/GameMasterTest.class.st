@@ -20,15 +20,16 @@ GameMasterTest >> should: aBlock raise: anError withMessage: anErrorMessage [
 
 { #category : #tests }
 GameMasterTest >> testGameMasterGameOrder [
-	| gameMaster player1 player2 ship1 ship2 setOfPlayers|
-	ship1 := Ship initialize.
-	ship2 := Ship initialize.
+	| gameMaster player1 player2 ship1 ship2 setOfPlayers aBoard |
+	aBoard:= Board with:10.
+	ship1 := Ship withBoard:aBoard.
+	ship2 := Ship withBoard:aBoard.
 	player1:=Player withName:'Valen' withShip:ship1.
 	player2:=Player withName:'Pablo' withShip:ship2.
 	setOfPlayers:= Array new: 2.
 	setOfPlayers at: 1 put: player1.
 	setOfPlayers at: 2 put: player2.
-	gameMaster:= GameMaster withPlayers: setOfPlayers.
+	gameMaster:= GameMaster withPlayers: setOfPlayers andBoard:aBoard.
 	self assert: ((gameMaster whoPlays) = player1).
 	self assert: ((gameMaster whoPlays) = player2).
 	self assert: ((gameMaster whoPlays) = player1).
@@ -36,13 +37,14 @@ GameMasterTest >> testGameMasterGameOrder [
 
 { #category : #tests }
 GameMasterTest >> testGameMasterIsCreatedWithAnArrayOfOnePlayer [
-	| player1  ship1  arrayOfPlayers|
-	ship1:= Ship initialize.
-	player1:=Player withName:'Pablo' withShip:ship1.
+	| player1  ship1  arrayOfPlayers aBoard |
+	aBoard:= Board with:10.
+	ship1 := Ship withBoard:aBoard.
+	player1:=Player withName:'Valen' withShip:ship1.
 	arrayOfPlayers:= Array new: 1.
 	arrayOfPlayers at:1 put:player1.
 	self 
-		should: [ GameMaster withPlayers: arrayOfPlayers]
+		should: [  GameMaster withPlayers: arrayOfPlayers andBoard:aBoard]
 		raise: Error
 		withMessage: 'GameMaster must have an array of players with a size greater than one'.
 ]
@@ -50,27 +52,29 @@ GameMasterTest >> testGameMasterIsCreatedWithAnArrayOfOnePlayer [
 { #category : #tests }
 GameMasterTest >> testGameMasterIsCreatedWithAnArrayOfPlayers [
 
-	| gameMaster player1 player2 ship1 ship2 setOfPlayers|
-	ship1 := Ship initialize.
-	ship2 := Ship initialize.
+	| gameMaster player1 player2 ship1 ship2 setOfPlayers aBoard |
+	aBoard:= Board with:10.
+	ship1 := Ship withBoard:aBoard.
+	ship2 := Ship withBoard:aBoard.
 	player1:=Player withName:'Valen' withShip:ship1.
 	player2:=Player withName:'Pablo' withShip:ship2.
 	setOfPlayers:= Array new: 2.
 	setOfPlayers at: 1 put: player1.
 	setOfPlayers at: 2 put: player2.
-	gameMaster:= GameMaster withPlayers: setOfPlayers.
+	gameMaster:= GameMaster withPlayers: setOfPlayers andBoard:aBoard.
 	self assert: ((gameMaster getPlayers at: 2)  = player2).
 	self deny: ((gameMaster getPlayers at: 1)  = player2).
 ]
 
 { #category : #tests }
 GameMasterTest >> testGameMasterIsCreatedWithAnArrayOfStrings [
-	|  arrayOfPlayers|
+	|  arrayOfPlayers aBoard |
+	aBoard:= Board with:10.
 	arrayOfPlayers:= Array new: 2.
 	arrayOfPlayers at:1 put:'player1'.
 	arrayOfPlayers at:1 put:'player2'.
 	self 
-		should: [ GameMaster withPlayers: arrayOfPlayers]
+		should: [ GameMaster withPlayers: arrayOfPlayers andBoard:aBoard.]
 		raise: Error
 		withMessage: 'GameMaster must have an array of players full of players'.
 ]
@@ -79,7 +83,26 @@ GameMasterTest >> testGameMasterIsCreatedWithAnArrayOfStrings [
 GameMasterTest >> testGameMasterIsCreatedWithNoArrayOfPlayers [
 	
 	self 
-		should: [ GameMaster withPlayers: '']
+		should: [ GameMaster withPlayers: '' andBoard:(Board with:10)]
 		raise: Error
 		withMessage: 'GameMaster must have an array of players with a size greater than one'.
+]
+
+{ #category : #tests }
+GameMasterTest >> testGameMasterIsCreatedWithNoBoard [
+	|  player1 player2 ship1 ship2 setOfPlayers aBoard |
+	
+	aBoard:= Board with:10.
+	ship1 := Ship withBoard:aBoard.
+	ship2 := Ship withBoard:aBoard.
+	player1:=Player withName:'Valen' withShip:ship1.
+	player2:=Player withName:'Pablo' withShip:ship2.
+	setOfPlayers:= Array new: 2.
+	setOfPlayers at: 1 put: player1.
+	setOfPlayers at: 2 put: player2.
+	
+	self 
+		should: [ GameMaster withPlayers: setOfPlayers  andBoard:'']
+		raise: Error
+		withMessage: 'GameMaster must have a board'.
 ]
