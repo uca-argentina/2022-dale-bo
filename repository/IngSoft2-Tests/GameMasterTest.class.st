@@ -20,19 +20,20 @@ GameMasterTest >> should: aBlock raise: anError withMessage: anErrorMessage [
 
 { #category : #tests }
 GameMasterTest >> testGameMasterGameOrder [
+
 	| gameMaster player1 player2 ship1 ship2 setOfPlayers aBoard |
-	aBoard:= Board with:10.
-	ship1 := Ship withBoard:aBoard.
-	ship2 := Ship withBoard:aBoard.
-	player1:=Player withName:'Valen' withShip:ship1.
-	player2:=Player withName:'Pablo' withShip:ship2.
-	setOfPlayers:= Array new: 2.
+	aBoard := Board with: 10.
+	ship1 := Ship withBoard: aBoard.
+	ship2 := Ship withBoard: aBoard.
+	player1 := Player withName: 'Valen' withShip: ship1.
+	player2 := Player withName: 'Pablo' withShip: ship2.
+	setOfPlayers := Array new: 2.
 	setOfPlayers at: 1 put: player1.
 	setOfPlayers at: 2 put: player2.
-	gameMaster:= GameMaster withPlayers: setOfPlayers andBoard:aBoard.
-	self assert: ((gameMaster whoPlays)  = player1 ).
-	self assert: ((gameMaster whoPlays) = player2).
-	self assert: ((gameMaster whoPlays) = player1).
+	gameMaster := GameMaster withPlayers: setOfPlayers andBoard: aBoard.
+	self assert: gameMaster whoPlays = player1.
+	self assert: gameMaster whoPlays equals: player2.
+	self assert: gameMaster whoPlays = player1
 ]
 
 { #category : #tests }
@@ -166,16 +167,4 @@ GameMasterTest >> testGameMasterReturnsWhoHasWon [
 	(gameMaster whoPlays) moveItsShip: die.
 	(gameMaster whoPlays) moveItsShip: die.
 	self assert:(gameMaster winner) = player1.
-]
-
-{ #category : #tests }
-GameMasterTest >> testSpaceShipMovesThreePositions [
-
-	
-	| spaceship1 aBoard |
-	aBoard:= Board with:10.
-	spaceship1 := Ship withBoard:aBoard.
-	spaceship1 changePositionTo:3.
-	self assert: (spaceship1 positionOf == 3).
-	self deny: (spaceship1 positionOf == 2).
 ]
