@@ -63,7 +63,7 @@ PlayerTest >> testPlayerMovesHisShip [
 	dieTwo := LoadedDie with: 2.
 	dieThree := LoadedDie with: 3.
 	aDiceCup := DiceCup withAll: { dieOne. dieTwo. dieThree }.
-	player1 moveItsShip:(player1 roll:aDiceCup).
-	self assert: (ship1 getPosition = 6).
+	player1 moveItsShip:aDiceCup.
+	self assert: (ship1 positionOf = 6).
 
 ]

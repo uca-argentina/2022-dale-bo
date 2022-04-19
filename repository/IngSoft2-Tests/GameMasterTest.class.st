@@ -109,7 +109,7 @@ GameMasterTest >> testGameMasterIsCreatedWithNoBoard [
 
 { #category : #tests }
 GameMasterTest >> testGameMasterReturnsErrorWhenGameHasFinishAndSomeoneWantsToPlay [
-	| gameMaster player1 player2 ship1 ship2 setOfPlayers aBoard |
+	| gameMaster player1 player2 ship1 ship2 setOfPlayers aBoard die |
 	aBoard:= Board with:10.
 	ship1 := Ship withBoard:aBoard.
 	ship2 := Ship withBoard:aBoard.
@@ -118,18 +118,19 @@ GameMasterTest >> testGameMasterReturnsErrorWhenGameHasFinishAndSomeoneWantsToPl
 	setOfPlayers:= Array new: 2.
 	setOfPlayers at: 1 put: player1.
 	setOfPlayers at: 2 put: player2.
+	die := LoadedDie with: 11.
 	gameMaster:= GameMaster withPlayers: setOfPlayers andBoard:aBoard.
-	(gameMaster whoPlays) moveItsShip: 11.
+	(gameMaster whoPlays) moveItsShip: die.
 	
 		self
-		should: [ (gameMaster whoPlays) moveItsShip: 1.]
+		should: [ (gameMaster whoPlays) moveItsShip: die.]
 		raise: Error
 		withMessage: 'Game has ended'.
 ]
 
 { #category : #tests }
 GameMasterTest >> testGameMasterReturnsPositions [
-	| gameMaster player1 player2 ship1 ship2 setOfPlayers aBoard dieOne dieTwo activePlayer |
+	| gameMaster player1 player2 ship1 ship2 setOfPlayers aBoard dieOne dieTwo |
 	aBoard:= Board with:10.
 	ship1 := Ship withBoard:aBoard.
 	ship2 := Ship withBoard:aBoard.
@@ -141,11 +142,28 @@ GameMasterTest >> testGameMasterReturnsPositions [
 	dieOne := LoadedDie with: 1.
 	dieTwo := LoadedDie with: 2.
 	gameMaster:= GameMaster withPlayers: setOfPlayers andBoard:aBoard.
-	activePlayer:=gameMaster whoPlays.
-	activePlayer moveItsShip:(activePlayer roll:dieOne).
-	activePlayer:=gameMaster whoPlays.
-	activePlayer moveItsShip:(activePlayer roll:dieTwo).
+	(gameMaster whoPlays) moveItsShip: dieOne.
+	(gameMaster whoPlays) moveItsShip: dieTwo.
 	
 	self assert:(gameMaster getPositions at:player1) = 1.
 	self assert:(gameMaster getPositions at:player2) = 2.
+]
+
+{ #category : #tests }
+GameMasterTest >> testGameMasterReturnsWhoHasWon [
+	| gameMaster player1 player2 ship1 ship2 setOfPlayers aBoard die |
+	aBoard:= Board with:10.
+	ship1 := Ship withBoard:aBoard.
+	ship2 := Ship withBoard:aBoard.
+	player1:=Player withName:'Valen' withShip:ship1.
+	player2:=Player withName:'Pablo' withShip:ship2.
+	setOfPlayers:= Array new: 2.
+	setOfPlayers at: 1 put: player1.
+	setOfPlayers at: 2 put: player2.
+	die := LoadedDie with: 6.
+	gameMaster:= GameMaster withPlayers: setOfPlayers andBoard:aBoard.
+	(gameMaster whoPlays) moveItsShip: die.
+	(gameMaster whoPlays) moveItsShip: die.
+	(gameMaster whoPlays) moveItsShip: die.
+	self assert:(gameMaster winner) = player1.
 ]

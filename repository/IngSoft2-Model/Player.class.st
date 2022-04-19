@@ -46,7 +46,9 @@ Player >> initilizeWithName: aName andShip: aShip [
 ]
 
 { #category : #'as yet unclassified' }
-Player >> moveItsShip:aSum [
+Player >> moveItsShip:aDiceCup [
+	| aSum |
+	aSum := self roll: aDiceCup.
 	ship changePositionTo: aSum.
 ]
 

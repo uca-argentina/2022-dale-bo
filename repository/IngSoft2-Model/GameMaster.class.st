@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'players',
 		'turn',
-		'board'
+		'board',
+		'theresAWinner'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -44,7 +45,7 @@ GameMaster >> getPlayers [
 GameMaster >> getPositions [
 		| dict |
 	dict:=Dictionary new.
-	self getPlayers do:[:each | dict at:each put:((each getShip) getPosition)].
+	self getPlayers do:[:each | dict at:each put:((each getShip) positionOf)].
 	^ dict.
 ]
 
@@ -52,6 +53,7 @@ GameMaster >> getPositions [
 GameMaster >> initializeWithPlayers: anArrayOfPlayers andInitWithBoard:aBoard [
 	players := anArrayOfPlayers.
 	turn := 1.
+	theresAWinner :=false.
 	board:= aBoard.
 ]
 
@@ -64,4 +66,12 @@ GameMaster >> whoPlays [
 	
 	(turn > players size) ifTrue: [ turn:=1 ].
 	^ activePlayer.
+]
+
+{ #category : #'as yet unclassified' }
+GameMaster >> winner [
+	| winner |
+	winner:= players detect:[:each | ((each getShip) positionOf) = board lastPosition] ifNone: [^false].
+	theresAWinner:=true.
+	^winner
 ]

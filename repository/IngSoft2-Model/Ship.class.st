@@ -28,15 +28,15 @@ Ship >> changePositionTo: aSum [
 	(position > board lastPosition) ifTrue:[position:= board lastPosition. board changeState:false.]. 
 ]
 
-{ #category : #'as yet unclassified' }
-Ship >> getPosition [
-
-	^position 
-]
-
 { #category : #initialization }
 Ship >> initializeAtPositionZeroAndBoard:aBoard [
 
 	position:=0.
 	board:= aBoard.
+]
+
+{ #category : #'as yet unclassified' }
+Ship >> positionOf [
+
+	^position 
 ]
