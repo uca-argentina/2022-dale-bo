@@ -29,11 +29,6 @@ Board >> changeState: aState [
 	state:= aState.
 ]
 
-{ #category : #'as yet unclassified' }
-Board >> getState [
-	^ state.
-]
-
 { #category : #initialization }
 Board >> initializeWith: aNumberOfBoxes [
 	boxes := aNumberOfBoxes.
@@ -43,4 +38,9 @@ Board >> initializeWith: aNumberOfBoxes [
 { #category : #accesing }
 Board >> lastPosition [
 	^self boxes.
+]
+
+{ #category : #accesing }
+Board >> state [
+	^ state.
 ]

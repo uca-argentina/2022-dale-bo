@@ -26,8 +26,8 @@ PlayerTest >> testPlayerIsCreatedWithANameAndOneShip [
 	ship1 := Ship withBoard:aBoard.
 	player1:=Player withName:'Valen' withShip:ship1.
 	
-	self assert:(player1 getName sameAs: 'Valen').
-	self assert:(player1 getShip =ship1). 
+	self assert:(player1 name sameAs: 'Valen').
+	self assert:(player1 ship = ship1). 
 
 ]
 
@@ -64,6 +64,6 @@ PlayerTest >> testPlayerMovesHisShip [
 	dieThree := LoadedDie with: 3.
 	aDiceCup := DiceCup withAll: { dieOne. dieTwo. dieThree }.
 	player1 moveItsShip:aDiceCup.
-	self assert: (ship1 positionOf = 6).
+	self assert: (ship1 positionOf) equals: 6.
 
 ]

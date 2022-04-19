@@ -27,17 +27,6 @@ Player class >> withName: aName withShip: aShip [
 	^self new initilizeWithName:aName andShip:aShip.
 ]
 
-{ #category : #private }
-Player >> getName [
-	^ name.
-]
-
-{ #category : #private }
-Player >> getShip [
-
-	^ship.
-]
-
 { #category : #initialization }
 Player >> initilizeWithName: aName andShip: aShip [
 
@@ -45,14 +34,25 @@ Player >> initilizeWithName: aName andShip: aShip [
 	ship := aShip.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #action }
 Player >> moveItsShip:aDiceCup [
 	| aSum |
 	aSum := self roll: aDiceCup.
 	ship changePositionTo: aSum.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accesing }
+Player >> name [
+	^ name.
+]
+
+{ #category : #action }
 Player >> roll: aDiceCup [ 
 	^ aDiceCup roll.
+]
+
+{ #category : #accesing }
+Player >> ship [
+
+	^ship.
 ]

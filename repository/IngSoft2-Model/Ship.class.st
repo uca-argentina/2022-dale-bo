@@ -22,9 +22,9 @@ Ship class >> withBoard: aBoard [
 	^self new initializeAtPositionZeroAndBoard:aBoard.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #action }
 Ship >> changePositionTo: aSum [ 
-	position:=position + aSum.
+	position := position + aSum.
 	(position > board lastPosition) ifTrue:[position:= board lastPosition. board changeState:false.]. 
 ]
 
@@ -35,7 +35,7 @@ Ship >> initializeAtPositionZeroAndBoard:aBoard [
 	board:= aBoard.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accesing }
 Ship >> positionOf [
 
 	^position 

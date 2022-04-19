@@ -30,7 +30,7 @@ GameMasterTest >> testGameMasterGameOrder [
 	setOfPlayers at: 1 put: player1.
 	setOfPlayers at: 2 put: player2.
 	gameMaster:= GameMaster withPlayers: setOfPlayers andBoard:aBoard.
-	self assert: ((gameMaster whoPlays) = player1).
+	self assert: ((gameMaster whoPlays)  = player1 ).
 	self assert: ((gameMaster whoPlays) = player2).
 	self assert: ((gameMaster whoPlays) = player1).
 ]
@@ -38,9 +38,9 @@ GameMasterTest >> testGameMasterGameOrder [
 { #category : #tests }
 GameMasterTest >> testGameMasterIsCreatedWithAnArrayOfOnePlayer [
 	| player1  ship1  arrayOfPlayers aBoard |
-	aBoard:= Board with:10.
+	aBoard := Board with:10.
 	ship1 := Ship withBoard:aBoard.
-	player1:=Player withName:'Valen' withShip:ship1.
+	player1 := Player withName:'Valen' withShip:ship1.
 	arrayOfPlayers:= Array new: 1.
 	arrayOfPlayers at:1 put:player1.
 	self 
@@ -62,8 +62,8 @@ GameMasterTest >> testGameMasterIsCreatedWithAnArrayOfPlayers [
 	setOfPlayers at: 1 put: player1.
 	setOfPlayers at: 2 put: player2.
 	gameMaster:= GameMaster withPlayers: setOfPlayers andBoard:aBoard.
-	self assert: ((gameMaster getPlayers at: 2)  = player2).
-	self deny: ((gameMaster getPlayers at: 1)  = player2).
+	self assert: ((gameMaster players at: 2)  = player2).
+	self deny: ((gameMaster players at: 1)  = player2).
 ]
 
 { #category : #tests }
@@ -145,8 +145,8 @@ GameMasterTest >> testGameMasterReturnsPositions [
 	(gameMaster whoPlays) moveItsShip: dieOne.
 	(gameMaster whoPlays) moveItsShip: dieTwo.
 	
-	self assert:(gameMaster getPositions at:player1) = 1.
-	self assert:(gameMaster getPositions at:player2) = 2.
+	self assert:(gameMaster allPositions at:player1) equals: 1.
+	self assert:(gameMaster allPositions at:player2) equals: 2.
 ]
 
 { #category : #tests }
@@ -166,4 +166,16 @@ GameMasterTest >> testGameMasterReturnsWhoHasWon [
 	(gameMaster whoPlays) moveItsShip: die.
 	(gameMaster whoPlays) moveItsShip: die.
 	self assert:(gameMaster winner) = player1.
+]
+
+{ #category : #tests }
+GameMasterTest >> testSpaceShipMovesThreePositions [
+
+	
+	| spaceship1 aBoard |
+	aBoard:= Board with:10.
+	spaceship1 := Ship withBoard:aBoard.
+	spaceship1 changePositionTo:3.
+	self assert: (spaceship1 positionOf == 3).
+	self deny: (spaceship1 positionOf == 2).
 ]

@@ -36,16 +36,11 @@ GameMaster class >> withPlayers: anArrayOfPlayers andBoard: aBoard [
 	^self new initializeWithPlayers: anArrayOfPlayers andInitWithBoard:aBoard.
 ]
 
-{ #category : #'as yet unclassified' }
-GameMaster >> getPlayers [
-	 ^ players.
-]
-
-{ #category : #'as yet unclassified' }
-GameMaster >> getPositions [
+{ #category : #accesing }
+GameMaster >> allPositions [
 		| dict |
 	dict:=Dictionary new.
-	self getPlayers do:[:each | dict at:each put:((each getShip) positionOf)].
+	self players do:[:each | dict at:each put:((each ship) positionOf)].
 	^ dict.
 ]
 
@@ -57,10 +52,15 @@ GameMaster >> initializeWithPlayers: anArrayOfPlayers andInitWithBoard:aBoard [
 	board:= aBoard.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accesing }
+GameMaster >> players [
+	 ^ players.
+]
+
+{ #category : #action }
 GameMaster >> whoPlays [
 	| activePlayer |
-	(board getState) ifFalse:[Error signal: 'Game has ended'].
+	(board state) ifFalse:[Error signal: 'Game has ended'].
 	activePlayer := (players at: turn).
 	turn := turn +1.
 	
@@ -68,10 +68,10 @@ GameMaster >> whoPlays [
 	^ activePlayer.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accesing }
 GameMaster >> winner [
 	| winner |
-	winner:= players detect:[:each | ((each getShip) positionOf) = board lastPosition] ifNone: [^false].
+	winner:= players detect:[:each | ((each ship) positionOf) = board lastPosition] ifNone: [^false].
 	theresAWinner:=true.
 	^winner
 ]
