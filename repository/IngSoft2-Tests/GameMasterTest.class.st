@@ -63,8 +63,8 @@ GameMasterTest >> testGameMasterIsCreatedWithAnArrayOfPlayers [
 	setOfPlayers at: 1 put: player1.
 	setOfPlayers at: 2 put: player2.
 	gameMaster:= GameMaster withPlayers: setOfPlayers andBoard:aBoard.
-	self assert: ((gameMaster players at: 2)  = player2).
-	self deny: ((gameMaster players at: 1)  = player2).
+	self assert: (gameMaster players at: 2)  equals:player2.
+	self deny: (gameMaster players at: 1)  equals: player2.
 ]
 
 { #category : #tests }
@@ -166,5 +166,5 @@ GameMasterTest >> testGameMasterReturnsWhoHasWon [
 	(gameMaster whoPlays) moveItsShip: die.
 	(gameMaster whoPlays) moveItsShip: die.
 	(gameMaster whoPlays) moveItsShip: die.
-	self assert:(gameMaster winner) = player1.
+	self assert:(gameMaster winner) equals:player1.
 ]

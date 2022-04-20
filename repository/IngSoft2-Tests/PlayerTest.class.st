@@ -27,7 +27,7 @@ PlayerTest >> testPlayerIsCreatedWithANameAndOneShip [
 	player1:=Player withName:'Valen' withShip:ship1.
 	
 	self assert:(player1 name sameAs: 'Valen').
-	self assert:(player1 ship = ship1). 
+	self assert:(player1 ship) equals: ship1. 
 
 ]
 
