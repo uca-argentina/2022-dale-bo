@@ -3,36 +3,31 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'position',
-		'board'
+		'board',
+		'name'
 	],
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #asserting }
-Ship class >> assertBoardIsValid: aBoard [ 
-	aBoard className = 'Board' ifFalse: [ 
-		Error signal: 'Ship must have a board']
-]
-
-{ #category : #initialization }
-Ship class >> withBoard: aBoard [
-
-	self assertBoardIsValid:aBoard.
-
-	^self new initializeAtPositionZeroAndBoard:aBoard.
+{ #category : #'instance creation' }
+Ship class >> withName: aName [
+	^self new initializeWithName:aName.
 ]
 
 { #category : #action }
-Ship >> changePositionTo: aSum [ 
-	position := position + aSum.
-	(position > board lastPosition) ifTrue:[position:= board lastPosition. board changeState:false.]. 
+Ship >> changePositionTo: aPosition [ 
+	position := aPosition.
 ]
 
-{ #category : #initialization }
-Ship >> initializeAtPositionZeroAndBoard:aBoard [
-
+{ #category : #initalize }
+Ship >> initializeWithName: aName [ 
+	name:=aName.
 	position:=0.
-	board:= aBoard.
+]
+
+{ #category : #accessing }
+Ship >> name [
+	^ name
 ]
 
 { #category : #accesing }
