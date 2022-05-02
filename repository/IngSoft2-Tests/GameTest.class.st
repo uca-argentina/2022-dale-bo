@@ -19,6 +19,49 @@ GameTest >> should: aBlock raise: anError withMessage: anErrorMessage [
 ]
 
 { #category : #tests }
+GameTest >> testAGameHasAWinner [
+
+	| ship1 ships aBoard sequenceController dieOne dieTwo dieThree aDiceCup game ship2 |
+	aBoard := Board with: 60.
+	ship1 := Ship withName: 'Valen'.
+	ship2:= Ship withName:'Pablito'.
+	ships := { ship1.ship2.}.
+	sequenceController := SequenceController withShips: ships.
+	dieOne := LoadedDie with: 1.
+	dieTwo := LoadedDie with: 2.
+	dieThree := LoadedDie with: 3.
+	aDiceCup := DiceCup withAll: { dieOne. dieTwo. dieThree }.
+	game:=Game withShips: ships aBoard: aBoard shipsSequenceController: sequenceController 
+	andDiceCup: 	aDiceCup.
+	[game hasFinished] whileFalse:  [game playATurn].
+	self assert: (game winner) equals: 'Valen'.
+	self deny: (game winner) equals: 'Pablito'.
+	
+
+]
+
+{ #category : #tests }
+GameTest >> testAGameHasFinishedWhenAShipWins [
+
+	| ship1 ships aBoard sequenceController dieOne dieTwo dieThree aDiceCup game ship2 |
+	aBoard := Board with: 6.
+	ship1 := Ship withName: 'Valen'.
+	ship2:= Ship withName:'Pablito'.
+	ships := { ship1.ship2.}.
+	sequenceController := SequenceController withShips: ships.
+	dieOne := LoadedDie with: 1.
+	dieTwo := LoadedDie with: 2.
+	dieThree := LoadedDie with: 3.
+	aDiceCup := DiceCup withAll: { dieOne. dieTwo. dieThree }.
+	game:=Game withShips: ships aBoard: aBoard shipsSequenceController: sequenceController 
+	andDiceCup: 	aDiceCup.
+	self assert: (game hasFinished) equals:false.
+	game playATurn.
+	self assert: (game hasFinished) equals:true.
+
+]
+
+{ #category : #tests }
 GameTest >> testAGameIsCreatedWithLessThanTwoShips [
 
 	| ship1 ships aBoard sequenceController dieOne dieTwo dieThree aDiceCup |

@@ -5,7 +5,9 @@ Class {
 		'board',
 		'ships',
 		'sequenceController',
-		'diceCup'
+		'diceCup',
+		'finished',
+		'winner'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -25,18 +27,28 @@ Game class >> withShips: aCollectionOfShips aBoard: aBoard shipsSequenceControll
 	^self new initializeWithShips:aCollectionOfShips withBoard: aBoard SequenceController:aSequenceController andWithDiceCup: aDiceCup.
 ]
 
+{ #category : #accessing }
+Game >> hasFinished [
+	^ finished.
+]
+
 { #category : #initialization }
 Game >> initializeWithShips:aCollectionOfShips withBoard: aBoard 	SequenceController:aSequenceController andWithDiceCup: aDiceCup [
 	ships:= aCollectionOfShips.
 	board:= aBoard.
 	sequenceController:= aSequenceController.
 	diceCup:= aDiceCup.
+	finished:= false.
 	
 ]
 
 { #category : #action }
 Game >> playATurn [
-	(sequenceController whoPlays) changePositionTo: (diceCup roll).
+	| shipNewPosition |
+	shipNewPosition:= diceCup roll + (sequenceController whoPlays) positionOf.
+	(shipNewPosition >= board lastPosition) ifTrue: [shipNewPosition:= board lastPosition. 
+	finished:= 	true. winner:= (sequenceController whoPlays) name].
+	(sequenceController whoPlays) changePositionTo: shipNewPosition.
 	(sequenceController changeTurn)
 ]
 
@@ -45,4 +57,9 @@ Game >> positionOf: aShipsName [
 	
 	ships do: [ :each | ((each name) = aShipsName) ifTrue:[^ each positionOf] ].
 
+]
+
+{ #category : #actions }
+Game >> winner [
+	^ winner.
 ]
