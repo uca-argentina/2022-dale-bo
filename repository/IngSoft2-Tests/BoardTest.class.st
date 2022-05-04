@@ -15,28 +15,26 @@ BoardTest >> should: block raise: classError whoseDescriptionIncludes: anErrorMe
 
 { #category : #tests }
 BoardTest >> testABoardCannotHaveLessThanOneBox [
-	
-	self 
-		should: [Board with: 0]
-		raise: Error	
-		whoseDescriptionIncludes: 'A board must have at least one box'.
+
+	self
+		should: [ Board with: 0 ]
+		raise: Error
+		whoseDescriptionIncludes: 'A board must have at least one box'
 ]
 
 { #category : #tests }
 BoardTest >> testABoardMustHaveAtLeastOneBox [
-	
+
 	| aBoard |
-	
 	aBoard := Board with: 1.
-	self assert: aBoard boxes > 0.
+	self assert: aBoard lastPosition > 0
 ]
 
 { #category : #tests }
 BoardTest >> testTheLastPositionOfABoardMustBeTheTotalNumberOfBoxes [
-	
-	| aBoard boxes|
-	
+
+	| aBoard boxes |
 	boxes := 15.
 	aBoard := Board with: boxes.
-	self assert: aBoard lastPosition equals: 15.
+	self assert: aBoard lastPosition equals: 15
 ]

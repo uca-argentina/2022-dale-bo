@@ -15,16 +15,18 @@ LoadedDieTest >> should: aBlock raise: anErrorClass whoseDescriptionIncludes: an
 
 { #category : #tests }
 LoadedDieTest >> testLoadedDieCantBeLoadedWith0 [
-	self 
+
+	self
 		should: [ LoadedDie with: 0 ]
 		raise: Error
-		whoseDescriptionIncludes: 'Number of faces should be greater than 0'.
+		whoseDescriptionIncludes: 'Number of faces should be greater than 0'
 ]
 
 { #category : #tests }
 LoadedDieTest >> testLoadedDieRollsOneWhenLoadedWithOne [
+
 	| die rollResult |
 	die := LoadedDie with: 1.
 	rollResult := die roll.
-	self assert: rollResult equals: 1.
+	self assert: rollResult equals: 1
 ]

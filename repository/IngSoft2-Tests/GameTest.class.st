@@ -21,18 +21,19 @@ GameTest >> should: aBlock raise: anError withMessage: anErrorMessage [
 { #category : #tests }
 GameTest >> testAGameHasAWinner [
 
-	| ship1 ships aBoard sequenceController dieOne dieTwo dieThree aDiceCup game ship2 |
+	| aBoard dieOne dieTwo dieThree aDiceCup game |
 	aBoard := Board with: 60.
-	ship1 := Position withName: 'Valen'.
-	ship2:= Position withName:'Pablito'.
-	ships := { ship1.ship2.}.
-	sequenceController := TurnController withShips: ships.
 	dieOne := LoadedDie with: 1.
 	dieTwo := LoadedDie with: 2.
 	dieThree := LoadedDie with: 3.
-	aDiceCup := DiceCup withAll: { dieOne. dieTwo. dieThree }.
-	game:=Game withShips: ships aBoard: aBoard shipsSequenceController: sequenceController 
-	andDiceCup: 	aDiceCup.
+	aDiceCup := DiceCup withAll: { 
+			            dieOne.
+			            dieTwo.
+			            dieThree }.
+	game := Game
+		        with: { 'Valen'. 'Pablo'. 'Seba' }
+		        a: aBoard
+		        and: aDiceCup.
 	[game hasFinished] whileFalse:  [game playATurn].
 	self assert: (game winner) equals: 'Valen'.
 	self deny: (game winner) equals: 'Pablito'.
@@ -43,18 +44,19 @@ GameTest >> testAGameHasAWinner [
 { #category : #tests }
 GameTest >> testAGameHasFinishedWhenAShipWins [
 
-	| ship1 ships aBoard sequenceController dieOne dieTwo dieThree aDiceCup game ship2 |
+	| aBoard dieOne dieTwo dieThree aDiceCup game |
 	aBoard := Board with: 6.
-	ship1 := Position withName: 'Valen'.
-	ship2:= Position withName:'Pablito'.
-	ships := { ship1.ship2.}.
-	sequenceController := TurnController withShips: ships.
 	dieOne := LoadedDie with: 1.
 	dieTwo := LoadedDie with: 2.
 	dieThree := LoadedDie with: 3.
-	aDiceCup := DiceCup withAll: { dieOne. dieTwo. dieThree }.
-	game:=Game withShips: ships aBoard: aBoard shipsSequenceController: sequenceController 
-	andDiceCup: 	aDiceCup.
+	aDiceCup := DiceCup withAll: { 
+			            dieOne.
+			            dieTwo.
+			            dieThree }.
+	game := Game
+		        with: { 'Valen'. 'Pablo'. 'Seba' }
+		        a: aBoard
+		        and: aDiceCup.
 	self assert: (game hasFinished) equals:false.
 	game playATurn.
 	self assert: (game hasFinished) equals:true.
@@ -64,49 +66,61 @@ GameTest >> testAGameHasFinishedWhenAShipWins [
 { #category : #tests }
 GameTest >> testAGameIsCreatedWithLessThanTwoShips [
 
-	| ship1 ships aBoard sequenceController dieOne dieTwo dieThree aDiceCup |
-	aBoard := Board with: 10.
-	ship1 := Position withName: 'Valen'.
-	ships := { ship1 }.
-	sequenceController := TurnController withShips: ships.
-	dieOne := LoadedDie with: 1.
-	dieTwo := LoadedDie with: 2.
-	dieThree := LoadedDie with: 3.
-	aDiceCup := DiceCup withAll: { dieOne. dieTwo. dieThree }.
-	self should:[Game
-		        withShips: ships
-		        aBoard: aBoard
-		        shipsSequenceController: sequenceController
-		        andDiceCup: aDiceCup.]
-	 		raise: Error
-			withMessage: 'Game must have more than one Ship'.
-	
-]
-
-{ #category : #tests }
-GameTest >> testAGameRetrunsPositionOfPlayerAfterItMoves [
-
-	|  aBoard dieOne dieTwo dieThree aDiceCup game  |
+	| aBoard dieOne dieTwo dieThree aDiceCup |
 	aBoard := Board with: 6.
 	dieOne := LoadedDie with: 1.
 	dieTwo := LoadedDie with: 2.
 	dieThree := LoadedDie with: 3.
-	aDiceCup := DiceCup withAll: { dieOne. dieTwo. dieThree }.
-	game:=Game withPlayers:{'Valen'.'Pablo'.'Seba'} aBoard:aBoard andDiceCup:aDiceCup.
+	aDiceCup := DiceCup withAll: { 
+			            dieOne.
+			            dieTwo.
+			            dieThree }.
+	self
+		should: [ 
+		Game with: { 'Valen' } a: aBoard and: aDiceCup ]
+		raise: Error
+		withMessage: 'Game must have more than one Ship'
+]
+
+{ #category : #tests }
+GameTest >> testAGameRetrunsPositionOfShipAfterItMoves [
+
+	| aBoard dieOne dieTwo dieThree aDiceCup game |
+	aBoard := Board with: 15.
+	dieOne := LoadedDie with: 1.
+	dieTwo := LoadedDie with: 2.
+	dieThree := LoadedDie with: 3.
+	aDiceCup := DiceCup withAll: { 
+			            dieOne.
+			            dieTwo.
+			            dieThree }.
+	game := Game
+		        with: { 'Valen'. 'Pablo'. 'Seba' }
+		        a: aBoard
+		        and: aDiceCup.
 	game playATurn.
-	self assert: (game positionOf:'Valen') equals: 6.
+	game playATurn.
+	game playATurn.
+	game playATurn.
+	self assert: (game boxNumberOf: 'Valen') equals: 12.
+	self assert: (game boxNumberOf: 'Pablo') equals: 6.
 ]
 
 { #category : #tests }
-GameTest >> testAGameStartsWithPlayerAtPosition0 [
+GameTest >> testAGameStartsWithShipsAtPosition0 [
 
-	|  aBoard dieOne dieTwo dieThree aDiceCup game  |
+	| aBoard dieOne dieTwo dieThree aDiceCup game |
 	aBoard := Board with: 6.
 	dieOne := LoadedDie with: 1.
 	dieTwo := LoadedDie with: 2.
 	dieThree := LoadedDie with: 3.
-	aDiceCup := DiceCup withAll: { dieOne. dieTwo. dieThree }.
-	game:=Game withPlayers:{'Valen'.'Pablo'.'Seba'} aBoard:aBoard andDiceCup:aDiceCup.
-	self assert: (game positionOf:'Valen') equals: 0. 
-
+	aDiceCup := DiceCup withAll: { 
+			            dieOne.
+			            dieTwo.
+			            dieThree }.
+	game := Game
+		        with: { 'Valen'. 'Pablo'. 'Seba' }
+		        a: aBoard
+		        and: aDiceCup.
+	self assert: (game boxNumberOf: 'Valen') equals: 0
 ]

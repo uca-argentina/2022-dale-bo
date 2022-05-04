@@ -15,10 +15,11 @@ DiceCupTest >> should: aBlock raise: anErrorClass whoseDescriptionIncludes: anEr
 
 { #category : #tests }
 DiceCupTest >> testDiceCupCannotBeEmpty [
-	self 
+
+	self
 		should: [ DiceCup withAll: {  } ]
 		raise: Error
-		whoseDescriptionIncludes: 'DiceCup can´t be empty'.
+		whoseDescriptionIncludes: 'DiceCup can´t be empty'
 ]
 
 { #category : #tests }
@@ -28,9 +29,12 @@ DiceCupTest >> testDiceCupRollShouldReturnTheSumOfAllLoadedDie [
 	dieOne := LoadedDie with: 1.
 	dieTwo := LoadedDie with: 2.
 	dieThree := LoadedDie with: 3.
-	
-	aDiceCup := DiceCup withAll: { dieOne. dieTwo. dieThree }.
-	
+
+	aDiceCup := DiceCup withAll: { 
+			            dieOne.
+			            dieTwo.
+			            dieThree }.
+
 	rollResult := aDiceCup roll.
-	self assert: rollResult equals: 6.
+	self assert: rollResult equals: 6
 ]
