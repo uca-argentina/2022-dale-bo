@@ -23,10 +23,10 @@ GameTest >> testAGameHasAWinner [
 
 	| ship1 ships aBoard sequenceController dieOne dieTwo dieThree aDiceCup game ship2 |
 	aBoard := Board with: 60.
-	ship1 := Ship withName: 'Valen'.
-	ship2:= Ship withName:'Pablito'.
+	ship1 := Position withName: 'Valen'.
+	ship2:= Position withName:'Pablito'.
 	ships := { ship1.ship2.}.
-	sequenceController := SequenceController withShips: ships.
+	sequenceController := TurnController withShips: ships.
 	dieOne := LoadedDie with: 1.
 	dieTwo := LoadedDie with: 2.
 	dieThree := LoadedDie with: 3.
@@ -45,10 +45,10 @@ GameTest >> testAGameHasFinishedWhenAShipWins [
 
 	| ship1 ships aBoard sequenceController dieOne dieTwo dieThree aDiceCup game ship2 |
 	aBoard := Board with: 6.
-	ship1 := Ship withName: 'Valen'.
-	ship2:= Ship withName:'Pablito'.
+	ship1 := Position withName: 'Valen'.
+	ship2:= Position withName:'Pablito'.
 	ships := { ship1.ship2.}.
-	sequenceController := SequenceController withShips: ships.
+	sequenceController := TurnController withShips: ships.
 	dieOne := LoadedDie with: 1.
 	dieTwo := LoadedDie with: 2.
 	dieThree := LoadedDie with: 3.
@@ -66,9 +66,9 @@ GameTest >> testAGameIsCreatedWithLessThanTwoShips [
 
 	| ship1 ships aBoard sequenceController dieOne dieTwo dieThree aDiceCup |
 	aBoard := Board with: 10.
-	ship1 := Ship withName: 'Valen'.
+	ship1 := Position withName: 'Valen'.
 	ships := { ship1 }.
-	sequenceController := SequenceController withShips: ships.
+	sequenceController := TurnController withShips: ships.
 	dieOne := LoadedDie with: 1.
 	dieTwo := LoadedDie with: 2.
 	dieThree := LoadedDie with: 3.
@@ -84,23 +84,29 @@ GameTest >> testAGameIsCreatedWithLessThanTwoShips [
 ]
 
 { #category : #tests }
-GameTest >> testAGameReturnsThePositionsOfAllShips [
+GameTest >> testAGameRetrunsPositionOfPlayerAfterItMoves [
 
-	| ship1 ships aBoard sequenceController dieOne dieTwo dieThree aDiceCup game ship2 |
-	aBoard := Board with: 10.
-	ship1 := Ship withName: 'Valen'.
-	ship2:= Ship withName:'Pablito'.
-	ships := { ship1.ship2.}.
-	sequenceController := SequenceController withShips: ships.
+	|  aBoard dieOne dieTwo dieThree aDiceCup game  |
+	aBoard := Board with: 6.
 	dieOne := LoadedDie with: 1.
 	dieTwo := LoadedDie with: 2.
 	dieThree := LoadedDie with: 3.
 	aDiceCup := DiceCup withAll: { dieOne. dieTwo. dieThree }.
-	game:=Game withShips: ships aBoard: aBoard shipsSequenceController: sequenceController 
-	andDiceCup: 	aDiceCup.
+	game:=Game withPlayers:{'Valen'.'Pablo'.'Seba'} aBoard:aBoard andDiceCup:aDiceCup.
 	game playATurn.
-	self assert: (game positionOf: 'Valen') equals:6.
-	game playATurn.
-	self assert: (game positionOf: 'Pablito') equals:6.
+	self assert: (game positionOf:'Valen') equals: 6.
+]
+
+{ #category : #tests }
+GameTest >> testAGameStartsWithPlayerAtPosition0 [
+
+	|  aBoard dieOne dieTwo dieThree aDiceCup game  |
+	aBoard := Board with: 6.
+	dieOne := LoadedDie with: 1.
+	dieTwo := LoadedDie with: 2.
+	dieThree := LoadedDie with: 3.
+	aDiceCup := DiceCup withAll: { dieOne. dieTwo. dieThree }.
+	game:=Game withPlayers:{'Valen'.'Pablo'.'Seba'} aBoard:aBoard andDiceCup:aDiceCup.
+	self assert: (game positionOf:'Valen') equals: 0. 
 
 ]
