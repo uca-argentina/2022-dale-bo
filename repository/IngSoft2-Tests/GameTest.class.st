@@ -107,6 +107,31 @@ GameTest >> testAGameRetrunsPositionOfShipAfterItMoves [
 ]
 
 { #category : #tests }
+GameTest >> testAGameRetrunsRanking [
+
+	| aBoard dieOne dieTwo dieThree aDiceCup game |
+	aBoard := Board with: 15.
+	dieOne := LoadedDie with: 1.
+	dieTwo := LoadedDie with: 2.
+	dieThree := LoadedDie with: 3.
+	aDiceCup := DiceCup withAll: { 
+			            dieOne.
+			            dieTwo.
+			            dieThree }.
+	game := Game
+		        with: { 'Valen'. 'Pablo'. 'AA' }
+		        a: aBoard
+		        and: aDiceCup.
+	game playATurn.
+	game playATurn.
+	game playATurn.
+	game playATurn.
+	self assert: (game rankingOf: 'Valen') equals: 1.
+	self assert: (game rankingOf: 'Pablo') equals: 3.
+	self assert: (game rankingOf: 'AA') equals: 2.
+]
+
+{ #category : #tests }
 GameTest >> testAGameStartsWithShipsAtPosition0 [
 
 	| aBoard dieOne dieTwo dieThree aDiceCup game |

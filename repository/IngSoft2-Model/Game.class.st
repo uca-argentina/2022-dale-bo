@@ -71,6 +71,24 @@ Game >> positionOfShip: aShip [
 ]
 
 { #category : #action }
+Game >> rankingOf: aShip [
+
+	self sortPositionsByRanking.
+	positions do: [ :positionOfAShip | 
+		positionOfAShip ownerShip = aShip ifTrue: [ 
+			^ positions indexOf: positionOfAShip ] ]
+]
+
+{ #category : #action }
+Game >> sortPositionsByRanking [
+
+	positions sort: [ :positionOfShip1 :positionOfShip2 | 
+		positionOfShip1 boxNumber > positionOfShip2 boxNumber or: [ 
+			positionOfShip1 boxNumber = positionOfShip2 boxNumber and:
+				positionOfShip1 ownerShip < positionOfShip2 ownerShip ] ]
+]
+
+{ #category : #action }
 Game >> update: oldPosition to: shipNewBoxNumber [
 
 	| newPosition |
