@@ -24,7 +24,7 @@ PositionTest >> testPositionHasAPositionBoxNumberGreaterThan0 [
 
 	self
 		should: [ 
-		PositionOfAShip of: 'Valen' at:-2  ]
+		PositionOfAShip of: 'Valen' at:-2 and:0 ]
 		raise: Error
 		withMessage: 'Box number must be positive'.
 ]
@@ -46,7 +46,7 @@ PositionTest >> testPositionHasAValidShipName [
 
 	self
 		should: [ 
-		PositionOfAShip of: 'V' at:0  ]
+		PositionOfAShip of: 'V' at:0 and: 0 ]
 		raise: Error
 		withMessage: 'Ship name must have a name longer than one character'.
 ]

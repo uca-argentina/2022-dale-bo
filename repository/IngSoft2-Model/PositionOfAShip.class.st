@@ -12,14 +12,14 @@ Class {
 { #category : #instanceCreation }
 PositionOfAShip class >> assertBoxNumberIsGreaterThanZero: aBoxNumber [
 
-	aBoxNumber >= 0 ifFalse: [ 
+	(aBoxNumber >= 0) ifFalse: [ 
 		Error signal: 'Box number must be positive' ]
 ]
 
 { #category : #instanceCreation }
 PositionOfAShip class >> assertLapNumberIsGreaterThanZero: aLapNumber [
 
-	aLapNumber >= 0 ifFalse: [ 
+	(aLapNumber >= 0) ifFalse: [ 
 		Error signal: 'Lap number must be positive' ]
 ]
 
@@ -49,6 +49,12 @@ PositionOfAShip >> initializeOf: aShip at: aBoxNumber and: aLapNumber [
 	ship := aShip.
 	boxNumber := aBoxNumber.
 	lapNumber:=aLapNumber.
+]
+
+{ #category : #accesing }
+PositionOfAShip >> lapNumber [
+
+	^ lapNumber
 ]
 
 { #category : #accessing }
