@@ -15,17 +15,19 @@ DieTest >> should: aBlock raise: anErrorClass whoseDescriptionIncludes: anErrorM
 
 { #category : #tests }
 DieTest >> testDieCannotBeCreatedWithNumberOfSidesMinorThanThree [
-	self 
+
+	self
 		should: [ Die with: 2 ]
 		raise: Error
-		whoseDescriptionIncludes: 'Number of faces should be greater than 2'.
+		whoseDescriptionIncludes: 'Number of faces should be greater than 2'
 ]
 
 { #category : #tests }
 DieTest >> testDieRollResultIsBetweenOneAndNumberOfFaces [
-	| numberOfSides die rollResult | 
+
+	| numberOfSides die rollResult |
 	numberOfSides := 6.
 	die := Die with: numberOfSides.
 	rollResult := die roll.
-	self assert: (rollResult between: 1 and: numberOfSides) 
+	self assert: (rollResult between: 1 and: numberOfSides)
 ]

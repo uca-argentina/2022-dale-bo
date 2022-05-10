@@ -19,11 +19,13 @@ LoadedDie class >> with: aNumberOfSides [
 ]
 
 { #category : #initialization }
-LoadedDie >> initializeWith: aNumberOfSides [ 
-	numberOfSides := aNumberOfSides.
+LoadedDie >> initializeWith: aNumberOfSides [
+
+	numberOfSides := aNumberOfSides
 ]
 
 { #category : #actions }
 LoadedDie >> roll [
-	^numberOfSides.
+
+	^ numberOfSides
 ]

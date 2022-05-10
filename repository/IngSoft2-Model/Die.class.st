@@ -19,16 +19,19 @@ Die class >> with: aNumberOfSides [
 ]
 
 { #category : #initialization }
-Die >> initializeWith: aNumberOfSides [ 
-	numberOfSides := aNumberOfSides.
+Die >> initializeWith: aNumberOfSides [
+
+	numberOfSides := aNumberOfSides
 ]
 
 { #category : #accesing }
 Die >> numberOfSides [
+
 	^ numberOfSides
 ]
 
 { #category : #actions }
 Die >> roll [
-	^ numberOfSides atRandom.
+
+	^ numberOfSides atRandom
 ]

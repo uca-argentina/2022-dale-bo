@@ -20,10 +20,12 @@ DiceCup class >> withAll: dice [
 
 { #category : #initialization }
 DiceCup >> initializeWithAll: aDice [
-	dice := aDice.
+
+	dice := aDice
 ]
 
 { #category : #actions }
 DiceCup >> roll [
-	^dice sum: [:die | die roll ]
+
+	^ dice sum: [ :die | die roll ]
 ]
