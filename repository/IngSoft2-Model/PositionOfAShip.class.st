@@ -3,7 +3,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'ship',
-		'boxNumber'
+		'boxNumber',
+		'lapNumber'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -11,8 +12,15 @@ Class {
 { #category : #instanceCreation }
 PositionOfAShip class >> assertBoxNumberIsGreaterThanZero: aBoxNumber [
 
-	aBoxNumber >= 0 ifFalse: [ 
+	(aBoxNumber >= 0) ifFalse: [ 
 		Error signal: 'Box number must be positive' ]
+]
+
+{ #category : #instanceCreation }
+PositionOfAShip class >> assertLapNumberIsGreaterThanZero: aLapNumber [
+
+	(aLapNumber >= 0) ifFalse: [ 
+		Error signal: 'Lap number must be positive' ]
 ]
 
 { #category : #instanceCreation }
@@ -22,10 +30,11 @@ PositionOfAShip class >> assertShipsNameIsValid:aShip [
 ]
 
 { #category : #instanceCreation }
-PositionOfAShip class >> of: aShip at: aBoxNumber [
+PositionOfAShip class >> of: aShip at: aBoxNumber and: aLapNumber [
 	self assertShipsNameIsValid:aShip.
 	self assertBoxNumberIsGreaterThanZero: aBoxNumber.
-	^self new initializeOf:aShip at:aBoxNumber.
+	self assertLapNumberIsGreaterThanZero: aLapNumber.
+	^self new initializeOf:aShip at:aBoxNumber and: aLapNumber.
 ]
 
 { #category : #accesing }
@@ -35,10 +44,17 @@ PositionOfAShip >> boxNumber [
 ]
 
 { #category : #initialization }
-PositionOfAShip >> initializeOf: aShip at: aBoxNumber [
+PositionOfAShip >> initializeOf: aShip at: aBoxNumber and: aLapNumber [
 
 	ship := aShip.
-	boxNumber := aBoxNumber
+	boxNumber := aBoxNumber.
+	lapNumber:=aLapNumber.
+]
+
+{ #category : #accesing }
+PositionOfAShip >> lapNumber [
+
+	^ lapNumber
 ]
 
 { #category : #accessing }

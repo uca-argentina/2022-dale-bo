@@ -24,9 +24,20 @@ PositionTest >> testPositionHasAPositionBoxNumberGreaterThan0 [
 
 	self
 		should: [ 
-		PositionOfAShip of: 'Valen' at:-2  ]
+		PositionOfAShip of: 'Valen' at:-2 and:0 ]
 		raise: Error
 		withMessage: 'Box number must be positive'.
+]
+
+{ #category : #tests }
+PositionTest >> testPositionHasAPositionLapNumberGreaterThan0 [
+
+
+	self
+		should: [ 
+		PositionOfAShip of: 'Valen' at:2  and:-2]
+		raise: Error
+		withMessage: 'Lap number must be positive'.
 ]
 
 { #category : #tests }
@@ -35,7 +46,7 @@ PositionTest >> testPositionHasAValidShipName [
 
 	self
 		should: [ 
-		PositionOfAShip of: 'V' at:0  ]
+		PositionOfAShip of: 'V' at:0 and: 0 ]
 		raise: Error
 		withMessage: 'Ship name must have a name longer than one character'.
 ]

@@ -43,7 +43,7 @@ Game >> hasFinished [
 { #category : #initializing }
 Game >> initializeWith: aShips a: aBoard and: aDiceCup [
 
-	positions := aShips collect: [ :ship | PositionOfAShip of: ship at: 0 ].
+	positions := aShips collect: [ :ship | PositionOfAShip of: ship at: 0 and: 0].
 	board := aBoard.
 	diceCup := aDiceCup.
 	turnSequenceController := TurnSequenceController with: aShips.
@@ -53,14 +53,21 @@ Game >> initializeWith: aShips a: aBoard and: aDiceCup [
 { #category : #action }
 Game >> playATurn [
 
-	| shipNewBoxNumber oldPosition |
+	| shipNewBoxNumber shipNewLapNumber oldPosition |
 	oldPosition := self positionOfShip: turnSequenceController whoPlays.
 	shipNewBoxNumber := diceCup roll + oldPosition boxNumber.
-	shipNewBoxNumber >= board lastPosition ifTrue: [ 
-		shipNewBoxNumber := board lastPosition.
-		finished := true.
-		winner := turnSequenceController whoPlays ].
-	self update: oldPosition to: shipNewBoxNumber.
+	shipNewLapNumber := oldPosition lapNumber.
+	oldPosition lapNumber < 2  "envez de 3 iria board lastLap"
+		ifTrue: [ 
+			(shipNewBoxNumber > board lastPosition) ifTrue: [ 
+				shipNewLapNumber := oldPosition lapNumber  + 1 .
+				shipNewBoxNumber := shipNewBoxNumber - board lastPosition ]]
+		ifFalse: [ 
+			(shipNewBoxNumber > board lastPosition) ifTrue: [ 
+			shipNewBoxNumber := board lastPosition.
+			finished := true.
+			winner := turnSequenceController whoPlays ]].
+	self update: oldPosition to: shipNewBoxNumber and: shipNewLapNumber.
 	turnSequenceController changeTurn
 ]
 
@@ -89,12 +96,13 @@ Game >> sortPositionsByRanking [
 ]
 
 { #category : #action }
-Game >> update: oldPosition to: shipNewBoxNumber [
+Game >> update: oldPosition to: shipNewBoxNumber and: shipNewLapNumber [
 
 	| newPosition |
 	newPosition := PositionOfAShip
 		               of: turnSequenceController whoPlays
-		               at: shipNewBoxNumber.
+		               at: shipNewBoxNumber
+		               and: shipNewLapNumber.
 	positions replaceAll: oldPosition with: newPosition.
 ]
 

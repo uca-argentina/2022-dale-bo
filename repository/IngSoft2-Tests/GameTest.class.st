@@ -45,7 +45,7 @@ GameTest >> testAGameHasAWinner [
 GameTest >> testAGameHasFinishedWhenAShipWins [
 
 	| aBoard dieOne dieTwo dieThree aDiceCup game |
-	aBoard := Board with: 6.
+	aBoard := Board with: 7.
 	dieOne := LoadedDie with: 1.
 	dieTwo := LoadedDie with: 2.
 	dieThree := LoadedDie with: 3.
@@ -54,11 +54,17 @@ GameTest >> testAGameHasFinishedWhenAShipWins [
 			            dieTwo.
 			            dieThree }.
 	game := Game
-		        with: { 'Valen'. 'Pablo'. 'Seba' }
+		        with: { 'Valen'. 'Pablo'.}
 		        a: aBoard
 		        and: aDiceCup.
 	self assert: (game hasFinished) equals:false.
 	game playATurn.
+	game playATurn.
+	game playATurn.
+	game playATurn.
+	game playATurn.
+	game playATurn.	
+	game playATurn.	
 	self assert: (game hasFinished) equals:true.
 
 ]
