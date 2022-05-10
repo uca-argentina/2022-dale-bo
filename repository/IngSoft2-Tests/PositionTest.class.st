@@ -30,6 +30,17 @@ PositionTest >> testPositionHasAPositionBoxNumberGreaterThan0 [
 ]
 
 { #category : #tests }
+PositionTest >> testPositionHasAPositionLapNumberGreaterThan0 [
+
+
+	self
+		should: [ 
+		PositionOfAShip of: 'Valen' at:2  and:-2]
+		raise: Error
+		withMessage: 'Lap number must be positive'.
+]
+
+{ #category : #tests }
 PositionTest >> testPositionHasAValidShipName [
 
 

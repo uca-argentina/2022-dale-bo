@@ -43,7 +43,7 @@ Game >> hasFinished [
 { #category : #initializing }
 Game >> initializeWith: aShips a: aBoard and: aDiceCup [
 
-	positions := aShips collect: [ :ship | PositionOfAShip of: ship at: 0 ].
+	positions := aShips collect: [ :ship | PositionOfAShip of: ship at: 0 and:0].
 	board := aBoard.
 	diceCup := aDiceCup.
 	turnSequenceController := TurnSequenceController with: aShips.
