@@ -14,27 +14,40 @@ BoardTest >> should: block raise: classError whoseDescriptionIncludes: anErrorMe
 ]
 
 { #category : #tests }
-BoardTest >> testABoardCannotHaveLessThanOneBox [
+BoardTest >> testABoardMustHaveASpeedUpInSecondPositionAndMoveaShipToSixPosition [
 
-	self
-		should: [ Board with: 0 ]
-		raise: Error
-		whoseDescriptionIncludes: 'A board must have at least one box'
+	| aBoard dieOne  aDiceCup game speedUp |
+	
+	speedUp := SpeedUp new.	
+	aBoard := Board withAll: {speedUp}.
+	dieOne := LoadedDie with: 2.
+	aDiceCup := DiceCup withAll: { 
+			            dieOne }.
+	game := Game
+		        with: { 'Valen'. 'Pablo'. 'Seba' }
+		        a: aBoard
+		        and: aDiceCup.
+	[game hasFinished] whileFalse:  [game playATurn].
+	self assert: (game winner) equals: 'Valen'.
+	self deny: (game winner) equals: 'Pablito'.
 ]
 
 { #category : #tests }
 BoardTest >> testABoardMustHaveAtLeastOneBox [
 
-	| aBoard |
-	aBoard := Board with: 1.
-	self assert: aBoard lastPosition > 0
+	| aBoard box |
+	
+	box := Box new. 
+	aBoard := Board withAll: { box }.
+	self assert: aBoard numberOfBoxes > 0
 ]
 
 { #category : #tests }
-BoardTest >> testTheLastPositionOfABoardMustBeTheTotalNumberOfBoxes [
+BoardTest >> testABoardMustHaveAtLeastOneBoxWithNoEffect [
 
-	| aBoard boxes |
-	boxes := 15.
-	aBoard := Board with: boxes.
-	self assert: aBoard lastPosition equals: 15
+	| aBoard noEffect |
+	
+	noEffect := Box new. 
+	aBoard := Board withAll: { noEffect. noEffect. noEffect}.
+	self assert: aBoard numberOfBoxes > 0
 ]

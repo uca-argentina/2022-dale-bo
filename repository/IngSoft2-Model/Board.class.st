@@ -9,23 +9,27 @@ Class {
 
 { #category : #asserting }
 Board class >> assertValid: boxes [
-	boxes > 0 ifFalse: [ Error signal: 'A board must have at least one box' ].
+	boxes size > 0 ifFalse: [ Error signal: 'A board must have at least one box' ].
 ]
 
 { #category : #creation }
-Board class >> with: numberOfBoxes [ 
-	self assertValid: numberOfBoxes.
-	^self new initializeWith: numberOfBoxes.
+Board class >> withAll: aCollectionOfBoxes [ 
+	self assertValid: aCollectionOfBoxes.
+	^self new initializeWith: aCollectionOfBoxes.
 ]
 
 { #category : #initialization }
-Board >> initializeWith: aNumberOfBoxes [
+Board >> initializeWith: aCollection [
 
-	boxes := aNumberOfBoxes.
+	boxes := aCollection.
 ]
 
 { #category : #accesing }
 Board >> lastPosition [
+	^boxes size.
+]
 
-	^ boxes
+{ #category : #accesing }
+Board >> numberOfBoxes [
+	^boxes size.
 ]
