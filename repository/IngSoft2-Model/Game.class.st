@@ -55,11 +55,11 @@ Game >> playATurn [
 
 	| shipNewBoxNumber shipNewLapNumber oldPosition |
 	oldPosition := self positionOfShip: turnSequenceController whoPlays.
-	shipNewBoxNumber := diceCup roll + oldPosition boxNumber.
+	shipNewBoxNumber := diceCup roll + oldPosition boxNumber + (board effectAt:diceCup roll + oldPosition boxNumber) .
 	shipNewLapNumber := oldPosition lapNumber.
 	oldPosition lapNumber < 2  "envez de 3 iria board lastLap"
 		ifTrue: [ 
-			(shipNewBoxNumber > board lastPosition) ifTrue: [ 
+			(shipNewBoxNumber > board lastPosition) ifTrue: [  
 				shipNewLapNumber := oldPosition lapNumber  + 1 .
 				shipNewBoxNumber := shipNewBoxNumber - board lastPosition ]]
 		ifFalse: [ 

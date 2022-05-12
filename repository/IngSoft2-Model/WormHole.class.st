@@ -1,10 +1,10 @@
 Class {
-	#name : #Box,
+	#name : #WormHole,
 	#superclass : #Object,
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #action }
-Box >> effect [
-	^0.
+WormHole >> effect [
+	^-4.
 ]

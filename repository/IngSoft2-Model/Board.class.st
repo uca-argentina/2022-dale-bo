@@ -18,6 +18,11 @@ Board class >> withAll: aCollectionOfBoxes [
 	^self new initializeWith: aCollectionOfBoxes.
 ]
 
+{ #category : #accesing }
+Board >> effectAt: aBoxNumber [ 
+	^(boxes at: aBoxNumber) effect.
+]
+
 { #category : #initialization }
 Board >> initializeWith: aCollection [
 
