@@ -2,7 +2,8 @@ Class {
 	#name : #Board,
 	#superclass : #Object,
 	#instVars : [
-		'boxes'
+		'boxes',
+		'laps'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -12,10 +13,16 @@ Board class >> assertValid: boxes [
 	boxes size > 0 ifFalse: [ Error signal: 'A board must have at least one box' ].
 ]
 
+{ #category : #asserting }
+Board class >> assertValidLaps:laps [
+	laps > 0 ifFalse: [ Error signal: 'A board must have at least one lap' ].
+]
+
 { #category : #creation }
-Board class >> withAll: aCollectionOfBoxes [ 
+Board class >> withAll: aCollectionOfBoxes and:laps [
 	self assertValid: aCollectionOfBoxes.
-	^self new initializeWith: aCollectionOfBoxes.
+	self assertValidLaps:laps.
+	^self new initializeWith: aCollectionOfBoxes and:laps.
 ]
 
 { #category : #accesing }
@@ -23,10 +30,21 @@ Board >> effectAt: aBoxNumber [
 	^(boxes at: aBoxNumber) effect.
 ]
 
-{ #category : #initialization }
-Board >> initializeWith: aCollection [
+{ #category : #actions }
+Board >> effectAt: aBoxNumber for: ships appliedBy: aShip [ 
+	^(boxes at:aBoxNumber) effectTo:ships appliedBy:aShip
+]
 
-	boxes := aCollection.
+{ #category : #initialization }
+Board >> initializeWith: aCollectionOfBoxes and:numberOfLaps [
+
+	boxes := aCollectionOfBoxes.
+	laps:= numberOfLaps.
+]
+
+{ #category : #accessing }
+Board >> laps [
+	^laps
 ]
 
 { #category : #accesing }

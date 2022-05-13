@@ -24,16 +24,18 @@ GameTest >> testAGameHasABoardWithAWormHoleInFivePositionAndValentinEndsUpInPosi
 	| aBoard dieOne dieTwo dieThree aDiceCupForValen game noEffect newPosition wormHole |
 	noEffect := Box new.
 	wormHole := WormHole new.
-	aBoard := Board withAll: { 
-			          noEffect.
-			          noEffect.
-			          noEffect.
-			          noEffect.
-			          wormHole.
-			          noEffect.
-			          noEffect.
-			          noEffect.
-			          noEffect }.
+	aBoard := Board
+		          withAll: { 
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          wormHole.
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          noEffect }
+		          and: 2.
 	dieOne := LoadedDie with: 1.
 	dieTwo := LoadedDie with: 2.
 	dieThree := LoadedDie with: 2.
@@ -51,18 +53,50 @@ GameTest >> testAGameHasABoardWithAWormHoleInFivePositionAndValentinEndsUpInPosi
 ]
 
 { #category : #tests }
+GameTest >> testAGameHasABoardWithMoonwalkEffectInPosition8AndAppliesItsEffectToAllShips [
+
+	| aBoard dieOne dieTwo dieThree aDiceCup game box moonWalk |
+	box := Box new.
+	moonWalk := Moonwalk with: 3.
+	aBoard := Board
+		          withAll: { 
+				          box.
+				          box.
+				          box.
+				          box.
+				          box.
+				          box.
+				          box.
+				          moonWalk }
+		          and: 2.
+	dieOne := LoadedDie with: 1.
+	dieTwo := LoadedDie with: 1.
+	dieThree := LoadedDie with: 5.
+	aDiceCup := DiceCup withAll: { 
+			            dieOne.
+			            dieTwo.
+			            dieThree }.
+	game := Game with: { 'Valen'. 'Pablo'. 'AA' } a: aBoard and: aDiceCup.
+	game playATurn.
+	game playATurn.
+	self assert: (game boxNumberOf: 'Valen') equals: 2
+]
+
+{ #category : #tests }
 GameTest >> testAGameHasABoardWithNoEffectsAndValenWinsTheGame [
 
 	| aBoard dieOne dieTwo dieThree aDiceCup game noEffect |
 	noEffect := Box new.
-	aBoard := Board withAll: { 
-			          noEffect.
-			          noEffect.
-			          noEffect.
-			          noEffect.
-			          noEffect.
-			          noEffect.
-			          noEffect }.
+	aBoard := Board
+		          withAll: { 
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          noEffect }
+		          and: 2.
 	dieOne := LoadedDie with: 1.
 	dieTwo := LoadedDie with: 2.
 	dieThree := LoadedDie with: 3.
@@ -85,16 +119,18 @@ GameTest >> testAGameHasABoardWithSpeedUpInFivePositionAndValentinEndsUpInNinePo
 	| aBoard dieOne dieTwo dieThree aDiceCupForValen game noEffect speedUp newPosition |
 	noEffect := Box new.
 	speedUp := SpeedUp new.
-	aBoard := Board withAll: { 
-			          noEffect.
-			          noEffect.
-			          noEffect.
-			          noEffect.
-			          speedUp.
-			          noEffect.
-			          noEffect.
-			          noEffect.
-			          noEffect }.
+	aBoard := Board
+		          withAll: { 
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          speedUp.
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          noEffect }
+		          and: 2.
 	dieOne := LoadedDie with: 1.
 	dieTwo := LoadedDie with: 2.
 	dieThree := LoadedDie with: 2.
@@ -116,14 +152,16 @@ GameTest >> testAGameHasAWinner [
 
 	| aBoard dieOne dieTwo dieThree aDiceCup game noEffect |
 	noEffect := Box new.
-	aBoard := Board withAll: { 
-			          noEffect.
-			          noEffect.
-			          noEffect.
-			          noEffect.
-			          noEffect.
-			          noEffect.
-			          noEffect }.
+	aBoard := Board
+		          withAll: { 
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          noEffect }
+		          and: 2.
 	dieOne := LoadedDie with: 1.
 	dieTwo := LoadedDie with: 2.
 	dieThree := LoadedDie with: 3.
@@ -145,20 +183,22 @@ GameTest >> testAGameHasFinishedWhenAShipWins [
 
 	| aBoard dieOne dieTwo dieThree aDiceCup game noEffect |
 	noEffect := Box new.
-	aBoard := Board withAll: { 
-			          noEffect.
-			          noEffect.
-			          noEffect.
-			          noEffect.
-			          noEffect.
-			          noEffect.
-			          noEffect.
-			          noEffect.
-			          noEffect.
-			          noEffect.
-			          noEffect.
-			          noEffect.
-			          noEffect }.
+	aBoard := Board
+		          withAll: { 
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          noEffect }
+		          and: 2.
 	dieOne := LoadedDie with: 1.
 	dieTwo := LoadedDie with: 1.
 	dieThree := LoadedDie with: 1.
@@ -177,14 +217,16 @@ GameTest >> testAGameIsCreatedWithLessThanTwoShips [
 
 	| aBoard dieOne dieTwo dieThree aDiceCup noEffect |
 	noEffect := Box new.
-	aBoard := Board withAll: { 
-			          noEffect.
-			          noEffect.
-			          noEffect.
-			          noEffect.
-			          noEffect.
-			          noEffect.
-			          noEffect }.
+	aBoard := Board
+		          withAll: { 
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          noEffect }
+		          and: 2.
 	dieOne := LoadedDie with: 1.
 	dieTwo := LoadedDie with: 2.
 	dieThree := LoadedDie with: 3.
@@ -203,20 +245,22 @@ GameTest >> testAGameRetrunsPositionOfShipAfterItMoves [
 
 	| aBoard dieOne dieTwo dieThree aDiceCup game noEffect |
 	noEffect := Box new.
-	aBoard := Board withAll: { 
-			          noEffect.
-			          noEffect.
-			          noEffect.
-			          noEffect.
-			          noEffect.
-			          noEffect.
-			          noEffect.
-			          noEffect.
-			          noEffect.
-			          noEffect.
-			          noEffect.
-			          noEffect.
-			          noEffect }.
+	aBoard := Board
+		          withAll: { 
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          noEffect }
+		          and: 2.
 	dieOne := LoadedDie with: 1.
 	dieTwo := LoadedDie with: 2.
 	dieThree := LoadedDie with: 3.
@@ -238,14 +282,16 @@ GameTest >> testAGameRetrunsRanking [
 
 	| aBoard dieOne dieTwo dieThree aDiceCup game box |
 	box := Box new.
-	aBoard := Board withAll: { 
-			          box.
-			          box.
-			          box.
-			          box.
-			          box.
-			          box.
-			          box }.
+	aBoard := Board
+		          withAll: { 
+				          box.
+				          box.
+				          box.
+				          box.
+				          box.
+				          box.
+				          box }
+		          and: 2.
 	dieOne := LoadedDie with: 1.
 	dieTwo := LoadedDie with: 1.
 	dieThree := LoadedDie with: 1.
@@ -264,17 +310,19 @@ GameTest >> testAGameRetrunsRanking [
 ]
 
 { #category : #tests }
-GameTest >> testAGameStartsWithShipsAtPosition0 [
+GameTest >> testAGameStartsWithShipsAtPosition1 [
 
 	| aBoard dieOne dieTwo dieThree aDiceCup game noEffect |
 	noEffect := Box new.
-	aBoard := Board withAll: { 
-			          noEffect.
-			          noEffect.
-			          noEffect.
-			          noEffect.
-			          noEffect.
-			          noEffect }.
+	aBoard := Board
+		          withAll: { 
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          noEffect }
+		          and: 2.
 	dieOne := LoadedDie with: 1.
 	dieTwo := LoadedDie with: 2.
 	dieThree := LoadedDie with: 3.

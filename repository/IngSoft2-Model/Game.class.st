@@ -50,17 +50,13 @@ Game >> initializeWith: aShips a: aBoard and: aDiceCup [
 	finished := false
 ]
 
-{ #category : #action }
-Game >> playATurn [
+{ #category : #'instance creation' }
+Game >> newPositionWith: oldPosition and: effect [
 
-	| shipNewBoxNumber shipNewLapNumber oldPosition |
-	oldPosition := self positionOfShip: turnSequenceController whoPlays.
-	shipNewBoxNumber := diceCup roll + oldPosition boxNumber
-	                    +
-	                    (board effectAt:
-		                     diceCup roll + oldPosition boxNumber).
+	| shipNewLapNumber shipNewBoxNumber |
+	shipNewBoxNumber := oldPosition boxNumber + effect.
 	shipNewLapNumber := oldPosition lapNumber.
-	oldPosition lapNumber < 2
+	oldPosition lapNumber < board laps
 		ifTrue: [ 
 			shipNewBoxNumber > board lastPosition ifTrue: [ 
 				shipNewLapNumber := oldPosition lapNumber + 1.
@@ -69,8 +65,29 @@ Game >> playATurn [
 			shipNewBoxNumber >= board lastPosition ifTrue: [ 
 				shipNewBoxNumber := board lastPosition.
 				finished := true.
-				winner := turnSequenceController whoPlays ] ]. "envez de 3 iria board lastLap"
-	self update: oldPosition to: shipNewBoxNumber and: shipNewLapNumber.
+				winner := turnSequenceController whoPlays ] ].
+	^ PositionOfAShip
+		  of: turnSequenceController whoPlays
+		  at: shipNewBoxNumber
+		  and: shipNewLapNumber
+]
+
+{ #category : #action }
+Game >> playATurn [
+
+	| shipNewBoxNumber oldPosition targetedShips effect |
+	oldPosition := self positionOfShip: turnSequenceController whoPlays.
+	shipNewBoxNumber := diceCup roll + oldPosition boxNumber.
+	self newPositionWith: oldPosition and: 0.
+	targetedShips := board
+		                 effectAt: shipNewBoxNumber
+		                 for: positions
+		                 appliedBy: oldPosition.
+	effect := board effectAt: shipNewBoxNumber.
+	targetedShips do: [ :each | 
+		positions
+			replace: each
+			with: (self newPositionWith: each and: effect) ].
 	turnSequenceController changeTurn
 ]
 
@@ -94,17 +111,6 @@ Game >> sortPositionsByRanking [
 
 	positions sort: [ :positionOfShip1 :positionOfShip2 | 
 		 positionOfShip1 lapNumber > positionOfShip2 lapNumber  or: [ positionOfShip1 lapNumber = positionOfShip2 lapNumber and: positionOfShip1 boxNumber  > positionOfShip2 boxNumber ]  ]
-]
-
-{ #category : #action }
-Game >> update: oldPosition to: shipNewBoxNumber and: shipNewLapNumber [
-
-	| newPosition |
-	newPosition := PositionOfAShip
-		               of: turnSequenceController whoPlays
-		               at: shipNewBoxNumber
-		               and: shipNewLapNumber.
-	positions replaceAll: oldPosition with: newPosition.
 ]
 
 { #category : #actions }
