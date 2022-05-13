@@ -14,30 +14,10 @@ BoardTest >> should: block raise: classError whoseDescriptionIncludes: anErrorMe
 ]
 
 { #category : #tests }
-BoardTest >> testABoardMustHaveASpeedUpInSecondPositionAndMoveaShipToSixPosition [
-
-	| aBoard dieOne  aDiceCup game speedUp |
-	
-	speedUp := SpeedUp new.	
-	aBoard := Board withAll: {speedUp}.
-	dieOne := LoadedDie with: 2.
-	aDiceCup := DiceCup withAll: { 
-			            dieOne }.
-	game := Game
-		        with: { 'Valen'. 'Pablo'. 'Seba' }
-		        a: aBoard
-		        and: aDiceCup.
-	[game hasFinished] whileFalse:  [game playATurn].
-	self assert: (game winner) equals: 'Valen'.
-	self deny: (game winner) equals: 'Pablito'.
-]
-
-{ #category : #tests }
 BoardTest >> testABoardMustHaveAtLeastOneBox [
 
 	| aBoard box |
-	
-	box := Box new. 
+	box := Box new.
 	aBoard := Board withAll: { box }.
 	self assert: aBoard numberOfBoxes > 0
 ]
@@ -46,8 +26,10 @@ BoardTest >> testABoardMustHaveAtLeastOneBox [
 BoardTest >> testABoardMustHaveAtLeastOneBoxWithNoEffect [
 
 	| aBoard noEffect |
-	
-	noEffect := Box new. 
-	aBoard := Board withAll: { noEffect. noEffect. noEffect}.
+	noEffect := Box new.
+	aBoard := Board withAll: { 
+			          noEffect.
+			          noEffect.
+			          noEffect }.
 	self assert: aBoard numberOfBoxes > 0
 ]

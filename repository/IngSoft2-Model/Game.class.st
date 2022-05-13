@@ -43,7 +43,7 @@ Game >> hasFinished [
 { #category : #initializing }
 Game >> initializeWith: aShips a: aBoard and: aDiceCup [
 
-	positions := aShips collect: [ :ship | PositionOfAShip of: ship at: 0 and: 0].
+	positions := aShips collect: [ :ship | PositionOfAShip of: ship at: 1 and: 1].
 	board := aBoard.
 	diceCup := aDiceCup.
 	turnSequenceController := TurnSequenceController with: aShips.
@@ -55,18 +55,21 @@ Game >> playATurn [
 
 	| shipNewBoxNumber shipNewLapNumber oldPosition |
 	oldPosition := self positionOfShip: turnSequenceController whoPlays.
-	shipNewBoxNumber := diceCup roll + oldPosition boxNumber + (board effectAt:diceCup roll + oldPosition boxNumber) .
+	shipNewBoxNumber := diceCup roll + oldPosition boxNumber
+	                    +
+	                    (board effectAt:
+		                     diceCup roll + oldPosition boxNumber).
 	shipNewLapNumber := oldPosition lapNumber.
-	oldPosition lapNumber < 2  "envez de 3 iria board lastLap"
+	oldPosition lapNumber < 2
 		ifTrue: [ 
-			(shipNewBoxNumber > board lastPosition) ifTrue: [  
-				shipNewLapNumber := oldPosition lapNumber  + 1 .
-				shipNewBoxNumber := shipNewBoxNumber - board lastPosition ]]
+			shipNewBoxNumber > board lastPosition ifTrue: [ 
+				shipNewLapNumber := oldPosition lapNumber + 1.
+				shipNewBoxNumber := shipNewBoxNumber - board lastPosition ] ]
 		ifFalse: [ 
-			(shipNewBoxNumber > board lastPosition) ifTrue: [ 
-			shipNewBoxNumber := board lastPosition.
-			finished := true.
-			winner := turnSequenceController whoPlays ]].
+			shipNewBoxNumber >= board lastPosition ifTrue: [ 
+				shipNewBoxNumber := board lastPosition.
+				finished := true.
+				winner := turnSequenceController whoPlays ] ]. "envez de 3 iria board lastLap"
 	self update: oldPosition to: shipNewBoxNumber and: shipNewLapNumber.
 	turnSequenceController changeTurn
 ]
@@ -90,9 +93,7 @@ Game >> rankingOf: aShip [
 Game >> sortPositionsByRanking [
 
 	positions sort: [ :positionOfShip1 :positionOfShip2 | 
-		positionOfShip1 boxNumber > positionOfShip2 boxNumber or: [ 
-			positionOfShip1 boxNumber = positionOfShip2 boxNumber and:
-				positionOfShip1 ownerShip < positionOfShip2 ownerShip ] ]
+		 positionOfShip1 lapNumber > positionOfShip2 lapNumber  or: [ positionOfShip1 lapNumber = positionOfShip2 lapNumber and: positionOfShip1 boxNumber  > positionOfShip2 boxNumber ]  ]
 ]
 
 { #category : #action }

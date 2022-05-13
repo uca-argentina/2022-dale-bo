@@ -31,7 +31,7 @@ Board >> initializeWith: aCollection [
 
 { #category : #accesing }
 Board >> lastPosition [
-	^boxes size.
+	^boxes size-1.
 ]
 
 { #category : #accesing }
