@@ -8,3 +8,8 @@ Class {
 SpeedUp >> effect [
 	^4
 ]
+
+{ #category : #action }
+SpeedUp >> effectTo: ships appliedBy: aShip [
+	^{aShip}
+]

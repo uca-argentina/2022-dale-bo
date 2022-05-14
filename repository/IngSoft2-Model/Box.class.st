@@ -8,3 +8,10 @@ Class {
 Box >> effect [
 	^0.
 ]
+
+{ #category : #action }
+Box >> effectTo: ships appliedBy: aShip [
+
+	
+	^{aShip} .
+]

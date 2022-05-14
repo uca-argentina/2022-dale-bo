@@ -8,3 +8,8 @@ Class {
 WormHole >> effect [
 	^-4.
 ]
+
+{ #category : #action }
+WormHole >> effectTo: ships appliedBy: aShip [
+	^{aShip}
+]

@@ -38,7 +38,7 @@ GameTest >> testAGameHasABoardWithAWormHoleInFivePositionAndValentinEndsUpInPosi
 		          and: 2.
 	dieOne := LoadedDie with: 1.
 	dieTwo := LoadedDie with: 2.
-	dieThree := LoadedDie with: 2.
+	dieThree := LoadedDie with: 1.
 	aDiceCupForValen := DiceCup withAll: { 
 			                    dieOne.
 			                    dieTwo.
@@ -49,7 +49,7 @@ GameTest >> testAGameHasABoardWithAWormHoleInFivePositionAndValentinEndsUpInPosi
 		        and: aDiceCupForValen.
 	game playATurn.
 	newPosition := game positionOfShip: 'Valen'.
-	self assert: newPosition boxNumber equals: 6
+	self assert: newPosition boxNumber equals: 1
 ]
 
 { #category : #tests }
@@ -129,11 +129,13 @@ GameTest >> testAGameHasABoardWithSpeedUpInFivePositionAndValentinEndsUpInNinePo
 				          noEffect.
 				          noEffect.
 				          noEffect.
+				          noEffect.
+				          noEffect.
 				          noEffect }
 		          and: 2.
 	dieOne := LoadedDie with: 1.
 	dieTwo := LoadedDie with: 2.
-	dieThree := LoadedDie with: 2.
+	dieThree := LoadedDie with: 1.
 	aDiceCupForValen := DiceCup withAll: { 
 			                    dieOne.
 			                    dieTwo.
@@ -144,7 +146,7 @@ GameTest >> testAGameHasABoardWithSpeedUpInFivePositionAndValentinEndsUpInNinePo
 		        and: aDiceCupForValen.
 	game playATurn.
 	newPosition := game positionOfShip: 'Valen'.
-	self assert: newPosition boxNumber equals: 6
+	self assert: newPosition boxNumber equals: 9.
 ]
 
 { #category : #tests }
