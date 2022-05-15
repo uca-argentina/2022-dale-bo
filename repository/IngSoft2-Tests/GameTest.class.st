@@ -48,8 +48,7 @@ GameTest >> testAGameHasABoardWithAWormHoleInFivePositionAndValentinEndsUpInPosi
 		        a: aBoard
 		        and: aDiceCupForValen.
 	game playATurn.
-	newPosition := game positionOfShip: 'Valen'.
-	self assert: newPosition boxNumber equals: 1
+	self assert: (game positionOfShip: 'Valen') boxNumber equals: 1
 ]
 
 { #category : #tests }
@@ -79,7 +78,8 @@ GameTest >> testAGameHasABoardWithMoonwalkEffectInPosition8AndAppliesItsEffectTo
 	game := Game with: { 'Valen'. 'Pablo'. 'AA' } a: aBoard and: aDiceCup.
 	game playATurn.
 	game playATurn.
-	self assert: (game boxNumberOf: 'Valen') equals: 2
+	self assert: (game boxNumberOf: 'Valen') equals: 5.
+   self assert: (game boxNumberOf: 'Pablo') equals: 8.
 ]
 
 { #category : #tests }
@@ -95,7 +95,7 @@ GameTest >> testAGameHasABoardWithNoEffectsAndValenWinsTheGame [
 				          noEffect.
 				          noEffect.
 				          noEffect.
-				          noEffect }
+				          noEffect. }
 		          and: 2.
 	dieOne := LoadedDie with: 1.
 	dieTwo := LoadedDie with: 2.
@@ -110,7 +110,7 @@ GameTest >> testAGameHasABoardWithNoEffectsAndValenWinsTheGame [
 		        and: aDiceCup.
 	[ game hasFinished ] whileFalse: [ game playATurn ].
 	self assert: game winner equals: 'Valen'.
-	self deny: game winner equals: 'Pablito'
+	self deny: game winner equals: 'Pablo'
 ]
 
 { #category : #tests }
@@ -275,8 +275,8 @@ GameTest >> testAGameRetrunsPositionOfShipAfterItMoves [
 		        a: aBoard
 		        and: aDiceCup.
 	[ game hasFinished ] whileFalse: [ game playATurn ].
-	self assert: (game boxNumberOf: 'Valen') equals: 12.
-	self assert: (game boxNumberOf: 'Pablo') equals: 7
+	self assert: (game boxNumberOf: 'Valen') equals: 13.
+	self assert: (game boxNumberOf: 'Pablo') equals: 12.
 ]
 
 { #category : #tests }

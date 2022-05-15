@@ -16,10 +16,10 @@ BoardTest >> should: block raise: classError whoseDescriptionIncludes: anErrorMe
 { #category : #tests }
 BoardTest >> testABoardMustHaveAtLeastOneBox [
 
-	| aBoard box |
-	box := Box new.
-	aBoard := Board withAll: { box }.
-	self assert: aBoard numberOfBoxes > 0
+	self
+		should: [Board withAll: { }  and: 2]
+		raise: Error
+		whoseDescriptionIncludes: 'A board must have at least one box'
 ]
 
 { #category : #tests }
@@ -30,6 +30,16 @@ BoardTest >> testABoardMustHaveAtLeastOneBoxWithNoEffect [
 	aBoard := Board withAll: { 
 			          noEffect.
 			          noEffect.
-			          noEffect }.
-	self assert: aBoard numberOfBoxes > 0
+			          noEffect }  and: 2.
+	self assert: aBoard lastPosition  > 0
+]
+
+{ #category : #tests }
+BoardTest >> testABoardMustHaveAtLeastOneLap [
+	| noEffect |
+	noEffect := Box new.
+	self
+		should: [Board withAll: {noEffect }  and: 0]
+		raise: Error
+		whoseDescriptionIncludes: 'A board must have at least one lap'
 ]

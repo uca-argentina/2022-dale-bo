@@ -70,9 +70,9 @@ Game >> newPositionWith: lastPosition and: effect [
 			shipNewBoxNumber >= board lastPosition ifTrue: [ 
 				shipNewBoxNumber := board lastPosition.
 				finished := true.
-				winner := turnSequenceController whoPlays ] ].
+				winner := lastPosition ownerShip ] ].
 	^ PositionOfAShip
-		  of: turnSequenceController whoPlays
+		  of: lastPosition ownerShip 
 		  at: shipNewBoxNumber
 		  and: shipNewLapNumber
 ]
@@ -80,18 +80,17 @@ Game >> newPositionWith: lastPosition and: effect [
 { #category : #action }
 Game >> playATurn [
 
-	| shipNewBoxNumber oldPosition targetedShips effect positionWithoutEffect |
+	| oldPosition targetedShips effect positionWithoutEffect |
 	oldPosition := self positionOfShip: turnSequenceController whoPlays.
-	shipNewBoxNumber := diceCup roll + oldPosition boxNumber.
 	positionWithoutEffect := self
 		                         newPositionWith: oldPosition
 		                         and: diceCup roll.
 	self update: oldPosition to: positionWithoutEffect.
 	targetedShips := board
-		                 effectAt: shipNewBoxNumber
+		                 effectAt: positionWithoutEffect boxNumber
 		                 for: positions
 		                 appliedBy: positionWithoutEffect .
-	effect := board effectAt: shipNewBoxNumber.
+	effect := board effectAt: positionWithoutEffect boxNumber.
 	targetedShips do: [ :each | 
 		self update: each to: (self newPositionWith: each and: effect) ].
 	turnSequenceController changeTurn

@@ -10,7 +10,7 @@ Class {
 
 { #category : #asserting }
 Board class >> assertValid: boxes [
-	boxes size > 0 ifFalse: [ Error signal: 'A board must have at least one box' ].
+	boxes isEmpty ifTrue: [ Error signal: 'A board must have at least one box' ].
 ]
 
 { #category : #asserting }
@@ -49,10 +49,5 @@ Board >> laps [
 
 { #category : #accesing }
 Board >> lastPosition [
-	^boxes size-1.
-]
-
-{ #category : #accesing }
-Board >> numberOfBoxes [
 	^boxes size.
 ]
