@@ -76,8 +76,8 @@ GameTest >> testAGameHasABoardWithMoonwalkEffectInPosition8AndAppliesItsEffectTo
 			            dieTwo.
 			            dieThree }.
 	game := Game with: { 'Valen'. 'Pablo'. 'AA' } a: aBoard and: aDiceCup.
-	game playATurn.
-	game playATurn.
+	game playATurn. "valen cae en la pos 8, el moonwalk no afecta a los demas por estar en la primera posicion."
+	game playATurn. "pablo cae en la pos 8, el moonwalk afecta a valen y lo retrocede 3 lugares."
 	self assert: (game boxNumberOf: 'Valen') equals: 5.
    self assert: (game boxNumberOf: 'Pablo') equals: 8.
 ]
