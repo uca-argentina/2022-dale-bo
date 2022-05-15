@@ -19,6 +19,46 @@ GameTest >> should: aBlock raise: anError withMessage: anErrorMessage [
 ]
 
 { #category : #tests }
+GameTest >> testAGameHasABoardWithAAtomicBombInPositionThreeAndTheEffectDoenstChangeLaps [
+
+	| aBoard dieOne dieTwo dieThree aDiceCupForValen game noEffect atomicBomb|
+	noEffect := Box new.
+	atomicBomb := AtomicBomb with: 10.
+	aBoard := Board
+		          withAll: { 
+				          noEffect.
+				          noEffect.
+				          atomicBomb.
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          noEffect.				          
+							 noEffect.
+							 noEffect.
+							 noEffect. }
+		          and: 2.
+	dieOne := LoadedDie with: 1.
+	dieTwo := LoadedDie with: 3.
+	dieThree := LoadedDie with: 2.
+	aDiceCupForValen := DiceCup withAll: { 
+			                    dieOne.
+			                    dieTwo.
+			                    dieThree }.
+	game := Game
+		        with: { 'Valen'. 'Pablo'. 'Seba' }
+		        a: aBoard
+		        and: aDiceCupForValen.
+	game playATurn.
+	game playATurn.
+	game playATurn.
+	game playATurn.
+	self assert: (game positionOfShip: 'Valen') boxNumber equals: 1.
+	self assert: (game positionOfShip: 'Valen') lapNumber equals: 2.
+	self assert: (game positionOfShip: 'Pablo') boxNumber equals: 1.
+	self assert: (game positionOfShip: 'Seba') boxNumber equals: 1.
+]
+
+{ #category : #tests }
 GameTest >> testAGameHasABoardWithAWormHoleInFivePositionAndValentinEndsUpInPositionOne [
 
 	| aBoard dieOne dieTwo dieThree aDiceCupForValen game noEffect newPosition wormHole |

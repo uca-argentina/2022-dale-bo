@@ -51,28 +51,29 @@ Game >> initializeWith: aShips a: aBoard and: aDiceCup [
 ]
 
 { #category : #'instance creation' }
-Game >> newPositionWith: lastPosition and: effect [
+Game >> newPositionWith: oldPosition and: effect [
 
 	| shipNewLapNumber shipNewBoxNumber |
-	shipNewBoxNumber := lastPosition boxNumber + effect.
-	shipNewLapNumber := lastPosition lapNumber.
-	 (shipNewBoxNumber < 0 and: shipNewLapNumber < 2 )  ifTrue: [ 
+	shipNewBoxNumber := oldPosition boxNumber + effect.
+	shipNewLapNumber := oldPosition lapNumber.
+	 ((shipNewBoxNumber <= 0 and: shipNewLapNumber < 2) or: (effect = (0-board lastPosition) ) )  ifTrue: [ 
 		shipNewBoxNumber := 1 ].
-	( shipNewBoxNumber < 0 and: shipNewLapNumber > 1 ) ifTrue: [ 
-		shipNewBoxNumber := board numberOfBoxes + shipNewBoxNumber ].
+	( shipNewBoxNumber < 0 and: (shipNewLapNumber > 1 and: effect ~= (0-board lastPosition))) ifTrue: [ 
+		shipNewBoxNumber := board numberOfBoxes + shipNewBoxNumber.
+		shipNewLapNumber := shipNewLapNumber - 1. ].
 
-	lastPosition lapNumber < board laps
+	oldPosition lapNumber < board laps
 		ifTrue: [ 
 			shipNewBoxNumber > board lastPosition ifTrue: [ 
-				shipNewLapNumber := lastPosition lapNumber + 1.
+				shipNewLapNumber := oldPosition lapNumber + 1.
 				shipNewBoxNumber := shipNewBoxNumber - board lastPosition ] ]
 		ifFalse: [ 
 			shipNewBoxNumber >= board lastPosition ifTrue: [ 
 				shipNewBoxNumber := board lastPosition.
 				finished := true.
-				winner := lastPosition ownerShip ] ].
+				winner := oldPosition ownerShip ] ].
 	^ PositionOfAShip
-		  of: lastPosition ownerShip 
+		  of: oldPosition ownerShip 
 		  at: shipNewBoxNumber
 		  and: shipNewLapNumber
 ]
