@@ -23,6 +23,16 @@ PositionController class >> for:ships [
 	
 ]
 
+{ #category : #accesing }
+PositionController >> applyAtomicBomb [
+
+	positions do: [ :each | 
+		positions
+			replaceAll: each
+			with:
+			(PositionOfAShip of: each ownerShip at: 1 and: each lapNumber) ]
+]
+
 { #category : #initialization }
 PositionController >> initializeWith: ships [
 

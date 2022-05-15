@@ -19,8 +19,8 @@ AtomicBomb >> effect [
 ]
 
 { #category : #action }
-AtomicBomb >> effectTo: ships appliedBy: aShip [
-	^ships.
+AtomicBomb >> effectTo: ships appliedBy: aShip with: endPosition and:laps [
+	ships applyAtomicBomb.
 ]
 
 { #category : #initialization }

@@ -23,7 +23,7 @@ GameTest >> testAGameHasABoardWithAAtomicBombInPositionThreeAndTheEffectDoenstCh
 
 	| aBoard dieOne dieTwo dieThree aDiceCupForValen game noEffect atomicBomb|
 	noEffect := Box new.
-	atomicBomb := AtomicBomb with: 10.
+	atomicBomb := AtomicBomb new.
 	aBoard := Board
 		          withAll: { 
 				          noEffect.
@@ -50,6 +50,7 @@ GameTest >> testAGameHasABoardWithAAtomicBombInPositionThreeAndTheEffectDoenstCh
 		        and: aDiceCupForValen.
 	game playATurn.
 	game playATurn.
+	self assert: (game positionOfShip: 'Pablo') boxNumber equals: 7.
 	game playATurn.
 	game playATurn.
 	self assert: (game positionOfShip: 'Valen') boxNumber equals: 1.
@@ -88,11 +89,11 @@ GameTest >> testAGameHasABoardWithMoonWalkAtBoxSix [
 		        with: { 'Valen'. 'Pablo'. 'Seba' }
 		        a: aBoard
 		        and: aDiceCupForValen.
-	game playATurn2.
-	game playATurn2.
+	game playATurn.
+	game playATurn.
 	self assert: (game positionOfShip: 'Pablo') boxNumber equals: 4.
-	game playATurn2.
-	game playATurn2.
+	game playATurn.
+	game playATurn.
 	self assert: (game positionOfShip: 'Valen') boxNumber equals: 7.
 	self assert: (game positionOfShip: 'Pablo') boxNumber equals: 2.
 	self assert: (game positionOfShip: 'Seba') boxNumber equals: 2.
@@ -124,7 +125,7 @@ GameTest >> testAGameHasABoardWithNoEffectsAndValenWinsTheGame [
 		        with: { 'Valen'. 'Pablo'. 'Seba' }
 		        a: aBoard
 		        and: aDiceCup.
-	[ game hasFinished ] whileFalse: [ game playATurn2 ].
+	[ game hasFinished ] whileFalse: [ game playATurn ].
 	self assert: game winner equals: 'Valen'.
 	self deny: game winner equals: 'Pablo'
 ]
@@ -160,7 +161,7 @@ GameTest >> testAGameHasABoardWithSpeedUpAtBoxFive [
 		        with: {'Valen'.'Pablo'.'Seba'}
 		        a: aBoard
 		        and: aDiceCupForValen.
-	game playATurn2.
+	game playATurn.
 	newPosition := game positionOfShip: 'Valen'.
 	self assert: newPosition boxNumber equals: 9.
 ]
@@ -196,7 +197,7 @@ GameTest >> testAGameHasABoardWithWormHoleAtBoxThree [
 		        with: { 'Valen'. 'Pablo'. 'Seba' }
 		        a: aBoard
 		        and: aDiceCupForValen.
-	game playATurn2.
+	game playATurn.
 	newPosition := game positionOfShip: 'Valen'.
 	self assert: newPosition boxNumber equals: 9.
 	self assert: newPosition lapNumber equals:1.
@@ -228,7 +229,7 @@ GameTest >> testAGameHasAWinner [
 		        with: { 'Valen'. 'Pablo'. 'Seba' }
 		        a: aBoard
 		        and: aDiceCup.
-	[ game hasFinished ] whileFalse: [ game playATurn2 ].
+	[ game hasFinished ] whileFalse: [ game playATurn ].
 	self assert: game winner equals: 'Valen'.
 	self deny: game winner equals: 'Pablito'
 ]
@@ -355,10 +356,10 @@ GameTest >> testAGameRetrunsRanking [
 			            dieTwo.
 			            dieThree }.
 	game := Game with: { 'Valen'. 'Pablo'. 'AA' } a: aBoard and: aDiceCup.
-	game playATurn.
-	game playATurn.
-	game playATurn.
-	game playATurn.
+	game playATurn2 .
+	game playATurn2 .
+	game playATurn2 .
+	game playATurn2.
 	self assert: (game rankingOf: 'Valen') equals: 1.
 	self assert: (game rankingOf: 'Pablo') equals: 2.
 	self assert: (game rankingOf: 'AA') equals: 2
