@@ -28,6 +28,14 @@ Moonwalk >> effectTo: ships appliedBy: aShip [
 	^ shipsAffected
 ]
 
+{ #category : #'action handling' }
+Moonwalk >> effectTo: ships appliedBy: aShip with: endPosition and:laps [
+
+	ships positions do: [ :each | 
+		each ownerShip ~= aShip ifTrue: [ 
+			ships moveBackwards: each ownerShip to: self effect with: endPosition and:laps] ]
+]
+
 { #category : #initialization }
 Moonwalk >> initializeWith: aNumberOfBoxesToSendBack [ 
 	retroPositions:= aNumberOfBoxesToSendBack.

@@ -13,3 +13,8 @@ WormHole >> effect [
 WormHole >> effectTo: ships appliedBy: aShip [
 	^{aShip}
 ]
+
+{ #category : #action }
+WormHole >> effectTo: ships appliedBy: aShip with:endPosition and:laps [
+	ships moveBackwards: aShip to: (self effect) with:endPosition and:laps. 
+]

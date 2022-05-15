@@ -6,26 +6,16 @@ Class {
 		'diceCup',
 		'finished',
 		'winner',
-		'positions',
-		'turnSequenceController'
+		'turnSequenceController',
+		'positionController'
 	],
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #asserting }
-Game class >> assertCollectionOfShipsIsValid:aCollectionOfShips [
-
-	(aCollectionOfShips size  > 1) ifFalse: [ 
-		Error signal: 'Game must have more than one Ship']
-
-
-]
-
 { #category : #'instance colors' }
-Game class >> with: aCollectionOfShips a: aBoard and: aDiceCup [
+Game class >> with: ships a: aBoard and: aDiceCup [
 
-	self assertCollectionOfShipsIsValid: aCollectionOfShips.
-	^ self new initializeWith: aCollectionOfShips a: aBoard and: aDiceCup
+	^ self new initializeWith: ships a: aBoard and: aDiceCup
 ]
 
 { #category : #accesing }
@@ -37,13 +27,13 @@ Game >> boxNumberOf: aShip [
 { #category : #accessing }
 Game >> hasFinished [
 
-	^ finished
+	^(self winner equals: 'No one') 
 ]
 
 { #category : #initializing }
 Game >> initializeWith: aShips a: aBoard and: aDiceCup [
 
-	positions := aShips collect: [ :ship | PositionOfAShip of: ship at: 1 and: 1].
+	positionController := PositionController for:aShips.
 	board := aBoard.
 	diceCup := aDiceCup.
 	turnSequenceController := TurnSequenceController with: aShips.
@@ -97,10 +87,31 @@ Game >> playATurn [
 	turnSequenceController changeTurn
 ]
 
+{ #category : #actions }
+Game >> playATurn2 [
+
+	| oldPosition diceResult shipPositionWithoutEffect |
+	oldPosition := positionController positionOf:
+		               turnSequenceController whoPlays.
+	diceResult := diceCup roll.
+	positionController
+		moveForward: oldPosition ownerShip
+		to: diceResult
+		with: board lastPosition and: board laps.
+	shipPositionWithoutEffect := positionController positionOf:
+		                             turnSequenceController whoPlays.
+	board
+		effectAt: shipPositionWithoutEffect boxNumber
+		for: positionController
+		appliedBy: shipPositionWithoutEffect ownerShip.
+
+	turnSequenceController changeTurn
+]
+
 { #category : #action }
 Game >> positionOfShip: aShip [
 
-	^ positions detect: [ :each | each ownerShip = aShip ]
+	^ positionController positionOf:aShip.
 ]
 
 { #category : #action }
@@ -129,5 +140,5 @@ Game >> update: lastPosition to: newPosition [
 { #category : #actions }
 Game >> winner [
 
-	^ winner
+	^ positionController winner.
 ]

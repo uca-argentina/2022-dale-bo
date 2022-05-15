@@ -31,8 +31,8 @@ Board >> effectAt: aBoxNumber [
 ]
 
 { #category : #actions }
-Board >> effectAt: aBoxNumber for: ships appliedBy: aShip [ 
-	^(boxes at:aBoxNumber) effectTo:ships appliedBy:aShip
+Board >> effectAt: aBoxNumber for: ships appliedBy: aShip [
+	(boxes at:aBoxNumber) effectTo:ships appliedBy:aShip with: (self lastPosition) and:(self laps).
 ]
 
 { #category : #initialization }
