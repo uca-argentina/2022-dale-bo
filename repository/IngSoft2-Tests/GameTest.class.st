@@ -329,8 +329,8 @@ GameTest >> testAGameRetrunsPositionOfShipAfterItMoves [
 		        a: aBoard
 		        and: aDiceCup.
 	[ game hasFinished ] whileFalse: [ game playATurn ].
-	self assert: (game boxNumberOf: 'Valen') equals: 13.
-	self assert: (game boxNumberOf: 'Pablo') equals: 12.
+	self assert: (game positionOfShip: 'Valen') boxNumber  equals: 13.
+	self assert: (game positionOfShip: 'Pablo') boxNumber equals: 12.
 ]
 
 { #category : #tests }
@@ -356,10 +356,10 @@ GameTest >> testAGameRetrunsRanking [
 			            dieTwo.
 			            dieThree }.
 	game := Game with: { 'Valen'. 'Pablo'. 'AA' } a: aBoard and: aDiceCup.
-	game playATurn2 .
-	game playATurn2 .
-	game playATurn2 .
-	game playATurn2.
+	game playATurn .
+	game playATurn .
+	game playATurn.
+	game playATurn.
 	self assert: (game rankingOf: 'Valen') equals: 1.
 	self assert: (game rankingOf: 'Pablo') equals: 2.
 	self assert: (game rankingOf: 'AA') equals: 2
@@ -390,5 +390,5 @@ GameTest >> testAGameStartsWithShipsAtPosition1 [
 		        with: { 'Valen'. 'Pablo'. 'Seba' }
 		        a: aBoard
 		        and: aDiceCup.
-	self assert: (game boxNumberOf: 'Valen') equals: 1
+	self assert: (game positionOfShip: 'Valen') boxNumber  equals: 1
 ]

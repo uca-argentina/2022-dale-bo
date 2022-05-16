@@ -18,12 +18,6 @@ Game class >> with: ships a: aBoard and: aDiceCup [
 	^ self new initializeWith: ships a: aBoard and: aDiceCup
 ]
 
-{ #category : #accesing }
-Game >> boxNumberOf: aShip [
-
-	^( self positionOfShip:aShip) boxNumber. 
-]
-
 { #category : #accessing }
 Game >> hasFinished [
 

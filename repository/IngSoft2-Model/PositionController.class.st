@@ -42,24 +42,6 @@ PositionController >> initializeWith: ships [
 ]
 
 { #category : #action }
-PositionController >> moveBackwards: aShip to: aBox with: endPosition [
-
-	| oldPosition shipNewBoxNumber shipNewLapNumber |
-	oldPosition := positions detect: [ :each | each ownerShip = aShip ].
-	shipNewBoxNumber := oldPosition boxNumber + aBox.
-	shipNewLapNumber:= oldPosition lapNumber.
-	(shipNewBoxNumber < 1 and: oldPosition lapNumber > 1) ifTrue: [ 
-		shipNewBoxNumber := endPosition + shipNewBoxNumber.
-		shipNewLapNumber := oldPosition lapNumber - 1 ].
-	(shipNewBoxNumber < 1 and: oldPosition lapNumber = 1) ifTrue: [ 
-		shipNewBoxNumber := 1 ].
-
-	positions
-		replaceAll: oldPosition
-		with: (PositionOfAShip of: aShip at: shipNewBoxNumber and: shipNewLapNumber)
-]
-
-{ #category : #action }
 PositionController >> moveBackwards: aShip to: aBox with: endPosition and:laps [
 
 	| oldPosition shipNewBoxNumber shipNewLapNumber |
@@ -75,26 +57,6 @@ PositionController >> moveBackwards: aShip to: aBox with: endPosition and:laps [
 	positions
 		replaceAll: oldPosition
 		with: (PositionOfAShip of: aShip at: shipNewBoxNumber and: shipNewLapNumber)
-]
-
-{ #category : #action }
-PositionController >> moveForward: aShip to: aBox with: endPosition [
-
-	| oldPosition shipNewBoxNumber shipNewLapNumber |
-	oldPosition := positions detect: [ :each | each ownerShip = aShip  ].
-	shipNewBoxNumber := oldPosition boxNumber + aBox.
-	shipNewBoxNumber > endPosition
-		ifTrue: [ 
-			shipNewLapNumber := oldPosition lapNumber + 1.
-			shipNewBoxNumber := shipNewBoxNumber - endPosition ]
-		ifFalse: [ shipNewLapNumber := oldPosition lapNumber ].
-	positions
-		replaceAll: oldPosition
-		with:
-		(PositionOfAShip
-			 of: aShip 
-			 at: shipNewBoxNumber
-			 and: shipNewLapNumber)
 ]
 
 { #category : #action }
