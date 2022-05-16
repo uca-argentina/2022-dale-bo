@@ -14,6 +14,16 @@ BoardTest >> should: block raise: classError whoseDescriptionIncludes: anErrorMe
 ]
 
 { #category : #tests }
+BoardTest >> testABoardHasRandomGeneratedBoxes [
+
+	| randomBoxes aBoard box |
+	box := Box parsecs:2.
+	randomBoxes := (BoxesGenerator generateWith:10 and:200) boxSequence.
+	aBoard:= Board withAll: randomBoxes  and: 2.
+	self assert: (aBoard boxes) size equals:10.
+]
+
+{ #category : #tests }
 BoardTest >> testABoardMustHaveAtLeastOneBox [
 
 	self

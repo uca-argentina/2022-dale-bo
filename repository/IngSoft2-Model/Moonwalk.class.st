@@ -2,15 +2,16 @@ Class {
 	#name : #Moonwalk,
 	#superclass : #Object,
 	#instVars : [
-		'retroPositions'
+		'retroPositions',
+		'parsecs'
 	],
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #'instance creation' }
-Moonwalk class >> with: aNumberOfBoxesToSendBack [
+Moonwalk class >> with: aNumberOfBoxesToSendBack and:aNumberOfParsecs [
  
-	^self new initializeWith:aNumberOfBoxesToSendBack.
+	^self new initializeWith:aNumberOfBoxesToSendBack and:aNumberOfParsecs.
 ]
 
 { #category : #action }
@@ -27,6 +28,7 @@ Moonwalk >> effectTo: ships appliedBy: aShip with: endPosition and:laps [
 ]
 
 { #category : #initialization }
-Moonwalk >> initializeWith: aNumberOfBoxesToSendBack [ 
+Moonwalk >> initializeWith: aNumberOfBoxesToSendBack and:aNumberOfParsecs [
 	retroPositions:= aNumberOfBoxesToSendBack.
+	parsecs:= aNumberOfParsecs.
 ]

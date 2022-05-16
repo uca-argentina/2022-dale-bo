@@ -23,7 +23,7 @@ GameTest >> testAGameHasABoardWithAAtomicBombInPositionThreeAndTheEffectDoenstCh
 
 	| aBoard dieOne dieTwo dieThree aDiceCupForValen game noEffect atomicBomb|
 	noEffect := Box parsecs: 2.
-	atomicBomb := AtomicBomb new.
+	atomicBomb := AtomicBomb with:2.
 	aBoard := Board
 		          withAll: { 
 				          noEffect.
@@ -64,7 +64,7 @@ GameTest >> testAGameHasABoardWithAHyperJamInPositionFive [
 
 	| aBoard dieOne dieTwo dieThree aDiceCupForValen game noEffect hyperJam|
 	noEffect := Box parsecs: 2.
-	hyperJam := HyperJam with: {5. 4. 3. 1.} parsecs: 2.
+	hyperJam := HyperJump with: {5. 4. 3. 1.} parsecs: 2.
 	aBoard := Board
 		          withAll: { 
 				          noEffect.
@@ -107,7 +107,7 @@ GameTest >> testAGameHasABoardWithMoonWalkAtBoxSix [
 
 	| aBoard dieOne dieTwo dieThree aDiceCupForValen game noEffect moonwalk |
 	noEffect := Box parsecs: 2.
-	moonwalk := Moonwalk with: 2.
+	moonwalk := Moonwalk with: 2 and:2.
 	aBoard := Board
 		          withAll: { 
 				          noEffect.
@@ -178,7 +178,7 @@ GameTest >> testAGameHasABoardWithSpeedUpAtBoxFive [
 
 	| aBoard dieOne dieTwo dieThree aDiceCupForValen game noEffect speedUp newPosition |
 	noEffect := Box parsecs: 2.
-	speedUp := SpeedUp new.
+	speedUp := SpeedUp with:2.
 	aBoard := Board
 		          withAll: { 
 				          noEffect.
@@ -214,7 +214,7 @@ GameTest >> testAGameHasABoardWithWormHoleAtBoxThree [
 
 	| aBoard dieOne dieTwo dieThree aDiceCupForValen game noEffect newPosition wormhole |
 	noEffect := Box parsecs: 2.
-	wormhole := WormHole new.
+	wormhole := WormHole with:2.
 	aBoard := Board
 		          withAll: { 
 				          noEffect.

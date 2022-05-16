@@ -26,7 +26,7 @@ PositionTest >> testPositionHasAPositionBoxNumberGreaterThan0 [
 			PositionOfAShip
 				of: 'Valen'
 				at: -2
-				parsecs: aNumberOfParsecs
+				parsecs: 0
 				and: 0 ]
 		raise: Error
 		withMessage: 'Box number must be positive'
@@ -40,7 +40,7 @@ PositionTest >> testPositionHasAPositionLapNumberGreaterThan0 [
 			PositionOfAShip
 				of: 'Valen'
 				at: 2
-				parsecs: aNumberOfParsecs
+				parsecs: 0
 				and: -2 ]
 		raise: Error
 		withMessage: 'Lap number must be positive'
@@ -54,7 +54,7 @@ PositionTest >> testPositionHasAValidShipName [
 			PositionOfAShip
 				of: 'V'
 				at: 0
-				parsecs: aNumberOfParsecs
+				parsecs: 0
 				and: 0 ]
 		raise: Error
 		withMessage: 'Ship name must have a name longer than one character'

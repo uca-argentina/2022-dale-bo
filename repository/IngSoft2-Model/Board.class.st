@@ -25,6 +25,11 @@ Board class >> withAll: aCollectionOfBoxes and:laps [
 	^self new initializeWith: aCollectionOfBoxes and:laps.
 ]
 
+{ #category : #accessing }
+Board >> boxes [
+	^boxes
+]
+
 { #category : #accesing }
 Board >> effectAt: aBoxNumber [ 
 	^(boxes at: aBoxNumber) effect.

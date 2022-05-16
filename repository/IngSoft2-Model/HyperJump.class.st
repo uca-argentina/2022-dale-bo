@@ -1,5 +1,5 @@
 Class {
-	#name : #HyperJam,
+	#name : #HyperJump,
 	#superclass : #Object,
 	#instVars : [
 		'posibleMoves',
@@ -10,25 +10,25 @@ Class {
 }
 
 { #category : #'class initialization' }
-HyperJam class >> with:aCollectionOfPosiblesMoves parsecs: aNumberOfParsecs [
+HyperJump class >> with:aCollectionOfPosiblesMoves parsecs: aNumberOfParsecs [
  
 	^self new initializeWith:aCollectionOfPosiblesMoves and:aNumberOfParsecs.
 ]
 
 { #category : #initialization }
-HyperJam >> effect [
+HyperJump >> effect [
 	index:= index+1.
 	(index > posibleMoves size) ifTrue:[index:=1.].
 	^posibleMoves at: index.
 ]
 
 { #category : #initialization }
-HyperJam >> effectTo: ships appliedBy: aShip with: endPosition and:laps [
+HyperJump >> effectTo: ships appliedBy: aShip with: endPosition and:laps [
 	ships moveParsecs: aShip to: (self effect) parsecs:(parsecs) with:endPosition and:laps.
 ]
 
 { #category : #initialization }
-HyperJam >> initializeWith:aCollectionOfPosiblesMoves and:aNumberOfParsecs [
+HyperJump >> initializeWith:aCollectionOfPosiblesMoves and:aNumberOfParsecs [
 	index:=0.
 	posibleMoves:= aCollectionOfPosiblesMoves.
 	parsecs:= aNumberOfParsecs.

@@ -2,20 +2,15 @@ Class {
 	#name : #AtomicBomb,
 	#superclass : #Object,
 	#instVars : [
-		'retroPositions'
+		'parsecs'
 	],
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #'class initialization' }
-AtomicBomb class >> with: numberOfBoardBoxes [
+AtomicBomb class >> with:aNumberOfParsecs [
  
-	^self new initializeWith:numberOfBoardBoxes.
-]
-
-{ #category : #action }
-AtomicBomb >> effect [
-	^retroPositions.
+	^self new initializeWith:aNumberOfParsecs .
 ]
 
 { #category : #action }
@@ -24,6 +19,6 @@ AtomicBomb >> effectTo: ships appliedBy: aShip with: endPosition and:laps [
 ]
 
 { #category : #initialization }
-AtomicBomb >> initializeWith: numberOfBoardBoxes [ 
-	retroPositions:= 0-numberOfBoardBoxes .
+AtomicBomb >> initializeWith:aNumberOfParsecs [
+	parsecs:= aNumberOfParsecs.
 ]
