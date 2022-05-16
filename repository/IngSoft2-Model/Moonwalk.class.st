@@ -19,16 +19,6 @@ Moonwalk >> effect [
 ]
 
 { #category : #'action handling' }
-Moonwalk >> effectTo: ships appliedBy: aShip [
-
-	| shipsAffected |
-	shipsAffected := OrderedCollection new.
-	ships do: [ :each | 
-		each ~= aShip ifTrue: [ shipsAffected add: each ] ].
-	^ shipsAffected
-]
-
-{ #category : #'action handling' }
 Moonwalk >> effectTo: ships appliedBy: aShip with: endPosition and:laps [
 
 	ships positions do: [ :each | 

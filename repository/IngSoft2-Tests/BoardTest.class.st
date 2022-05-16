@@ -26,7 +26,7 @@ BoardTest >> testABoardMustHaveAtLeastOneBox [
 BoardTest >> testABoardMustHaveAtLeastOneBoxWithNoEffect [
 
 	| aBoard noEffect |
-	noEffect := Box new.
+	noEffect := Box parsecs:2.
 	aBoard := Board withAll: { 
 			          noEffect.
 			          noEffect.
@@ -37,7 +37,7 @@ BoardTest >> testABoardMustHaveAtLeastOneBoxWithNoEffect [
 { #category : #tests }
 BoardTest >> testABoardMustHaveAtLeastOneLap [
 	| noEffect |
-	noEffect := Box new.
+	noEffect := Box parsecs:2.
 	self
 		should: [Board withAll: {noEffect }  and: 0]
 		raise: Error

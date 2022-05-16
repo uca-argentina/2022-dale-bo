@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'ship',
 		'boxNumber',
-		'lapNumber'
+		'lapNumber',
+		'parsecNumber'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -30,11 +31,16 @@ PositionOfAShip class >> assertShipsNameIsValid:aShip [
 ]
 
 { #category : #instanceCreation }
-PositionOfAShip class >> of: aShip at: aBoxNumber and: aLapNumber [
-	self assertShipsNameIsValid:aShip.
+PositionOfAShip class >> of: aShip at: aBoxNumber parsecs: aNumberOfParsecs and: aLapNumber [
+
+	self assertShipsNameIsValid: aShip.
 	self assertBoxNumberIsGreaterThanZero: aBoxNumber.
 	self assertLapNumberIsGreaterThanZero: aLapNumber.
-	^self new initializeOf:aShip at:aBoxNumber and: aLapNumber.
+	^ self new
+		  initializeOf: aShip
+		  at: aBoxNumber
+		  parsecs: aNumberOfParsecs
+		  and: aLapNumber
 ]
 
 { #category : #accesing }
@@ -44,10 +50,11 @@ PositionOfAShip >> boxNumber [
 ]
 
 { #category : #initialization }
-PositionOfAShip >> initializeOf: aShip at: aBoxNumber and: aLapNumber [
+PositionOfAShip >> initializeOf: aShip at: aBoxNumber parsecs: aNumberOfParsecs and: aLapNumber [
 
 	ship := aShip.
 	boxNumber := aBoxNumber.
+	parsecNumber := aNumberOfParsecs.
 	lapNumber:=aLapNumber.
 ]
 
@@ -61,4 +68,10 @@ PositionOfAShip >> lapNumber [
 PositionOfAShip >> ownerShip [
 
 	^ ship
+]
+
+{ #category : #accessing }
+PositionOfAShip >> parsecNumber [
+
+	^ parsecNumber 
 ]

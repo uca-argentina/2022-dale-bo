@@ -22,7 +22,7 @@ GameTest >> should: aBlock raise: anError withMessage: anErrorMessage [
 GameTest >> testAGameHasABoardWithAAtomicBombInPositionThreeAndTheEffectDoenstChangeLaps [
 
 	| aBoard dieOne dieTwo dieThree aDiceCupForValen game noEffect atomicBomb|
-	noEffect := Box new.
+	noEffect := Box parsecs: 2.
 	atomicBomb := AtomicBomb new.
 	aBoard := Board
 		          withAll: { 
@@ -60,10 +60,53 @@ GameTest >> testAGameHasABoardWithAAtomicBombInPositionThreeAndTheEffectDoenstCh
 ]
 
 { #category : #tests }
+GameTest >> testAGameHasABoardWithAHyperJamInPositionFive [
+
+	| aBoard dieOne dieTwo dieThree aDiceCupForValen game noEffect hyperJam|
+	noEffect := Box parsecs: 2.
+	hyperJam := HyperJam with: {5. 4. 3. 1.} parsecs: 2.
+	aBoard := Board
+		          withAll: { 
+				          noEffect.
+				          noEffect.				        
+				          noEffect.
+				          noEffect.
+							 hyperJam.
+				          noEffect.
+				          noEffect.				          
+							 noEffect.
+							 noEffect.
+							 noEffect. }
+		          and: 2.
+	dieOne := LoadedDie with: 1.
+	dieTwo := LoadedDie with: 1.
+	dieThree := LoadedDie with: 2.
+	aDiceCupForValen := DiceCup withAll: { 
+			                    dieOne.
+			                    dieTwo.
+			                    dieThree }.
+	game := Game
+		        with: { 'Valen'. 'Pablo'. 'Seba' }
+		        a: aBoard
+		        and: aDiceCupForValen.
+	game playATurn.
+	self assert: (game positionOfShip: 'Valen') boxNumber equals: 7.
+	self assert: (game positionOfShip: 'Valen') parsecNumber equals: 1.
+	game playATurn.
+	game playATurn.
+	game playATurn.
+	game playATurn.
+	game playATurn.
+	game playATurn.
+	self assert: (game positionOfShip: 'Valen') boxNumber equals: 6.
+	self assert: (game positionOfShip: 'Valen') parsecNumber equals: 0.
+]
+
+{ #category : #tests }
 GameTest >> testAGameHasABoardWithMoonWalkAtBoxSix [
 
-	| aBoard dieOne dieTwo dieThree aDiceCupForValen game noEffect newPosition moonwalk |
-	noEffect := Box new.
+	| aBoard dieOne dieTwo dieThree aDiceCupForValen game noEffect moonwalk |
+	noEffect := Box parsecs: 2.
 	moonwalk := Moonwalk with: 2.
 	aBoard := Board
 		          withAll: { 
@@ -103,7 +146,7 @@ GameTest >> testAGameHasABoardWithMoonWalkAtBoxSix [
 GameTest >> testAGameHasABoardWithNoEffectsAndValenWinsTheGame [
 
 	| aBoard dieOne dieTwo dieThree aDiceCup game noEffect |
-	noEffect := Box new.
+	noEffect := Box parsecs: 2.
 	aBoard := Board
 		          withAll: { 
 				          noEffect.
@@ -134,7 +177,7 @@ GameTest >> testAGameHasABoardWithNoEffectsAndValenWinsTheGame [
 GameTest >> testAGameHasABoardWithSpeedUpAtBoxFive [
 
 	| aBoard dieOne dieTwo dieThree aDiceCupForValen game noEffect speedUp newPosition |
-	noEffect := Box new.
+	noEffect := Box parsecs: 2.
 	speedUp := SpeedUp new.
 	aBoard := Board
 		          withAll: { 
@@ -170,7 +213,7 @@ GameTest >> testAGameHasABoardWithSpeedUpAtBoxFive [
 GameTest >> testAGameHasABoardWithWormHoleAtBoxThree [
 
 	| aBoard dieOne dieTwo dieThree aDiceCupForValen game noEffect newPosition wormhole |
-	noEffect := Box new.
+	noEffect := Box parsecs: 2.
 	wormhole := WormHole new.
 	aBoard := Board
 		          withAll: { 
@@ -207,7 +250,7 @@ GameTest >> testAGameHasABoardWithWormHoleAtBoxThree [
 GameTest >> testAGameHasAWinner [
 
 	| aBoard dieOne dieTwo dieThree aDiceCup game noEffect |
-	noEffect := Box new.
+	noEffect := Box parsecs: 2.
 	aBoard := Board
 		          withAll: { 
 				          noEffect.
@@ -238,7 +281,7 @@ GameTest >> testAGameHasAWinner [
 GameTest >> testAGameHasFinishedWhenAShipWins [
 
 	| aBoard dieOne dieTwo dieThree aDiceCup game noEffect |
-	noEffect := Box new.
+	noEffect := Box parsecs: 2.
 	aBoard := Board
 		          withAll: { 
 				          noEffect.
@@ -272,7 +315,7 @@ GameTest >> testAGameHasFinishedWhenAShipWins [
 GameTest >> testAGameIsCreatedWithLessThanTwoShips [
 
 	| aBoard dieOne dieTwo dieThree aDiceCup noEffect |
-	noEffect := Box new.
+	noEffect := Box parsecs: 2.
 	aBoard := Board
 		          withAll: { 
 				          noEffect.
@@ -300,7 +343,7 @@ GameTest >> testAGameIsCreatedWithLessThanTwoShips [
 GameTest >> testAGameRetrunsPositionOfShipAfterItMoves [
 
 	| aBoard dieOne dieTwo dieThree aDiceCup game noEffect |
-	noEffect := Box new.
+	noEffect := Box parsecs: 2.
 	aBoard := Board
 		          withAll: { 
 				          noEffect.
@@ -336,17 +379,17 @@ GameTest >> testAGameRetrunsPositionOfShipAfterItMoves [
 { #category : #tests }
 GameTest >> testAGameRetrunsRanking [
 
-	| aBoard dieOne dieTwo dieThree aDiceCup game box |
-	box := Box new.
+	| aBoard dieOne dieTwo dieThree aDiceCup game noEffect  |
+	noEffect  := Box parsecs: 2.
 	aBoard := Board
 		          withAll: { 
-				          box.
-				          box.
-				          box.
-				          box.
-				          box.
-				          box.
-				          box }
+				          noEffect .
+				          noEffect .
+				          noEffect .
+				          noEffect .
+				          noEffect .
+				          noEffect .
+				          noEffect  }
 		          and: 2.
 	dieOne := LoadedDie with: 1.
 	dieTwo := LoadedDie with: 1.
@@ -369,7 +412,7 @@ GameTest >> testAGameRetrunsRanking [
 GameTest >> testAGameStartsWithShipsAtPosition1 [
 
 	| aBoard dieOne dieTwo dieThree aDiceCup game noEffect |
-	noEffect := Box new.
+	noEffect := Box parsecs: 2.
 	aBoard := Board
 		          withAll: { 
 				          noEffect.

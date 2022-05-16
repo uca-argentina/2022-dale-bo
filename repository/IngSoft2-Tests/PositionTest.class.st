@@ -22,7 +22,12 @@ PositionTest >> should: aBlock raise: anError withMessage: anErrorMessage [
 PositionTest >> testPositionHasAPositionBoxNumberGreaterThan0 [
 
 	self
-		should: [ PositionOfAShip of: 'Valen' at: -2 and: 0 ]
+		should: [ 
+			PositionOfAShip
+				of: 'Valen'
+				at: -2
+				parsecs: aNumberOfParsecs
+				and: 0 ]
 		raise: Error
 		withMessage: 'Box number must be positive'
 ]
@@ -31,7 +36,12 @@ PositionTest >> testPositionHasAPositionBoxNumberGreaterThan0 [
 PositionTest >> testPositionHasAPositionLapNumberGreaterThan0 [
 
 	self
-		should: [ PositionOfAShip of: 'Valen' at: 2 and: -2 ]
+		should: [ 
+			PositionOfAShip
+				of: 'Valen'
+				at: 2
+				parsecs: aNumberOfParsecs
+				and: -2 ]
 		raise: Error
 		withMessage: 'Lap number must be positive'
 ]
@@ -40,7 +50,12 @@ PositionTest >> testPositionHasAPositionLapNumberGreaterThan0 [
 PositionTest >> testPositionHasAValidShipName [
 
 	self
-		should: [ PositionOfAShip of: 'V' at: 0 and: 0 ]
+		should: [ 
+			PositionOfAShip
+				of: 'V'
+				at: 0
+				parsecs: aNumberOfParsecs
+				and: 0 ]
 		raise: Error
 		withMessage: 'Ship name must have a name longer than one character'
 ]
