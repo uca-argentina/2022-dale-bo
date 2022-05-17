@@ -19,9 +19,9 @@ TurnSequenceController class >> with: aCollectionOfShips [
 
 { #category : #actions }
 TurnSequenceController >> changeTurn [
+
 	turnNumber := turnNumber + 1.
-	turnNumber > ships size
-		ifTrue: [ turnNumber := 1 ]
+	turnNumber > ships size ifTrue: [ turnNumber := 1 ]
 ]
 
 { #category : #initialization }

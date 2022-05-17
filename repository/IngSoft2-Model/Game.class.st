@@ -21,13 +21,13 @@ Game class >> with: ships a: aBoard and: aDiceCup [
 { #category : #accessing }
 Game >> hasFinished [
 
-	^(self winner) ~= 'No one'. 
+	^ self winner ~= 'No one'
 ]
 
 { #category : #initializing }
 Game >> initializeWith: aShips a: aBoard and: aDiceCup [
 
-	positionController := PositionController for:aShips.
+	positionController := PositionController for: aShips.
 	board := aBoard.
 	diceCup := aDiceCup.
 	turnSequenceController := TurnSequenceController with: aShips.
@@ -44,7 +44,8 @@ Game >> playATurn [
 	positionController
 		moveForward: oldPosition ownerShip
 		to: diceResult
-		with: board lastPosition and: board laps.
+		with: board lastPosition
+		and: board laps.
 	shipPositionWithoutEffect := positionController positionOf:
 		                             turnSequenceController whoPlays.
 	board
@@ -63,15 +64,15 @@ Game >> positionOfShip: aShip [
 
 { #category : #action }
 Game >> rankingOf: aShip [
-	
+
 	positionController sortPositionsByRanking.
 	positionController positions do: [ :positionOfAShip | 
 		positionOfAShip ownerShip = aShip ifTrue: [ 
-			^ (positionController positions) indexOf: positionOfAShip ] ]
+			^ positionController positions indexOf: positionOfAShip ] ]
 ]
 
 { #category : #actions }
 Game >> winner [
 
-	^ positionController winner.
+	^ positionController winner
 ]

@@ -14,11 +14,13 @@ AtomicBomb class >> with:aNumberOfParsecs [
 ]
 
 { #category : #action }
-AtomicBomb >> effectTo: ships appliedBy: aShip with: endPosition and:laps [
-	ships applyAtomicBomb.
+AtomicBomb >> effectTo: ships appliedBy: aShip with: endPosition and: laps [
+
+	ships applyAtomicBomb
 ]
 
 { #category : #initialization }
-AtomicBomb >> initializeWith:aNumberOfParsecs [
-	parsecs:= aNumberOfParsecs.
+AtomicBomb >> initializeWith: aNumberOfParsecs [
+
+	parsecs := aNumberOfParsecs
 ]

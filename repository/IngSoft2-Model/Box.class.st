@@ -15,15 +15,22 @@ Box class >> parsecs: aNumberOfParsecs [
 
 { #category : #action }
 Box >> effect [
-	^0.
+
+	^ 0
 ]
 
 { #category : #action }
-Box >> effectTo: ships appliedBy: aShip with:endPosition and:laps [
-	ships moveForward: aShip to: (self effect) with:endPosition and:laps. 
+Box >> effectTo: ships appliedBy: aShip with: endPosition and: laps [
+
+	ships
+		moveForward: aShip
+		to: self effect
+		with: endPosition
+		and: laps
 ]
 
 { #category : #initialization }
-Box >> initializeWith:aNumberOfParsecs [
-	parsecs:= aNumberOfParsecs.
+Box >> initializeWith: aNumberOfParsecs [
+
+	parsecs := aNumberOfParsecs
 ]

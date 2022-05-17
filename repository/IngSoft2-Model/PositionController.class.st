@@ -112,15 +112,6 @@ PositionController >> positions [
 ]
 
 { #category : #accesing }
-PositionController >> rankingOf: aShip [
-
-	self sortPositionsByRanking.
-	positions do: [ :positionOfAShip | 
-		positionOfAShip ownerShip = aShip ifTrue: [ 
-			^ positions indexOf: positionOfAShip ] ]
-]
-
-{ #category : #accesing }
 PositionController >> sortPositionsByRanking [
 
 	positions sort: [ :positionOfShip1 :positionOfShip2 | 

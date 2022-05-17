@@ -27,32 +27,41 @@ Board class >> withAll: aCollectionOfBoxes and:laps [
 
 { #category : #accessing }
 Board >> boxes [
-	^boxes
+
+	^ boxes
 ]
 
 { #category : #accesing }
-Board >> effectAt: aBoxNumber [ 
-	^(boxes at: aBoxNumber) effect.
+Board >> effectAt: aBoxNumber [
+
+	^ (boxes at: aBoxNumber) effect
 ]
 
 { #category : #actions }
 Board >> effectAt: aBoxNumber for: ships appliedBy: aShip [
-	(boxes at:aBoxNumber) effectTo:ships appliedBy:aShip with: (self lastPosition) and:(self laps).
+
+	(boxes at: aBoxNumber)
+		effectTo: ships
+		appliedBy: aShip
+		with: self lastPosition
+		and: self laps
 ]
 
 { #category : #initialization }
-Board >> initializeWith: aCollectionOfBoxes and:numberOfLaps [
+Board >> initializeWith: aCollectionOfBoxes and: numberOfLaps [
 
 	boxes := aCollectionOfBoxes.
-	laps:= numberOfLaps.
+	laps := numberOfLaps
 ]
 
 { #category : #accessing }
 Board >> laps [
-	^laps
+
+	^ laps
 ]
 
 { #category : #accesing }
 Board >> lastPosition [
-	^boxes size.
+
+	^ boxes size
 ]
