@@ -9,16 +9,7 @@ Class {
 }
 
 { #category : #'instance creation' }
-PositionController class >> assertCollectionOfShipsIsValid:aCollectionOfShips [
-
-	(aCollectionOfShips size  > 1) ifFalse: [ 
-		Error signal: 'Game must have more than one Ship']
-	
-]
-
-{ #category : #'instance creation' }
 PositionController class >> for:ships [
-	self assertCollectionOfShipsIsValid:ships.
 	^self new initializeWith:ships.
 	
 ]

@@ -19,15 +19,6 @@ PositionControllerTest >> should: aBlock raise: anError withMessage: anErrorMess
 ]
 
 { #category : #tests }
-PositionControllerTest >> testPositionControllerIsInitializedWithLessThanTwoShips [
-
-self
-		should: [ PositionController  for: { 'Valen' }]
-		raise: Error
-		withMessage: 'Game must have more than one Ship'
-]
-
-{ #category : #tests }
 PositionControllerTest >> testPositionControllerMovesOneShipBackwards3Boxes [
 
 	| positionController |

@@ -14,34 +14,23 @@ BoardTest >> should: block raise: classError whoseDescriptionIncludes: anErrorMe
 ]
 
 { #category : #tests }
-BoardTest >> testABoardHasRandomGeneratedBoxes [
+BoardTest >> testABoardCannotBeCreatedWithZeroBoxes [
+
+
+	self
+		should: [ Board withAll: {  } and:2 ]
+		raise: Error
+		whoseDescriptionIncludes: 'A board must have at least one box'
+]
+
+{ #category : #tests }
+BoardTest >> testABoardIsCreatedWith10RandomGeneratedBoxes [
 
 	| randomBoxes aBoard box |
 	box := Box parsecs:2.
 	randomBoxes := (BoxesGenerator generateWith:10 and:200) boxSequence.
 	aBoard:= Board withAll: randomBoxes  and: 2.
 	self assert: (aBoard boxes) size equals:10.
-]
-
-{ #category : #tests }
-BoardTest >> testABoardMustHaveAtLeastOneBox [
-
-	self
-		should: [Board withAll: { }  and: 2]
-		raise: Error
-		whoseDescriptionIncludes: 'A board must have at least one box'
-]
-
-{ #category : #tests }
-BoardTest >> testABoardMustHaveAtLeastOneBoxWithNoEffect [
-
-	| aBoard noEffect |
-	noEffect := Box parsecs:2.
-	aBoard := Board withAll: { 
-			          noEffect.
-			          noEffect.
-			          noEffect }  and: 2.
-	self assert: aBoard lastPosition  > 0
 ]
 
 { #category : #tests }

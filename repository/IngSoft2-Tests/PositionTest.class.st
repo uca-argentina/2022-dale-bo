@@ -19,7 +19,7 @@ PositionTest >> should: aBlock raise: anError withMessage: anErrorMessage [
 ]
 
 { #category : #tests }
-PositionTest >> testPositionHasAPositionBoxNumberGreaterThan0 [
+PositionTest >> testPositionHasAPositionBoxNumberGreaterThanZero [
 
 	self
 		should: [ 
@@ -33,7 +33,7 @@ PositionTest >> testPositionHasAPositionBoxNumberGreaterThan0 [
 ]
 
 { #category : #tests }
-PositionTest >> testPositionHasAPositionLapNumberGreaterThan0 [
+PositionTest >> testPositionHasAPositionLapNumberGreaterThanZero [
 
 	self
 		should: [ 

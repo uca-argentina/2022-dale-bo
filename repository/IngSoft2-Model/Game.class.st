@@ -5,7 +5,6 @@ Class {
 		'board',
 		'diceCup',
 		'finished',
-		'winner',
 		'turnSequenceController',
 		'positionController'
 	],
@@ -13,9 +12,22 @@ Class {
 }
 
 { #category : #'instance colors' }
-Game class >> with: ships a: aBoard and: aDiceCup [
+Game class >> assertCollectionOfShipsIsValid:aCollectionOfShips [
 
+	(aCollectionOfShips size  > 1) ifFalse: [ 
+		Error signal: 'Game must have more than one Ship']
+]
+
+{ #category : #'instance colors' }
+Game class >> with: ships a: aBoard and: aDiceCup [
+	self assertCollectionOfShipsIsValid:ships.
 	^ self new initializeWith: ships a: aBoard and: aDiceCup
+]
+
+{ #category : #actions }
+Game >> checkIfGameIsNotFinished [
+
+	(self hasFinished) ifTrue: [Error signal: 'Turn cannot be played, games has finished' ].
 ]
 
 { #category : #accessing }
@@ -31,13 +43,14 @@ Game >> initializeWith: aShips a: aBoard and: aDiceCup [
 	board := aBoard.
 	diceCup := aDiceCup.
 	turnSequenceController := TurnSequenceController with: aShips.
-	finished := false
+	finished := false.
 ]
 
 { #category : #actions }
 Game >> playATurn [
 
 	| oldPosition diceResult shipPositionWithoutEffect |
+	self checkIfGameIsNotFinished.
 	oldPosition := positionController positionOf:
 		               turnSequenceController whoPlays.
 	diceResult := diceCup roll.
