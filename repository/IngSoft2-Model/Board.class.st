@@ -41,8 +41,8 @@ Board >> effectAt: aBoxNumber [
 Board >> effectAt: aBoxNumber for: ships appliedBy: aShip [
 
 	(boxes at: aBoxNumber)
-		effectTo: ships
-		appliedBy: aShip
+		applyTo: ships
+		triggeredBy: aShip
 		with: self lastPosition
 		and: self laps
 ]

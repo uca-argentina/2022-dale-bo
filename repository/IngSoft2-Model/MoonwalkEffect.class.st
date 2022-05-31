@@ -1,6 +1,6 @@
 Class {
 	#name : #MoonwalkEffect,
-	#superclass : #Object,
+	#superclass : #BoxEffect,
 	#instVars : [
 		'retroPositions',
 		'parsecs'
@@ -15,16 +15,15 @@ MoonwalkEffect class >> with: aNumberOfBoxesToSendBack and:aNumberOfParsecs [
 ]
 
 { #category : #action }
-MoonwalkEffect >> effect [
-	^ 0- retroPositions.
-]
-
-{ #category : #'action handling' }
-MoonwalkEffect >> effectTo: ships appliedBy: aShip with: endPosition and:laps [
-
-	ships positions do: [ :each | 
+MoonwalkEffect >> applyTo: ships triggeredBy: aShip with: endPosition and:laps [
+ ships positions do: [ :each | 
 		each ownerShip ~= aShip ifTrue: [ 
 			ships moveBackwards: each ownerShip to: self effect with: endPosition and:laps] ]
+]
+
+{ #category : #action }
+MoonwalkEffect >> effect [
+	^ 0- retroPositions.
 ]
 
 { #category : #initialization }

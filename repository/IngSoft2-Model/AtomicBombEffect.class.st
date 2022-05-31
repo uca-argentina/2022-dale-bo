@@ -1,6 +1,6 @@
 Class {
 	#name : #AtomicBombEffect,
-	#superclass : #Object,
+	#superclass : #BoxEffect,
 	#instVars : [
 		'parsecs'
 	],
@@ -14,9 +14,8 @@ AtomicBombEffect class >> with:aNumberOfParsecs [
 ]
 
 { #category : #action }
-AtomicBombEffect >> effectTo: ships appliedBy: aShip with: endPosition and: laps [
-
-	ships applyAtomicBomb
+AtomicBombEffect >> applyTo: ships triggeredBy: aShip with: endPosition and:laps [
+ 	ships applyAtomicBomb
 ]
 
 { #category : #initialization }

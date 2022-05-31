@@ -1,6 +1,6 @@
 Class {
 	#name : #HyperJumpEffect,
-	#superclass : #Object,
+	#superclass : #BoxEffect,
 	#instVars : [
 		'posibleMoves',
 		'parsecs',
@@ -15,22 +15,21 @@ HyperJumpEffect class >> with:aCollectionOfPosiblesMoves parsecs: aNumberOfParse
 	^self new initializeWith:aCollectionOfPosiblesMoves and:aNumberOfParsecs.
 ]
 
-{ #category : #initialization }
-HyperJumpEffect >> effect [
-	index:= index+1.
-	(index > posibleMoves size) ifTrue:[index:=1.].
-	^posibleMoves at: index.
-]
-
-{ #category : #initialization }
-HyperJumpEffect >> effectTo: ships appliedBy: aShip with: endPosition and: laps [
-
-	ships
+{ #category : #action }
+HyperJumpEffect >> applyTo: ships triggeredBy: aShip with: endPosition and:laps [
+ ships
 		moveParsecs: aShip
 		to: self effect
 		parsecs: parsecs
 		with: endPosition
 		and: laps
+]
+
+{ #category : #initialization }
+HyperJumpEffect >> effect [
+	index:= index+1.
+	(index > posibleMoves size) ifTrue:[index:=1.].
+	^posibleMoves at: index.
 ]
 
 { #category : #initialization }

@@ -1,6 +1,6 @@
 Class {
 	#name : #WormHoleEffect,
-	#superclass : #Object,
+	#superclass : #BoxEffect,
 	#instVars : [
 		'parsecs'
 	],
@@ -14,19 +14,18 @@ WormHoleEffect class >> with:aNumberOfParsecs [
 ]
 
 { #category : #action }
-WormHoleEffect >> effect [
-
-	^ -4
-]
-
-{ #category : #action }
-WormHoleEffect >> effectTo: ships appliedBy: aShip with: endPosition and: laps [
-
-	ships
+WormHoleEffect >> applyTo: ships triggeredBy: aShip with: endPosition and:laps [
+ ships
 		moveBackwards: aShip
 		to: self effect
 		with: endPosition
 		and: laps
+]
+
+{ #category : #action }
+WormHoleEffect >> effect [
+
+	^ -4
 ]
 
 { #category : #action }

@@ -1,6 +1,6 @@
 Class {
 	#name : #SpeedUpEffect,
-	#superclass : #Object,
+	#superclass : #BoxEffect,
 	#instVars : [
 		'parsecs'
 	],
@@ -14,18 +14,17 @@ SpeedUpEffect class >> with:aNumberOfParsecs [
 ]
 
 { #category : #action }
-SpeedUpEffect >> effect [
-	^4
-]
-
-{ #category : #action }
-SpeedUpEffect >> effectTo: ships appliedBy: aShip with: endPosition and: laps [
-
-	ships
+SpeedUpEffect >> applyTo: ships triggeredBy: aShip with: endPosition and:laps [
+ ships
 		moveForward: aShip
 		to: self effect
 		with: endPosition
 		and: laps
+]
+
+{ #category : #action }
+SpeedUpEffect >> effect [
+	^4
 ]
 
 { #category : #action }

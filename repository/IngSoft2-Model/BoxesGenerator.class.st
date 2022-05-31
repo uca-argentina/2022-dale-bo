@@ -50,7 +50,7 @@ BoxesGenerator >> createBoxesSequenceWith: quantityOfBoxesByEffect [
 BoxesGenerator >> generateBoxes [
 
 	| wormholeBoxes atomicBombBoxes moonWalkBoxes speedUpBoxes hyperjumpBoxes noEffectBoxes quantityOfBoxesByEffect |
-	wormholeBoxes := (boxes * (self searchDistribution: 'wormHole')) floor.
+	wormholeBoxes := (boxes * 0.02) floor.
 	atomicBombBoxes := (boxes * 0.02) floor.
 	moonWalkBoxes := (boxes * 0.1) floor.
 	speedUpBoxes := (boxes * 0.2) floor.
@@ -93,9 +93,4 @@ BoxesGenerator >> initializeWith: numberOfBoxes distance: aDistance distribution
 	boxesSequence:= OrderedCollection new.
 	boxesDistribution:= aBoxDistribution.
 	self generateBoxes
-]
-
-{ #category : #actions }
-BoxesGenerator >> searchDistribution: aBoxName [ 
-	^boxesDistribution detect:  [ :each | each == aBoxName]
 ]
