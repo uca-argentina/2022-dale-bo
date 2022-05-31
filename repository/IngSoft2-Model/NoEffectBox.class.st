@@ -1,5 +1,5 @@
 Class {
-	#name : #Box,
+	#name : #NoEffectBox,
 	#superclass : #Object,
 	#instVars : [
 		'parsecs'
@@ -8,19 +8,19 @@ Class {
 }
 
 { #category : #'class initialization' }
-Box class >> parsecs: aNumberOfParsecs [
+NoEffectBox class >> distance: aNumberOfParsecs [
  
 	^self new initializeWith:aNumberOfParsecs.
 ]
 
 { #category : #action }
-Box >> effect [
+NoEffectBox >> effect [
 
 	^ 0
 ]
 
 { #category : #action }
-Box >> effectTo: ships appliedBy: aShip with: endPosition and: laps [
+NoEffectBox >> effectTo: ships appliedBy: aShip with: endPosition and: laps [
 
 	ships
 		moveForward: aShip
@@ -30,7 +30,7 @@ Box >> effectTo: ships appliedBy: aShip with: endPosition and: laps [
 ]
 
 { #category : #initialization }
-Box >> initializeWith: aNumberOfParsecs [
+NoEffectBox >> initializeWith: aNumberOfParsecs [
 
 	parsecs := aNumberOfParsecs
 ]

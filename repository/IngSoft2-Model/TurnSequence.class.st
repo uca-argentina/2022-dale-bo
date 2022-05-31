@@ -1,5 +1,5 @@
 Class {
-	#name : #TurnSequenceController,
+	#name : #TurnSequence,
 	#superclass : #Object,
 	#instVars : [
 		'ships',
@@ -13,26 +13,26 @@ Class {
 }
 
 { #category : #'instance creation' }
-TurnSequenceController class >> with: aCollectionOfShips [
+TurnSequence class >> with: aCollectionOfShips [
 	^self new initializeWith:aCollectionOfShips.
 ]
 
 { #category : #actions }
-TurnSequenceController >> changeTurn [
+TurnSequence >> changeTurn [
 
 	turnNumber := turnNumber + 1.
 	turnNumber > ships size ifTrue: [ turnNumber := 1 ]
 ]
 
 { #category : #initialization }
-TurnSequenceController >> initializeWith: aCollectionOfShips [
+TurnSequence >> initializeWith: aCollectionOfShips [
 
 	ships := aCollectionOfShips.
 	turnNumber := 1
 ]
 
 { #category : #action }
-TurnSequenceController >> whoPlays [
+TurnSequence >> whoPlays [
 
 	^ ships at: turnNumber
 ]

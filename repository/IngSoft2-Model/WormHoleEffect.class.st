@@ -1,5 +1,5 @@
 Class {
-	#name : #SpeedUp,
+	#name : #WormHoleEffect,
 	#superclass : #Object,
 	#instVars : [
 		'parsecs'
@@ -8,27 +8,29 @@ Class {
 }
 
 { #category : #'instance creation' }
-SpeedUp class >> with:aNumberOfParsecs [
+WormHoleEffect class >> with:aNumberOfParsecs [
  
 	^self new initializeWith:aNumberOfParsecs.
 ]
 
 { #category : #action }
-SpeedUp >> effect [
-	^4
+WormHoleEffect >> effect [
+
+	^ -4
 ]
 
 { #category : #action }
-SpeedUp >> effectTo: ships appliedBy: aShip with: endPosition and: laps [
+WormHoleEffect >> effectTo: ships appliedBy: aShip with: endPosition and: laps [
 
 	ships
-		moveForward: aShip
+		moveBackwards: aShip
 		to: self effect
 		with: endPosition
 		and: laps
 ]
 
 { #category : #action }
-SpeedUp >> initializeWith:aNumberOfParsecs [
-	parsecs:= aNumberOfParsecs.
+WormHoleEffect >> initializeWith: aNumberOfParsecs [
+
+	parsecs := aNumberOfParsecs
 ]

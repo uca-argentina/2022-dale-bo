@@ -42,7 +42,7 @@ Game >> initializeWith: aShips a: aBoard and: aDiceCup [
 	positionController := PositionController for: aShips.
 	board := aBoard.
 	diceCup := aDiceCup.
-	turnSequenceController := TurnSequenceController with: aShips.
+	turnSequenceController := TurnSequence with: aShips.
 	finished := false.
 ]
 

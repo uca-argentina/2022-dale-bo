@@ -1,5 +1,5 @@
 Class {
-	#name : #AtomicBomb,
+	#name : #AtomicBombEffect,
 	#superclass : #Object,
 	#instVars : [
 		'parsecs'
@@ -8,19 +8,19 @@ Class {
 }
 
 { #category : #'class initialization' }
-AtomicBomb class >> with:aNumberOfParsecs [
+AtomicBombEffect class >> with:aNumberOfParsecs [
  
 	^self new initializeWith:aNumberOfParsecs .
 ]
 
 { #category : #action }
-AtomicBomb >> effectTo: ships appliedBy: aShip with: endPosition and: laps [
+AtomicBombEffect >> effectTo: ships appliedBy: aShip with: endPosition and: laps [
 
 	ships applyAtomicBomb
 ]
 
 { #category : #initialization }
-AtomicBomb >> initializeWith: aNumberOfParsecs [
+AtomicBombEffect >> initializeWith: aNumberOfParsecs [
 
 	parsecs := aNumberOfParsecs
 ]

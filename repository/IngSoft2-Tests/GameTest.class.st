@@ -22,7 +22,7 @@ GameTest >> should: aBlock raise: anError withMessage: anErrorMessage [
 GameTest >> testAGameCannotBePlayedAfterItHasFinished [
 
 	| aBoard dieOne dieTwo dieThree aDiceCup game noEffect |
-	noEffect := Box parsecs: 2.
+	noEffect := NoEffectBox distance: 2.
 	aBoard := Board
 		          withAll: { 
 				          noEffect.
@@ -61,8 +61,8 @@ GameTest >> testAGameCannotBePlayedAfterItHasFinished [
 GameTest >> testAGameHasABoardWithAAtomicBombInPositionThreeAndTheEffectDoenstChangeLaps [
 
 	| aBoard dieOne dieTwo dieThree aDiceCupForValen game noEffect atomicBomb|
-	noEffect := Box parsecs: 2.
-	atomicBomb := AtomicBomb with:2.
+	noEffect := NoEffectBox distance: 2.
+	atomicBomb := AtomicBombEffect with:2.
 	aBoard := Board
 		          withAll: { 
 				          noEffect.
@@ -102,7 +102,7 @@ GameTest >> testAGameHasABoardWithAAtomicBombInPositionThreeAndTheEffectDoenstCh
 GameTest >> testAGameHasFinishedWhenAShipInTheLastPositionOfTheLastLap [
 
 	| aBoard dieOne dieTwo dieThree aDiceCup game noEffect |
-	noEffect := Box parsecs: 2.
+	noEffect := NoEffectBox distance: 2.
 	aBoard := Board
 		          withAll: { 
 				          noEffect.
@@ -135,10 +135,46 @@ GameTest >> testAGameHasFinishedWhenAShipInTheLastPositionOfTheLastLap [
 ]
 
 { #category : #tests }
+GameTest >> testAGameHasNoWinnerBeforeItsFinished [
+
+	| aBoard dieOne dieTwo dieThree aDiceCup game noEffect |
+	noEffect := NoEffectBox distance: 2.
+	aBoard := Board
+		          withAll: { 
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          noEffect.
+				          noEffect }
+		          and: 2.
+	dieOne := LoadedDie with: 1.
+	dieTwo := LoadedDie with: 2.
+	dieThree := LoadedDie with: 3.
+	aDiceCup := DiceCup withAll: { 
+			            dieOne.
+			            dieTwo.
+			            dieThree }.
+	game := Game
+		        with: { 'Valen'. 'Pablo'. 'Seba' }
+		        a: aBoard
+		        and: aDiceCup.
+	 game playATurn .
+	self assert: game winner equals: 'No one'
+]
+
+{ #category : #tests }
 GameTest >> testAGameIsPlayedAndValenEndsInLapTwo [
 
 	| aBoard dieOne dieTwo dieThree aDiceCup game noEffect |
-	noEffect := Box parsecs: 2.
+	noEffect := NoEffectBox distance: 2.
 	aBoard := Board
 		          withAll: { 
 				          noEffect.
@@ -168,7 +204,7 @@ GameTest >> testAGameIsPlayedAndValenEndsInLapTwo [
 GameTest >> testAGameIsPlayedAndValenEndsInPositionOneAndTheOthersInTheSecondPosition [
 
 	| aBoard dieOne dieTwo dieThree aDiceCup game noEffect  |
-	noEffect  := Box parsecs: 2.
+	noEffect  := NoEffectBox distance: 2.
 	aBoard := Board
 		          withAll: { 
 				          noEffect .
@@ -200,7 +236,7 @@ GameTest >> testAGameIsPlayedAndValenEndsInPositionOneAndTheOthersInTheSecondPos
 GameTest >> testAGameReturnsPositionOfShipAfterItMoves [
 
 	| aBoard dieOne dieTwo dieThree aDiceCup game noEffect |
-	noEffect := Box parsecs: 2.
+	noEffect := NoEffectBox distance: 2.
 	aBoard := Board
 		          withAll: { 
 				          noEffect.
@@ -237,7 +273,7 @@ GameTest >> testAGameReturnsPositionOfShipAfterItMoves [
 GameTest >> testAGameStartsWithShipsAtPositionOne [
 
 	| aBoard dieOne dieTwo dieThree aDiceCup game noEffect |
-	noEffect := Box parsecs: 2.
+	noEffect := NoEffectBox distance: 2.
 	aBoard := Board
 		          withAll: { 
 				          noEffect.
@@ -265,8 +301,8 @@ GameTest >> testAGameStartsWithShipsAtPositionOne [
 GameTest >> testAllPlayersLandInHyperJumpAtBoxFiveAndTheyMoveFirstFiveParsecsAndThenFourAndTheSequenceRestarts [
 
 	| aBoard dieOne dieTwo dieThree aDiceCupForValen game noEffect hyperJump|
-	noEffect := Box parsecs: 2.
-	hyperJump := HyperJump with: {5. 4.} parsecs: 2.
+	noEffect := NoEffectBox distance: 2.
+	hyperJump := HyperJumpEffect with: {5. 4.} parsecs: 2.
 	aBoard := Board
 		          withAll: { 
 				          noEffect.
@@ -308,7 +344,7 @@ GameTest >> testAllPlayersLandInHyperJumpAtBoxFiveAndTheyMoveFirstFiveParsecsAnd
 GameTest >> testGameCannotBeInitializedWithLessThanTwoShips [
 
 	| noEffect aBoard dieOne dieTwo dieThree aDiceCup game |
-	noEffect := Box parsecs: 2.
+	noEffect := NoEffectBox distance: 2.
 	aBoard := Board
 		          withAll: { 
 				          noEffect.
@@ -346,8 +382,8 @@ self
 GameTest >> testValenLandsInAMoonwalkAtBoxSixAndMakeTheOthersGoBackTwoPositions [
 
 	| aBoard dieOne dieTwo dieThree aDiceCupForValen game noEffect moonwalk |
-	noEffect := Box parsecs: 2.
-	moonwalk := Moonwalk with: 2 and:2.
+	noEffect := NoEffectBox distance: 2.
+	moonwalk := MoonwalkEffect with: 2 and:2.
 	aBoard := Board
 		          withAll: { 
 				          noEffect.
@@ -386,8 +422,8 @@ GameTest >> testValenLandsInAMoonwalkAtBoxSixAndMakeTheOthersGoBackTwoPositions 
 GameTest >> testValenLandsInASpeedupBoxInPositionFiveAndMovesToPositionNine [
 
 	| aBoard dieOne dieTwo dieThree aDiceCupForValen game noEffect speedUp newPosition |
-	noEffect := Box parsecs: 2.
-	speedUp := SpeedUp with:2.
+	noEffect := NoEffectBox distance: 2.
+	speedUp := SpeedUpEffect with:2.
 	aBoard := Board
 		          withAll: { 
 				          noEffect.
@@ -422,8 +458,8 @@ GameTest >> testValenLandsInASpeedupBoxInPositionFiveAndMovesToPositionNine [
 GameTest >> testValenLandsInWormholeAtBoxSevenAndGoesBackFourBoxesToEndAtBoxNumberThree [
 
 	| aBoard dieOne dieTwo dieThree aDiceCupForValen game noEffect newPosition wormhole |
-	noEffect := Box parsecs: 2.
-	wormhole := WormHole with: 2.
+	noEffect := NoEffectBox distance: 2.
+	wormhole := WormHoleEffect with: 2.
 	aBoard := Board
 		          withAll: { 
 				          noEffect.
@@ -458,8 +494,8 @@ GameTest >> testValenLandsInWormholeAtBoxSevenAndGoesBackFourBoxesToEndAtBoxNumb
 GameTest >> testValenLandsInWormholeAtBoxThreeOfLapTwoAndStepBackFourBoxesToEndAtBoxNumberNineAndLapOne [
 
 	| aBoard dieOne dieTwo dieThree aDiceCupForValen game noEffect newPosition wormhole |
-	noEffect := Box parsecs: 2.
-	wormhole := WormHole with:2.
+	noEffect := NoEffectBox distance: 2.
+	wormhole := WormHoleEffect with:2.
 	aBoard := Board
 		          withAll: { 
 				          noEffect.

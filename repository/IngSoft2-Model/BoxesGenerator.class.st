@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'parsecPerBox',
 		'boxes',
-		'boxesSequence'
+		'boxesSequence',
+		'boxesDistribution'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -12,6 +13,12 @@ Class {
 { #category : #'instance creation' }
 BoxesGenerator class >> generateWith: numberOfBoxes and: numberOfParsecs [
 	^self new initializeWith:numberOfBoxes and:numberOfParsecs.
+]
+
+{ #category : #instanceCreation }
+BoxesGenerator class >> generateWith: numberOfBoxes distance: aDistance distribution: aBoxDistribution [
+	^self new initializeWith: numberOfBoxes distance: aDistance distribution: aBoxDistribution.
+	
 ]
 
 { #category : #action }
@@ -43,7 +50,7 @@ BoxesGenerator >> createBoxesSequenceWith: quantityOfBoxesByEffect [
 BoxesGenerator >> generateBoxes [
 
 	| wormholeBoxes atomicBombBoxes moonWalkBoxes speedUpBoxes hyperjumpBoxes noEffectBoxes quantityOfBoxesByEffect |
-	wormholeBoxes := (boxes * 0.2) floor.
+	wormholeBoxes := (boxes * (self searchDistribution: 'wormHole')) floor.
 	atomicBombBoxes := (boxes * 0.02) floor.
 	moonWalkBoxes := (boxes * 0.1) floor.
 	speedUpBoxes := (boxes * 0.2) floor.
@@ -51,21 +58,21 @@ BoxesGenerator >> generateBoxes [
 	noEffectBoxes := boxes - wormholeBoxes - atomicBombBoxes
 	                 - moonWalkBoxes - hyperjumpBoxes - speedUpBoxes.
 	quantityOfBoxesByEffect := Dictionary newFrom: { 
-			                           ((WormHole with: parsecPerBox)
+			                           ((WormHoleEffect with: parsecPerBox)
 			                            -> wormholeBoxes).
-			                           ((AtomicBomb with: parsecPerBox)
+			                           ((AtomicBombEffect with: parsecPerBox)
 			                            -> atomicBombBoxes).
-			                           ((Moonwalk
+			                           ((MoonwalkEffect
 				                             with:
 				                             (0 to: (boxes // 7) floor) atRandom
 				                             and: parsecPerBox) -> moonWalkBoxes).
-			                           ((SpeedUp with: parsecPerBox)
+			                           ((SpeedUpEffect with: parsecPerBox)
 			                            -> speedUpBoxes).
-			                           ((HyperJump
+			                           ((HyperJumpEffect
 				                             with: { 5. 4. 3. 2. 1 }
 				                             parsecs: parsecPerBox)
 			                            -> hyperjumpBoxes).
-			                           ((Box parsecs: parsecPerBox)
+			                           ((NoEffectBox distance: parsecPerBox)
 			                            -> noEffectBoxes) }.
 	self createBoxesSequenceWith: quantityOfBoxesByEffect
 ]
@@ -77,4 +84,18 @@ BoxesGenerator >> initializeWith: numberOfBoxes and: numberOfParsecs [
 	boxes := numberOfBoxes.
 	boxesSequence := OrderedCollection new.
 	self generateBoxes
+]
+
+{ #category : #initialize }
+BoxesGenerator >> initializeWith: numberOfBoxes distance: aDistance distribution: aBoxDistribution [
+	parsecPerBox:= aDistance // numberOfBoxes.
+	boxes:= numberOfBoxes.
+	boxesSequence:= OrderedCollection new.
+	boxesDistribution:= aBoxDistribution.
+	self generateBoxes
+]
+
+{ #category : #actions }
+BoxesGenerator >> searchDistribution: aBoxName [ 
+	^boxesDistribution detect:  [ :each | each == aBoxName]
 ]

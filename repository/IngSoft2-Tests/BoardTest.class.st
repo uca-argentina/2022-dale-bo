@@ -24,10 +24,28 @@ BoardTest >> testABoardCannotBeCreatedWithZeroBoxes [
 ]
 
 { #category : #tests }
+BoardTest >> testABoardIsCreatedWith10NoEffectBoxes2 [
+
+	| randomBoxes aBoard |
+	randomBoxes := (BoxesGenerator generateWith:10 and:200) boxSequence.
+	aBoard:= Board withAll: randomBoxes  and: 2.
+	self assert: (aBoard boxes) size equals:10.
+]
+
+{ #category : #tests }
+BoardTest >> testABoardIsCreatedWith10NoEffectsBoxes [
+
+	| randomBoxes aBoard boxDistribution |
+	boxDistribution:= Dictionary newFrom: {'noEffect' -> 1. 'speedUp' -> 0. 'wormHole'->0. 'hyperJump'->0. 'moonwalk'->0. 'atomicBomb'->0}.
+	randomBoxes := (BoxesGenerator generateWith:10 distance:200 distribution: boxDistribution ) boxSequence.
+	aBoard:= Board withAll: randomBoxes  and: 2.
+	self assert: (aBoard boxes) size equals:10.
+]
+
+{ #category : #tests }
 BoardTest >> testABoardIsCreatedWith10RandomGeneratedBoxes [
 
-	| randomBoxes aBoard box |
-	box := Box parsecs:2.
+	| randomBoxes aBoard |
 	randomBoxes := (BoxesGenerator generateWith:10 and:200) boxSequence.
 	aBoard:= Board withAll: randomBoxes  and: 2.
 	self assert: (aBoard boxes) size equals:10.
@@ -36,7 +54,7 @@ BoardTest >> testABoardIsCreatedWith10RandomGeneratedBoxes [
 { #category : #tests }
 BoardTest >> testABoardMustHaveAtLeastOneLap [
 	| noEffect |
-	noEffect := Box parsecs:2.
+	noEffect := NoEffectBox distance:2.
 	self
 		should: [Board withAll: {noEffect }  and: 0]
 		raise: Error
