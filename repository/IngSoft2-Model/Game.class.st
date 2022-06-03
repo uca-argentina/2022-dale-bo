@@ -18,6 +18,18 @@ Game class >> assertCollectionOfShipsIsValid:aCollectionOfShips [
 		Error signal: 'Game must have more than one Ship']
 ]
 
+{ #category : #'class initialization' }
+Game class >> ships: ships boardWithNoEffectsOf: numberOfBoxes distance: distance laps: laps and: aDiceCup [ 
+	self assertCollectionOfShipsIsValid:ships.
+	^ self new initializeWith: ships aBoardWithNoEffectsOf: numberOfBoxes distance: distance laps: laps and: aDiceCup.
+]
+
+{ #category : #'instance creation' }
+Game class >> ships: ships boardWithOnly: anEffect at: aNumberOfBox of: numberOfBoxes distance: distance laps: laps and: aDiceCup [ 
+	self assertCollectionOfShipsIsValid:ships.
+	^ self new initializeWith: ships aBoardWithOnly: anEffect at: aNumberOfBox of: numberOfBoxes distance: distance laps: laps and: aDiceCup.
+]
+
 { #category : #'instance colors' }
 Game class >> with: ships a: aBoard and: aDiceCup [
 	self assertCollectionOfShipsIsValid:ships.
@@ -46,6 +58,33 @@ Game >> initializeWith: aShips a: aBoard and: aDiceCup [
 	finished := false.
 ]
 
+{ #category : #initialization }
+Game >> initializeWith: ships aBoardWithNoEffectsOf: aNumberOfBoxes distance: aDistance laps: laps and: aDiceCup [
+
+	board := Board
+		         players: ships
+		         withNoEffectsOf: aNumberOfBoxes
+		         distance: aDistance
+		         laps: laps.
+	diceCup := aDiceCup.
+	turnSequenceController := TurnSequence with: ships.
+	finished := false
+]
+
+{ #category : #initialize }
+Game >> initializeWith: ships aBoardWithOnly: anEffect at: aNumberOfBox of: numberOfBoxes distance: aDistance laps: laps and: aDiceCup [ 
+	board := Board
+		         players: ships
+		         withOnly: anEffect
+					at: aNumberOfBox 
+					of: numberOfBoxes
+		         distance: aDistance
+		         laps: laps.
+	diceCup := aDiceCup.
+	turnSequenceController := TurnSequence with: ships.
+	finished := false
+]
+
 { #category : #actions }
 Game >> playATurn [
 
@@ -69,23 +108,29 @@ Game >> playATurn [
 	turnSequenceController changeTurn
 ]
 
+{ #category : #actions }
+Game >> playATurn2 [
+   | diceResult |
+	diceResult := diceCup roll.
+	board play: (turnSequenceController whoPlays)  with: diceResult.
+	turnSequenceController changeTurn
+]
+
 { #category : #action }
 Game >> positionOfShip: aShip [
 
-	^ positionController positionOf:aShip.
+	^ board positionOf:aShip.
 ]
 
 { #category : #action }
 Game >> rankingOf: aShip [
 
-	positionController sortPositionsByRanking.
-	positionController positions do: [ :positionOfAShip | 
-		positionOfAShip ownerShip = aShip ifTrue: [ 
-			^ positionController positions indexOf: positionOfAShip ] ]
+
+			^ board rankingOf: aShip.
 ]
 
 { #category : #actions }
 Game >> winner [
 
-	^ positionController winner
+	^ board winner
 ]

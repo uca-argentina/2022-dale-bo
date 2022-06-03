@@ -34,7 +34,7 @@ PositionController >> initializeWith: ships [
 			             at: 1
 			             parsecs: 0
 			             and: 1 ].
-	winner := 'No one'
+	winner := 'No one'.
 ]
 
 { #category : #action }

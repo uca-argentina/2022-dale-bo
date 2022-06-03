@@ -21,6 +21,16 @@ BoxesGenerator class >> generateWith: numberOfBoxes distance: aDistance distribu
 	
 ]
 
+{ #category : #'class initialization' }
+BoxesGenerator class >> generateWithNoEffectsOf: aNumberOfBoxes [
+	^self new initializeWithAllNoEffectsOf: aNumberOfBoxes.
+]
+
+{ #category : #'instance creation' }
+BoxesGenerator class >> generateWithOnly: anEffect at: aNumberOfBox of: aNumberOfBoxes [ 
+	^self new initializeWithOnly: anEffect at: aNumberOfBox of:aNumberOfBoxes.
+]
+
 { #category : #action }
 BoxesGenerator >> boxSequence [
 
@@ -77,6 +87,26 @@ BoxesGenerator >> generateBoxes [
 	self createBoxesSequenceWith: quantityOfBoxesByEffect
 ]
 
+{ #category : #actions }
+BoxesGenerator >> generateBoxesAllNoEffect [
+	| quantityOfBoxesByEffect |
+	quantityOfBoxesByEffect := Dictionary newFrom: { 		                          
+			                           ((NoEffectBox distance: parsecPerBox)
+			                            -> boxes) }.
+	self createBoxesSequenceWith: quantityOfBoxesByEffect
+]
+
+{ #category : #actions }
+BoxesGenerator >> generateBoxesWithOnly: anEffect at: aBoxNumber [
+
+	| noEffectBox |
+	noEffectBox:=NoEffectBox distance: parsecPerBox.
+	[boxesSequence size < boxes] whileTrue: [ 
+		((boxesSequence size) == aBoxNumber)
+			ifTrue: [ boxesSequence add: anEffect ]
+			ifFalse: [ boxesSequence add: noEffectBox ] ]
+]
+
 { #category : #initialization }
 BoxesGenerator >> initializeWith: numberOfBoxes and: numberOfParsecs [
 
@@ -93,4 +123,18 @@ BoxesGenerator >> initializeWith: numberOfBoxes distance: aDistance distribution
 	boxesSequence:= OrderedCollection new.
 	boxesDistribution:= aBoxDistribution.
 	self generateBoxes
+]
+
+{ #category : #initialization }
+BoxesGenerator >> initializeWithAllNoEffectsOf: aNumberOfBoxes [
+	boxes:= aNumberOfBoxes.
+	boxesSequence:= OrderedCollection new.
+	self generateBoxesAllNoEffect
+]
+
+{ #category : #initialization }
+BoxesGenerator >> initializeWithOnly: anEffect at: aNumberOfBox of: aNumberOfBoxes [ 
+	boxes:= aNumberOfBoxes.
+	boxesSequence:= OrderedCollection new.
+	self generateBoxesWithOnly:anEffect at: aNumberOfBox 
 ]
