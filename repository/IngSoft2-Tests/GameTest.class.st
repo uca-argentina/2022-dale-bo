@@ -34,7 +34,7 @@ GameTest >> testAGameCannotBePlayedAfterItHasFinished [
 		        distance: 200
 		        laps: 2
 		        and: aDiceCup.
-	[ game hasFinished ] whileFalse: [ game playATurn2].
+	[ game hasFinished ] whileFalse: [ game playATurn].
 	self
 		should: [ game playATurn ]
 		raise: Error
@@ -44,8 +44,7 @@ GameTest >> testAGameCannotBePlayedAfterItHasFinished [
 { #category : #tests }
 GameTest >> testAGameHasABoardWithAAtomicBombInPositionThreeAndTheEffectDoenstChangeLaps [
 
-	| dieOne dieTwo dieThree aDiceCup game  atomicBomb|
-	atomicBomb := AtomicBombEffect with:2.
+	| dieOne dieTwo dieThree aDiceCup game |
 	dieOne := LoadedDie with: 1.
 	dieTwo := LoadedDie with: 3.
 	dieThree := LoadedDie with: 2.
@@ -54,17 +53,17 @@ GameTest >> testAGameHasABoardWithAAtomicBombInPositionThreeAndTheEffectDoenstCh
 			                    dieTwo.
 			                    dieThree }.
 	game := Game ships: { 'Valen'. 'Pablo'. 'Seba' }
-		        boardWithOnly: (atomicBomb )  
+		        boardWithOnly: (AtomicBombEffect )  
 		        at: 2
 		        of: 10
 		        distance: 200
 		        laps: 2
 		        and: aDiceCup.
-	game playATurn2 .
-	game playATurn2 .
+	game playATurn .
+	game playATurn .
 	self assert: (game positionOfShip: 'Pablo') boxNumber equals: 7.
-	game playATurn2 .
-	game playATurn2.
+	game playATurn .
+	game playATurn.
 	self assert: (game positionOfShip: 'Valen') boxNumber equals: 1.
 	self assert: (game positionOfShip: 'Valen') lapNumber equals: 2.
 	self assert: (game positionOfShip: 'Pablo') boxNumber equals: 1.
@@ -88,7 +87,7 @@ GameTest >> testAGameHasFinishedWhenAShipInTheLastPositionOfTheLastLap [
 		        laps: 2
 		        and: aDiceCup.
 	self deny: game hasFinished.
-	[ game hasFinished ] whileFalse: [ game playATurn2 ].
+	[ game hasFinished ] whileFalse: [ game playATurn ].
 	self assert: game hasFinished.
 	self assert: (game positionOfShip:(game winner) ) boxNumber equals:13.
 	self assert: (game positionOfShip:(game winner) ) lapNumber equals:2.
@@ -110,7 +109,7 @@ GameTest >> testAGameHasNoWinnerBeforeItsFinished [
 		        distance: 200
 		        laps: 2
 		        and: aDiceCup.
-	 game playATurn2 .
+	 game playATurn .
 	self assert: game winner equals: 'No one'
 ]
 
@@ -130,7 +129,7 @@ GameTest >> testAGameIsPlayedAndValenEndsInLapTwo [
 		        distance: 200
 		        laps: 2
 		        and: aDiceCup.
-	[ game hasFinished ] whileFalse: [ game playATurn2 ].
+	[ game hasFinished ] whileFalse: [ game playATurn ].
 	self assert: (game positionOfShip: 'Valen') lapNumber equals:2.
 ]
 
@@ -150,10 +149,10 @@ GameTest >> testAGameIsPlayedAndValenEndsInPositionOneAndTheOthersInTheSecondPos
 		        distance: 200
 		        laps: 2
 		        and: aDiceCup.
-	game playATurn2 .
-	game playATurn2 .
-	game playATurn2.
-	game playATurn2.
+	game playATurn .
+	game playATurn .
+	game playATurn.
+	game playATurn.
 	self assert: (game rankingOf: 'Valen') equals: 1.
 	self assert: (game rankingOf: 'Pablo') equals: 2.
 	self assert: (game rankingOf: 'Seba') equals: 2
@@ -176,7 +175,7 @@ GameTest >> testAGameReturnsPositionOfShipAfterItMoves [
 		        distance: 200
 		        laps: 2
 		        and: aDiceCup.
-	[ game hasFinished ] whileFalse: [ game playATurn2 ].
+	[ game hasFinished ] whileFalse: [ game playATurn ].
 	self assert: (game positionOfShip: 'Valen') boxNumber equals: 13.
 	self assert: (game positionOfShip: 'Pablo') boxNumber equals: 12
 ]
@@ -205,33 +204,31 @@ GameTest >> testAGameStartsWithShipsAtPositionOne [
 { #category : #tests }
 GameTest >> testAllPlayersLandInHyperJumpAtBoxFiveAndTheyMoveFirstFiveParsecsAndThenFourAndTheSequenceRestarts [
 
-	| dieOne dieTwo dieThree aDiceCup game hyperJump|
-	hyperJump := HyperJumpEffect with: {5. 4.} parsecs: 2.	
+	| dieOne dieTwo dieThree aDiceCup game |
 	dieOne := LoadedDie with: 1.
 	dieTwo := LoadedDie with: 1.
 	dieThree := LoadedDie with: 2.
 	aDiceCup := DiceCup withAll: { 
-			                    dieOne.
-			                    dieTwo.
-			                    dieThree }.
-	game := Game ships: { 'Valen'. 'Pablo'. 'Seba' }
-		        boardWithOnly: (hyperJump)  
+			            dieOne.
+			            dieTwo.
+			            dieThree }.
+	game := Game
+		        ships: { 'Valen'. 'Pablo'. 'Seba' }
+		        boardWithOnly: HyperJumpEffect
 		        at: 4
 		        of: 10
-		        distance: 200
+		        distance: 20
 		        laps: 2
 		        and: aDiceCup.
-	game playATurn2.
+	game playATurn.
 	self assert: (game positionOfShip: 'Valen') boxNumber equals: 7.
 	self assert: (game positionOfShip: 'Valen') parsecNumber equals: 1.
-	game playATurn2.
+	game playATurn.
 	self assert: (game positionOfShip: 'Pablo') boxNumber equals: 7.
 	self assert: (game positionOfShip: 'Pablo') parsecNumber equals: 0.
-	game playATurn2.
+	game playATurn.
 	self assert: (game positionOfShip: 'Seba') boxNumber equals: 7.
-	self assert: (game positionOfShip: 'Seba') parsecNumber equals: 1.
-	
-	
+	self assert: (game positionOfShip: 'Seba') parsecNumber equals: 1
 ]
 
 { #category : #tests }
@@ -260,59 +257,59 @@ self
 { #category : #tests }
 GameTest >> testValenLandsInAMoonwalkAtBoxSevenAndMakeTheOthersGoBackTwoPositions [
 
-	|  dieOne dieTwo dieThree  game moonwalk aDiceCup |
-	moonwalk := MoonwalkEffect with: 2 and:2.
+	| dieOne dieTwo dieThree game aDiceCup |
 	dieOne := LoadedDie with: 1.
 	dieTwo := LoadedDie with: 1.
 	dieThree := LoadedDie with: 1.
 	aDiceCup := DiceCup withAll: { 
-			                    dieOne.
-			                    dieTwo.
-			                    dieThree }.
-	game := Game ships: { 'Valen'. 'Pablo'. 'Seba' }
-		        boardWithOnly: (moonwalk)  
+			            dieOne.
+			            dieTwo.
+			            dieThree }.
+	game := Game
+		        ships: { 'Valen'. 'Pablo'. 'Seba' }
+		        boardWithOnly: MoonwalkEffect
 		        at: 6
 		        of: 10
 		        distance: 200
 		        laps: 2
 		        and: aDiceCup.
-	game playATurn2.
-	game playATurn2.
+	game playATurn.
+	game playATurn.
 	self assert: (game positionOfShip: 'Pablo') boxNumber equals: 4.
-	game playATurn2.
-	game playATurn2.
+	game playATurn.
+	game playATurn.
 	self assert: (game positionOfShip: 'Valen') boxNumber equals: 7.
 	self assert: (game positionOfShip: 'Pablo') boxNumber equals: 2.
-	self assert: (game positionOfShip: 'Seba') boxNumber equals: 2.
+	self assert: (game positionOfShip: 'Seba') boxNumber equals: 2
 ]
 
 { #category : #tests }
 GameTest >> testValenLandsInAMoonwalkAtBoxSixAndMakeTheOthersGoBackTwoPositions [
 
-	|  dieOne dieTwo dieThree  game moonwalk aDiceCup |
-	moonwalk := MoonwalkEffect with: 2 and:2.
+	| dieOne dieTwo dieThree game aDiceCup |
 	dieOne := LoadedDie with: 1.
 	dieTwo := LoadedDie with: 1.
 	dieThree := LoadedDie with: 1.
 	aDiceCup := DiceCup withAll: { 
-			                    dieOne.
-			                    dieTwo.
-			                    dieThree }.
-	game := Game ships: { 'Valen'. 'Pablo'. 'Seba' }
-		        boardWithOnly: (moonwalk)  
+			            dieOne.
+			            dieTwo.
+			            dieThree }.
+	game := Game
+		        ships: { 'Valen'. 'Pablo'. 'Seba' }
+		        boardWithOnly: MoonwalkEffect
 		        at: 6
 		        of: 10
 		        distance: 200
 		        laps: 2
 		        and: aDiceCup.
-	game playATurn2.
-	game playATurn2.
+	game playATurn.
+	game playATurn.
 	self assert: (game positionOfShip: 'Pablo') boxNumber equals: 4.
-	game playATurn2.
-	game playATurn2.
+	game playATurn.
+	game playATurn.
 	self assert: (game positionOfShip: 'Valen') boxNumber equals: 7.
 	self assert: (game positionOfShip: 'Pablo') boxNumber equals: 2.
-	self assert: (game positionOfShip: 'Seba') boxNumber equals: 2.
+	self assert: (game positionOfShip: 'Seba') boxNumber equals: 2
 ]
 
 { #category : #tests }
@@ -328,13 +325,13 @@ GameTest >> testValenLandsInASpeedupBoxInPositionFiveAndMovesToPositionNine [
 			            dieThree }.
 	game := Game
 		        ships: { 'Valen'. 'Pablo'. 'Seba' }
-		        boardWithOnly: (SpeedUpEffect with: 2)  
+		        boardWithOnly: (SpeedUpEffect)  
 		        at: 4
 		        of: 10
 		        distance: 200
 		        laps: 2
 		        and: aDiceCup.
-	game playATurn2.
+	game playATurn.
 	newPosition := game positionOfShip: 'Valen'.
 	self assert: newPosition boxNumber equals: 9
 ]
@@ -342,8 +339,7 @@ GameTest >> testValenLandsInASpeedupBoxInPositionFiveAndMovesToPositionNine [
 { #category : #tests }
 GameTest >> testValenLandsInWormholeAtBoxSevenAndGoesBackFourBoxesToEndAtBoxNumberThree [
 
-	| dieOne dieTwo dieThree aDiceCup game newPosition wormhole |
-	wormhole := WormHoleEffect with: 2.
+	| dieOne dieTwo dieThree aDiceCup game newPosition |
 	dieOne := LoadedDie with: 3.
 	dieTwo := LoadedDie with: 2.
 	dieThree := LoadedDie with: 1.
@@ -352,13 +348,13 @@ GameTest >> testValenLandsInWormholeAtBoxSevenAndGoesBackFourBoxesToEndAtBoxNumb
 			                    dieTwo.
 			                    dieThree }.
 	game := Game ships: { 'Valen'. 'Pablo'. 'Seba' }
-		        boardWithOnly: (wormhole )  
+		        boardWithOnly: (WormHoleEffect)  
 		        at: 6
 		        of: 10
 		        distance: 200
 		        laps: 2
 		        and: aDiceCup.
-	game playATurn2.
+	game playATurn.
 	newPosition := game positionOfShip: 'Valen'.
 	self assert: newPosition boxNumber equals: 3.
 	self assert: newPosition lapNumber equals: 1
@@ -377,13 +373,13 @@ GameTest >> testValenLandsInWormholeAtBoxThreeOfLapTwoAndStepBackFourBoxesToEndA
 			                    dieTwo.
 			                    dieThree }.
 	game := Game ships: { 'Valen'. 'Pablo'. 'Seba' }
-		        boardWithOnly: (wormhole)  
+		        boardWithOnly: (WormHoleEffect)  
 		        at: 2
 		        of: 10
 		        distance: 200
 		        laps: 2
 		        and: aDiceCup.
-	game playATurn2.
+	game playATurn.
 	newPosition := game positionOfShip: 'Valen'.
 	self assert: newPosition boxNumber equals: 9.
 	self assert: newPosition lapNumber equals:1.

@@ -5,6 +5,6 @@ Class {
 }
 
 { #category : #action }
-BoxEffect >> applyTo: ships triggeredBy: aShip with: endPosition and:laps [
+BoxEffect >> applyTo: ships triggeredBy: aShip with: endPosition distance: aDistance and: laps [
  self subclassResponsibility.
 ]

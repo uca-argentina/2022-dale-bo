@@ -5,7 +5,7 @@ Class {
 		'board',
 		'diceCup',
 		'finished',
-		'turnSequenceController',
+		'turnSequence',
 		'positionController'
 	],
 	#category : #'IngSoft2-Model'
@@ -54,7 +54,7 @@ Game >> initializeWith: aShips a: aBoard and: aDiceCup [
 	positionController := PositionController for: aShips.
 	board := aBoard.
 	diceCup := aDiceCup.
-	turnSequenceController := TurnSequence with: aShips.
+	turnSequence := TurnSequence with: aShips.
 	finished := false.
 ]
 
@@ -67,7 +67,7 @@ Game >> initializeWith: ships aBoardWithNoEffectsOf: aNumberOfBoxes distance: aD
 		         distance: aDistance
 		         laps: laps.
 	diceCup := aDiceCup.
-	turnSequenceController := TurnSequence with: ships.
+	turnSequence := TurnSequence with: ships.
 	finished := false
 ]
 
@@ -81,39 +81,17 @@ Game >> initializeWith: ships aBoardWithOnly: anEffect at: aNumberOfBox of: numb
 		         distance: aDistance
 		         laps: laps.
 	diceCup := aDiceCup.
-	turnSequenceController := TurnSequence with: ships.
+	turnSequence := TurnSequence with: ships.
 	finished := false
 ]
 
 { #category : #actions }
 Game >> playATurn [
-
-	| oldPosition diceResult shipPositionWithoutEffect |
-	self checkIfGameIsNotFinished.
-	oldPosition := positionController positionOf:
-		               turnSequenceController whoPlays.
-	diceResult := diceCup roll.
-	positionController
-		moveForward: oldPosition ownerShip
-		to: diceResult
-		with: board lastPosition
-		and: board laps.
-	shipPositionWithoutEffect := positionController positionOf:
-		                             turnSequenceController whoPlays.
-	board
-		effectAt: shipPositionWithoutEffect boxNumber
-		for: positionController
-		appliedBy: shipPositionWithoutEffect ownerShip.
-
-	turnSequenceController changeTurn
-]
-
-{ #category : #actions }
-Game >> playATurn2 [
    | diceResult |
+	self checkIfGameIsNotFinished.
 	diceResult := diceCup roll.
-	board play: (turnSequenceController whoPlays)  with: diceResult.
-	turnSequenceController changeTurn
+	board play: (turnSequence whoPlays)  with: diceResult.
+	turnSequence changeTurn
 ]
 
 { #category : #action }

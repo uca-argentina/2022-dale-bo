@@ -7,12 +7,33 @@ Class {
 		'boxesSequence',
 		'boxesDistribution'
 	],
+	#classInstVars : [
+		'boxes'
+	],
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #asserting }
+BoxesGenerator class >> assertDistributionsAreValid: distributions [
+	distributions sum = 1 ifFalse: [ 
+        Error signal: 'Distributions sum must be 1' ].
+]
+
+{ #category : #'instance creation' }
+BoxesGenerator class >> generate: anInteger distance: anInteger2 for: aCollection with: aCollection4 [ 
+	self shouldBeImplemented.
+]
+
+{ #category : #'instance creation' }
+BoxesGenerator class >> generate: aNumberOfBoxes for: effects with: distributions [
+	self assertDistributionsAreValid:distributions.
+	^self new initializeWith:aNumberOfBoxes for: effects with: distributions.
+]
+
 { #category : #'instance creation' }
 BoxesGenerator class >> generateWith: numberOfBoxes and: numberOfParsecs [
-	^self new initializeWith:numberOfBoxes and:numberOfParsecs.
+
+	^ self new initializeWith: numberOfBoxes
 ]
 
 { #category : #instanceCreation }
@@ -38,12 +59,6 @@ BoxesGenerator >> boxSequence [
 ]
 
 { #category : #action }
-BoxesGenerator >> boxes [
-
-	^ boxes
-]
-
-{ #category : #action }
 BoxesGenerator >> createBoxesSequenceWith: quantityOfBoxesByEffect [
 
 	| i |
@@ -56,37 +71,6 @@ BoxesGenerator >> createBoxesSequenceWith: quantityOfBoxesByEffect [
 	boxesSequence := boxesSequence shuffled first: boxes
 ]
 
-{ #category : #action }
-BoxesGenerator >> generateBoxes [
-
-	| wormholeBoxes atomicBombBoxes moonWalkBoxes speedUpBoxes hyperjumpBoxes noEffectBoxes quantityOfBoxesByEffect |
-	wormholeBoxes := (boxes * 0.02) floor.
-	atomicBombBoxes := (boxes * 0.02) floor.
-	moonWalkBoxes := (boxes * 0.1) floor.
-	speedUpBoxes := (boxes * 0.2) floor.
-	hyperjumpBoxes := (boxes * 0.08) floor.
-	noEffectBoxes := boxes - wormholeBoxes - atomicBombBoxes
-	                 - moonWalkBoxes - hyperjumpBoxes - speedUpBoxes.
-	quantityOfBoxesByEffect := Dictionary newFrom: { 
-			                           ((WormHoleEffect with: parsecPerBox)
-			                            -> wormholeBoxes).
-			                           ((AtomicBombEffect with: parsecPerBox)
-			                            -> atomicBombBoxes).
-			                           ((MoonwalkEffect
-				                             with:
-				                             (0 to: (boxes // 7) floor) atRandom
-				                             and: parsecPerBox) -> moonWalkBoxes).
-			                           ((SpeedUpEffect with: parsecPerBox)
-			                            -> speedUpBoxes).
-			                           ((HyperJumpEffect
-				                             with: { 5. 4. 3. 2. 1 }
-				                             parsecs: parsecPerBox)
-			                            -> hyperjumpBoxes).
-			                           ((NoEffectBox distance: parsecPerBox)
-			                            -> noEffectBoxes) }.
-	self createBoxesSequenceWith: quantityOfBoxesByEffect
-]
-
 { #category : #actions }
 BoxesGenerator >> generateBoxesAllNoEffect [
 	| quantityOfBoxesByEffect |
@@ -96,33 +80,57 @@ BoxesGenerator >> generateBoxesAllNoEffect [
 	self createBoxesSequenceWith: quantityOfBoxesByEffect
 ]
 
+{ #category : #action }
+BoxesGenerator >> generateBoxesWith: effects and: distributions [
+
+	| quantityOfBoxesByEffect boxesOfEffect |
+	quantityOfBoxesByEffect := Dictionary new.
+	(1 to: effects size by: 1) do: [ :index | 
+		boxesOfEffect := (boxes * (distributions at: index)) floor.
+		quantityOfBoxesByEffect at: (self initializeEffect:(effects at: index)) put: boxesOfEffect ].
+	self createBoxesSequenceWith: quantityOfBoxesByEffect
+]
+
 { #category : #actions }
 BoxesGenerator >> generateBoxesWithOnly: anEffect at: aBoxNumber [
 
-	| noEffectBox |
-	noEffectBox:=NoEffectBox distance: parsecPerBox.
 	[boxesSequence size < boxes] whileTrue: [ 
 		((boxesSequence size) == aBoxNumber)
-			ifTrue: [ boxesSequence add: anEffect ]
-			ifFalse: [ boxesSequence add: noEffectBox ] ]
+			ifTrue: [ boxesSequence add: (self initializeEffect: anEffect)  ]
+			ifFalse: [ boxesSequence add: (self initializeEffect: NoEffectBox) ] ]
+]
+
+{ #category : #actions }
+BoxesGenerator >> initializeEffect: anEffect [
+	(anEffect == MoonwalkEffect ) ifTrue:[^ (MoonwalkEffect with:2)].
+	(anEffect == HyperJumpEffect ) ifTrue:[^ (HyperJumpEffect with: {5. 4.})].
+	((anEffect ~= MoonwalkEffect ) or:(anEffect ~= HyperJumpEffect )) ifTrue:[^ (anEffect new)].
 ]
 
 { #category : #initialization }
-BoxesGenerator >> initializeWith: numberOfBoxes and: numberOfParsecs [
+BoxesGenerator >> initializeWith: numberOfBoxes [
 
 	parsecPerBox := numberOfParsecs // numberOfBoxes.
 	boxes := numberOfBoxes.
 	boxesSequence := OrderedCollection new.
-	self generateBoxes
+	self generateBoxesWith: effects and: distributions
 ]
 
 { #category : #initialize }
 BoxesGenerator >> initializeWith: numberOfBoxes distance: aDistance distribution: aBoxDistribution [
-	parsecPerBox:= aDistance // numberOfBoxes.
-	boxes:= numberOfBoxes.
+
+	parsecPerBox := aDistance // numberOfBoxes.
+	boxes := numberOfBoxes.
+	boxesSequence := OrderedCollection new.
+	boxesDistribution := aBoxDistribution.
+	self generateBoxesWith: effects and: distributions
+]
+
+{ #category : #initialization }
+BoxesGenerator >> initializeWith: aNumberOfBoxes for: effects with: distributions [ 
+	boxes:= aNumberOfBoxes.
 	boxesSequence:= OrderedCollection new.
-	boxesDistribution:= aBoxDistribution.
-	self generateBoxes
+	self generateBoxesWith:effects and:distributions.
 ]
 
 { #category : #initialization }

@@ -14,7 +14,7 @@ NoEffectBox class >> distance: aNumberOfParsecs [
 ]
 
 { #category : #action }
-NoEffectBox >> applyTo: ships triggeredBy: aShip with: endPosition and:laps [
+NoEffectBox >> applyTo: ships triggeredBy: aShip with: endPosition distance: aDistance and: laps [
  ships
 		moveForward: aShip
 		to: self effect

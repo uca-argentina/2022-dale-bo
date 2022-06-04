@@ -27,9 +27,19 @@ BoardTest >> testABoardCannotBeCreatedWithZeroBoxes [
 BoardTest >> testABoardIsCreatedWith10RandomGeneratedBoxes [
 
 	| randomBoxes aBoard |
-	randomBoxes := (BoxesGenerator generateWith:10 and:200) boxSequence.
-	aBoard:= Board withAll: randomBoxes  and: 2.
-	self assert: (aBoard boxes) size equals:10.
+	"randomBoxes := (BoxesGenerator generateWith:10 and:200) boxSequence."
+	randomBoxes := (BoxesGenerator
+		                generate: 10
+		                for: { 
+				                AtomicBombEffect.
+				                HyperJumpEffect.
+				                MoonwalkEffect.
+				                SpeedUpEffect.
+				                WormHoleEffect.
+				                NoEffectBox }
+		                with: {0.1. 0.1. 0.1 . 0.1. 0.1. 0.5 }) boxSequence.
+	aBoard := Board withAll: randomBoxes and: 2.
+	self assert: aBoard boxes size equals: 10.
 ]
 
 { #category : #tests }

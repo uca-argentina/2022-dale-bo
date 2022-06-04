@@ -9,13 +9,13 @@ Class {
 }
 
 { #category : #'instance creation' }
-MoonwalkEffect class >> with: aNumberOfBoxesToSendBack and:aNumberOfParsecs [
- 
-	^self new initializeWith:aNumberOfBoxesToSendBack and:aNumberOfParsecs.
+MoonwalkEffect class >> with: aNumberOfBoxesToSendBack [
+
+	^ self new initializeWith: aNumberOfBoxesToSendBack
 ]
 
 { #category : #action }
-MoonwalkEffect >> applyTo: ships triggeredBy: aShip with: endPosition and:laps [
+MoonwalkEffect >> applyTo: ships triggeredBy: aShip with: endPosition distance: aDistance and: laps [
  ships positions do: [ :each | 
 		each ownerShip ~= aShip ifTrue: [ 
 			ships moveBackwards: each ownerShip to: self effect with: endPosition and:laps] ]
@@ -27,7 +27,6 @@ MoonwalkEffect >> effect [
 ]
 
 { #category : #initialization }
-MoonwalkEffect >> initializeWith: aNumberOfBoxesToSendBack and:aNumberOfParsecs [
+MoonwalkEffect >> initializeWith: aNumberOfBoxesToSendBack [
 	retroPositions:= aNumberOfBoxesToSendBack.
-	parsecs:= aNumberOfParsecs.
 ]

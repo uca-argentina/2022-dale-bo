@@ -10,17 +10,17 @@ Class {
 }
 
 { #category : #'class initialization' }
-HyperJumpEffect class >> with:aCollectionOfPosiblesMoves parsecs: aNumberOfParsecs [
- 
-	^self new initializeWith:aCollectionOfPosiblesMoves and:aNumberOfParsecs.
+HyperJumpEffect class >> with: aCollectionOfPosiblesMoves [
+
+	^ self new initializeWith: aCollectionOfPosiblesMoves
 ]
 
 { #category : #action }
-HyperJumpEffect >> applyTo: ships triggeredBy: aShip with: endPosition and:laps [
+HyperJumpEffect >> applyTo: ships triggeredBy: aShip with: endPosition distance: aDistance and: laps [
  ships
 		moveParsecs: aShip
 		to: self effect
-		parsecs: parsecs
+		parsecs: aDistance
 		with: endPosition
 		and: laps
 ]
@@ -33,8 +33,7 @@ HyperJumpEffect >> effect [
 ]
 
 { #category : #initialization }
-HyperJumpEffect >> initializeWith:aCollectionOfPosiblesMoves and:aNumberOfParsecs [
+HyperJumpEffect >> initializeWith: aCollectionOfPosiblesMoves [
 	index:=0.
 	posibleMoves:= aCollectionOfPosiblesMoves.
-	parsecs:= aNumberOfParsecs.
 ]

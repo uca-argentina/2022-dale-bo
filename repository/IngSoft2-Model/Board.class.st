@@ -74,22 +74,17 @@ Board class >> players: ships withOnly: anEffect at: aNumberOfBox of: aNumberOfB
 ]
 
 { #category : #creation }
-Board class >> withAll: aCollectionOfBoxes and:laps [
+Board class >> withAll: aCollectionOfBoxes and: laps [
+
 	self assertValid: aCollectionOfBoxes.
-	self assertValidLaps:laps.
-	^self new initializeWith: aCollectionOfBoxes and:laps.
+	self assertValidLaps: laps.
+	^ self new initializeWith: aCollectionOfBoxes
 ]
 
 { #category : #accessing }
 Board >> boxes [
 
 	^ boxes
-]
-
-{ #category : #accesing }
-Board >> effectAt: aBoxNumber [
-
-	^ (boxes at: aBoxNumber) effect
 ]
 
 { #category : #actions }
@@ -99,38 +94,44 @@ Board >> effectAt: aBoxNumber for: ships appliedBy: aShip [
 		applyTo: ships
 		triggeredBy: aShip
 		with: self lastPosition
+		distance: distancePerBox
 		and: self laps
 ]
 
 { #category : #initialization }
-Board >> initializeWith: ships a:aCollectionOfBoxes and: numberOfLaps [.
-
-	boxes := aCollectionOfBoxes.
-	laps := numberOfLaps.
-]
-
-{ #category : #initialization }
-Board >> initializeWith: aCollectionOfBoxes and: numberOfLaps [
+Board >> initializeWith: aCollectionOfBoxes [
 
 	boxes := aCollectionOfBoxes.
 	laps := numberOfLaps
 ]
 
-{ #category : #'as yet unclassified' }
-Board >> initializeWithPlayers: ships withNoEffectsOf: aNumberOfBoxes distance: aDistance laps: aNumberOfLaps [
-	boxes := (BoxesGenerator generateWithNoEffectsOf:aNumberOfBoxes) boxSequence.
-	distancePerBox := aDistance // boxes size.
-	laps := aNumberOfLaps.
-	positionController := PositionController for: ships.
-	
+{ #category : #initialization }
+Board >> initializeWith: ships a:aCollectionOfBoxes and: numberOfLaps [
+
+	boxes := aCollectionOfBoxes.
+	laps := numberOfLaps.
 ]
 
 { #category : #initialize }
-Board >> initializeWithPlayers: ships withOnly: anEffect at: aNumberOfBox of: aNumberOfBoxes distance: aDistance laps: aNumberOfLaps [ 
-	boxes := (BoxesGenerator generateWithOnly:anEffect at: aNumberOfBox of: aNumberOfBoxes ) boxSequence.
+Board >> initializeWithPlayers: ships withNoEffectsOf: aNumberOfBoxes distance: aDistance laps: aNumberOfLaps [
+
+	boxes := (BoxesGenerator generateWithNoEffectsOf: aNumberOfBoxes)
+		         boxSequence.
 	distancePerBox := aDistance // boxes size.
 	laps := aNumberOfLaps.
-	positionController := PositionController for: ships.
+	positionController := PositionController for: ships
+]
+
+{ #category : #initialize }
+Board >> initializeWithPlayers: ships withOnly: anEffect at: aNumberOfBox of: aNumberOfBoxes distance: aDistance laps: aNumberOfLaps [
+
+	boxes := (BoxesGenerator
+		          generateWithOnly: anEffect
+		          at: aNumberOfBox
+		          of: aNumberOfBoxes) boxSequence.
+	distancePerBox := aDistance // boxes size.
+	laps := aNumberOfLaps.
+	positionController := PositionController for: ships
 ]
 
 { #category : #accessing }
@@ -146,21 +147,20 @@ Board >> lastPosition [
 ]
 
 { #category : #actions }
-Board >> play: aShip with: aDiceResult [  
+Board >> play: aShip with: aDiceResult [
+
 	| oldPosition shipPositionWithoutEffect |
-	oldPosition := positionController positionOf:
-		              aShip.
+	oldPosition := positionController positionOf: aShip.
 	positionController
 		moveForward: oldPosition ownerShip
 		to: aDiceResult
 		with: self lastPosition
 		and: self laps.
-	shipPositionWithoutEffect := positionController positionOf:
-		                             aShip.
+	shipPositionWithoutEffect := positionController positionOf: aShip.
 	self
 		effectAt: shipPositionWithoutEffect boxNumber
 		for: positionController
-		appliedBy: shipPositionWithoutEffect ownerShip.
+		appliedBy: shipPositionWithoutEffect ownerShip
 ]
 
 { #category : #accesing }
