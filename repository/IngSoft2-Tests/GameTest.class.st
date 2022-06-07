@@ -19,39 +19,50 @@ GameTest >> should: aBlock raise: anError withMessage: anErrorMessage [
 ]
 
 { #category : #tests }
+GameTest >> testAGameCannotBePlayedAfterItHasFinished [
+
+	| dieOne dieTwo dieThree aDiceCup game|
+	dieOne := LoadedDie with: 1.
+	dieTwo := LoadedDie with: 2.
+	dieThree := LoadedDie with: 3.
+	aDiceCup := DiceCup withAll: { 
+			            dieOne.
+			            dieTwo.
+			            dieThree }.
+	game := Game ships: { 'Valen'. 'Pablo'. 'Seba' } 
+		        boardWithNoEffectsOf: 13 
+		        distance: 200
+		        laps: 2
+		        and: aDiceCup.
+	[ game hasFinished ] whileFalse: [ game playATurn].
+	self
+		should: [ game playATurn ]
+		raise: Error
+		withMessage: 'Turn cannot be played, games has finished'
+]
+
+{ #category : #tests }
 GameTest >> testAGameHasABoardWithAAtomicBombInPositionThreeAndTheEffectDoenstChangeLaps [
 
-	| aBoard dieOne dieTwo dieThree aDiceCupForValen game noEffect atomicBomb|
-	noEffect := Box parsecs: 2.
-	atomicBomb := AtomicBomb with:2.
-	aBoard := Board
-		          withAll: { 
-				          noEffect.
-				          noEffect.
-				          atomicBomb.
-				          noEffect.
-				          noEffect.
-				          noEffect.
-				          noEffect.				          
-							 noEffect.
-							 noEffect.
-							 noEffect. }
-		          and: 2.
+	| dieOne dieTwo dieThree aDiceCup game |
 	dieOne := LoadedDie with: 1.
 	dieTwo := LoadedDie with: 3.
 	dieThree := LoadedDie with: 2.
-	aDiceCupForValen := DiceCup withAll: { 
+	aDiceCup := DiceCup withAll: { 
 			                    dieOne.
 			                    dieTwo.
 			                    dieThree }.
-	game := Game
-		        with: { 'Valen'. 'Pablo'. 'Seba' }
-		        a: aBoard
-		        and: aDiceCupForValen.
-	game playATurn.
-	game playATurn.
+	game := Game ships: { 'Valen'. 'Pablo'. 'Seba' }
+		        boardWithOnly: (AtomicBombEffect new )  
+		        at: 2
+		        of: 10
+		        distance: 200
+		        laps: 2
+		        and: aDiceCup.
+	game playATurn .
+	game playATurn .
 	self assert: (game positionOfShip: 'Pablo') boxNumber equals: 7.
-	game playATurn.
+	game playATurn .
 	game playATurn.
 	self assert: (game positionOfShip: 'Valen') boxNumber equals: 1.
 	self assert: (game positionOfShip: 'Valen') lapNumber equals: 2.
@@ -60,78 +71,208 @@ GameTest >> testAGameHasABoardWithAAtomicBombInPositionThreeAndTheEffectDoenstCh
 ]
 
 { #category : #tests }
-GameTest >> testAGameHasABoardWithAHyperJamInPositionFive [
+GameTest >> testAGameHasFinishedWhenAShipInTheLastPositionOfTheLastLap [
 
-	| aBoard dieOne dieTwo dieThree aDiceCupForValen game noEffect hyperJam|
-	noEffect := Box parsecs: 2.
-	hyperJam := HyperJump with: {5. 4. 3. 1.} parsecs: 2.
-	aBoard := Board
-		          withAll: { 
-				          noEffect.
-				          noEffect.				        
-				          noEffect.
-				          noEffect.
-							 hyperJam.
-				          noEffect.
-				          noEffect.				          
-							 noEffect.
-							 noEffect.
-							 noEffect. }
-		          and: 2.
+	|dieOne dieTwo dieThree aDiceCup game |
+	dieOne := LoadedDie with: 1.
+	dieTwo := LoadedDie with: 1.
+	dieThree := LoadedDie with: 1.
+	aDiceCup := DiceCup withAll: { 
+			            dieOne.
+			            dieTwo.
+			            dieThree }.
+	game := Game ships: { 'Valen'. 'Pablo'. 'Seba' } 
+		        boardWithNoEffectsOf: 13 
+		        distance: 200
+		        laps: 2
+		        and: aDiceCup.
+	self deny: game hasFinished.
+	[ game hasFinished ] whileFalse: [ game playATurn ].
+	self assert: game hasFinished.
+	self assert: (game positionOfShip:(game winner) ) boxNumber equals:13.
+	self assert: (game positionOfShip:(game winner) ) lapNumber equals:2.
+]
+
+{ #category : #tests }
+GameTest >> testAGameHasNoWinnerBeforeItsFinished [
+
+	| dieOne dieTwo dieThree aDiceCup game  |
+	dieOne := LoadedDie with: 1.
+	dieTwo := LoadedDie with: 2.
+	dieThree := LoadedDie with: 3.
+	aDiceCup := DiceCup withAll: { 
+			            dieOne.
+			            dieTwo.
+			            dieThree }.
+	game := Game ships: { 'Valen'. 'Pablo'. 'Seba' } 
+		        boardWithNoEffectsOf: 13 
+		        distance: 200
+		        laps: 2
+		        and: aDiceCup.
+	 game playATurn .
+	self assert: game winner equals: 'No one'
+]
+
+{ #category : #tests }
+GameTest >> testAGameIsPlayedAndValenEndsInLapTwo [
+
+	| dieOne dieTwo dieThree aDiceCup game |
+	dieOne := LoadedDie with: 1.
+	dieTwo := LoadedDie with: 2.
+	dieThree := LoadedDie with: 3.
+	aDiceCup := DiceCup withAll: { 
+			            dieOne.
+			            dieTwo.
+			            dieThree }.
+	game := Game ships: { 'Valen'. 'Pablo'. 'Seba' } 
+		        boardWithNoEffectsOf: 13 
+		        distance: 200
+		        laps: 2
+		        and: aDiceCup.
+	[ game hasFinished ] whileFalse: [ game playATurn ].
+	self assert: (game positionOfShip: 'Valen') lapNumber equals:2.
+]
+
+{ #category : #tests }
+GameTest >> testAGameIsPlayedAndValenEndsInPositionOneAndTheOthersInTheSecondPosition [
+
+	| dieOne dieTwo dieThree aDiceCup game  |
+	dieOne := LoadedDie with: 1.
+	dieTwo := LoadedDie with: 1.
+	dieThree := LoadedDie with: 1.
+	aDiceCup := DiceCup withAll: { 
+			            dieOne.
+			            dieTwo.
+			            dieThree }.
+	game := Game ships: { 'Valen'. 'Pablo'. 'Seba' } 
+		        boardWithNoEffectsOf: 13 
+		        distance: 200
+		        laps: 2
+		        and: aDiceCup.
+	game playATurn .
+	game playATurn .
+	game playATurn.
+	game playATurn.
+	self assert: (game rankingOf: 'Valen') equals: 1.
+	self assert: (game rankingOf: 'Pablo') equals: 2.
+	self assert: (game rankingOf: 'Seba') equals: 2
+]
+
+{ #category : #tests }
+GameTest >> testAGameReturnsPositionOfShipAfterItMoves [
+
+	| dieOne dieTwo dieThree aDiceCup game |
+	dieOne := LoadedDie with: 1.
+	dieTwo := LoadedDie with: 2.
+	dieThree := LoadedDie with: 3.
+	aDiceCup := DiceCup withAll: { 
+			            dieOne.
+			            dieTwo.
+			            dieThree }.
+	game := Game
+		        ships: { 'Valen'. 'Pablo'. 'Seba' } 
+		        boardWithNoEffectsOf: 13 
+		        distance: 200
+		        laps: 2
+		        and: aDiceCup.
+	[ game hasFinished ] whileFalse: [ game playATurn ].
+	self assert: (game positionOfShip: 'Valen') boxNumber equals: 13.
+	self assert: (game positionOfShip: 'Pablo') boxNumber equals: 12
+]
+
+{ #category : #tests }
+GameTest >> testAGameStartsWithShipsAtPositionOne [
+
+	| dieOne dieTwo dieThree aDiceCup game |
+
+	dieOne := LoadedDie with: 1.
+	dieTwo := LoadedDie with: 2.
+	dieThree := LoadedDie with: 3.
+	aDiceCup := DiceCup withAll: { 
+			            dieOne.
+			            dieTwo.
+			            dieThree }.
+	game := Game
+		        ships: { 'Valen'. 'Pablo'. 'Seba' } 
+		        boardWithNoEffectsOf: 13 
+		        distance: 200
+		        laps: 2
+		        and: aDiceCup.
+	self assert: (game positionOfShip: 'Valen') boxNumber  equals: 1
+]
+
+{ #category : #tests }
+GameTest >> testAllPlayersLandInHyperJumpAtBoxFiveAndTheyMoveFirstFiveParsecsAndThenFourAndTheSequenceRestarts [
+
+	| dieOne dieTwo dieThree aDiceCup game |
 	dieOne := LoadedDie with: 1.
 	dieTwo := LoadedDie with: 1.
 	dieThree := LoadedDie with: 2.
-	aDiceCupForValen := DiceCup withAll: { 
-			                    dieOne.
-			                    dieTwo.
-			                    dieThree }.
+	aDiceCup := DiceCup withAll: { 
+			            dieOne.
+			            dieTwo.
+			            dieThree }.
 	game := Game
-		        with: { 'Valen'. 'Pablo'. 'Seba' }
-		        a: aBoard
-		        and: aDiceCupForValen.
+		        ships: { 'Valen'. 'Pablo'. 'Seba' }
+		        boardWithOnly: (HyperJumpEffect with:{5. 4})
+		        at: 4
+		        of: 10
+		        distance: 20
+		        laps: 2
+		        and: aDiceCup.
 	game playATurn.
 	self assert: (game positionOfShip: 'Valen') boxNumber equals: 7.
 	self assert: (game positionOfShip: 'Valen') parsecNumber equals: 1.
 	game playATurn.
+	self assert: (game positionOfShip: 'Pablo') boxNumber equals: 7.
+	self assert: (game positionOfShip: 'Pablo') parsecNumber equals: 0.
 	game playATurn.
-	game playATurn.
-	game playATurn.
-	game playATurn.
-	game playATurn.
-	self assert: (game positionOfShip: 'Valen') boxNumber equals: 6.
-	self assert: (game positionOfShip: 'Valen') parsecNumber equals: 0.
+	self assert: (game positionOfShip: 'Seba') boxNumber equals: 7.
+	self assert: (game positionOfShip: 'Seba') parsecNumber equals: 1
 ]
 
 { #category : #tests }
-GameTest >> testAGameHasABoardWithMoonWalkAtBoxSix [
+GameTest >> testGameCannotBeInitializedWithLessThanTwoShips [
 
-	| aBoard dieOne dieTwo dieThree aDiceCupForValen game noEffect moonwalk |
-	noEffect := Box parsecs: 2.
-	moonwalk := Moonwalk with: 2 and:2.
-	aBoard := Board
-		          withAll: { 
-				          noEffect.
-				          noEffect.
-				          noEffect.
-				          noEffect.
-				          noEffect.
-				          noEffect.
-				          moonwalk.
-				          noEffect.
-				          noEffect.
-				          noEffect }
-		          and: 2.
+	|dieOne dieTwo dieThree aDiceCup|
+	dieOne := LoadedDie with: 1.
+	dieTwo := LoadedDie with: 2.
+	dieThree := LoadedDie with: 3.
+	aDiceCup := DiceCup withAll: { 
+			            dieOne.
+			            dieTwo.
+			            dieThree }.
+
+self
+		should: [ Game
+		        ships: { 'Valen'. } 
+		        boardWithNoEffectsOf: 13 
+		        distance: 200
+		        laps: 2
+		        and: aDiceCup.]
+		raise: Error
+		withMessage: 'Game must have more than one Ship'
+]
+
+{ #category : #tests }
+GameTest >> testValenLandsInAMoonwalkAtBoxSevenAndMakeTheOthersGoBackTwoPositions [
+
+	| dieOne dieTwo dieThree game aDiceCup |
 	dieOne := LoadedDie with: 1.
 	dieTwo := LoadedDie with: 1.
 	dieThree := LoadedDie with: 1.
-	aDiceCupForValen := DiceCup withAll: { 
-			                    dieOne.
-			                    dieTwo.
-			                    dieThree }.
+	aDiceCup := DiceCup withAll: { 
+			            dieOne.
+			            dieTwo.
+			            dieThree }.
 	game := Game
-		        with: { 'Valen'. 'Pablo'. 'Seba' }
-		        a: aBoard
-		        and: aDiceCupForValen.
+		        ships: { 'Valen'. 'Pablo'. 'Seba' }
+		        boardWithOnly: (MoonwalkEffect with:2)
+		        at: 6
+		        of: 10
+		        distance: 200
+		        laps: 2
+		        and: aDiceCup.
 	game playATurn.
 	game playATurn.
 	self assert: (game positionOfShip: 'Pablo') boxNumber equals: 4.
@@ -139,299 +280,107 @@ GameTest >> testAGameHasABoardWithMoonWalkAtBoxSix [
 	game playATurn.
 	self assert: (game positionOfShip: 'Valen') boxNumber equals: 7.
 	self assert: (game positionOfShip: 'Pablo') boxNumber equals: 2.
-	self assert: (game positionOfShip: 'Seba') boxNumber equals: 2.
+	self assert: (game positionOfShip: 'Seba') boxNumber equals: 2
 ]
 
 { #category : #tests }
-GameTest >> testAGameHasABoardWithNoEffectsAndValenWinsTheGame [
+GameTest >> testValenLandsInAMoonwalkAtBoxSixAndMakeTheOthersGoBackTwoPositions [
 
-	| aBoard dieOne dieTwo dieThree aDiceCup game noEffect |
-	noEffect := Box parsecs: 2.
-	aBoard := Board
-		          withAll: { 
-				          noEffect.
-				          noEffect.
-				          noEffect.
-				          noEffect.
-				          noEffect.
-				          noEffect.
-				          noEffect. }
-		          and: 2.
+	| dieOne dieTwo dieThree game aDiceCup |
 	dieOne := LoadedDie with: 1.
-	dieTwo := LoadedDie with: 2.
-	dieThree := LoadedDie with: 3.
+	dieTwo := LoadedDie with: 1.
+	dieThree := LoadedDie with: 1.
 	aDiceCup := DiceCup withAll: { 
 			            dieOne.
 			            dieTwo.
 			            dieThree }.
 	game := Game
-		        with: { 'Valen'. 'Pablo'. 'Seba' }
-		        a: aBoard
+		        ships: { 'Valen'. 'Pablo'. 'Seba' }
+		        boardWithOnly: (MoonwalkEffect with:2)
+		        at: 6
+		        of: 10
+		        distance: 200
+		        laps: 2
 		        and: aDiceCup.
-	[ game hasFinished ] whileFalse: [ game playATurn ].
-	self assert: game winner equals: 'Valen'.
-	self deny: game winner equals: 'Pablo'
+	game playATurn.
+	game playATurn.
+	self assert: (game positionOfShip: 'Pablo') boxNumber equals: 4.
+	game playATurn.
+	game playATurn.
+	self assert: (game positionOfShip: 'Valen') boxNumber equals: 7.
+	self assert: (game positionOfShip: 'Pablo') boxNumber equals: 2.
+	self assert: (game positionOfShip: 'Seba') boxNumber equals: 2
 ]
 
 { #category : #tests }
-GameTest >> testAGameHasABoardWithSpeedUpAtBoxFive [
+GameTest >> testValenLandsInASpeedupBoxInPositionFiveAndMovesToPositionNine [
 
-	| aBoard dieOne dieTwo dieThree aDiceCupForValen game noEffect speedUp newPosition |
-	noEffect := Box parsecs: 2.
-	speedUp := SpeedUp with:2.
-	aBoard := Board
-		          withAll: { 
-				          noEffect.
-				          noEffect.
-				          noEffect.
-				          noEffect.
-				          speedUp.
-				          noEffect.
-				          noEffect.
-				          noEffect.
-				          noEffect.
-				          noEffect.
-				          noEffect }
-		          and: 2.
+	| dieOne dieTwo dieThree aDiceCup game newPosition |
 	dieOne := LoadedDie with: 1.
 	dieTwo := LoadedDie with: 2.
 	dieThree := LoadedDie with: 1.
-	aDiceCupForValen := DiceCup withAll: { 
-			                    dieOne.
-			                    dieTwo.
-			                    dieThree }.
+	aDiceCup := DiceCup withAll: { 
+			            dieOne.
+			            dieTwo.
+			            dieThree }.
 	game := Game
-		        with: {'Valen'.'Pablo'.'Seba'}
-		        a: aBoard
-		        and: aDiceCupForValen.
+		        ships: { 'Valen'. 'Pablo'. 'Seba' }
+		        boardWithOnly: (SpeedUpEffect new)  
+		        at: 4
+		        of: 10
+		        distance: 200
+		        laps: 2
+		        and: aDiceCup.
 	game playATurn.
 	newPosition := game positionOfShip: 'Valen'.
-	self assert: newPosition boxNumber equals: 9.
+	self assert: newPosition boxNumber equals: 9
 ]
 
 { #category : #tests }
-GameTest >> testAGameHasABoardWithWormHoleAtBoxThree [
+GameTest >> testValenLandsInWormholeAtBoxSevenAndGoesBackFourBoxesToEndAtBoxNumberThree [
 
-	| aBoard dieOne dieTwo dieThree aDiceCupForValen game noEffect newPosition wormhole |
-	noEffect := Box parsecs: 2.
-	wormhole := WormHole with:2.
-	aBoard := Board
-		          withAll: { 
-				          noEffect.
-				          noEffect.
-				          wormhole.
-				          noEffect.
-				          noEffect.
-				          noEffect.
-				          noEffect.
-				          noEffect.
-				          noEffect.
-				          noEffect.
-				          }
-		          and: 2.
-	dieOne := LoadedDie with: 9.
+	| dieOne dieTwo dieThree aDiceCup game newPosition |
+	dieOne := LoadedDie with: 3.
 	dieTwo := LoadedDie with: 2.
 	dieThree := LoadedDie with: 1.
-	aDiceCupForValen := DiceCup withAll: { 
+	aDiceCup := DiceCup withAll: { 
 			                    dieOne.
 			                    dieTwo.
 			                    dieThree }.
-	game := Game
-		        with: { 'Valen'. 'Pablo'. 'Seba' }
-		        a: aBoard
-		        and: aDiceCupForValen.
+	game := Game ships: { 'Valen'. 'Pablo'. 'Seba' }
+		        boardWithOnly: (WormHoleEffect new)  
+		        at: 6
+		        of: 10
+		        distance: 200
+		        laps: 2
+		        and: aDiceCup.
+	game playATurn.
+	newPosition := game positionOfShip: 'Valen'.
+	self assert: newPosition boxNumber equals: 3.
+	self assert: newPosition lapNumber equals: 1
+]
+
+{ #category : #tests }
+GameTest >> testValenLandsInWormholeAtBoxThreeOfLapTwoAndStepBackFourBoxesToEndAtBoxNumberNineAndLapOne [
+
+	| dieOne dieTwo dieThree aDiceCup game newPosition wormhole |
+	wormhole := WormHoleEffect with:2.
+	dieOne := LoadedDie with: 9.
+	dieTwo := LoadedDie with: 2.
+	dieThree := LoadedDie with: 1.
+	aDiceCup := DiceCup withAll: { 
+			                    dieOne.
+			                    dieTwo.
+			                    dieThree }.
+	game := Game ships: { 'Valen'. 'Pablo'. 'Seba' }
+		        boardWithOnly: (WormHoleEffect new)  
+		        at: 2
+		        of: 10
+		        distance: 200
+		        laps: 2
+		        and: aDiceCup.
 	game playATurn.
 	newPosition := game positionOfShip: 'Valen'.
 	self assert: newPosition boxNumber equals: 9.
 	self assert: newPosition lapNumber equals:1.
-]
-
-{ #category : #tests }
-GameTest >> testAGameHasAWinner [
-
-	| aBoard dieOne dieTwo dieThree aDiceCup game noEffect |
-	noEffect := Box parsecs: 2.
-	aBoard := Board
-		          withAll: { 
-				          noEffect.
-				          noEffect.
-				          noEffect.
-				          noEffect.
-				          noEffect.
-				          noEffect.
-				          noEffect }
-		          and: 2.
-	dieOne := LoadedDie with: 1.
-	dieTwo := LoadedDie with: 2.
-	dieThree := LoadedDie with: 3.
-	aDiceCup := DiceCup withAll: { 
-			            dieOne.
-			            dieTwo.
-			            dieThree }.
-	game := Game
-		        with: { 'Valen'. 'Pablo'. 'Seba' }
-		        a: aBoard
-		        and: aDiceCup.
-	[ game hasFinished ] whileFalse: [ game playATurn ].
-	self assert: game winner equals: 'Valen'.
-	self deny: game winner equals: 'Pablito'
-]
-
-{ #category : #tests }
-GameTest >> testAGameHasFinishedWhenAShipWins [
-
-	| aBoard dieOne dieTwo dieThree aDiceCup game noEffect |
-	noEffect := Box parsecs: 2.
-	aBoard := Board
-		          withAll: { 
-				          noEffect.
-				          noEffect.
-				          noEffect.
-				          noEffect.
-				          noEffect.
-				          noEffect.
-				          noEffect.
-				          noEffect.
-				          noEffect.
-				          noEffect.
-				          noEffect.
-				          noEffect.
-				          noEffect }
-		          and: 2.
-	dieOne := LoadedDie with: 1.
-	dieTwo := LoadedDie with: 1.
-	dieThree := LoadedDie with: 1.
-	aDiceCup := DiceCup withAll: { 
-			            dieOne.
-			            dieTwo.
-			            dieThree }.
-	game := Game with: { 'Valen'. 'Pablo' } a: aBoard and: aDiceCup.
-	self assert: game hasFinished equals: false.
-	[ game hasFinished ] whileFalse: [ game playATurn ].
-	self assert: game hasFinished equals: true
-]
-
-{ #category : #tests }
-GameTest >> testAGameIsCreatedWithLessThanTwoShips [
-
-	| aBoard dieOne dieTwo dieThree aDiceCup noEffect |
-	noEffect := Box parsecs: 2.
-	aBoard := Board
-		          withAll: { 
-				          noEffect.
-				          noEffect.
-				          noEffect.
-				          noEffect.
-				          noEffect.
-				          noEffect.
-				          noEffect }
-		          and: 2.
-	dieOne := LoadedDie with: 1.
-	dieTwo := LoadedDie with: 2.
-	dieThree := LoadedDie with: 3.
-	aDiceCup := DiceCup withAll: { 
-			            dieOne.
-			            dieTwo.
-			            dieThree }.
-	self
-		should: [ Game with: { 'Valen' } a: aBoard and: aDiceCup ]
-		raise: Error
-		withMessage: 'Game must have more than one Ship'
-]
-
-{ #category : #tests }
-GameTest >> testAGameRetrunsPositionOfShipAfterItMoves [
-
-	| aBoard dieOne dieTwo dieThree aDiceCup game noEffect |
-	noEffect := Box parsecs: 2.
-	aBoard := Board
-		          withAll: { 
-				          noEffect.
-				          noEffect.
-				          noEffect.
-				          noEffect.
-				          noEffect.
-				          noEffect.
-				          noEffect.
-				          noEffect.
-				          noEffect.
-				          noEffect.
-				          noEffect.
-				          noEffect.
-				          noEffect }
-		          and: 2.
-	dieOne := LoadedDie with: 1.
-	dieTwo := LoadedDie with: 2.
-	dieThree := LoadedDie with: 3.
-	aDiceCup := DiceCup withAll: { 
-			            dieOne.
-			            dieTwo.
-			            dieThree }.
-	game := Game
-		        with: { 'Valen'. 'Pablo'. 'Seba' }
-		        a: aBoard
-		        and: aDiceCup.
-	[ game hasFinished ] whileFalse: [ game playATurn ].
-	self assert: (game positionOfShip: 'Valen') boxNumber  equals: 13.
-	self assert: (game positionOfShip: 'Pablo') boxNumber equals: 12.
-]
-
-{ #category : #tests }
-GameTest >> testAGameRetrunsRanking [
-
-	| aBoard dieOne dieTwo dieThree aDiceCup game noEffect  |
-	noEffect  := Box parsecs: 2.
-	aBoard := Board
-		          withAll: { 
-				          noEffect .
-				          noEffect .
-				          noEffect .
-				          noEffect .
-				          noEffect .
-				          noEffect .
-				          noEffect  }
-		          and: 2.
-	dieOne := LoadedDie with: 1.
-	dieTwo := LoadedDie with: 1.
-	dieThree := LoadedDie with: 1.
-	aDiceCup := DiceCup withAll: { 
-			            dieOne.
-			            dieTwo.
-			            dieThree }.
-	game := Game with: { 'Valen'. 'Pablo'. 'AA' } a: aBoard and: aDiceCup.
-	game playATurn .
-	game playATurn .
-	game playATurn.
-	game playATurn.
-	self assert: (game rankingOf: 'Valen') equals: 1.
-	self assert: (game rankingOf: 'Pablo') equals: 2.
-	self assert: (game rankingOf: 'AA') equals: 2
-]
-
-{ #category : #tests }
-GameTest >> testAGameStartsWithShipsAtPosition1 [
-
-	| aBoard dieOne dieTwo dieThree aDiceCup game noEffect |
-	noEffect := Box parsecs: 2.
-	aBoard := Board
-		          withAll: { 
-				          noEffect.
-				          noEffect.
-				          noEffect.
-				          noEffect.
-				          noEffect.
-				          noEffect }
-		          and: 2.
-	dieOne := LoadedDie with: 1.
-	dieTwo := LoadedDie with: 2.
-	dieThree := LoadedDie with: 3.
-	aDiceCup := DiceCup withAll: { 
-			            dieOne.
-			            dieTwo.
-			            dieThree }.
-	game := Game
-		        with: { 'Valen'. 'Pablo'. 'Seba' }
-		        a: aBoard
-		        and: aDiceCup.
-	self assert: (game positionOfShip: 'Valen') boxNumber  equals: 1
 ]

@@ -14,42 +14,85 @@ BoardTest >> should: block raise: classError whoseDescriptionIncludes: anErrorMe
 ]
 
 { #category : #tests }
-BoardTest >> testABoardHasRandomGeneratedBoxes [
+BoardTest >> testABoardCannotBeCreatedWithZeroBoxes [
 
-	| randomBoxes aBoard box |
-	box := Box parsecs:2.
-	randomBoxes := (BoxesGenerator generateWith:10 and:200) boxSequence.
-	aBoard:= Board withAll: randomBoxes  and: 2.
-	self assert: (aBoard boxes) size equals:10.
-]
 
-{ #category : #tests }
-BoardTest >> testABoardMustHaveAtLeastOneBox [
 
 	self
-		should: [Board withAll: { }  and: 2]
+		should: [Board
+		          players: { 'Valen'. 'Pablo'. 'Seba' }
+		          withBoxes: {}
+		          distance: 200
+		          and: 2.  ]
 		raise: Error
 		whoseDescriptionIncludes: 'A board must have at least one box'
 ]
 
 { #category : #tests }
-BoardTest >> testABoardMustHaveAtLeastOneBoxWithNoEffect [
+BoardTest >> testABoardIsCreatedWith10RandomGeneratedBoxes [
 
-	| aBoard noEffect |
-	noEffect := Box parsecs:2.
-	aBoard := Board withAll: { 
-			          noEffect.
-			          noEffect.
-			          noEffect }  and: 2.
-	self assert: aBoard lastPosition  > 0
+	| randomBoxes aBoard |
+	"randomBoxes := (BoxesGenerator generateWith:10 and:200) boxSequence."
+	randomBoxes := (BoxesGenerator
+		                generate: 10
+		                for: { 
+				                AtomicBombEffect.
+				                HyperJumpEffect.
+				                MoonwalkEffect.
+				                SpeedUpEffect.
+				                WormHoleEffect.
+				                NoEffectBox }
+		                with: {0.1. 0.1. 0.1 . 0.1. 0.1. 0.5 }) boxSequence.
+	aBoard := Board players:{'Valen'. 'Pablo'. 'Seba'} withBoxes:randomBoxes distance:200 and:2.
+	self assert: aBoard boxes size equals: 10.
+]
+
+{ #category : #tests }
+BoardTest >> testABoardMustHaveAPositiveDistanceAndGreatearThan0 [
+
+	| randomBoxes |
+	randomBoxes := (BoxesGenerator
+		                generate: 10
+		                for: { 
+				                AtomicBombEffect.
+				                HyperJumpEffect.
+				                MoonwalkEffect.
+				                SpeedUpEffect.
+				                WormHoleEffect.
+				                NoEffectBox }
+		                with: { 0.1. 0.1. 0.1. 0.1. 0.1. 0.5 }) boxSequence.
+	self
+		should: [ 
+			Board
+				players: { 'Valen'. 'Pablo'. 'Seba' }
+				withBoxes: randomBoxes  
+				distance: 0
+				and: 2]
+		raise: Error
+		whoseDescriptionIncludes: 'A board must have a distance greater than zero'
 ]
 
 { #category : #tests }
 BoardTest >> testABoardMustHaveAtLeastOneLap [
-	| noEffect |
-	noEffect := Box parsecs:2.
+
+	| randomBoxes |
+	randomBoxes := (BoxesGenerator
+		                generate: 10
+		                for: { 
+				                AtomicBombEffect new.
+				                HyperJumpEffect with:{5. 4. 3. 2} .
+				                MoonwalkEffect with:2.
+				                SpeedUpEffect new.
+				                WormHoleEffect new.
+				                NoEffectBox new }
+		                with: { 0.1. 0.1. 0.1. 0.1. 0.1. 0.5 }) boxSequence.
 	self
-		should: [Board withAll: {noEffect }  and: 0]
+		should: [ 
+			Board
+				players: { 'Valen'. 'Pablo'. 'Seba' }
+				withBoxes:  randomBoxes  
+				distance: 200
+				and: 0 ]
 		raise: Error
 		whoseDescriptionIncludes: 'A board must have at least one lap'
 ]

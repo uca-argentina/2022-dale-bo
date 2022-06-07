@@ -4,26 +4,41 @@ Class {
 	#instVars : [
 		'parsecPerBox',
 		'boxes',
-		'boxesSequence'
+		'boxesSequence',
+		'boxesDistribution'
+	],
+	#classInstVars : [
+		'boxes'
 	],
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #asserting }
+BoxesGenerator class >> assertDistributionsAreValid: distributions [
+	distributions sum = 1 ifFalse: [ 
+        Error signal: 'Distributions sum must be 1' ].
+]
+
 { #category : #'instance creation' }
-BoxesGenerator class >> generateWith: numberOfBoxes and: numberOfParsecs [
-	^self new initializeWith:numberOfBoxes and:numberOfParsecs.
+BoxesGenerator class >> generate: aNumberOfBoxes for: effects with: distributions [
+	self assertDistributionsAreValid:distributions.
+	^self new initializeWith:aNumberOfBoxes for: effects with: distributions.
+]
+
+{ #category : #'class initialization' }
+BoxesGenerator class >> generateWithNoEffectsOf: aNumberOfBoxes [
+	^self new initializeWithAllNoEffectsOf: aNumberOfBoxes.
+]
+
+{ #category : #'instance creation' }
+BoxesGenerator class >> generateWithOnly: anEffect at: aNumberOfBox of: aNumberOfBoxes [ 
+	^self new initializeWithOnly: anEffect at: aNumberOfBox of:aNumberOfBoxes.
 ]
 
 { #category : #action }
 BoxesGenerator >> boxSequence [
 
 	^ boxesSequence
-]
-
-{ #category : #action }
-BoxesGenerator >> boxes [
-
-	^ boxes
 ]
 
 { #category : #action }
@@ -39,42 +54,52 @@ BoxesGenerator >> createBoxesSequenceWith: quantityOfBoxesByEffect [
 	boxesSequence := boxesSequence shuffled first: boxes
 ]
 
-{ #category : #action }
-BoxesGenerator >> generateBoxes [
-
-	| wormholeBoxes atomicBombBoxes moonWalkBoxes speedUpBoxes hyperjumpBoxes noEffectBoxes quantityOfBoxesByEffect |
-	wormholeBoxes := (boxes * 0.2) floor.
-	atomicBombBoxes := (boxes * 0.02) floor.
-	moonWalkBoxes := (boxes * 0.1) floor.
-	speedUpBoxes := (boxes * 0.2) floor.
-	hyperjumpBoxes := (boxes * 0.08) floor.
-	noEffectBoxes := boxes - wormholeBoxes - atomicBombBoxes
-	                 - moonWalkBoxes - hyperjumpBoxes - speedUpBoxes.
-	quantityOfBoxesByEffect := Dictionary newFrom: { 
-			                           ((WormHole with: parsecPerBox)
-			                            -> wormholeBoxes).
-			                           ((AtomicBomb with: parsecPerBox)
-			                            -> atomicBombBoxes).
-			                           ((Moonwalk
-				                             with:
-				                             (0 to: (boxes // 7) floor) atRandom
-				                             and: parsecPerBox) -> moonWalkBoxes).
-			                           ((SpeedUp with: parsecPerBox)
-			                            -> speedUpBoxes).
-			                           ((HyperJump
-				                             with: { 5. 4. 3. 2. 1 }
-				                             parsecs: parsecPerBox)
-			                            -> hyperjumpBoxes).
-			                           ((Box parsecs: parsecPerBox)
-			                            -> noEffectBoxes) }.
+{ #category : #actions }
+BoxesGenerator >> generateBoxesAllNoEffect [
+	| quantityOfBoxesByEffect |
+	quantityOfBoxesByEffect := Dictionary newFrom: { 		                          
+			                           ((NoEffectBox distance: parsecPerBox)
+			                            -> boxes) }.
 	self createBoxesSequenceWith: quantityOfBoxesByEffect
 ]
 
-{ #category : #initialization }
-BoxesGenerator >> initializeWith: numberOfBoxes and: numberOfParsecs [
+{ #category : #action }
+BoxesGenerator >> generateBoxesWith: effects and: distributions [
 
-	parsecPerBox := numberOfParsecs // numberOfBoxes.
-	boxes := numberOfBoxes.
-	boxesSequence := OrderedCollection new.
-	self generateBoxes
+	| quantityOfBoxesByEffect boxesOfEffect |
+	quantityOfBoxesByEffect := Dictionary new.
+	(1 to: effects size by: 1) do: [ :index | 
+		boxesOfEffect := (boxes * (distributions at: index)) floor.
+		quantityOfBoxesByEffect at: (effects at: index) put: boxesOfEffect ].
+	self createBoxesSequenceWith: quantityOfBoxesByEffect
+]
+
+{ #category : #actions }
+BoxesGenerator >> generateBoxesWithOnly: anEffect at: aBoxNumber [
+
+	[boxesSequence size < boxes] whileTrue: [ 
+		((boxesSequence size) == aBoxNumber)
+			ifTrue: [ boxesSequence add: anEffect  ]
+			ifFalse: [ boxesSequence add:  NoEffectBox new ] ]
+]
+
+{ #category : #initialization }
+BoxesGenerator >> initializeWith: aNumberOfBoxes for: effects with: distributions [ 
+	boxes:= aNumberOfBoxes.
+	boxesSequence:= OrderedCollection new.
+	self generateBoxesWith:effects and:distributions.
+]
+
+{ #category : #initialization }
+BoxesGenerator >> initializeWithAllNoEffectsOf: aNumberOfBoxes [
+	boxes:= aNumberOfBoxes.
+	boxesSequence:= OrderedCollection new.
+	self generateBoxesAllNoEffect
+]
+
+{ #category : #initialization }
+BoxesGenerator >> initializeWithOnly: anEffect at: aNumberOfBox of: aNumberOfBoxes [ 
+	boxes:= aNumberOfBoxes.
+	boxesSequence:= OrderedCollection new.
+	self generateBoxesWithOnly:anEffect at: aNumberOfBox 
 ]
