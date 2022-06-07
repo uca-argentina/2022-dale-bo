@@ -53,7 +53,7 @@ GameTest >> testAGameHasABoardWithAAtomicBombInPositionThreeAndTheEffectDoenstCh
 			                    dieTwo.
 			                    dieThree }.
 	game := Game ships: { 'Valen'. 'Pablo'. 'Seba' }
-		        boardWithOnly: (AtomicBombEffect )  
+		        boardWithOnly: (AtomicBombEffect new )  
 		        at: 2
 		        of: 10
 		        distance: 200
@@ -214,7 +214,7 @@ GameTest >> testAllPlayersLandInHyperJumpAtBoxFiveAndTheyMoveFirstFiveParsecsAnd
 			            dieThree }.
 	game := Game
 		        ships: { 'Valen'. 'Pablo'. 'Seba' }
-		        boardWithOnly: HyperJumpEffect
+		        boardWithOnly: (HyperJumpEffect with:{5. 4})
 		        at: 4
 		        of: 10
 		        distance: 20
@@ -267,7 +267,7 @@ GameTest >> testValenLandsInAMoonwalkAtBoxSevenAndMakeTheOthersGoBackTwoPosition
 			            dieThree }.
 	game := Game
 		        ships: { 'Valen'. 'Pablo'. 'Seba' }
-		        boardWithOnly: MoonwalkEffect
+		        boardWithOnly: (MoonwalkEffect with:2)
 		        at: 6
 		        of: 10
 		        distance: 200
@@ -296,7 +296,7 @@ GameTest >> testValenLandsInAMoonwalkAtBoxSixAndMakeTheOthersGoBackTwoPositions 
 			            dieThree }.
 	game := Game
 		        ships: { 'Valen'. 'Pablo'. 'Seba' }
-		        boardWithOnly: MoonwalkEffect
+		        boardWithOnly: (MoonwalkEffect with:2)
 		        at: 6
 		        of: 10
 		        distance: 200
@@ -325,7 +325,7 @@ GameTest >> testValenLandsInASpeedupBoxInPositionFiveAndMovesToPositionNine [
 			            dieThree }.
 	game := Game
 		        ships: { 'Valen'. 'Pablo'. 'Seba' }
-		        boardWithOnly: (SpeedUpEffect)  
+		        boardWithOnly: (SpeedUpEffect new)  
 		        at: 4
 		        of: 10
 		        distance: 200
@@ -348,7 +348,7 @@ GameTest >> testValenLandsInWormholeAtBoxSevenAndGoesBackFourBoxesToEndAtBoxNumb
 			                    dieTwo.
 			                    dieThree }.
 	game := Game ships: { 'Valen'. 'Pablo'. 'Seba' }
-		        boardWithOnly: (WormHoleEffect)  
+		        boardWithOnly: (WormHoleEffect new)  
 		        at: 6
 		        of: 10
 		        distance: 200
@@ -373,7 +373,7 @@ GameTest >> testValenLandsInWormholeAtBoxThreeOfLapTwoAndStepBackFourBoxesToEndA
 			                    dieTwo.
 			                    dieThree }.
 	game := Game ships: { 'Valen'. 'Pablo'. 'Seba' }
-		        boardWithOnly: (WormHoleEffect)  
+		        boardWithOnly: (WormHoleEffect new)  
 		        at: 2
 		        of: 10
 		        distance: 200

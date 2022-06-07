@@ -70,7 +70,7 @@ BoxesGenerator >> generateBoxesWith: effects and: distributions [
 	quantityOfBoxesByEffect := Dictionary new.
 	(1 to: effects size by: 1) do: [ :index | 
 		boxesOfEffect := (boxes * (distributions at: index)) floor.
-		quantityOfBoxesByEffect at: (self initializeEffect:(effects at: index)) put: boxesOfEffect ].
+		quantityOfBoxesByEffect at: (effects at: index) put: boxesOfEffect ].
 	self createBoxesSequenceWith: quantityOfBoxesByEffect
 ]
 
@@ -79,15 +79,8 @@ BoxesGenerator >> generateBoxesWithOnly: anEffect at: aBoxNumber [
 
 	[boxesSequence size < boxes] whileTrue: [ 
 		((boxesSequence size) == aBoxNumber)
-			ifTrue: [ boxesSequence add: (self initializeEffect: anEffect)  ]
-			ifFalse: [ boxesSequence add: (self initializeEffect: NoEffectBox) ] ]
-]
-
-{ #category : #actions }
-BoxesGenerator >> initializeEffect: anEffect [
-	(anEffect == MoonwalkEffect ) ifTrue:[^ (MoonwalkEffect with:2)].
-	(anEffect == HyperJumpEffect ) ifTrue:[^ (HyperJumpEffect with: {5. 4.})].
-	((anEffect ~= MoonwalkEffect ) or:(anEffect ~= HyperJumpEffect )) ifTrue:[^ (anEffect new)].
+			ifTrue: [ boxesSequence add: anEffect  ]
+			ifFalse: [ boxesSequence add:  NoEffectBox new ] ]
 ]
 
 { #category : #initialization }

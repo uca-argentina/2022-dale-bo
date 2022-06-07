@@ -79,12 +79,12 @@ BoardTest >> testABoardMustHaveAtLeastOneLap [
 	randomBoxes := (BoxesGenerator
 		                generate: 10
 		                for: { 
-				                AtomicBombEffect.
-				                HyperJumpEffect.
-				                MoonwalkEffect.
-				                SpeedUpEffect.
-				                WormHoleEffect.
-				                NoEffectBox }
+				                AtomicBombEffect new.
+				                HyperJumpEffect with:{5. 4. 3. 2} .
+				                MoonwalkEffect with:2.
+				                SpeedUpEffect new.
+				                WormHoleEffect new.
+				                NoEffectBox new }
 		                with: { 0.1. 0.1. 0.1. 0.1. 0.1. 0.5 }) boxSequence.
 	self
 		should: [ 
