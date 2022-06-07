@@ -18,10 +18,10 @@ PositionController class >> for:ships [
 PositionController >> applyAtomicBomb [
 
 	positions do: [ :each | 
-		positions replaceAll: each with: (PositionOfAShip
+		positions replaceAll: each with: (ShipPosition
 				 of: each ownerShip
 				 at: 1
-				 parsecs: each parsecNumber
+				 distance: each parsecNumber
 				 and: each lapNumber) ]
 ]
 
@@ -29,12 +29,25 @@ PositionController >> applyAtomicBomb [
 PositionController >> initializeWith: ships [
 
 	positions := ships collect: [ :ship | 
-		             PositionOfAShip
+		             ShipPosition
 			             of: ship
 			             at: 1
-			             parsecs: 0
+			             distance: 0
 			             and: 1 ].
 	winner := 'No one'.
+]
+
+{ #category : #actions }
+PositionController >> move: aShip to: aNumberOfParsecs finalDistance: endParsecs with: endPosition and: laps [
+	| oldPosition shipNewParsecNumber |
+	oldPosition := positions detect: [ :each | each ownerShip = aShip ].
+	shipNewParsecNumber := oldPosition parsecNumber + aNumberOfParsecs.
+	positions replaceAll: oldPosition with: (ShipPosition
+			 of: aShip
+			 at: oldPosition boxNumber 
+			 distance: (shipNewParsecNumber%endParsecs)
+			 and: oldPosition lapNumber).
+ 	self moveForward: aShip to: (shipNewParsecNumber//endParsecs) with: endPosition and: laps 
 ]
 
 { #category : #action }
@@ -42,7 +55,7 @@ PositionController >> moveBackwards: aShip to: aBox with: endPosition and: laps 
 
 	| oldPosition shipNewBoxNumber shipNewLapNumber |
 	oldPosition := positions detect: [ :each | each ownerShip = aShip ].
-	shipNewBoxNumber := oldPosition boxNumber + aBox.
+	shipNewBoxNumber := oldPosition boxNumber - aBox.
 	shipNewLapNumber := oldPosition lapNumber.
 	(shipNewBoxNumber < 1 and: oldPosition lapNumber > 1) ifTrue: [ 
 		shipNewBoxNumber := endPosition + shipNewBoxNumber.
@@ -50,10 +63,10 @@ PositionController >> moveBackwards: aShip to: aBox with: endPosition and: laps 
 	(shipNewBoxNumber < 1 and: oldPosition lapNumber = 1) ifTrue: [ 
 		shipNewBoxNumber := 1 ].
 
-	positions replaceAll: oldPosition with: (PositionOfAShip
+	positions replaceAll: oldPosition with: (ShipPosition
 			 of: aShip
 			 at: shipNewBoxNumber
-			 parsecs: oldPosition parsecNumber
+			 distance: oldPosition parsecNumber
 			 and: shipNewLapNumber)
 ]
 
@@ -72,24 +85,11 @@ PositionController >> moveForward: aShip to: aBox with: endPosition and: laps [
 			shipNewLapNumber := oldPosition lapNumber + 1.
 			shipNewBoxNumber := shipNewBoxNumber - endPosition ]
 		ifFalse: [ shipNewLapNumber := oldPosition lapNumber ].
-	positions replaceAll: oldPosition with: (PositionOfAShip
+	positions replaceAll: oldPosition with: (ShipPosition
 			 of: aShip
 			 at: shipNewBoxNumber
-			 parsecs: oldPosition parsecNumber
+			 distance: oldPosition parsecNumber
 			 and: shipNewLapNumber)
-]
-
-{ #category : #actions }
-PositionController >> moveParsecs: aShip to: aNumberOfParsecs parsecs: endParsecs with: endPosition and: laps [
-	| oldPosition shipNewParsecNumber |
-	oldPosition := positions detect: [ :each | each ownerShip = aShip ].
-	shipNewParsecNumber := oldPosition parsecNumber + aNumberOfParsecs.
-	positions replaceAll: oldPosition with: (PositionOfAShip
-			 of: aShip
-			 at: oldPosition boxNumber 
-			 parsecs: (shipNewParsecNumber%endParsecs)
-			 and: oldPosition lapNumber).
- 	self moveForward: aShip to: (shipNewParsecNumber//endParsecs) with: endPosition and: laps 
 ]
 
 { #category : #accesing }

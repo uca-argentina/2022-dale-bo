@@ -17,13 +17,6 @@ TurnSequence class >> with: aCollectionOfShips [
 	^self new initializeWith:aCollectionOfShips.
 ]
 
-{ #category : #actions }
-TurnSequence >> changeTurn [
-
-	turnNumber := turnNumber + 1.
-	turnNumber > ships size ifTrue: [ turnNumber := 1 ]
-]
-
 { #category : #initialization }
 TurnSequence >> initializeWith: aCollectionOfShips [
 
@@ -32,7 +25,11 @@ TurnSequence >> initializeWith: aCollectionOfShips [
 ]
 
 { #category : #action }
-TurnSequence >> whoPlays [
+TurnSequence >> next [
 
-	^ ships at: turnNumber
+	| actualTurn |
+	actualTurn := ships at: turnNumber.
+	turnNumber := turnNumber + 1.
+	turnNumber > ships size ifTrue: [ turnNumber := 1 ].
+	^ actualTurn
 ]

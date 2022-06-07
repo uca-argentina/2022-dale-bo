@@ -90,8 +90,7 @@ Game >> playATurn [
    | diceResult |
 	self checkIfGameIsNotFinished.
 	diceResult := diceCup roll.
-	board play: (turnSequence whoPlays)  with: diceResult.
-	turnSequence changeTurn
+	board play: (turnSequence next)  with: diceResult.
 ]
 
 { #category : #action }

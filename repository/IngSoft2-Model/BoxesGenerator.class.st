@@ -20,26 +20,9 @@ BoxesGenerator class >> assertDistributionsAreValid: distributions [
 ]
 
 { #category : #'instance creation' }
-BoxesGenerator class >> generate: anInteger distance: anInteger2 for: aCollection with: aCollection4 [ 
-	self shouldBeImplemented.
-]
-
-{ #category : #'instance creation' }
 BoxesGenerator class >> generate: aNumberOfBoxes for: effects with: distributions [
 	self assertDistributionsAreValid:distributions.
 	^self new initializeWith:aNumberOfBoxes for: effects with: distributions.
-]
-
-{ #category : #'instance creation' }
-BoxesGenerator class >> generateWith: numberOfBoxes and: numberOfParsecs [
-
-	^ self new initializeWith: numberOfBoxes
-]
-
-{ #category : #instanceCreation }
-BoxesGenerator class >> generateWith: numberOfBoxes distance: aDistance distribution: aBoxDistribution [
-	^self new initializeWith: numberOfBoxes distance: aDistance distribution: aBoxDistribution.
-	
 ]
 
 { #category : #'class initialization' }
@@ -105,25 +88,6 @@ BoxesGenerator >> initializeEffect: anEffect [
 	(anEffect == MoonwalkEffect ) ifTrue:[^ (MoonwalkEffect with:2)].
 	(anEffect == HyperJumpEffect ) ifTrue:[^ (HyperJumpEffect with: {5. 4.})].
 	((anEffect ~= MoonwalkEffect ) or:(anEffect ~= HyperJumpEffect )) ifTrue:[^ (anEffect new)].
-]
-
-{ #category : #initialization }
-BoxesGenerator >> initializeWith: numberOfBoxes [
-
-	parsecPerBox := numberOfParsecs // numberOfBoxes.
-	boxes := numberOfBoxes.
-	boxesSequence := OrderedCollection new.
-	self generateBoxesWith: effects and: distributions
-]
-
-{ #category : #initialize }
-BoxesGenerator >> initializeWith: numberOfBoxes distance: aDistance distribution: aBoxDistribution [
-
-	parsecPerBox := aDistance // numberOfBoxes.
-	boxes := numberOfBoxes.
-	boxesSequence := OrderedCollection new.
-	boxesDistribution := aBoxDistribution.
-	self generateBoxesWith: effects and: distributions
 ]
 
 { #category : #initialization }

@@ -18,22 +18,22 @@ HyperJumpEffect class >> with: aCollectionOfPosiblesMoves [
 { #category : #action }
 HyperJumpEffect >> applyTo: ships triggeredBy: aShip with: endPosition distance: aDistance and: laps [
  ships
-		moveParsecs: aShip
-		to: self effect
-		parsecs: aDistance
+		move: aShip
+		to: self numberOfDistanceByHyperJump
+		finalDistance: aDistance
 		with: endPosition
 		and: laps
-]
-
-{ #category : #initialization }
-HyperJumpEffect >> effect [
-	index:= index+1.
-	(index > posibleMoves size) ifTrue:[index:=1.].
-	^posibleMoves at: index.
 ]
 
 { #category : #initialization }
 HyperJumpEffect >> initializeWith: aCollectionOfPosiblesMoves [
 	index:=0.
 	posibleMoves:= aCollectionOfPosiblesMoves.
+]
+
+{ #category : #initialization }
+HyperJumpEffect >> numberOfDistanceByHyperJump [
+	index:= index+1.
+	(index > posibleMoves size) ifTrue:[index:=1.].
+	^posibleMoves at: index.
 ]
