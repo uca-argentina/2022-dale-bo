@@ -25,6 +25,11 @@ PositionController >> applyAtomicBomb [
 				 and: each lapNumber) ]
 ]
 
+{ #category : #action }
+PositionController >> giveTo: aPlayer card: aCard [ 
+	(self positionOf: aPlayer) receive: aCard.
+]
+
 { #category : #initialization }
 PositionController >> initializeWith: ships [
 

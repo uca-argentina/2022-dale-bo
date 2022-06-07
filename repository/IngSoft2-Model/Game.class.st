@@ -87,10 +87,12 @@ Game >> initializeWith: ships aBoardWithOnly: anEffect at: aNumberOfBox of: numb
 
 { #category : #actions }
 Game >> playATurn [
-   | diceResult |
+   | diceResult currentPlayer cardEffect|
 	self checkIfGameIsNotFinished.
 	diceResult := diceCup roll.
-	board play: (turnSequence next)  with: diceResult.
+	currentPlayer := turnSequence next.
+	cardEffect := (board positionOf: currentPlayer) effects .
+	board play: (currentPlayer)  with: (diceResult + cardEffect).
 ]
 
 { #category : #action }
