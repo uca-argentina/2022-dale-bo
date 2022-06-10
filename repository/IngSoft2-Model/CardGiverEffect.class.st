@@ -5,8 +5,8 @@ Class {
 }
 
 { #category : #action }
-CardGiverEffect >> applyTo: ships triggeredBy: aShip with: endPosition distance: aDistance and: laps [
+CardGiverEffect >> applyTo: ships triggeredBy: aShip with: aCard distance: aDistance laps: laps and: aDeck [
  ships
 		giveTo: aShip
-		card: Card new.
+		card: aDeck giveCard.
 ]

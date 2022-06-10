@@ -23,11 +23,12 @@ PositionTest >> testPositionHasAValidShipName [
 
 	self
 		should: [ 
-			ShipPosition
+			Spaceship
 				of: 'V'
 				at: 0
 				distance: 0
-				and: 0 ]
+				laps: 0
+				and: hand ]
 		raise: Error
 		withMessage: 'Ship name must have a name longer than one character'
 ]

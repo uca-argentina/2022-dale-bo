@@ -1,90 +1,103 @@
 Class {
-	#name : #ShipPosition,
+	#name : #Spaceship,
 	#superclass : #Object,
 	#instVars : [
 		'ship',
 		'boxNumber',
 		'lapNumber',
-		'parsecNumber',
 		'hand',
-		'effectsOnMe'
+		'effectsOnMe',
+		'distance'
 	],
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #instanceCreation }
-ShipPosition class >> assertShipsNameIsValid:aShip [
+Spaceship class >> assertShipsNameIsValid:aShip [
 	(aShip size  > 1) ifFalse: [ 
 		Error signal: 'Ship name must have a name longer than one character']
 ]
 
 { #category : #instanceCreation }
-ShipPosition class >> of: aShip at: aBoxNumber distance: aNumberOfParsecs and: aLapNumber [
+Spaceship class >> of: aShip at: aBoxNumber distance: aDistance laps: aLapNumber and: hand [
 
 	self assertShipsNameIsValid: aShip.
 	^ self new
 		  initializeOf: aShip
 		  at: aBoxNumber
-		  parsecs: aNumberOfParsecs
-		  and: aLapNumber
+		  distance: aDistance
+		  lap: aLapNumber
+		and:hand.
 ]
 
 { #category : #accesing }
-ShipPosition >> boxNumber [
+Spaceship >> boxNumber [
 
 	^ boxNumber
 ]
 
 { #category : #accesing }
-ShipPosition >> effects [
+Spaceship >> effects [
 	^effectsOnMe.
 ]
 
+{ #category : #action }
+Spaceship >> hand [
+
+	^ hand
+]
+
 { #category : #initialization }
-ShipPosition >> initializeOf: aShip at: aBoxNumber parsecs: aNumberOfParsecs and: aLapNumber [
+Spaceship >> initializeOf: aShip at: aBoxNumber distance: aDistance lap: aLapNumber and: aHand [
 
 	ship := aShip.
 	boxNumber := aBoxNumber.
-	parsecNumber := aNumberOfParsecs.
+	distance := aDistance.
 	lapNumber:=aLapNumber.
-	hand:= OrderedCollection new.
+	hand:= aHand.
 	effectsOnMe := 0.
 ]
 
 { #category : #action }
-ShipPosition >> isAffectedBy: anEffect [
+Spaceship >> isAffectedBy: anEffect [
 	effectsOnMe:= anEffect.
 ]
 
 { #category : #accesing }
-ShipPosition >> lapNumber [
+Spaceship >> lapNumber [
 
 	^ lapNumber
 ]
 
 { #category : #action }
-ShipPosition >> numberOfCards [
+Spaceship >> numberOfCards [
 	^hand size.
 ]
 
 { #category : #accessing }
-ShipPosition >> ownerShip [
+Spaceship >> ownerShip [
 
 	^ ship
 ]
 
 { #category : #accessing }
-ShipPosition >> parsecNumber [
+Spaceship >> parsecNumber [
 
-	^ parsecNumber 
+	^ distance 
 ]
 
 { #category : #action }
-ShipPosition >> playACard: aCard to: aPlayer [ 
+Spaceship >> playACard: aCard to: aPlayer [
+	|card |
+	card := hand 
+        detect: [ :each | (each type) = (aCard type) ]
+        ifNone: [ Error
+                signal: 'The spaceship does not have this card' ].
 	aPlayer isAffectedBy: aCard effect.
+	hand remove: card.
 ]
 
 { #category : #action }
-ShipPosition >> receive: aCard [ 
+Spaceship >> receive: aCard [ 
 	hand add: aCard. 
 ]

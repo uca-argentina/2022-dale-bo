@@ -4,7 +4,13 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #action }
-SpeedCard class >> effect [
-	 ^1.
+{ #category : #accesing }
+SpeedCard >> effect [
+	^ 1.
+]
+
+{ #category : #accessing }
+SpeedCard >> type [
+
+	^ 'SpeedCard'
 ]

@@ -15,7 +15,7 @@ MoonwalkEffect class >> with: aNumberOfBoxesToSendBack [
 ]
 
 { #category : #action }
-MoonwalkEffect >> applyTo: ships triggeredBy: aShip with: endPosition distance: aDistance and: laps [
+MoonwalkEffect >> applyTo: ships triggeredBy: aShip with: endPosition distance: aDistance laps: laps and: aDeck [
  ships positions do: [ :each | 
 		each ownerShip ~= aShip ifTrue: [ 
 			ships moveBackwards: each ownerShip to: self numberOfBoxesToMoonwalk with: endPosition and:laps] ]

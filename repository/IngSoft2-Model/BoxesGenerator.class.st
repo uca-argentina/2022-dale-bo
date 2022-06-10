@@ -25,11 +25,6 @@ BoxesGenerator class >> generate: aNumberOfBoxes for: effects with: distribution
 	^self new initializeWith:aNumberOfBoxes for: effects with: distributions.
 ]
 
-{ #category : #'class initialization' }
-BoxesGenerator class >> generateWithNoEffectsOf: aNumberOfBoxes [
-	^self new initializeWithAllNoEffectsOf: aNumberOfBoxes.
-]
-
 { #category : #'instance creation' }
 BoxesGenerator class >> generateWithOnly: anEffect at: aNumberOfBox of: aNumberOfBoxes [ 
 	^self new initializeWithOnly: anEffect at: aNumberOfBox of:aNumberOfBoxes.

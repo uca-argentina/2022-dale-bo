@@ -5,6 +5,12 @@ Class {
 }
 
 { #category : #action }
-OverloadCard class >> effect [
+OverloadCard >> effect [
 	^-2.
+]
+
+{ #category : #accessing }
+OverloadCard >> type [
+
+	^ 'OverloadCard'
 ]

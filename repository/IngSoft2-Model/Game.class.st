@@ -18,22 +18,29 @@ Game class >> assertCollectionOfShipsIsValid:aCollectionOfShips [
 		Error signal: 'Game must have more than one Ship']
 ]
 
-{ #category : #'class initialization' }
-Game class >> ships: ships boardWithNoEffectsOf: numberOfBoxes distance: distance laps: laps and: aDiceCup [ 
-	self assertCollectionOfShipsIsValid:ships.
-	^ self new initializeWith: ships aBoardWithNoEffectsOf: numberOfBoxes distance: distance laps: laps and: aDiceCup.
-]
-
-{ #category : #'instance creation' }
-Game class >> ships: ships boardWithOnly: anEffect at: aNumberOfBox of: numberOfBoxes distance: distance laps: laps and: aDiceCup [ 
-	self assertCollectionOfShipsIsValid:ships.
-	^ self new initializeWith: ships aBoardWithOnly: anEffect at: aNumberOfBox of: numberOfBoxes distance: distance laps: laps and: aDiceCup.
+{ #category : #'instance colors' }
+Game class >> assertValidDistance: distance [
+	distance < 1 ifTrue: [ Error signal: 'A board must have a distance greater than zero' ].
 ]
 
 { #category : #'instance colors' }
-Game class >> with: ships a: aBoard and: aDiceCup [
-	self assertCollectionOfShipsIsValid:ships.
-	^ self new initializeWith: ships a: aBoard and: aDiceCup
+Game class >> assertValidLaps:laps [
+	laps > 0 ifFalse: [ Error signal: 'A board must have at least one lap' ].
+]
+
+{ #category : #'instance creation' }
+Game class >> spaceships: ships boardWith: aBoxSequence distance: distance laps: laps diceCup: aDiceCup and: aDeck [
+
+	self assertCollectionOfShipsIsValid: ships.
+	self assertValidLaps: laps.
+	self assertValidDistance: distance.
+	^ self new
+		  initializeWith: ships
+		  aBoardWith: aBoxSequence
+		  distance: distance
+		  laps: laps
+		  aDiceCup: aDiceCup
+		  and: aDeck
 ]
 
 { #category : #actions }
@@ -48,40 +55,17 @@ Game >> hasFinished [
 	^ self winner ~= 'No one'
 ]
 
-{ #category : #initializing }
-Game >> initializeWith: aShips a: aBoard and: aDiceCup [
-
-	positionController := PositionController for: aShips.
-	board := aBoard.
-	diceCup := aDiceCup.
-	turnSequence := TurnSequence with: aShips.
-	finished := false.
-]
-
-{ #category : #initialization }
-Game >> initializeWith: ships aBoardWithNoEffectsOf: aNumberOfBoxes distance: aDistance laps: laps and: aDiceCup [
-
-	board := Board
-		         players: ships
-		         withNoEffectsOf: aNumberOfBoxes
-		         distance: aDistance
-		         laps: laps.
-	diceCup := aDiceCup.
-	turnSequence := TurnSequence with: ships.
-	finished := false
-]
-
 { #category : #initialize }
-Game >> initializeWith: ships aBoardWithOnly: anEffect at: aNumberOfBox of: numberOfBoxes distance: aDistance laps: laps and: aDiceCup [ 
+Game >> initializeWith: spaceships aBoardWith: aBoxSequence distance: aDistance laps: laps aDiceCup: aDiceCup and: aDeck [
+
 	board := Board
-		         players: ships
-		         withOnly: anEffect
-					at: aNumberOfBox 
-					of: numberOfBoxes
+		         ships: spaceships
+		         with: aBoxSequence
 		         distance: aDistance
-		         laps: laps.
+		         laps: laps
+		         and: aDeck.
 	diceCup := aDiceCup.
-	turnSequence := TurnSequence with: ships.
+	turnSequence := TurnSequence with: spaceships.
 	finished := false
 ]
 
