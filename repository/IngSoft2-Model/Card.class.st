@@ -4,6 +4,17 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #operations }
+Card >> applyTo: target [
+
+	self subclassResponsibility.
+]
+
+{ #category : #accessing }
+Card >> family [
+self subclassResponsibility.
+]
+
 { #category : #accessing }
 Card >> type [
 self subclassResponsibility.

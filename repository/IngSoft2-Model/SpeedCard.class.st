@@ -4,9 +4,20 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #operations }
+SpeedCard >> applyTo: target [
+
+	target isAffectedBy: self.
+]
+
 { #category : #accesing }
 SpeedCard >> effect [
 	^ 1.
+]
+
+{ #category : #accessing }
+SpeedCard >> family [
+^ 'Permanent'
 ]
 
 { #category : #accessing }

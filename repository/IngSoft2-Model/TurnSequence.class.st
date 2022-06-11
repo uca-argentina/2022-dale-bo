@@ -27,9 +27,15 @@ TurnSequence >> initializeWith: aCollectionOfShips [
 { #category : #action }
 TurnSequence >> next [
 
-	| actualTurn |
-	actualTurn := ships at: turnNumber.
 	turnNumber := turnNumber + 1.
 	turnNumber > ships size ifTrue: [ turnNumber := 1 ].
+
+]
+
+{ #category : #action }
+TurnSequence >> whoPlays [
+
+	| actualTurn |
+	actualTurn := ships at: turnNumber.
 	^ actualTurn
 ]

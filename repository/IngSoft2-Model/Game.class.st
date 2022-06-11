@@ -49,6 +49,18 @@ Game >> checkIfGameIsNotFinished [
 	(self hasFinished) ifTrue: [Error signal: 'Turn cannot be played, games has finished' ].
 ]
 
+{ #category : #actions }
+Game >> checkValidTurn: aSpaceship andCardType: aCard [
+
+	| whoWantsToPlay |
+	whoWantsToPlay := self positionOfShip: aSpaceship.
+
+	(turnSequence whoPlays ~= whoWantsToPlay ownerShip and:
+		 aCard family = 'Permanent') ifTrue: [ 
+		Error signal:
+			'A permanent card cannot be played on another spaceship turn' ].
+]
+
 { #category : #accessing }
 Game >> hasFinished [
 
@@ -71,12 +83,37 @@ Game >> initializeWith: spaceships aBoardWith: aBoxSequence distance: aDistance 
 
 { #category : #actions }
 Game >> playATurn [
-   | diceResult currentPlayer cardEffect|
+   | diceResult currentSpaceship effectsOnCurrentShip|
 	self checkIfGameIsNotFinished.
 	diceResult := diceCup roll.
-	currentPlayer := turnSequence next.
-	cardEffect := (board positionOf: currentPlayer) effects .
-	board play: (currentPlayer)  with: (diceResult + cardEffect).
+	currentSpaceship := turnSequence whoPlays.
+	effectsOnCurrentShip := (board positionOf: currentSpaceship) sumOfCardsEffects .
+	board play: (currentSpaceship)  with: (diceResult + effectsOnCurrentShip ).
+	turnSequence next.
+]
+
+{ #category : #actions }
+Game >> playAccelerationCardBy: aSpaceship [
+self checkValidTurn: aSpaceship andCardType: (AccelerationCard new).
+	(self positionOfShip:aSpaceship) playACard:(AccelerationCard new) to: (board allShips)
+]
+
+{ #category : #actions }
+Game >> playOverloadCardBy: aSpaceship to: anotherShip [
+
+	self checkValidTurn: aSpaceship andCardType: OverloadCard new.
+	(self positionOfShip: aSpaceship)
+		playACard:  OverloadCard new
+		to: anotherShip.
+]
+
+{ #category : #actions }
+Game >> playSpeedCardBy: aSpaceship to: anotherShip [
+
+	self checkValidTurn: aSpaceship andCardType: SpeedCard new.
+	(self positionOfShip: aSpaceship)
+		playACard: SpeedCard new
+		to: anotherShip.
 ]
 
 { #category : #action }

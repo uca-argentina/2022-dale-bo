@@ -36,11 +36,6 @@ Spaceship >> boxNumber [
 	^ boxNumber
 ]
 
-{ #category : #accesing }
-Spaceship >> effects [
-	^effectsOnMe.
-]
-
 { #category : #action }
 Spaceship >> hand [
 
@@ -55,12 +50,12 @@ Spaceship >> initializeOf: aShip at: aBoxNumber distance: aDistance lap: aLapNum
 	distance := aDistance.
 	lapNumber:=aLapNumber.
 	hand:= aHand.
-	effectsOnMe := 0.
+	effectsOnMe := OrderedCollection new.
 ]
 
 { #category : #action }
-Spaceship >> isAffectedBy: anEffect [
-	effectsOnMe:= anEffect.
+Spaceship >> isAffectedBy: aCard [
+	effectsOnMe add: aCard.
 ]
 
 { #category : #accesing }
@@ -87,17 +82,25 @@ Spaceship >> parsecNumber [
 ]
 
 { #category : #action }
-Spaceship >> playACard: aCard to: aPlayer [
+Spaceship >> playACard: aCard to: target [
 	|card |
 	card := hand 
         detect: [ :each | (each type) = (aCard type) ]
         ifNone: [ Error
                 signal: 'The spaceship does not have this card' ].
-	aPlayer isAffectedBy: aCard effect.
+	aCard applyTo: target.
 	hand remove: card.
 ]
 
 { #category : #action }
 Spaceship >> receive: aCard [ 
 	hand add: aCard. 
+]
+
+{ #category : #accesing }
+Spaceship >> sumOfCardsEffects [
+	| sum |
+	sum:=0.
+	effectsOnMe do: [ :each | sum:=sum + each effect].
+	 ^sum.
 ]

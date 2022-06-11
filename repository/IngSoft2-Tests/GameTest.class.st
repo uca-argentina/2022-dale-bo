@@ -51,7 +51,7 @@ GameTest >> testAGameCannotBePlayedAfterItHasFinished [
 GameTest >> testAGameHasABoardWithAAtomicBombInPositionThreeAndTheEffectDoenstChangeLaps [
 
 	| dieOne dieTwo dieThree aDiceCup game boxSequence |
-	dieOne := LoadedDie with: 1.
+	dieOne := LoadedDie with: 10.
 	dieTwo := LoadedDie with: 3.
 	dieThree := LoadedDie with: 2.
 	aDiceCup := DiceCup withAll: { 
@@ -59,9 +59,9 @@ GameTest >> testAGameHasABoardWithAAtomicBombInPositionThreeAndTheEffectDoenstCh
 			            dieTwo.
 			            dieThree }.
 	boxSequence := (BoxesGenerator
-		                generateWithOnly: AtomicBombEffect new
-		                at: 2
-		                of: 10) boxSequence.
+		                generate: 13
+		                for: { AtomicBombEffect new }
+		                with: { 1 }) boxSequence.
 	game := Game
 		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
@@ -70,14 +70,17 @@ GameTest >> testAGameHasABoardWithAAtomicBombInPositionThreeAndTheEffectDoenstCh
 		        diceCup: aDiceCup
 		        and: (Deck with:{SpeedCard new}).
 	game playATurn.
-	game playATurn.
-	self assert: (game positionOfShip: 'Pablo') boxNumber equals: 7.
-	game playATurn.
+	self assert: (game positionOfShip: 'Valen') boxNumber equals: 1.
+	self assert: (game positionOfShip: 'Valen') lapNumber equals: 2.
+	self assert: (game positionOfShip: 'Pablo') boxNumber equals: 1.
+	self assert: (game positionOfShip: 'Pablo') lapNumber equals: 1.
 	game playATurn.
 	self assert: (game positionOfShip: 'Valen') boxNumber equals: 1.
 	self assert: (game positionOfShip: 'Valen') lapNumber equals: 2.
 	self assert: (game positionOfShip: 'Pablo') boxNumber equals: 1.
-	self assert: (game positionOfShip: 'Seba') boxNumber equals: 1
+	self assert: (game positionOfShip: 'Pablo') lapNumber equals: 2.
+	
+	
 ]
 
 { #category : #tests }

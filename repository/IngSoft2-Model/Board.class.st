@@ -42,6 +42,11 @@ Board class >> ships: spaceships with: aBoxSequence distance: aDistance laps: la
 ]
 
 { #category : #accessing }
+Board >> allShips [
+	^spaceshipsController positions.
+]
+
+{ #category : #accessing }
 Board >> boxes [
 
 	^ boxes

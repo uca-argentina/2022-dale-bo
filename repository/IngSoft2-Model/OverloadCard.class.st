@@ -4,9 +4,21 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #operations }
+OverloadCard >> applyTo: target [
+
+	target isAffectedBy: self.
+]
+
 { #category : #action }
 OverloadCard >> effect [
 	^-2.
+]
+
+{ #category : #accessing }
+OverloadCard >> family [
+
+	^ 'Permanent'
 ]
 
 { #category : #accessing }
