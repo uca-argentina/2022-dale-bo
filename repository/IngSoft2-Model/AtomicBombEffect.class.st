@@ -14,7 +14,7 @@ AtomicBombEffect class >> with:aNumberOfParsecs [
 ]
 
 { #category : #action }
-AtomicBombEffect >> applyTo: ships triggeredBy: aShip with: endPosition distance: aDistance laps: laps and: aDeck [
+AtomicBombEffect >> applyTo: ships triggeredBy: aShip with: endPosition distance: aDistance laps: laps [
  	ships applyAtomicBomb
 ]
 

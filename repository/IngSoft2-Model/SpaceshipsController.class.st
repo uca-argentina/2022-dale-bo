@@ -23,7 +23,8 @@ SpaceshipsController >> applyAtomicBomb [
 				 at: 1
 				 distance: each parsecNumber
 				 laps: each lapNumber
-				 and: each hand) ]
+				 cards: each hand
+				 and: each effectsOnMe) ]
 ]
 
 { #category : #action }
@@ -44,8 +45,9 @@ SpaceshipsController >> initializeWith: ships and: aDeck [
 			             at: 1
 			             distance: 0
 			             laps: 1
-			             and: hand ].
-	winner := 'No one'
+			             cards: hand
+			             and: OrderedCollection new ].
+	winner := nil
 ]
 
 { #category : #actions }
@@ -59,7 +61,8 @@ SpaceshipsController >> move: aShip to: aNumberOfParsecs finalDistance: endParse
 			 at: oldPosition boxNumber
 			 distance: shipNewParsecNumber % endParsecs
 			 laps: oldPosition lapNumber
-			 and: oldPosition hand).
+			 cards: oldPosition hand
+			 and: oldPosition effectsOnMe ).
 	self
 		moveForward: aShip
 		to: shipNewParsecNumber // endParsecs
@@ -85,7 +88,8 @@ SpaceshipsController >> moveBackwards: aShip to: aBox with: endPosition and: lap
 			 at: shipNewBoxNumber
 			 distance: oldPosition parsecNumber
 			 laps: shipNewLapNumber
-			 and: oldPosition hand)
+			 cards: oldPosition hand
+			 and: oldPosition effectsOnMe)
 ]
 
 { #category : #action }
@@ -108,7 +112,8 @@ SpaceshipsController >> moveForward: aShip to: aBox with: endPosition and: laps 
 			 at: shipNewBoxNumber
 			 distance: oldPosition parsecNumber
 			 laps: shipNewLapNumber
-			 and: oldPosition hand)
+			 cards: oldPosition hand
+			 and: oldPosition effectsOnMe)
 ]
 
 { #category : #accesing }

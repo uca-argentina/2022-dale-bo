@@ -61,7 +61,6 @@ Board >> effectAt: aBoxNumber for: ships appliedBy: aShip [
 		with: self lastPosition
 		distance: distancePerBox
 		laps: self laps
-		and: deck
 ]
 
 { #category : #initialization }

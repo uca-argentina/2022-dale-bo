@@ -33,7 +33,23 @@ BoxesGenerator class >> generateWithOnly: anEffect at: aNumberOfBox of: aNumberO
 { #category : #action }
 BoxesGenerator >> boxSequence [
 
-	^ boxesSequence
+	^ boxesSequence.
+]
+
+{ #category : #accesing }
+BoxesGenerator >> boxSequenceInOrder [
+	^ boxesSequence.
+]
+
+{ #category : #action }
+BoxesGenerator >> calculateBoxesFor: effects with: distributions [
+
+	| quantityOfBoxesByEffect boxesOfEffect |
+	quantityOfBoxesByEffect := Dictionary new.
+	(1 to: effects size by: 1) do: [ :index | 
+		boxesOfEffect := (boxes * (distributions at: index)) floor.
+		quantityOfBoxesByEffect at: (effects at: index) put: boxesOfEffect ].
+	self createBoxesSequenceWith: quantityOfBoxesByEffect
 ]
 
 { #category : #action }
@@ -46,27 +62,7 @@ BoxesGenerator >> createBoxesSequenceWith: quantityOfBoxesByEffect [
 			boxesSequence add: (quantityOfBoxesByEffect keyAtValue: each).
 			i := i + 1 ].
 		each >= i ifFalse: [ i := 1 ] ].
-	boxesSequence := boxesSequence shuffled first: boxes
-]
-
-{ #category : #actions }
-BoxesGenerator >> generateBoxesAllNoEffect [
-	| quantityOfBoxesByEffect |
-	quantityOfBoxesByEffect := Dictionary newFrom: { 		                          
-			                           ((NoEffectBox distance: parsecPerBox)
-			                            -> boxes) }.
-	self createBoxesSequenceWith: quantityOfBoxesByEffect
-]
-
-{ #category : #action }
-BoxesGenerator >> generateBoxesWith: effects and: distributions [
-
-	| quantityOfBoxesByEffect boxesOfEffect |
-	quantityOfBoxesByEffect := Dictionary new.
-	(1 to: effects size by: 1) do: [ :index | 
-		boxesOfEffect := (boxes * (distributions at: index)) floor.
-		quantityOfBoxesByEffect at: (effects at: index) put: boxesOfEffect ].
-	self createBoxesSequenceWith: quantityOfBoxesByEffect
+	boxesSequence:= boxesSequence shuffled first: boxes
 ]
 
 { #category : #actions }
@@ -82,14 +78,7 @@ BoxesGenerator >> generateBoxesWithOnly: anEffect at: aBoxNumber [
 BoxesGenerator >> initializeWith: aNumberOfBoxes for: effects with: distributions [ 
 	boxes:= aNumberOfBoxes.
 	boxesSequence:= OrderedCollection new.
-	self generateBoxesWith:effects and:distributions.
-]
-
-{ #category : #initialization }
-BoxesGenerator >> initializeWithAllNoEffectsOf: aNumberOfBoxes [
-	boxes:= aNumberOfBoxes.
-	boxesSequence:= OrderedCollection new.
-	self generateBoxesAllNoEffect
+	self calculateBoxesFor:effects with:distributions.
 ]
 
 { #category : #initialization }

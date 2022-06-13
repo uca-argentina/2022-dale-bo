@@ -19,7 +19,7 @@ Spaceship class >> assertShipsNameIsValid:aShip [
 ]
 
 { #category : #instanceCreation }
-Spaceship class >> of: aShip at: aBoxNumber distance: aDistance laps: aLapNumber and: hand [
+Spaceship class >> of: aShip at: aBoxNumber distance: aDistance laps: aLapNumber cards: hand and: effectsApplied [
 
 	self assertShipsNameIsValid: aShip.
 	^ self new
@@ -27,7 +27,8 @@ Spaceship class >> of: aShip at: aBoxNumber distance: aDistance laps: aLapNumber
 		  at: aBoxNumber
 		  distance: aDistance
 		  lap: aLapNumber
-		and:hand.
+		  cards: hand
+		  and: effectsApplied
 ]
 
 { #category : #accesing }
@@ -37,20 +38,25 @@ Spaceship >> boxNumber [
 ]
 
 { #category : #action }
+Spaceship >> effectsOnMe [
+	^effectsOnMe.
+]
+
+{ #category : #action }
 Spaceship >> hand [
 
 	^ hand
 ]
 
 { #category : #initialization }
-Spaceship >> initializeOf: aShip at: aBoxNumber distance: aDistance lap: aLapNumber and: aHand [
+Spaceship >> initializeOf: aShip at: aBoxNumber distance: aDistance lap: aLapNumber cards: aHand and: effectsApplied [
 
 	ship := aShip.
 	boxNumber := aBoxNumber.
 	distance := aDistance.
 	lapNumber:=aLapNumber.
 	hand:= aHand.
-	effectsOnMe := OrderedCollection new.
+	effectsOnMe := effectsApplied.
 ]
 
 { #category : #action }
@@ -82,19 +88,26 @@ Spaceship >> parsecNumber [
 ]
 
 { #category : #action }
-Spaceship >> playACard: aCard to: target [
+Spaceship >> playACard: aCard to: target on: cardEffect [
 	|card |
 	card := hand 
         detect: [ :each | (each type) = (aCard type) ]
         ifNone: [ Error
                 signal: 'The spaceship does not have this card' ].
-	aCard applyTo: target.
+	aCard applyTo: target over:cardEffect.
 	hand remove: card.
 ]
 
 { #category : #action }
 Spaceship >> receive: aCard [ 
 	hand add: aCard. 
+]
+
+{ #category : #action }
+Spaceship >> removeEffect: aCardEffect [
+	| effectToBeRemoved |
+	effectToBeRemoved:=effectsOnMe detect: [ :each | (each type = aCardEffect)].
+	effectsOnMe remove: effectToBeRemoved.
 ]
 
 { #category : #accesing }

@@ -46,7 +46,7 @@ CardTest >> testPlayerLandsInABoxAndReceivesACard [
 			        OverloadCard new }.
 boxSequence := (BoxesGenerator
 		                generate: 13
-		                for: { CardGiverEffect new }
+		                for: { CardGiverEffect with:deck }
 		                with: { 1 }) boxSequence.
 	game := Game
 		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
@@ -74,7 +74,7 @@ CardTest >> testValenPlaysASpeedCardToPablo [
 	deck := Deck with: { SpeedCard new }.
 	boxSequence := (BoxesGenerator
 		                generate: 13
-		                for: { CardGiverEffect new }
+		                for: { CardGiverEffect with:deck }
 		                with: { 1 }) boxSequence.
 	game := Game
 		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
@@ -86,7 +86,7 @@ CardTest >> testValenPlaysASpeedCardToPablo [
 	
 	game
 		playSpeedCardBy:'Valen'
-		to: (game positionOfShip: 'Pablo').
+		to:  'Pablo'.
 	game playATurn.
 	game playATurn.
 
@@ -107,7 +107,7 @@ CardTest >> testValenPlaysAnAccelerationCardToAllPlayers [
 	deck := Deck with: { AccelerationCard new }.
 boxSequence := (BoxesGenerator
 		                generate: 13
-		                for: { CardGiverEffect new }
+		                for: { CardGiverEffect with:deck }
 		                with: { 1 }) boxSequence.
 	game := Game
 		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
@@ -124,7 +124,53 @@ boxSequence := (BoxesGenerator
 	self assert: (game positionOfShip: 'Valen') boxNumber equals: 8.
 	game playATurn.
 	self assert:(game positionOfShip: 'Pablo') boxNumber equals: 8.
+	game playATurn.
+	game playATurn.
+	self assert: (game positionOfShip: 'Valen') boxNumber equals: 2.
 	
+	
+]
+
+{ #category : #tests }
+CardTest >> testValenPlaysAnAccelerationCardToPabloAndPabloUseCancelationCardInValensTurn [
+
+	| dieOne dieTwo dieThree aDiceCup game boxSequence deckForGame deckForBoxes |
+	dieOne := LoadedDie with: 3.
+	dieTwo := LoadedDie with: 2.
+	dieThree := LoadedDie with: 1.
+	aDiceCup := DiceCup withAll: { 
+			            dieOne.
+			            dieTwo.
+			            dieThree }.
+	deckForGame := Deck with: { AccelerationCard new }.
+	deckForBoxes := Deck with: { CancellationCard new }.
+	boxSequence := (BoxesGenerator
+		                generate: 13
+		                for: { (CardGiverEffect with: deckForBoxes) }
+		                with: { 1 }) boxSequence.
+	game := Game
+		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
+		        boardWith: boxSequence
+		        distance: 200
+		        laps: 2
+		        diceCup: aDiceCup
+		        and: deckForGame.
+	game playAccelerationCardBy: 'Valen'.
+	game playATurn.
+	self assert: (game positionOfShip: 'Valen') boxNumber equals: 8.
+	game playATurn.
+	self assert: (game positionOfShip: 'Valen') boxNumber equals: 8.
+	game
+		playCancellationCardBy: 'Pablo'
+		to: 'Valen'
+		on: 'AccelerationCard'.
+	game playATurn.
+	game playATurn.
+	self assert: (game positionOfShip: 'Valen') boxNumber equals: 1.
+	self assert: (game positionOfShip: 'Valen') lapNumber equals: 2.
+	game playATurn.
+	self assert: (game positionOfShip: 'Pablo') boxNumber equals: 2.
+	self assert: (game positionOfShip: 'Pablo') lapNumber equals: 2
 ]
 
 { #category : #tests }
@@ -139,9 +185,9 @@ CardTest >> testValenPlaysAnOverloadCardToPablo [
 			            dieTwo.
 			            dieThree }.
 	deck := Deck with: { OverloadCard new }.
-boxSequence := (BoxesGenerator
+	boxSequence := (BoxesGenerator
 		                generate: 13
-		                for: { CardGiverEffect new }
+		                for: { (CardGiverEffect with: deck) }
 		                with: { 1 }) boxSequence.
 	game := Game
 		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
@@ -150,9 +196,7 @@ boxSequence := (BoxesGenerator
 		        laps: 2
 		        diceCup: aDiceCup
 		        and: deck.
-	game
-		playOverloadCardBy:'Valen'
-		to: (game positionOfShip: 'Pablo').
+	game playOverloadCardBy: 'Valen' to:  'Pablo'.
 	game playATurn.
 	game playATurn.
 
@@ -173,7 +217,7 @@ CardTest >> testValenTriesToPlayACardInPablosTurnAndHeCantsBecauseItAPermanentCa
 	deck := Deck with: { SpeedCard new }.
 	boxSequence := (BoxesGenerator
 		                generate: 13
-		                for: { CardGiverEffect new }
+		                for: { CardGiverEffect with:deck }
 		                with: { 1 }) boxSequence.
 	game := Game
 		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
@@ -220,7 +264,7 @@ CardTest >> testValenTriesToPlayACardThatIsNotInHisHand [
 		should: [ 
 			game
 				playOverloadCardBy:'Valen'
-		to: (game positionOfShip: 'Pablo'). ]
+		to:  'Pablo'. ]
 		raise: Error
 		withMessage: 'The spaceship does not have this card'
 ]

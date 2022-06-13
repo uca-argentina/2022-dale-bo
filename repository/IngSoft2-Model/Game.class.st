@@ -64,7 +64,7 @@ Game >> checkValidTurn: aSpaceship andCardType: aCard [
 { #category : #accessing }
 Game >> hasFinished [
 
-	^ self winner ~= 'No one'
+	^ self winner ~= nil
 ]
 
 { #category : #initialize }
@@ -94,8 +94,21 @@ Game >> playATurn [
 
 { #category : #actions }
 Game >> playAccelerationCardBy: aSpaceship [
-self checkValidTurn: aSpaceship andCardType: (AccelerationCard new).
-	(self positionOfShip:aSpaceship) playACard:(AccelerationCard new) to: (board allShips)
+
+	self checkValidTurn: aSpaceship andCardType: AccelerationCard new.
+	(self positionOfShip: aSpaceship)
+		playACard: AccelerationCard new
+		to: board allShips
+		on: ''
+]
+
+{ #category : #action }
+Game >> playCancellationCardBy: aSpaceship to: anotherSpaceship on: aCardEffect [
+
+	(self positionOfShip: aSpaceship)
+		playACard: CancellationCard new
+		to: (self positionOfShip: anotherSpaceship)
+		on: aCardEffect.
 ]
 
 { #category : #actions }
@@ -103,8 +116,9 @@ Game >> playOverloadCardBy: aSpaceship to: anotherShip [
 
 	self checkValidTurn: aSpaceship andCardType: OverloadCard new.
 	(self positionOfShip: aSpaceship)
-		playACard:  OverloadCard new
-		to: anotherShip.
+		playACard: OverloadCard new
+		to: (self positionOfShip: anotherShip)
+		on: ''
 ]
 
 { #category : #actions }
@@ -113,7 +127,8 @@ Game >> playSpeedCardBy: aSpaceship to: anotherShip [
 	self checkValidTurn: aSpaceship andCardType: SpeedCard new.
 	(self positionOfShip: aSpaceship)
 		playACard: SpeedCard new
-		to: anotherShip.
+		to: (self positionOfShip: anotherShip)
+		on: ''
 ]
 
 { #category : #action }

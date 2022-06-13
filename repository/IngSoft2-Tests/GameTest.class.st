@@ -51,16 +51,16 @@ GameTest >> testAGameCannotBePlayedAfterItHasFinished [
 GameTest >> testAGameHasABoardWithAAtomicBombInPositionThreeAndTheEffectDoenstChangeLaps [
 
 	| dieOne dieTwo dieThree aDiceCup game boxSequence |
-	dieOne := LoadedDie with: 10.
-	dieTwo := LoadedDie with: 3.
+	dieOne := LoadedDie with: 1.
+	dieTwo := LoadedDie with: 1.
 	dieThree := LoadedDie with: 2.
-	aDiceCup := DiceCup withAll: { 
+	aDiceCup := DiceCup withAll: {
 			            dieOne.
 			            dieTwo.
 			            dieThree }.
 	boxSequence := (BoxesGenerator
-		                generate: 13
-		                for: { AtomicBombEffect new }
+		                generate: 10
+		                for: {AtomicBombEffect new. }
 		                with: { 1 }) boxSequence.
 	game := Game
 		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
@@ -71,14 +71,14 @@ GameTest >> testAGameHasABoardWithAAtomicBombInPositionThreeAndTheEffectDoenstCh
 		        and: (Deck with:{SpeedCard new}).
 	game playATurn.
 	self assert: (game positionOfShip: 'Valen') boxNumber equals: 1.
-	self assert: (game positionOfShip: 'Valen') lapNumber equals: 2.
-	self assert: (game positionOfShip: 'Pablo') boxNumber equals: 1.
-	self assert: (game positionOfShip: 'Pablo') lapNumber equals: 1.
 	game playATurn.
-	self assert: (game positionOfShip: 'Valen') boxNumber equals: 1.
-	self assert: (game positionOfShip: 'Valen') lapNumber equals: 2.
 	self assert: (game positionOfShip: 'Pablo') boxNumber equals: 1.
-	self assert: (game positionOfShip: 'Pablo') lapNumber equals: 2.
+	self assert: (game positionOfShip: 'Valen') boxNumber equals: 1.
+	game playATurn.
+	game playATurn.
+	self assert: (game positionOfShip: 'Pablo') boxNumber equals: 1.
+	self assert: (game positionOfShip: 'Valen') boxNumber equals: 1.
+	
 	
 	
 ]
@@ -135,7 +135,7 @@ GameTest >> testAGameHasNoWinnerBeforeItsFinished [
 		        diceCup: aDiceCup
 		        and: (Deck with:{SpeedCard new}).
 	game playATurn.
-	self assert: game winner equals: 'No one'
+	self assert: game winner equals: nil.
 ]
 
 { #category : #tests }

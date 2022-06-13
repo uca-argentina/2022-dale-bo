@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : #operations }
-Card >> applyTo: target [
+Card >> applyTo: target over:aCardEffect [
 
 	self subclassResponsibility.
 ]

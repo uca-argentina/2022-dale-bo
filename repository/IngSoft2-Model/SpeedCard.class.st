@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : #operations }
-SpeedCard >> applyTo: target [
+SpeedCard >> applyTo: target over:aCardEffect [
 
 	target isAffectedBy: self.
 ]

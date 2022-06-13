@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : #operations }
-AccelerationCard >> applyTo: target [
+AccelerationCard >> applyTo: target over:aCardEffect [
 
 	target do:[:each | each isAffectedBy: self].
 ]

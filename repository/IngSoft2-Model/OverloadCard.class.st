@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : #operations }
-OverloadCard >> applyTo: target [
+OverloadCard >> applyTo: target over:aCardEffect [
 
 	target isAffectedBy: self.
 ]
