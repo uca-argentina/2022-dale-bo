@@ -5,11 +5,12 @@ Class {
 }
 
 { #category : #actions }
-Distance >> calculateParsec: aDistance [
+Distance >> amount [
 ^self subclassResponsibility.
 ]
 
 { #category : #actions }
-Distance >> units [
-^self subclassResponsibility.
+Distance >> amountInParsecs [
+
+	^ self subclassResponsibility
 ]

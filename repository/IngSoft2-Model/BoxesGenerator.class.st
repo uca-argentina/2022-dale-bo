@@ -25,19 +25,9 @@ BoxesGenerator class >> generate: aNumberOfBoxes for: effects with: distribution
 	^self new initializeWith:aNumberOfBoxes for: effects with: distributions.
 ]
 
-{ #category : #'instance creation' }
-BoxesGenerator class >> generateWithOnly: anEffect at: aNumberOfBox of: aNumberOfBoxes [ 
-	^self new initializeWithOnly: anEffect at: aNumberOfBox of:aNumberOfBoxes.
-]
-
 { #category : #action }
 BoxesGenerator >> boxSequence [
 
-	^ boxesSequence.
-]
-
-{ #category : #accesing }
-BoxesGenerator >> boxSequenceInOrder [
 	^ boxesSequence.
 ]
 
@@ -65,25 +55,9 @@ BoxesGenerator >> createBoxesSequenceWith: quantityOfBoxesByEffect [
 	boxesSequence:= boxesSequence shuffled first: boxes
 ]
 
-{ #category : #actions }
-BoxesGenerator >> generateBoxesWithOnly: anEffect at: aBoxNumber [
-
-	[boxesSequence size < boxes] whileTrue: [ 
-		((boxesSequence size) == aBoxNumber)
-			ifTrue: [ boxesSequence add: anEffect  ]
-			ifFalse: [ boxesSequence add:  NoEffectBox new ] ]
-]
-
 { #category : #initialization }
 BoxesGenerator >> initializeWith: aNumberOfBoxes for: effects with: distributions [ 
 	boxes:= aNumberOfBoxes.
 	boxesSequence:= OrderedCollection new.
 	self calculateBoxesFor:effects with:distributions.
-]
-
-{ #category : #initialization }
-BoxesGenerator >> initializeWithOnly: anEffect at: aNumberOfBox of: aNumberOfBoxes [ 
-	boxes:= aNumberOfBoxes.
-	boxesSequence:= OrderedCollection new.
-	self generateBoxesWithOnly:anEffect at: aNumberOfBox 
 ]

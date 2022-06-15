@@ -2,7 +2,7 @@ Class {
 	#name : #Lightyear,
 	#superclass : #Distance,
 	#instVars : [
-		'totalParsecDistance'
+		'amount'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -12,17 +12,18 @@ Lightyear class >> with: aDistance [
 	^ self new initializeWith: aDistance.
 ]
 
+{ #category : #accesing }
+Lightyear >> amount [
+	^amount.
+]
+
 { #category : #actions }
-Lightyear >> calculateParsec: aDistance [
- ^ aDistance/3.
+Lightyear >> amountInParsecs [
+
+	^ amount/3.
 ]
 
 { #category : #initialize }
 Lightyear >> initializeWith: aDistance [
-	totalParsecDistance := self calculateParsec: aDistance.
-]
-
-{ #category : #accesing }
-Lightyear >> units [
-	^totalParsecDistance.
+	amount:=aDistance.
 ]

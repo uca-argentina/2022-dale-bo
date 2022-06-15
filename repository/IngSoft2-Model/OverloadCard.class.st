@@ -15,14 +15,15 @@ OverloadCard >> effect [
 	^-2.
 ]
 
-{ #category : #accessing }
-OverloadCard >> family [
+{ #category : #operations }
+OverloadCard >> isPermanent [
 
-	^ 'Permanent'
+	^true.
 ]
 
-{ #category : #accessing }
-OverloadCard >> type [
-
-	^ 'OverloadCard'
+{ #category : #actions }
+OverloadCard >> playedUsing: aGame by: aSpaceship to: anotherSpaceship for: aCardEffect [
+	aGame checkValidTurn:aSpaceship andCardType:aCardEffect.
+	(aGame positionOfShip:anotherSpaceship) isAffectedBy:self.
+	aGame lastCardPlayed:(LastPlayedCard type:self to:anotherSpaceship).
 ]

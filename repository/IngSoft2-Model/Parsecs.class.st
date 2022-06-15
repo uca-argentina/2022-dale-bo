@@ -2,7 +2,7 @@ Class {
 	#name : #Parsecs,
 	#superclass : #Distance,
 	#instVars : [
-		'totalParsecDistance'
+		'amount'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -12,17 +12,18 @@ Parsecs class >> with: aTotalDistance [
 	^self new initializeWith:aTotalDistance.
 ]
 
+{ #category : #accesing }
+Parsecs >> amount [
+	^ amount.
+]
+
 { #category : #actions }
-Parsecs >> calculateParsec: aDistance [
- totalParsecDistance := aDistance.
+Parsecs >> amountInParsecs [
+
+	^ amount.
 ]
 
 { #category : #initialization }
-Parsecs >> initializeWith: aTotalDistance [
-	self calculateParsec: aTotalDistance.
-]
-
-{ #category : #accesing }
-Parsecs >> units [
-	^ totalParsecDistance.
+Parsecs >> initializeWith: aDistance [
+	amount:=aDistance.
 ]

@@ -38,6 +38,14 @@ Spaceship >> boxNumber [
 ]
 
 { #category : #action }
+Spaceship >> checkSpaceshipHas: aCard [
+
+	^ hand
+		  detect: [ :each | each className = aCard className ]
+		  ifNone: [ Error signal: 'The spaceship does not have this card' ]
+]
+
+{ #category : #action }
 Spaceship >> effectsOnMe [
 	^effectsOnMe.
 ]
@@ -89,13 +97,11 @@ Spaceship >> parsecNumber [
 
 { #category : #action }
 Spaceship >> playACard: aCard to: target on: cardEffect [
-	|card |
-	card := hand 
-        detect: [ :each | (each type) = (aCard type) ]
-        ifNone: [ Error
-                signal: 'The spaceship does not have this card' ].
-	aCard applyTo: target over:cardEffect.
-	hand remove: card.
+
+	| card |
+	card := self checkSpaceshipHas: aCard.
+	aCard applyTo: target over: cardEffect.
+	hand remove: card
 ]
 
 { #category : #action }
@@ -106,7 +112,7 @@ Spaceship >> receive: aCard [
 { #category : #action }
 Spaceship >> removeEffect: aCardEffect [
 	| effectToBeRemoved |
-	effectToBeRemoved:=effectsOnMe detect: [ :each | (each type = aCardEffect)].
+	effectToBeRemoved:=effectsOnMe detect: [ :each | (each className = aCardEffect className)].
 	effectsOnMe remove: effectToBeRemoved.
 ]
 

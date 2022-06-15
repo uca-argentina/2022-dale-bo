@@ -7,7 +7,7 @@ Class {
 		'finished',
 		'turnSequence',
 		'positionController',
-		'cardGraveyard'
+		'lastCardPlayed'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -21,7 +21,7 @@ Game class >> assertCollectionOfShipsIsValid:aCollectionOfShips [
 
 { #category : #'instance colors' }
 Game class >> assertValidDistance: distance [
-	(distance units ) < 1 ifTrue: [ Error signal: 'A board must have a distance greater than zero' ].
+	(distance amount ) < 1 ifTrue: [ Error signal: 'A board must have a distance greater than zero' ].
 ]
 
 { #category : #'instance colors' }
@@ -44,6 +44,11 @@ Game class >> spaceships: ships boardWith: aBoxSequence distance: distance laps:
 		  and: aDeck
 ]
 
+{ #category : #accessing }
+Game >> allShips [
+	^board allShips.
+]
+
 { #category : #actions }
 Game >> checkIfGameIsNotFinished [
 
@@ -55,9 +60,10 @@ Game >> checkValidTurn: aSpaceship andCardType: aCard [
 
 	| whoWantsToPlay |
 	whoWantsToPlay := self positionOfShip: aSpaceship.
+	whoWantsToPlay checkSpaceshipHas:aCard.
 
 	(turnSequence whoPlays ~= whoWantsToPlay ownerShip and:
-		 aCard family = 'Permanent') ifTrue: [ 
+		 aCard isPermanent) ifTrue: [ 
 		Error signal:
 			'A permanent card cannot be played on another spaceship turn' ].
 ]
@@ -80,7 +86,18 @@ Game >> initializeWith: spaceships aBoardWith: aBoxSequence distance: aDistance 
 	diceCup := aDiceCup.
 	turnSequence := TurnSequence with: spaceships.
 	finished := false.
-	cardGraveyard:= Graveyard with:OrderedCollection new.
+	lastCardPlayed:= nil.
+]
+
+{ #category : #actions }
+Game >> lastCardPlayed [
+
+	^ lastCardPlayed
+]
+
+{ #category : #actions }
+Game >> lastCardPlayed: aLastPlayedCard [ 
+	lastCardPlayed := aLastPlayedCard
 ]
 
 { #category : #actions }
@@ -95,53 +112,6 @@ Game >> playATurn [
 ]
 
 { #category : #actions }
-Game >> playAccelerationCardBy: aSpaceship [
-
-	self checkValidTurn: aSpaceship andCardType: AccelerationCard new.
-	(self positionOfShip: aSpaceship)
-		playACard: AccelerationCard new
-		to: board allShips
-		on: ''.
-	cardGraveyard addCard: (OverloadCard new) to: board allShips.
-]
-
-{ #category : #action }
-Game >> playCancellationCardBy: aSpaceship to: anotherSpaceship on: aCardEffect [
-
-	(self positionOfShip: aSpaceship)
-		playACard: CancellationCard new
-		to: (self positionOfShip: anotherSpaceship)
-		on: aCardEffect.
-	cardGraveyard addCard: (OverloadCard new) to: anotherSpaceship.
-]
-
-{ #category : #actions }
-Game >> playOverloadCardBy: aSpaceship to: anotherShip [
-
-	self checkValidTurn: aSpaceship andCardType: OverloadCard new.
-	(self positionOfShip: aSpaceship)
-		playACard: OverloadCard new
-		to: (self positionOfShip: anotherShip)
-		on: ''.
-	cardGraveyard addCard: (OverloadCard new) to: anotherShip.
-	
-]
-
-{ #category : #actions }
-Game >> playRedoCardBy: aSpaceship [ 
-	| lastCard |
-	lastCard:=cardGraveyard lastCardPlayed.
-	self checkValidTurn: aSpaceship andCardType: lastCard card.
-	(self positionOfShip: aSpaceship)
-		playACard: lastCard card
-		to: (self positionOfShip: lastCard affectedSpaceship)
-		on: ''.
-	cardGraveyard addCard: (lastCard card) to: lastCard affectedSpaceship.
-	
-	
-]
-
-{ #category : #actions }
 Game >> playRepeatCardBy: aSpaceship to: anotherSpaceship [
 	| lastBoxEffect |
 	lastBoxEffect:=board lastBoxEffect.
@@ -150,19 +120,9 @@ Game >> playRepeatCardBy: aSpaceship to: anotherSpaceship [
 		playACard: RepeatCard new
 		to: (self positionOfShip: anotherSpaceship)
 		on: ''.
-   lastBoxEffect applyTo: (board spaceshipController)  triggeredBy:  anotherSpaceship  with: board lastPosition  distance: board boxesDistance laps: board laps
 	
-]
-
-{ #category : #actions }
-Game >> playSpeedCardBy: aSpaceship to: anotherShip [
-
-	self checkValidTurn: aSpaceship andCardType: SpeedCard new.
-	(self positionOfShip: aSpaceship)
-		playACard: SpeedCard new
-		to: (self positionOfShip: anotherShip)
-		on: ''.
-		cardGraveyard addCard: (SpeedCard new) to: anotherShip.
+   lastBoxEffect applyTo: (board spaceshipController)  triggeredBy:  anotherSpaceship  with: board lastPosition  distance: board boxesDistance laps: board laps.
+	lastCardPlayed := LastPlayedCard type:(SpeedCard new) to:anotherSpaceship.
 ]
 
 { #category : #action }

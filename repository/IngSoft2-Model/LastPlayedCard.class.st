@@ -1,5 +1,5 @@
 Class {
-	#name : #PlayedCard,
+	#name : #LastPlayedCard,
 	#superclass : #Object,
 	#instVars : [
 		'card',
@@ -9,23 +9,23 @@ Class {
 }
 
 { #category : #'class initialization' }
-PlayedCard class >> type: aCard to: aSpaceship [
+LastPlayedCard class >> type: aCard to: aSpaceship [
 	^self new initializeWithType: aCard to:aSpaceship.
 ]
 
 { #category : #initialize }
-PlayedCard >> affectedSpaceship [
+LastPlayedCard >> affectedSpaceship [
 
 	^ affectedSpaceship
 ]
 
 { #category : #initialize }
-PlayedCard >> card [
+LastPlayedCard >> card [
 ^card.
 ]
 
 { #category : #initialize }
-PlayedCard >> initializeWithType: aCard to: aSpaceship [
+LastPlayedCard >> initializeWithType: aCard to: aSpaceship [
 	card:= aCard.
 	affectedSpaceship:=aSpaceship.
 ]

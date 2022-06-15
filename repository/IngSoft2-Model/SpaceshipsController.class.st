@@ -18,13 +18,11 @@ SpaceshipsController class >> for:ships and:aDeck [
 SpaceshipsController >> applyAtomicBomb [
 
 	positions do: [ :each | 
-		positions replaceAll: each with: (Spaceship
-				 of: each ownerShip
-				 at: 1
-				 distance: each parsecNumber
-				 laps: each lapNumber
-				 cards: each hand
-				 and: each effectsOnMe) ]
+		positions replaceAll: each with: (self
+				 updateSpaceshipOf: each ownerShip
+				 from: each
+				 to: 1
+				 and: each lapNumber) ]
 ]
 
 { #category : #action }
@@ -55,7 +53,7 @@ SpaceshipsController >> move: aShip to: aNumberOfParsecs finalDistance: endParse
 
 	| oldPosition shipNewParsecNumber |
 	oldPosition := positions detect: [ :each | each ownerShip = aShip ].
-	shipNewParsecNumber := oldPosition parsecNumber + (aNumberOfParsecs units).
+	shipNewParsecNumber := oldPosition parsecNumber + (aNumberOfParsecs amountInParsecs).
 	positions replaceAll: oldPosition with: (Spaceship
 			 of: aShip
 			 at: oldPosition boxNumber
@@ -83,13 +81,11 @@ SpaceshipsController >> moveBackwards: aShip to: aBox with: endPosition and: lap
 	(shipNewBoxNumber < 1 and: oldPosition lapNumber = 1) ifTrue: [ 
 		shipNewBoxNumber := 1 ].
 
-	positions replaceAll: oldPosition with: (Spaceship
-			 of: aShip
-			 at: shipNewBoxNumber
-			 distance: oldPosition parsecNumber
-			 laps: shipNewLapNumber
-			 cards: oldPosition hand
-			 and: oldPosition effectsOnMe)
+	positions replaceAll: oldPosition with: (self
+			 updateSpaceshipOf: aShip
+			 from: oldPosition
+			 to: shipNewBoxNumber
+			 and: shipNewLapNumber)
 ]
 
 { #category : #action }
@@ -107,13 +103,11 @@ SpaceshipsController >> moveForward: aShip to: aBox with: endPosition and: laps 
 			shipNewLapNumber := oldPosition lapNumber + 1.
 			shipNewBoxNumber := shipNewBoxNumber - endPosition ]
 		ifFalse: [ shipNewLapNumber := oldPosition lapNumber ].
-	positions replaceAll: oldPosition with: (Spaceship
-			 of: aShip
-			 at: shipNewBoxNumber
-			 distance: oldPosition parsecNumber
-			 laps: shipNewLapNumber
-			 cards: oldPosition hand
-			 and: oldPosition effectsOnMe)
+	positions replaceAll: oldPosition with: (self
+			 updateSpaceshipOf: aShip
+			 from: oldPosition
+			 to: shipNewBoxNumber
+			 and: shipNewLapNumber)
 ]
 
 { #category : #accesing }
@@ -131,6 +125,18 @@ SpaceshipsController >> sortPositionsByRanking [
 
 	positions sort: [ :positionOfShip1 :positionOfShip2 | 
 		 positionOfShip1 lapNumber > positionOfShip2 lapNumber  or: [ positionOfShip1 lapNumber = positionOfShip2 lapNumber and: positionOfShip1 boxNumber  > positionOfShip2 boxNumber ]  ]
+]
+
+{ #category : #action }
+SpaceshipsController >> updateSpaceshipOf: aShip from: oldPosition to: shipNewBoxNumber and: shipNewLapNumber [
+
+	^ Spaceship
+		  of: aShip
+		  at: shipNewBoxNumber
+		  distance: oldPosition parsecNumber
+		  laps: shipNewLapNumber
+		  cards: oldPosition hand
+		  and: oldPosition effectsOnMe
 ]
 
 { #category : #accesing }

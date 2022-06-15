@@ -15,13 +15,15 @@ SpeedCard >> effect [
 	^ 1.
 ]
 
-{ #category : #accessing }
-SpeedCard >> family [
-^ 'Permanent'
+{ #category : #operations }
+SpeedCard >> isPermanent [
+
+	^true.
 ]
 
-{ #category : #accessing }
-SpeedCard >> type [
-
-	^ 'SpeedCard'
+{ #category : #actions }
+SpeedCard >> playedUsing: aGame by: aSpaceship to: anotherSpaceship for: aCardEffect [
+	aGame checkValidTurn:aSpaceship andCardType:aCardEffect.
+	(aGame positionOfShip:anotherSpaceship) isAffectedBy:self.
+	aGame lastCardPlayed:(LastPlayedCard type:self to:anotherSpaceship).
 ]

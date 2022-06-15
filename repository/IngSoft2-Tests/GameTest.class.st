@@ -60,7 +60,7 @@ GameTest >> testAGameCannotBePlayedAfterItHasFinished [
 ]
 
 { #category : #tests }
-GameTest >> testAGameHasABoardWithAAtomicBombInPositionElevenAndTheEffectDoenstChangeLapsV2 [
+GameTest >> testAGameHasABoardWithAAtomicBombInPositionElevenAndTheEffectDoenstChangeLaps [
 
 	| dieOne dieTwo dieThree aDiceCup game boxSequence |
 	dieOne := LoadedDie with: 1.
@@ -89,42 +89,6 @@ GameTest >> testAGameHasABoardWithAAtomicBombInPositionElevenAndTheEffectDoenstC
 	game playATurn.
 	self assert: (game positionOfShip: 'Pablo') boxNumber equals: 1.
 	self assert: (game positionOfShip: 'Valen') boxNumber equals: 1
-]
-
-{ #category : #tests }
-GameTest >> testAGameHasABoardWithAAtomicBombInPositionThreeAndTheEffectDoenstChangeLaps [
-
-	| dieOne dieTwo dieThree aDiceCup game boxSequence |
-	dieOne := LoadedDie with: 1.
-	dieTwo := LoadedDie with: 1.
-	dieThree := LoadedDie with: 2.
-	aDiceCup := DiceCup withAll: {
-			            dieOne.
-			            dieTwo.
-			            dieThree }.
-	boxSequence := (BoxesGenerator
-		                generate: 10
-		                for: {AtomicBombEffect new. }
-		                with: { 1 }) boxSequence.
-	game := Game
-		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
-		        boardWith: boxSequence
-		        distance: (Parsecs with:200)
-		        laps: 2
-		        diceCup: aDiceCup
-		        and: (Deck with:{SpeedCard new}).
-	game playATurn.
-	self assert: (game positionOfShip: 'Valen') boxNumber equals: 1.
-	game playATurn.
-	self assert: (game positionOfShip: 'Pablo') boxNumber equals: 1.
-	self assert: (game positionOfShip: 'Valen') boxNumber equals: 1.
-	game playATurn.
-	game playATurn.
-	self assert: (game positionOfShip: 'Pablo') boxNumber equals: 1.
-	self assert: (game positionOfShip: 'Valen') boxNumber equals: 1.
-	
-	
-	
 ]
 
 { #category : #tests }
@@ -302,10 +266,10 @@ GameTest >> testAllPlayersLandInHyperJumpAtBoxFiveAndTheyMoveFirstFiveParsecsAnd
 			            dieOne.
 			            dieTwo.
 			            dieThree }.
-	boxSequence := (BoxesGenerator
-		                generateWithOnly: (HyperJumpEffect with: { Parsecs with: 5. Lightyear with: 12 })
-		                at: 4
-		                of: 10) boxSequence.
+	boxSequence := self
+		               sequenceOfNoEffectsOf: 9
+		               with: (HyperJumpEffect with: { Parsecs with: 5. Lightyear with: 12 })
+		               at: 4.
 	game := Game
 		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
@@ -365,10 +329,10 @@ GameTest >> testValenLandsInAMoonwalkAtBoxSevenAndMakeTheOthersGoBackTwoPosition
 			            dieOne.
 			            dieTwo.
 			            dieThree }.
-	boxSequence := (BoxesGenerator
-		                generateWithOnly: (MoonwalkEffect with: 2)
-		                at: 6
-		                of: 10) boxSequence.
+	boxSequence := self
+		               sequenceOfNoEffectsOf: 10
+		               with: (MoonwalkEffect with:2)
+		               at: 6.
 	game := Game
 		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
@@ -397,10 +361,10 @@ GameTest >> testValenLandsInAMoonwalkAtBoxSixAndMakeTheOthersGoBackTwoPositions 
 			            dieOne.
 			            dieTwo.
 			            dieThree }.
-	boxSequence := (BoxesGenerator
-		                generateWithOnly: (MoonwalkEffect with: 2)
-		                at: 6
-		                of: 10) boxSequence.
+	boxSequence := self
+		               sequenceOfNoEffectsOf: 10
+		               with: (MoonwalkEffect with:2)
+		               at: 6.
 	game := Game
 		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
@@ -429,10 +393,10 @@ GameTest >> testValenLandsInASpeedupBoxInPositionFiveAndMovesToPositionNine [
 			            dieOne.
 			            dieTwo.
 			            dieThree }.
-	boxSequence := (BoxesGenerator
-		                generateWithOnly: SpeedUpEffect new
-		                at: 4
-		                of: 10) boxSequence.
+	boxSequence := self
+		               sequenceOfNoEffectsOf: 10
+		               with: (SpeedUpEffect new)
+		               at: 4.
 	game := Game
 		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
@@ -456,17 +420,18 @@ GameTest >> testValenLandsInWormholeAtBoxSevenAndGoesBackFourBoxesToEndAtBoxNumb
 			            dieOne.
 			            dieTwo.
 			            dieThree }.
-	boxSequence := (BoxesGenerator
-		                generateWithOnly: WormHoleEffect new
-		                at: 6
-		                of: 10) boxSequence.
+	boxSequence := self
+		               sequenceOfNoEffectsOf: 10
+		               with: WormHoleEffect new
+		               at: 6.
+
 	game := Game
 		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
-		        distance: (Parsecs with:200)
+		        distance: (Parsecs with: 200)
 		        laps: 2
 		        diceCup: aDiceCup
-		        and: (Deck with:{SpeedCard new}).
+		        and: (Deck with: { SpeedCard new }).
 	game playATurn.
 	newPosition := game positionOfShip: 'Valen'.
 	self assert: newPosition boxNumber equals: 3.
@@ -485,10 +450,10 @@ GameTest >> testValenLandsInWormholeAtBoxThreeOfLapTwoAndStepBackFourBoxesToEndA
 			            dieOne.
 			            dieTwo.
 			            dieThree }.
-	boxSequence := (BoxesGenerator
-		                generateWithOnly: WormHoleEffect new
-		                at: 2
-		                of: 10) boxSequence.
+				boxSequence := self
+		               sequenceOfNoEffectsOf: 9
+		               with: (WormHoleEffect new)
+		               at: 2.
 	game := Game
 		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence

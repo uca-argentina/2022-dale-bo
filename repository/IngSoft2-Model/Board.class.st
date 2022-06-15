@@ -74,7 +74,7 @@ Board >> effectAt: aBoxNumber for: ships appliedBy: aShip [
 { #category : #initialization }
 Board >> initializeWithShips: spaceships with: aBoxSequence distance: aDistance laps: numberOfLaps and: aDeck [
 	boxes := aBoxSequence.
-	distancePerBox := (aDistance units) // (boxes size).
+	distancePerBox := (aDistance amountInParsecs) // (boxes size).
 	laps := numberOfLaps.
 	deck:= aDeck.
 	spaceshipsController := SpaceshipsController for: spaceships and:deck.

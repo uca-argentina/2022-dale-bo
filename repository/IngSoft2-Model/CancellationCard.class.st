@@ -10,14 +10,15 @@ CancellationCard >> applyTo: target over:aCardEffect [.
 	target removeEffect:aCardEffect.
 ]
 
-{ #category : #accessing }
-CancellationCard >> family [
+{ #category : #operations }
+CancellationCard >> isPermanent [
 
-	^ 'Instant'
+	^false.
 ]
 
-{ #category : #accessing }
-CancellationCard >> type [
-
-	^ 'CancelationCard'
+{ #category : #actions }
+CancellationCard >> playedUsing: aGame by: aSpaceship to: anotherSpaceship for: aCardEffect [
+	aGame checkValidTurn:aSpaceship andCardType:self.
+	(aGame positionOfShip:anotherSpaceship) removeEffect:aCardEffect.
+	aGame lastCardPlayed:(LastPlayedCard type:self to:anotherSpaceship).
 ]

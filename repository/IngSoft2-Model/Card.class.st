@@ -10,12 +10,8 @@ Card >> applyTo: target over:aCardEffect [
 	self subclassResponsibility.
 ]
 
-{ #category : #accessing }
-Card >> family [
-self subclassResponsibility.
-]
+{ #category : #operations }
+Card >> isPermanent [
 
-{ #category : #accessing }
-Card >> type [
-self subclassResponsibility.
+	self subclassResponsibility.
 ]

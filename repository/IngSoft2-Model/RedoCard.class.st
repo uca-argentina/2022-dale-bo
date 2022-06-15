@@ -10,12 +10,18 @@ RedoCard >> applyTo: target over:aCardEffect [
 	target isAffectedBy: self..
 ]
 
-{ #category : #accessing }
-RedoCard >> family [
-^nil.
+{ #category : #operations }
+RedoCard >> isPermanent [
+
+	^false.
 ]
 
-{ #category : #accessing }
-RedoCard >> type [
-^'RedoCard'
+{ #category : #actions }
+RedoCard >> playedUsing: aGame by: aSpaceship to: anotherSpaceship for: aCardEffect [
+
+	| lastPlayedCard |
+	lastPlayedCard := aGame lastCardPlayed.
+	aGame checkValidTurn: aSpaceship andCardType: lastPlayedCard card.
+	(aGame positionOfShip: lastPlayedCard affectedSpaceship) 
+		isAffectedBy: lastPlayedCard card
 ]
