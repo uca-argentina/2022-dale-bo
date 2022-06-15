@@ -6,7 +6,8 @@ Class {
 		'diceCup',
 		'finished',
 		'turnSequence',
-		'positionController'
+		'positionController',
+		'cardGraveyard'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -20,7 +21,7 @@ Game class >> assertCollectionOfShipsIsValid:aCollectionOfShips [
 
 { #category : #'instance colors' }
 Game class >> assertValidDistance: distance [
-	distance < 1 ifTrue: [ Error signal: 'A board must have a distance greater than zero' ].
+	(distance units ) < 1 ifTrue: [ Error signal: 'A board must have a distance greater than zero' ].
 ]
 
 { #category : #'instance colors' }
@@ -78,7 +79,8 @@ Game >> initializeWith: spaceships aBoardWith: aBoxSequence distance: aDistance 
 		         and: aDeck.
 	diceCup := aDiceCup.
 	turnSequence := TurnSequence with: spaceships.
-	finished := false
+	finished := false.
+	cardGraveyard:= Graveyard with:OrderedCollection new.
 ]
 
 { #category : #actions }
@@ -99,7 +101,8 @@ Game >> playAccelerationCardBy: aSpaceship [
 	(self positionOfShip: aSpaceship)
 		playACard: AccelerationCard new
 		to: board allShips
-		on: ''
+		on: ''.
+	cardGraveyard addCard: (OverloadCard new) to: board allShips.
 ]
 
 { #category : #action }
@@ -109,6 +112,7 @@ Game >> playCancellationCardBy: aSpaceship to: anotherSpaceship on: aCardEffect 
 		playACard: CancellationCard new
 		to: (self positionOfShip: anotherSpaceship)
 		on: aCardEffect.
+	cardGraveyard addCard: (OverloadCard new) to: anotherSpaceship.
 ]
 
 { #category : #actions }
@@ -118,7 +122,31 @@ Game >> playOverloadCardBy: aSpaceship to: anotherShip [
 	(self positionOfShip: aSpaceship)
 		playACard: OverloadCard new
 		to: (self positionOfShip: anotherShip)
-		on: ''
+		on: ''.
+	cardGraveyard addCard: (OverloadCard new) to: anotherShip.
+	
+]
+
+{ #category : #actions }
+Game >> playRedoCardBy: aSpaceship [ 
+	| lastCard |
+	lastCard:=cardGraveyard lastCardPlayed.
+	self checkValidTurn: aSpaceship andCardType: lastCard card.
+	(self positionOfShip: aSpaceship)
+		playACard: lastCard card
+		to: (self positionOfShip: lastCard affectedSpaceship)
+		on: ''.
+	cardGraveyard addCard: (lastCard card) to: lastCard affectedSpaceship.
+	
+	
+]
+
+{ #category : #actions }
+Game >> playRepeatCardBy: aSpaceship to: anotherSpaceship [
+	| lastBoxEffect |
+	lastBoxEffect:=board lastBoxEffect.
+   lastBoxEffect applyTo: (board spaceshipController)  triggeredBy:  anotherSpaceship  with: board lastPosition  distance: board boxesDistance laps: board laps
+	
 ]
 
 { #category : #actions }
@@ -128,7 +156,8 @@ Game >> playSpeedCardBy: aSpaceship to: anotherShip [
 	(self positionOfShip: aSpaceship)
 		playACard: SpeedCard new
 		to: (self positionOfShip: anotherShip)
-		on: ''
+		on: ''.
+		cardGraveyard addCard: (SpeedCard new) to: anotherShip.
 ]
 
 { #category : #action }

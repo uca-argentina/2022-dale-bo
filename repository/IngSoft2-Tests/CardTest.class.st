@@ -31,6 +31,112 @@ CardTest >> testADeckCannotBeCreatedWithNoCards [
 ]
 
 { #category : #tests }
+CardTest >> testPabloPlaysARedoCardAfterPabloPlaysAOverloadCard [
+
+	| dieOne dieTwo dieThree aDiceCup game boxSequence  deckForGame deckForCardGiver|
+	dieOne := LoadedDie with: 3.
+	dieTwo := LoadedDie with: 2.
+	dieThree := LoadedDie with: 1.
+	aDiceCup := DiceCup withAll: { 
+			            dieOne.
+			            dieTwo.
+			            dieThree }.
+	deckForGame := Deck with: { OverloadCard new }.
+	deckForCardGiver := Deck with: { RedoCard new }.
+	boxSequence := (BoxesGenerator
+		                generate: 13
+		                for: { (CardGiverEffect with: deckForCardGiver) }
+		                with: { 1 }) boxSequence.
+	game := Game
+		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
+		        boardWith: boxSequence
+		        distance: (Parsecs with:200)
+		        laps: 2
+		        diceCup: aDiceCup
+		        and: deckForGame.
+	game playATurn.
+	game playATurn.
+	game playATurn.
+   game playATurn.
+	self assert: (game positionOfShip: 'Seba') boxNumber equals: 7.
+	game playOverloadCardBy: 'Pablo' to:  'Seba'.
+	game playRedoCardBy:'Pablo'.
+	game playATurn.
+	game playATurn.
+	self assert: (game positionOfShip: 'Seba') boxNumber equals: 9.
+]
+
+{ #category : #tests }
+CardTest >> testPabloPlaysARepeatCardAfterValenMoves [
+
+	| dieOne dieTwo dieThree aDiceCup game boxSequence deckForGame deckForCardGiver |
+	dieOne := LoadedDie with: 3.
+	dieTwo := LoadedDie with: 2.
+	dieThree := LoadedDie with: 1.
+	aDiceCup := DiceCup withAll: { 
+			            dieOne.
+			            dieTwo.
+			            dieThree }.
+	deckForGame := Deck with: { OverloadCard new }.
+	deckForCardGiver := Deck with: { RedoCard new }.
+	boxSequence := (BoxesGenerator
+		                generate: 16
+		                for: { SpeedUpEffect new. }
+		                with: { 1 }) boxSequence.
+		
+	boxSequence add: (CardGiverEffect with: deckForCardGiver) afterIndex: 7.
+	game := Game
+		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
+		        boardWith: boxSequence
+		        distance: (Parsecs with: 200)
+		        laps: 2
+		        diceCup: aDiceCup
+		        and: deckForGame.
+	game playATurn.
+	self assert: (game positionOfShip: 'Valen') boxNumber equals: 11.
+	game playRepeatCardBy: 'Pablo' to: 'Pablo'.
+	game playATurn.
+	self assert: (game positionOfShip: 'Pablo') boxNumber equals: 15.
+]
+
+{ #category : #tests }
+CardTest >> testPabloTriesToPlaysARedoCardNotInHisTurnAfterPabloPlaysAOverloadCard [
+
+	| dieOne dieTwo dieThree aDiceCup game boxSequence  deckForGame deckForCardGiver|
+	dieOne := LoadedDie with: 3.
+	dieTwo := LoadedDie with: 2.
+	dieThree := LoadedDie with: 1.
+	aDiceCup := DiceCup withAll: { 
+			            dieOne.
+			            dieTwo.
+			            dieThree }.
+	deckForGame := Deck with: { OverloadCard new }.
+	deckForCardGiver := Deck with: { RedoCard new }.
+	boxSequence := (BoxesGenerator
+		                generate: 13
+		                for: { (CardGiverEffect with: deckForCardGiver) }
+		                with: { 1 }) boxSequence.
+	game := Game
+		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
+		        boardWith: boxSequence
+		        distance: (Parsecs with:200)
+		        laps: 2
+		        diceCup: aDiceCup
+		        and: deckForGame.
+	game playATurn.
+	self assert: (game positionOfShip: 'Valen') boxNumber equals: 7.
+	game playOverloadCardBy: 'Pablo' to:  'Valen'.
+	game playATurn.
+	self
+		should: [ 
+			game playRedoCardBy:'Pablo'. ]
+		raise: Error
+		withMessage:
+		'A permanent card cannot be played on another spaceship turn'
+
+]
+
+{ #category : #tests }
 CardTest >> testPlayerLandsInABoxAndReceivesACard [
 
 	| dieOne dieTwo dieThree aDiceCup game boxSequence deck |
@@ -51,7 +157,7 @@ boxSequence := (BoxesGenerator
 	game := Game
 		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
-		        distance: 200
+		        distance: (Parsecs with:200)
 		        laps: 2
 		        diceCup: aDiceCup
 		        and: deck.
@@ -79,7 +185,7 @@ CardTest >> testValenPlaysASpeedCardToPablo [
 	game := Game
 		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
-		        distance: 200
+		        distance: (Parsecs with:200)
 		        laps: 2
 		        diceCup: aDiceCup
 		        and: deck.
@@ -112,7 +218,7 @@ boxSequence := (BoxesGenerator
 	game := Game
 		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
-		        distance: 200
+		        distance: (Parsecs with:200)
 		        laps: 2
 		        diceCup: aDiceCup
 		        and: deck.
@@ -151,7 +257,7 @@ CardTest >> testValenPlaysAnAccelerationCardToPabloAndPabloUseCancelationCardInV
 	game := Game
 		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
-		        distance: 200
+		        distance: (Parsecs with:200)
 		        laps: 2
 		        diceCup: aDiceCup
 		        and: deckForGame.
@@ -192,7 +298,7 @@ CardTest >> testValenPlaysAnOverloadCardToPablo [
 	game := Game
 		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
-		        distance: 200
+		        distance: (Parsecs with:200)
 		        laps: 2
 		        diceCup: aDiceCup
 		        and: deck.
@@ -222,7 +328,7 @@ CardTest >> testValenTriesToPlayACardInPablosTurnAndHeCantsBecauseItAPermanentCa
 	game := Game
 		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
-		        distance: 200
+		        distance: (Parsecs with:200)
 		        laps: 2
 		        diceCup: aDiceCup
 		        and: deck.
@@ -256,7 +362,7 @@ CardTest >> testValenTriesToPlayACardThatIsNotInHisHand [
 	game := Game
 		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
-		        distance: 200
+		        distance: (Parsecs with:200)
 		        laps: 2
 		        diceCup: aDiceCup
 		        and: deck.

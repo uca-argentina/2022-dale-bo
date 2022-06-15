@@ -55,7 +55,7 @@ SpaceshipsController >> move: aShip to: aNumberOfParsecs finalDistance: endParse
 
 	| oldPosition shipNewParsecNumber |
 	oldPosition := positions detect: [ :each | each ownerShip = aShip ].
-	shipNewParsecNumber := oldPosition parsecNumber + aNumberOfParsecs.
+	shipNewParsecNumber := oldPosition parsecNumber + (aNumberOfParsecs units).
 	positions replaceAll: oldPosition with: (Spaceship
 			 of: aShip
 			 at: oldPosition boxNumber

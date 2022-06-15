@@ -29,7 +29,7 @@ PositionTest >> testPositionHasAValidShipName [
 				distance: 0
 				laps: 0
 				cards: {  }
-				and: effectsApplied ]
+				and: { }  ]
 		raise: Error
 		withMessage: 'Ship name must have a name longer than one character'
 ]

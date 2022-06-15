@@ -7,7 +7,8 @@ Class {
 		'distanceOfBoard',
 		'distancePerBox',
 		'deck',
-		'spaceshipsController'
+		'spaceshipsController',
+		'lastBoxEffect'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -52,6 +53,12 @@ Board >> boxes [
 	^ boxes
 ]
 
+{ #category : #accesing }
+Board >> boxesDistance [
+
+	^ distancePerBox 
+]
+
 { #category : #actions }
 Board >> effectAt: aBoxNumber for: ships appliedBy: aShip [
 
@@ -60,16 +67,18 @@ Board >> effectAt: aBoxNumber for: ships appliedBy: aShip [
 		triggeredBy: aShip
 		with: self lastPosition
 		distance: distancePerBox
-		laps: self laps
+		laps: self laps.
+	lastBoxEffect := boxes at:aBoxNumber.
 ]
 
 { #category : #initialization }
 Board >> initializeWithShips: spaceships with: aBoxSequence distance: aDistance laps: numberOfLaps and: aDeck [
 	boxes := aBoxSequence.
-	distancePerBox := aDistance // (boxes size).
+	distancePerBox := (aDistance units) // (boxes size).
 	laps := numberOfLaps.
 	deck:= aDeck.
 	spaceshipsController := SpaceshipsController for: spaceships and:deck.
+	lastBoxEffect := nil.
 	
 ]
 
@@ -77,6 +86,11 @@ Board >> initializeWithShips: spaceships with: aBoxSequence distance: aDistance 
 Board >> laps [
 
 	^ laps
+]
+
+{ #category : #accessing }
+Board >> lastBoxEffect [
+	^lastBoxEffect.
 ]
 
 { #category : #accesing }
@@ -115,6 +129,11 @@ Board >> rankingOf: aShip [
 	spaceshipsController positions do: [ :positionOfAShip | 
 		positionOfAShip ownerShip = aShip ifTrue: [ 
 			^ spaceshipsController positions indexOf: positionOfAShip ] ]
+]
+
+{ #category : #accessing }
+Board >> spaceshipController [
+	^spaceshipsController.
 ]
 
 { #category : #accesing }

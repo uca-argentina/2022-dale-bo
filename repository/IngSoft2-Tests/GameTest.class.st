@@ -36,7 +36,7 @@ GameTest >> testAGameCannotBePlayedAfterItHasFinished [
 	game := Game
 		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
-		        distance: 200
+		        distance: (Parsecs with:200)
 		        laps: 2
 		        diceCup: aDiceCup
 		        and: (Deck with:{SpeedCard new}).
@@ -45,6 +45,42 @@ GameTest >> testAGameCannotBePlayedAfterItHasFinished [
 		should: [ game playATurn ]
 		raise: Error
 		withMessage: 'Turn cannot be played, games has finished'
+]
+
+{ #category : #tests }
+GameTest >> testAGameHasABoardWithAAtomicBombInPositionElevenAndTheEffectDoenstChangeLapsV2 [
+
+	| dieOne dieTwo dieThree aDiceCup game boxSequence|
+	dieOne := LoadedDie with: 1.
+	dieTwo := LoadedDie with: 2.
+	dieThree := LoadedDie with: 2.
+	aDiceCup := DiceCup withAll: {
+			            dieOne.
+			            dieTwo.
+			            dieThree }.
+	boxSequence := (BoxesGenerator
+		                generate: 13
+		                for: { NoEffectBox new }
+		                with: { 1 }) boxSequence.
+  boxSequence add: (AtomicBombEffect new) afterIndex:10.
+	game := Game
+		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
+		        boardWith: boxSequence
+		        distance: (Parsecs with:200)
+		        laps: 2
+		        diceCup: aDiceCup
+		        and: (Deck with:{SpeedCard new}).
+	game playATurn.
+	self assert: (game positionOfShip: 'Valen') boxNumber equals: 6.
+	game playATurn.
+	self assert: (game positionOfShip: 'Pablo') boxNumber equals: 6.
+	game playATurn.
+	game playATurn.
+	self assert: (game positionOfShip: 'Pablo') boxNumber equals: 1.
+	self assert: (game positionOfShip: 'Valen') boxNumber equals: 1.
+	
+	
+	
 ]
 
 { #category : #tests }
@@ -65,7 +101,7 @@ GameTest >> testAGameHasABoardWithAAtomicBombInPositionThreeAndTheEffectDoenstCh
 	game := Game
 		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
-		        distance: 200
+		        distance: (Parsecs with:200)
 		        laps: 2
 		        diceCup: aDiceCup
 		        and: (Deck with:{SpeedCard new}).
@@ -101,7 +137,7 @@ GameTest >> testAGameHasFinishedWhenAShipInTheLastPositionOfTheLastLap [
 	game := Game
 		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
-		        distance: 200
+		        distance: (Parsecs with:200)
 		        laps: 2
 		        diceCup: aDiceCup
 		        and: (Deck with:{SpeedCard new}).
@@ -130,7 +166,7 @@ GameTest >> testAGameHasNoWinnerBeforeItsFinished [
 	game := Game
 		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
-		        distance: 200
+		        distance: (Parsecs with:200)
 		        laps: 2
 		        diceCup: aDiceCup
 		        and: (Deck with:{SpeedCard new}).
@@ -156,7 +192,7 @@ GameTest >> testAGameIsPlayedAndValenEndsInLapTwo [
 	game := Game
 		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
-		        distance: 200
+		        distance: (Parsecs with:200)
 		        laps: 2
 		        diceCup: aDiceCup
 		        and: (Deck with:{SpeedCard new}).
@@ -182,7 +218,7 @@ GameTest >> testAGameIsPlayedAndValenEndsInPositionOneAndTheOthersInTheSecondPos
 	game := Game
 		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
-		        distance: 200
+		        distance: (Parsecs with:200)
 		        laps: 2
 		        diceCup: aDiceCup
 		        and: (Deck with:{SpeedCard new}).
@@ -213,7 +249,7 @@ GameTest >> testAGameReturnsPositionOfShipAfterItMoves [
 	game := Game
 		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
-		        distance: 200
+		        distance: (Parsecs with:200)
 		        laps: 2
 		        diceCup: aDiceCup
 		        and: (Deck with:{SpeedCard new}).
@@ -240,7 +276,7 @@ GameTest >> testAGameStartsWithShipsAtPositionOne [
 	game := Game
 		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
-		        distance: 200
+		        distance: (Parsecs with:200)
 		        laps: 2
 		        diceCup: aDiceCup
 		        and: (Deck with:{SpeedCard new}).
@@ -259,13 +295,13 @@ GameTest >> testAllPlayersLandInHyperJumpAtBoxFiveAndTheyMoveFirstFiveParsecsAnd
 			            dieTwo.
 			            dieThree }.
 	boxSequence := (BoxesGenerator
-		                generateWithOnly: (HyperJumpEffect with: { 5. 4 })
+		                generateWithOnly: (HyperJumpEffect with: { Parsecs with: 5. Lightyear with: 12 })
 		                at: 4
 		                of: 10) boxSequence.
 	game := Game
 		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
-		        distance: 20
+		        distance: (Lightyear with: 60)
 		        laps: 2
 		        diceCup: aDiceCup
 		        and: (Deck with:{SpeedCard new}).
@@ -328,7 +364,7 @@ GameTest >> testValenLandsInAMoonwalkAtBoxSevenAndMakeTheOthersGoBackTwoPosition
 	game := Game
 		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
-		        distance: 200
+		        distance: (Parsecs with:200)
 		        laps: 2
 		        diceCup: aDiceCup
 		        and: (Deck with:{SpeedCard new}).
@@ -360,7 +396,7 @@ GameTest >> testValenLandsInAMoonwalkAtBoxSixAndMakeTheOthersGoBackTwoPositions 
 	game := Game
 		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
-		        distance: 200
+		        distance: (Parsecs with:200)
 		        laps: 2
 		        diceCup: aDiceCup
 		        and: (Deck with:{SpeedCard new}).
@@ -392,7 +428,7 @@ GameTest >> testValenLandsInASpeedupBoxInPositionFiveAndMovesToPositionNine [
 	game := Game
 		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
-		        distance: 200
+		        distance: (Parsecs with: 200)
 		        laps: 2
 		        diceCup: aDiceCup
 		        and: (Deck with:{SpeedCard new}).
@@ -419,7 +455,7 @@ GameTest >> testValenLandsInWormholeAtBoxSevenAndGoesBackFourBoxesToEndAtBoxNumb
 	game := Game
 		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
-		        distance: 200
+		        distance: (Parsecs with:200)
 		        laps: 2
 		        diceCup: aDiceCup
 		        and: (Deck with:{SpeedCard new}).
@@ -448,7 +484,7 @@ GameTest >> testValenLandsInWormholeAtBoxThreeOfLapTwoAndStepBackFourBoxesToEndA
 	game := Game
 		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
-		        distance: 200
+		        distance: (Parsecs with:200)
 		        laps: 2
 		        diceCup: aDiceCup
 		        and: (Deck with:{SpeedCard new}).
