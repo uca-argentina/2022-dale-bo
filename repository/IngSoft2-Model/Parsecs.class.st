@@ -1,9 +1,8 @@
 Class {
 	#name : #Parsecs,
-	#superclass : #Object,
+	#superclass : #Distance,
 	#instVars : [
-		'totalParsecDistance',
-		'totalLigthyearDistance'
+		'totalParsecDistance'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -14,14 +13,13 @@ Parsecs class >> with: aTotalDistance [
 ]
 
 { #category : #actions }
-Parsecs >> calculateLightyear: aParsecDistance [ 
-	^ aParsecDistance*3.
+Parsecs >> calculateParsec: aDistance [
+ totalParsecDistance := aDistance.
 ]
 
 { #category : #initialization }
 Parsecs >> initializeWith: aTotalDistance [
-	totalParsecDistance:= aTotalDistance.
-	totalLigthyearDistance := (self calculateLightyear: totalParsecDistance).
+	self calculateParsec: aTotalDistance.
 ]
 
 { #category : #accesing }

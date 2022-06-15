@@ -15,7 +15,8 @@ PlayedCard class >> type: aCard to: aSpaceship [
 
 { #category : #initialize }
 PlayedCard >> affectedSpaceship [
-^affectedSpaceship.
+
+	^ affectedSpaceship
 ]
 
 { #category : #initialize }

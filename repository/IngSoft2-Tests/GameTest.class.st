@@ -4,6 +4,18 @@ Class {
 	#category : #'IngSoft2-Tests'
 }
 
+{ #category : #tests }
+GameTest >> sequenceOfNoEffectsOf: boardSize with: effectToBePlaced at: positionOfEffectToBePlaced [
+
+	| boxSequence |
+	boxSequence := OrderedCollection new.
+	boardSize timesRepeat: [ boxSequence add: NoEffectBox new ].
+	boxSequence
+		add: effectToBePlaced
+		afterIndex: positionOfEffectToBePlaced.
+	^ boxSequence
+]
+
 { #category : #asserting }
 GameTest >> should: aBlock raise: anError withMessage: anErrorMessage [
 
@@ -50,26 +62,25 @@ GameTest >> testAGameCannotBePlayedAfterItHasFinished [
 { #category : #tests }
 GameTest >> testAGameHasABoardWithAAtomicBombInPositionElevenAndTheEffectDoenstChangeLapsV2 [
 
-	| dieOne dieTwo dieThree aDiceCup game boxSequence|
+	| dieOne dieTwo dieThree aDiceCup game boxSequence |
 	dieOne := LoadedDie with: 1.
 	dieTwo := LoadedDie with: 2.
 	dieThree := LoadedDie with: 2.
-	aDiceCup := DiceCup withAll: {
+	aDiceCup := DiceCup withAll: { 
 			            dieOne.
 			            dieTwo.
 			            dieThree }.
-	boxSequence := (BoxesGenerator
-		                generate: 13
-		                for: { NoEffectBox new }
-		                with: { 1 }) boxSequence.
-  boxSequence add: (AtomicBombEffect new) afterIndex:10.
+	boxSequence := self
+		               sequenceOfNoEffectsOf: 13
+		               with: AtomicBombEffect new
+		               at: 10.
 	game := Game
 		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
-		        distance: (Parsecs with:200)
+		        distance: (Parsecs with: 200)
 		        laps: 2
 		        diceCup: aDiceCup
-		        and: (Deck with:{SpeedCard new}).
+		        and: (Deck with: { SpeedCard new }).
 	game playATurn.
 	self assert: (game positionOfShip: 'Valen') boxNumber equals: 6.
 	game playATurn.
@@ -77,10 +88,7 @@ GameTest >> testAGameHasABoardWithAAtomicBombInPositionElevenAndTheEffectDoenstC
 	game playATurn.
 	game playATurn.
 	self assert: (game positionOfShip: 'Pablo') boxNumber equals: 1.
-	self assert: (game positionOfShip: 'Valen') boxNumber equals: 1.
-	
-	
-	
+	self assert: (game positionOfShip: 'Valen') boxNumber equals: 1
 ]
 
 { #category : #tests }
