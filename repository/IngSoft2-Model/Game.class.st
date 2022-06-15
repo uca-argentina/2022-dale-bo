@@ -145,6 +145,11 @@ Game >> playRedoCardBy: aSpaceship [
 Game >> playRepeatCardBy: aSpaceship to: anotherSpaceship [
 	| lastBoxEffect |
 	lastBoxEffect:=board lastBoxEffect.
+   self checkValidTurn: aSpaceship andCardType: RepeatCard new.
+	(self positionOfShip: aSpaceship)
+		playACard: RepeatCard new
+		to: (self positionOfShip: anotherSpaceship)
+		on: ''.
    lastBoxEffect applyTo: (board spaceshipController)  triggeredBy:  anotherSpaceship  with: board lastPosition  distance: board boxesDistance laps: board laps
 	
 ]

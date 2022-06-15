@@ -31,7 +31,7 @@ BoardTest >> testABoardIsCreatedWith10RandomGeneratedBoxes [
 	aBoard := Board
 		          ships: { 'Valen'. 'Pablo'. 'Seba' }
 		          with: randomBoxes
-		          distance: 200
+		          distance: (Parsecs with: 200)
 		          laps: 2
 		          and: (Deck with: { SpeedCard new }).
 	self assert: aBoard boxes size equals: 10
