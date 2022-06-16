@@ -5,12 +5,6 @@ Class {
 }
 
 { #category : #operations }
-RedoCard >> applyTo: target over:aCardEffect [
-
-	target isAffectedBy: self..
-]
-
-{ #category : #operations }
 RedoCard >> isPermanent [
 
 	^false.
@@ -21,7 +15,27 @@ RedoCard >> playedUsing: aGame by: aSpaceship to: anotherSpaceship for: aCardEff
 
 	| lastPlayedCard |
 	lastPlayedCard := aGame lastCardPlayed.
-	aGame checkValidTurn: aSpaceship andCardType: lastPlayedCard card.
-	(aGame positionOfShip: lastPlayedCard affectedSpaceship) 
-		isAffectedBy: lastPlayedCard card
+	( lastPlayedCard  isNil) ifTrue: [ 
+		Error signal:
+			'There is no cards played to apply redo' ].
+	aGame checkValidTurn: aSpaceship andCardType: self.
+	(aGame positionOfShip: aSpaceship) removeFromHand: self.
+	lastPlayedCard card
+		redoUsing: aGame
+		by: aSpaceship
+		to: anotherSpaceship
+		for: lastPlayedCard card
+]
+
+{ #category : #actions }
+RedoCard >> redoUsing: aGame by: aSpaceship to: anotherSpaceship for: aCardEffect [
+
+	| lastPlayedCard |
+	lastPlayedCard := aGame lastCardPlayed.
+	aGame checkValidTurn: aSpaceship andCardType: self.
+	lastPlayedCard card
+		redoUsing: aGame
+		by: aSpaceship
+		to: anotherSpaceship
+		for: lastPlayedCard card
 ]

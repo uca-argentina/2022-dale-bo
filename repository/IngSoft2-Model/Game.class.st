@@ -50,6 +50,12 @@ Game >> allShips [
 ]
 
 { #category : #actions }
+Game >> board [
+
+	^ board
+]
+
+{ #category : #actions }
 Game >> checkIfGameIsNotFinished [
 
 	(self hasFinished) ifTrue: [Error signal: 'Turn cannot be played, games has finished' ].
@@ -109,20 +115,6 @@ Game >> playATurn [
 	effectsOnCurrentShip := (board positionOf: currentSpaceship) sumOfCardsEffects .
 	board play: (currentSpaceship)  with: (diceResult + effectsOnCurrentShip ).
 	turnSequence next.
-]
-
-{ #category : #actions }
-Game >> playRepeatCardBy: aSpaceship to: anotherSpaceship [
-	| lastBoxEffect |
-	lastBoxEffect:=board lastBoxEffect.
-   self checkValidTurn: aSpaceship andCardType: RepeatCard new.
-	(self positionOfShip: aSpaceship)
-		playACard: RepeatCard new
-		to: (self positionOfShip: anotherSpaceship)
-		on: ''.
-	
-   lastBoxEffect applyTo: (board spaceshipController)  triggeredBy:  anotherSpaceship  with: board lastPosition  distance: board boxesDistance laps: board laps.
-	lastCardPlayed := LastPlayedCard type:(SpeedCard new) to:anotherSpaceship.
 ]
 
 { #category : #action }

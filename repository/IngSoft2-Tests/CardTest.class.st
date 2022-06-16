@@ -16,6 +16,9 @@ CardTest >> should: aBlock raise: anError withMessage: anErrorMessage [
 	self
 		assert: tmp2;
 		assert: tmp3 equals: anErrorMessage
+	
+
+
 ]
 
 { #category : #tests }
@@ -28,52 +31,6 @@ CardTest >> testADeckCannotBeCreatedWithNoCards [
 	
 
 
-]
-
-{ #category : #tests }
-CardTest >> testPabloPlaysARedoCardAfterPabloPlaysAOverloadCard [
-
-	| dieOne dieTwo dieThree aDiceCup game boxSequence deckForGame deckForCardGiver overloadCard redoCard |
-	dieOne := LoadedDie with: 3.
-	dieTwo := LoadedDie with: 2.
-	dieThree := LoadedDie with: 1.
-	aDiceCup := DiceCup withAll: { 
-			            dieOne.
-			            dieTwo.
-			            dieThree }.
-	overloadCard := OverloadCard new.
-	deckForGame := Deck with: { overloadCard }.
-	redoCard := RedoCard new.
-	deckForCardGiver := Deck with: { redoCard }.
-	boxSequence := (BoxesGenerator
-		                generate: 13
-		                for: { (CardGiverEffect with: deckForCardGiver) }
-		                with: { 1 }) boxSequence.
-	game := Game
-		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
-		        boardWith: boxSequence
-		        distance: (Parsecs with: 200)
-		        laps: 2
-		        diceCup: aDiceCup
-		        and: deckForGame.
-	game playATurn.
-	game playATurn.
-	game playATurn.
-	game playATurn.
-	self assert: (game positionOfShip: 'Seba') boxNumber equals: 7.
-	overloadCard
-		playedUsing: game
-		by: 'Pablo'
-		to: 'Seba'
-		for: overloadCard.
-	redoCard
-		playedUsing: game
-		by: 'Pablo'
-		to: ''
-		for: redoCard.
-	game playATurn.
-	game playATurn.
-	self assert: (game positionOfShip: 'Seba') boxNumber equals: 9
 ]
 
 { #category : #tests }
@@ -102,19 +59,19 @@ CardTest >> testPabloPlaysARepeatCardAfterValenLandsInACardGiver [
 		        and: deck.
 	game playATurn.
 	self assert: (game positionOfShip: 'Valen') boxNumber equals: 7.
-	"repeatCard
+	repeatCard
 		playedUsing: game
 		by: 'Pablo'
-		to: ''
+		to: 'Pablo'
 		for: repeatCard.
 	game playATurn.
-	self assert: (game positionOfShip: 'Pablo') hand size equals: 3"
+	self assert: (game positionOfShip: 'Pablo') hand size equals: 3
 ]
 
 { #category : #tests }
 CardTest >> testPabloPlaysARepeatCardAfterValenLandsInASpeedUpEffect [
 
-	| dieOne dieTwo dieThree aDiceCup game boxSequence deck |
+	| dieOne dieTwo dieThree aDiceCup game boxSequence deck repeatCard |
 	dieOne := LoadedDie with: 3.
 	dieTwo := LoadedDie with: 2.
 	dieThree := LoadedDie with: 1.
@@ -122,7 +79,8 @@ CardTest >> testPabloPlaysARepeatCardAfterValenLandsInASpeedUpEffect [
 			            dieOne.
 			            dieTwo.
 			            dieThree }.
-	deck := Deck with: { RepeatCard new }.
+	repeatCard :=RepeatCard new.
+	deck := Deck with: { repeatCard }.
 	boxSequence := (BoxesGenerator
 		                generate: 16
 		                for: { SpeedUpEffect new. }
@@ -136,15 +94,19 @@ CardTest >> testPabloPlaysARepeatCardAfterValenLandsInASpeedUpEffect [
 		        and: deck.
 	game playATurn.
 	self assert: (game positionOfShip: 'Valen') boxNumber equals: 11.
-	game playRepeatCardBy: 'Pablo' to: 'Pablo'.
+		repeatCard
+		playedUsing: game
+		by: 'Pablo'
+		to: 'Pablo'
+		for: repeatCard.
 	game playATurn.
 	self assert: (game positionOfShip: 'Pablo') boxNumber equals: 15.
 ]
 
 { #category : #tests }
-CardTest >> testPabloTriesToPlaysARedoCardNotInHisTurnAfterPabloPlaysAOverloadCard [
+CardTest >> testPabloTriesToCancelWhenThereWasNoCardPlayedPreviously [
 
-	| dieOne dieTwo dieThree aDiceCup game boxSequence deckForGame deckForCardGiver overloadCard redoCard |
+	| dieOne dieTwo dieThree aDiceCup game boxSequence deckForGame cancelationCard redoCard deckForCardGiver |
 	dieOne := LoadedDie with: 3.
 	dieTwo := LoadedDie with: 2.
 	dieThree := LoadedDie with: 1.
@@ -152,12 +114,12 @@ CardTest >> testPabloTriesToPlaysARedoCardNotInHisTurnAfterPabloPlaysAOverloadCa
 			            dieOne.
 			            dieTwo.
 			            dieThree }.
-	overloadCard := OverloadCard new.
-	deckForGame := Deck with: { overloadCard }.
+	cancelationCard := CancellationCard new.
 	redoCard := RedoCard new.
 	deckForCardGiver := Deck with: { redoCard }.
+	deckForGame := Deck with: { cancelationCard }.
 	boxSequence := (BoxesGenerator
-		                generate: 13
+		                generate: 16
 		                for: { (CardGiverEffect with: deckForCardGiver) }
 		                with: { 1 }) boxSequence.
 	game := Game
@@ -168,22 +130,16 @@ CardTest >> testPabloTriesToPlaysARedoCardNotInHisTurnAfterPabloPlaysAOverloadCa
 		        diceCup: aDiceCup
 		        and: deckForGame.
 	game playATurn.
-	self assert: (game positionOfShip: 'Valen') boxNumber equals: 7.
-	overloadCard
-		playedUsing: game
-		by: 'Pablo'
-		to: 'Valen'
-		for: overloadCard.
-	game playATurn.
 	self
-		should: [ redoCard
+		should: [ cancelationCard
 		playedUsing: game
-		by: 'Pablo'
-		to: ''
-		for: redoCard. ]
+		by: 'Valen'
+		to: 'Valen'
+		for: cancelationCard. ]
 		raise: Error
 		withMessage:
-		'A permanent card cannot be played on another spaceship turn'
+		'There is no cards played to be canceled'.
+	
 ]
 
 { #category : #tests }

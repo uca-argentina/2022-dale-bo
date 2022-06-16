@@ -96,15 +96,6 @@ Spaceship >> parsecNumber [
 ]
 
 { #category : #action }
-Spaceship >> playACard: aCard to: target on: cardEffect [
-
-	| card |
-	card := self checkSpaceshipHas: aCard.
-	aCard applyTo: target over: cardEffect.
-	hand remove: card
-]
-
-{ #category : #action }
 Spaceship >> receive: aCard [ 
 	hand add: aCard. 
 ]
@@ -114,6 +105,11 @@ Spaceship >> removeEffect: aCardEffect [
 	| effectToBeRemoved |
 	effectToBeRemoved:=effectsOnMe detect: [ :each | (each className = aCardEffect className)].
 	effectsOnMe remove: effectToBeRemoved.
+]
+
+{ #category : #actions }
+Spaceship >> removeFromHand: aCard [
+	hand remove: aCard.
 ]
 
 { #category : #accesing }

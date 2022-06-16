@@ -5,11 +5,6 @@ Class {
 }
 
 { #category : #operations }
-RepeatCard >> applyTo: target over:aCardEffect [
-
-]
-
-{ #category : #operations }
 RepeatCard >> isPermanent [
 
 	^false.
@@ -17,9 +12,35 @@ RepeatCard >> isPermanent [
 
 { #category : #actions }
 RepeatCard >> playedUsing: aGame by: aSpaceship to: anotherSpaceship for: aCardEffect [
-	| lastBoxEffect |
-	lastBoxEffect:=aGame lastBoxEffect.
-   aGame checkValidTurn: aSpaceship andCardType: self.
-   "lastBoxEffect applyTo: (aGame spaceshipController)  triggeredBy:  anotherSpaceship  with: board lastPosition  distance: board boxesDistance laps: board laps.
-	lastCardPlayed := LastPlayedCard type:(SpeedCard new) to:anotherSpaceship. TERMINAR MANANA"
+
+	| lastBoxEffect board |
+	board := aGame board.
+	lastBoxEffect := board lastBoxEffect.
+	aGame checkValidTurn: aSpaceship andCardType: self.
+	lastBoxEffect
+		applyTo: board spaceshipController
+		triggeredBy: anotherSpaceship
+		with: board lastPosition
+		distance: board boxesDistance
+		laps: board laps.
+	aGame lastCardPlayed:
+		(LastPlayedCard type: self to: anotherSpaceship).
+	(aGame positionOfShip: aSpaceship) removeFromHand: self
+]
+
+{ #category : #actions }
+RepeatCard >> redoUsing: aGame by: aSpaceship to: anotherSpaceship for: aCardEffect [
+
+	| lastBoxEffect board |
+	board := aGame board.
+	lastBoxEffect := board lastBoxEffect.
+	aGame checkValidTurn: aSpaceship andCardType: self.
+	lastBoxEffect
+		applyTo: board spaceshipController
+		triggeredBy: anotherSpaceship
+		with: board lastPosition
+		distance: board boxesDistance
+		laps: board laps.
+	aGame lastCardPlayed:
+		(LastPlayedCard type: self to: anotherSpaceship).
 ]

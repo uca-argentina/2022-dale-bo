@@ -5,13 +5,19 @@ Class {
 }
 
 { #category : #operations }
-Card >> applyTo: target over:aCardEffect [
+Card >> isPermanent [
 
 	self subclassResponsibility.
 ]
 
 { #category : #operations }
-Card >> isPermanent [
+Card >> playedUsing: aGame by: aSpaceship to: anotherSpaceship for: aCardEffect [
+
+	self subclassResponsibility.
+]
+
+{ #category : #operations }
+Card >> redoUsing: aGame by: aSpaceship to: anotherSpaceship for: aCardEffect [
 
 	self subclassResponsibility.
 ]

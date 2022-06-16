@@ -5,6 +5,12 @@ Class {
 }
 
 { #category : #tests }
+GameTest >> assertSpaceship: aSpaceship isAt: aBoxNumber in: aGame [
+
+	^ (aGame positionOfShip: 'Valen') boxNumber = aBoxNumber.
+]
+
+{ #category : #tests }
 GameTest >> sequenceOfNoEffectsOf: boardSize with: effectToBePlaced at: positionOfEffectToBePlaced [
 
 	| boxSequence |
@@ -252,7 +258,8 @@ GameTest >> testAGameStartsWithShipsAtPositionOne [
 		        laps: 2
 		        diceCup: aDiceCup
 		        and: (Deck with:{SpeedCard new}).
-	self assert: (game positionOfShip: 'Valen') boxNumber equals: 1
+	self assert: (game positionOfShip: 'Valen') boxNumber equals: 1.
+	self assertSpaceship: 'Valen' isAt: 1 in: game.
 ]
 
 { #category : #tests }
