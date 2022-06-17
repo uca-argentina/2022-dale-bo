@@ -8,22 +8,25 @@ Class {
 }
 
 { #category : #'instance cre' }
-Parsecs class >> with: aTotalDistance [ 
-	^self new initializeWith:aTotalDistance.
+Parsecs class >> with: aTotalDistance [
+
+	^ self new initializeWith: aTotalDistance
 ]
 
 { #category : #accesing }
 Parsecs >> amount [
-	^ amount.
+
+	^ amount
 ]
 
 { #category : #actions }
 Parsecs >> amountInParsecs [
 
-	^ amount.
+	^ amount
 ]
 
 { #category : #initialization }
 Parsecs >> initializeWith: aDistance [
-	amount:=aDistance.
+
+	amount := aDistance
 ]

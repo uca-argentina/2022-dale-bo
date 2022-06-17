@@ -21,10 +21,12 @@ Deck class >> with: aCollectionOfCards [
 
 { #category : #action }
 Deck >> giveCard [
-	^ cards atRandom.
+
+	^ cards atRandom
 ]
 
 { #category : #initialization }
 Deck >> initializeWith: aCollectionOfCards [
-	cards:= aCollectionOfCards.
+
+	cards := aCollectionOfCards
 ]

@@ -40,12 +40,12 @@ RedoCardTest >> testPabloPlaysARedoAfterACancelation [
 		                for:
 		                { (CardGiverEffect with:
 			                 deckForAccelerationCardGiver) }
-		                with: { 1 }) boxSequence.
+		                with: { 100 }) boxSequence.
 	boxSequence
 		add: (CardGiverEffect with: deckForCardGiver)
 		afterIndex: 12.
-	game := Game
-		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
+	game := SpaceRaceGame
+		        with: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
 		        laps: 2
@@ -71,9 +71,9 @@ RedoCardTest >> testPabloPlaysARedoAfterACancelation [
 		by: 'Pablo'
 		to: 'Seba'
 		for: accelerationCard.
-	self assert: (game positionOfShip: 'Pablo') boxNumber equals: 13.
+	self assert: (game spaceshipOf: 'Pablo') boxNumber equals: 13.
 	game playATurn.
-	self assert: (game positionOfShip: 'Seba') boxNumber equals: 13
+	self assert: (game spaceshipOf: 'Seba') boxNumber equals: 13
 ]
 
 { #category : #tests }
@@ -94,9 +94,9 @@ RedoCardTest >> testPabloPlaysARedoAfterValenPlaysARepeat [
 	boxSequence := (BoxesGenerator
 		                generate: 16
 		                for: { (CardGiverEffect with: deckForCardGiver) }
-		                with: { 1 }) boxSequence.
-	game := Game
-		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
+		                with: { 100 }) boxSequence.
+	game := SpaceRaceGame
+		        with: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
 		        laps: 2
@@ -110,8 +110,8 @@ RedoCardTest >> testPabloPlaysARedoAfterValenPlaysARepeat [
 		for: repeatCard.
 	game playATurn.
 	redoCard playedUsing: game by:'Pablo'  to:'Pablo'  for:redoCard.
-	self assert: (game positionOfShip: 'Valen') hand size equals: 3.
-	self assert: (game positionOfShip: 'Pablo') hand size equals: 3.
+	self assert: (game spaceshipOf: 'Valen') hand size equals: 3.
+	self assert: (game spaceshipOf: 'Pablo') hand size equals: 3.
 	
 ]
 
@@ -133,9 +133,9 @@ RedoCardTest >> testPabloPlaysARedoAfterValenPlaysAnAccellerationCard [
 	boxSequence := (BoxesGenerator
 		                generate: 16
 		                for: { (CardGiverEffect with: deckForCardGiver) }
-		                with: { 1 }) boxSequence.
-	game := Game
-		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
+		                with: { 100 }) boxSequence.
+	game := SpaceRaceGame
+		        with: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
 		        laps: 2
@@ -154,7 +154,7 @@ RedoCardTest >> testPabloPlaysARedoAfterValenPlaysAnAccellerationCard [
 	redoCard playedUsing: game by:'Pablo'  to:'Valen'  for:redoCard.
 	game playATurn.
 	game playATurn.
-	self assert: (game positionOfShip:'Seba') boxNumber equals: 16.
+	self assert: (game spaceshipOf:'Seba') boxNumber equals: 16.
 	
 	
 	
@@ -178,9 +178,9 @@ RedoCardTest >> testPabloPlaysARedoCardAfterPabloPlaysAOverloadCard [
 	boxSequence := (BoxesGenerator
 		                generate: 13
 		                for: { (CardGiverEffect with: deckForCardGiver) }
-		                with: { 1 }) boxSequence.
-	game := Game
-		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
+		                with: { 100 }) boxSequence.
+	game := SpaceRaceGame
+		        with: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
 		        laps: 2
@@ -190,7 +190,7 @@ RedoCardTest >> testPabloPlaysARedoCardAfterPabloPlaysAOverloadCard [
 	game playATurn.
 	game playATurn.
 	game playATurn.
-	self assert: (game positionOfShip: 'Seba') boxNumber equals: 7.
+	self assert: (game spaceshipOf: 'Seba') boxNumber equals: 7.
 	overloadCard
 		playedUsing: game
 		by: 'Pablo'
@@ -203,7 +203,7 @@ RedoCardTest >> testPabloPlaysARedoCardAfterPabloPlaysAOverloadCard [
 		for: redoCard.
 	game playATurn.
 	game playATurn.
-	self assert: (game positionOfShip: 'Seba') boxNumber equals: 9
+	self assert: (game spaceshipOf: 'Seba') boxNumber equals: 9
 ]
 
 { #category : #tests }
@@ -224,9 +224,9 @@ RedoCardTest >> testPabloPlaysARedoWhenNoCardWasPlayedPreviously [
 	boxSequence := (BoxesGenerator
 		                generate: 16
 		                for: { (CardGiverEffect with: deckForCardGiver) }
-		                with: { 1 }) boxSequence.
-	game := Game
-		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
+		                with: { 100 }) boxSequence.
+	game := SpaceRaceGame
+		        with: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
 		        laps: 2
@@ -263,9 +263,9 @@ RedoCardTest >> testPabloPlaysTwoRedoCardsAfterPlaysASpeedCard [
 	boxSequence := (BoxesGenerator
 		                generate: 16
 		                for: { (CardGiverEffect with: deckForCardGiver) }
-		                with: { 1 }) boxSequence.
-	game := Game
-		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
+		                with: { 100 }) boxSequence.
+	game := SpaceRaceGame
+		        with: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
 		        laps: 2
@@ -280,8 +280,8 @@ RedoCardTest >> testPabloPlaysTwoRedoCardsAfterPlaysASpeedCard [
 		to: 'Valen'
 		for: aSpeedCard.
 	game playATurn.
-	self assert: (game positionOfShip: 'Valen') boxNumber equals: 14.
-	self assert: (game positionOfShip: 'Pablo') boxNumber equals: 7.
+	self assert: (game spaceshipOf: 'Valen') boxNumber equals: 14.
+	self assert: (game spaceshipOf: 'Pablo') boxNumber equals: 7.
 	redoCard
 		playedUsing: game
 		by: 'Pablo'
@@ -293,7 +293,7 @@ RedoCardTest >> testPabloPlaysTwoRedoCardsAfterPlaysASpeedCard [
 		to: 'Pablo'
 		for: redoCard.
 	game playATurn.
-	self assert: (game positionOfShip: 'Pablo') boxNumber equals: 15.
+	self assert: (game spaceshipOf: 'Pablo') boxNumber equals: 15.
 ]
 
 { #category : #tests }
@@ -314,16 +314,16 @@ RedoCardTest >> testPabloTriesToPlaysARedoCardNotInHisTurnAfterPabloPlaysAOverlo
 	boxSequence := (BoxesGenerator
 		                generate: 13
 		                for: { (CardGiverEffect with: deckForCardGiver) }
-		                with: { 1 }) boxSequence.
-	game := Game
-		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
+		                with: { 100 }) boxSequence.
+	game := SpaceRaceGame
+		        with: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
 		        laps: 2
 		        diceCup: aDiceCup
 		        and: deckForGame.
 	game playATurn.
-	self assert: (game positionOfShip: 'Valen') boxNumber equals: 7.
+	self assert: (game spaceshipOf: 'Valen') boxNumber equals: 7.
 	overloadCard
 		playedUsing: game
 		by: 'Pablo'

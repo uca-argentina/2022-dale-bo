@@ -5,12 +5,6 @@ Class {
 }
 
 { #category : #tests }
-GameTest >> assertSpaceship: aSpaceship isAt: aBoxNumber in: aGame [
-
-	^ (aGame positionOfShip: 'Valen') boxNumber = aBoxNumber.
-]
-
-{ #category : #tests }
 GameTest >> sequenceOfNoEffectsOf: boardSize with: effectToBePlaced at: positionOfEffectToBePlaced [
 
 	| boxSequence |
@@ -50,14 +44,14 @@ GameTest >> testAGameCannotBePlayedAfterItHasFinished [
 	boxSequence := (BoxesGenerator
 		                generate: 13
 		                for: { NoEffectBox new }
-		                with: { 1 }) boxSequence.
-	game := Game
-		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
+		                with: { 100 }) boxSequence.
+	game := SpaceRaceGame
+		        with: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
-		        distance: (Parsecs with:200)
+		        distance: (Parsecs with: 200)
 		        laps: 2
 		        diceCup: aDiceCup
-		        and: (Deck with:{SpeedCard new}).
+		        and: (Deck with: { SpeedCard new }).
 	[ game hasFinished ] whileFalse: [ game playATurn ].
 	self
 		should: [ game playATurn ]
@@ -80,21 +74,21 @@ GameTest >> testAGameHasABoardWithAAtomicBombInPositionElevenAndTheEffectDoenstC
 		               sequenceOfNoEffectsOf: 13
 		               with: AtomicBombEffect new
 		               at: 10.
-	game := Game
-		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
+	game := SpaceRaceGame
+		        with: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
 		        laps: 2
 		        diceCup: aDiceCup
 		        and: (Deck with: { SpeedCard new }).
 	game playATurn.
-	self assert: (game positionOfShip: 'Valen') boxNumber equals: 6.
+	self assert: (game spaceshipOf: 'Valen') boxNumber equals: 6.
 	game playATurn.
-	self assert: (game positionOfShip: 'Pablo') boxNumber equals: 6.
+	self assert: (game spaceshipOf: 'Pablo') boxNumber equals: 6.
 	game playATurn.
 	game playATurn.
-	self assert: (game positionOfShip: 'Pablo') boxNumber equals: 1.
-	self assert: (game positionOfShip: 'Valen') boxNumber equals: 1
+	self assert: (game spaceshipOf: 'Pablo') boxNumber equals: 1.
+	self assert: (game spaceshipOf: 'Valen') boxNumber equals: 1
 ]
 
 { #category : #tests }
@@ -111,19 +105,19 @@ GameTest >> testAGameHasFinishedWhenAShipInTheLastPositionOfTheLastLap [
 	boxSequence := (BoxesGenerator
 		                generate: 13
 		                for: { NoEffectBox new }
-		                with: { 1 }) boxSequence.
-	game := Game
-		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
+		                with: { 100 }) boxSequence.
+	game := SpaceRaceGame
+		        with: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
-		        distance: (Parsecs with:200)
+		        distance: (Parsecs with: 200)
 		        laps: 2
 		        diceCup: aDiceCup
-		        and: (Deck with:{SpeedCard new}).
+		        and: (Deck with: { SpeedCard new }).
 	self deny: game hasFinished.
 	[ game hasFinished ] whileFalse: [ game playATurn ].
 	self assert: game hasFinished.
-	self assert: (game positionOfShip: game winner) boxNumber equals: 13.
-	self assert: (game positionOfShip: game winner) lapNumber equals: 2
+	self assert: (game spaceshipOf: game winner) boxNumber equals: 13.
+	self assert: (game spaceshipOf: game winner) lapNumber equals: 2
 ]
 
 { #category : #tests }
@@ -140,16 +134,16 @@ GameTest >> testAGameHasNoWinnerBeforeItsFinished [
 	boxSequence := (BoxesGenerator
 		                generate: 13
 		                for: { NoEffectBox new }
-		                with: { 1 }) boxSequence.
-	game := Game
-		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
+		                with: { 100 }) boxSequence.
+	game := SpaceRaceGame
+		        with: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
-		        distance: (Parsecs with:200)
+		        distance: (Parsecs with: 200)
 		        laps: 2
 		        diceCup: aDiceCup
-		        and: (Deck with:{SpeedCard new}).
+		        and: (Deck with: { SpeedCard new }).
 	game playATurn.
-	self assert: game winner equals: nil.
+	self assert: game winner equals: nil
 ]
 
 { #category : #tests }
@@ -166,16 +160,16 @@ GameTest >> testAGameIsPlayedAndValenEndsInLapTwo [
 	boxSequence := (BoxesGenerator
 		                generate: 13
 		                for: { NoEffectBox new }
-		                with: { 1 }) boxSequence.
-	game := Game
-		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
+		                with: { 100 }) boxSequence.
+	game := SpaceRaceGame
+		        with: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
-		        distance: (Parsecs with:200)
+		        distance: (Parsecs with: 200)
 		        laps: 2
 		        diceCup: aDiceCup
-		        and: (Deck with:{SpeedCard new}).
+		        and: (Deck with: { SpeedCard new }).
 	[ game hasFinished ] whileFalse: [ game playATurn ].
-	self assert: (game positionOfShip: 'Valen') lapNumber equals: 2
+	self assert: (game spaceshipOf: 'Valen') lapNumber equals: 2
 ]
 
 { #category : #tests }
@@ -192,14 +186,14 @@ GameTest >> testAGameIsPlayedAndValenEndsInPositionOneAndTheOthersInTheSecondPos
 	boxSequence := (BoxesGenerator
 		                generate: 13
 		                for: { NoEffectBox new }
-		                with: { 1 }) boxSequence.
-	game := Game
-		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
+		                with: { 100 }) boxSequence.
+	game := SpaceRaceGame
+		        with: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
-		        distance: (Parsecs with:200)
+		        distance: (Parsecs with: 200)
 		        laps: 2
 		        diceCup: aDiceCup
-		        and: (Deck with:{SpeedCard new}).
+		        and: (Deck with: { SpeedCard new }).
 	game playATurn.
 	game playATurn.
 	game playATurn.
@@ -223,17 +217,17 @@ GameTest >> testAGameReturnsPositionOfShipAfterItMoves [
 	boxSequence := (BoxesGenerator
 		                generate: 13
 		                for: { NoEffectBox new }
-		                with: { 1 }) boxSequence.
-	game := Game
-		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
+		                with: { 100 }) boxSequence.
+	game := SpaceRaceGame
+		        with: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
-		        distance: (Parsecs with:200)
+		        distance: (Parsecs with: 200)
 		        laps: 2
 		        diceCup: aDiceCup
-		        and: (Deck with:{SpeedCard new}).
+		        and: (Deck with: { SpeedCard new }).
 	[ game hasFinished ] whileFalse: [ game playATurn ].
-	self assert: (game positionOfShip: 'Valen') boxNumber equals: 13.
-	self assert: (game positionOfShip: 'Pablo') boxNumber equals: 12
+	self assert: (game spaceshipOf: 'Valen') boxNumber equals: 13.
+	self assert: (game spaceshipOf: 'Pablo') boxNumber equals: 12
 ]
 
 { #category : #tests }
@@ -250,16 +244,15 @@ GameTest >> testAGameStartsWithShipsAtPositionOne [
 	boxSequence := (BoxesGenerator
 		                generate: 13
 		                for: { NoEffectBox new }
-		                with: { 1 }) boxSequence.
-	game := Game
-		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
+		                with: { 100 }) boxSequence.
+	game := SpaceRaceGame
+		        with: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
-		        distance: (Parsecs with:200)
+		        distance: (Parsecs with: 200)
 		        laps: 2
 		        diceCup: aDiceCup
-		        and: (Deck with:{SpeedCard new}).
-	self assert: (game positionOfShip: 'Valen') boxNumber equals: 1.
-	self assertSpaceship: 'Valen' isAt: 1 in: game.
+		        and: (Deck with: { SpeedCard new }).
+	self assert: (game spaceshipOf: 'Valen') boxNumber equals: 1
 ]
 
 { #category : #tests }
@@ -275,24 +268,26 @@ GameTest >> testAllPlayersLandInHyperJumpAtBoxFiveAndTheyMoveFirstFiveParsecsAnd
 			            dieThree }.
 	boxSequence := self
 		               sequenceOfNoEffectsOf: 9
-		               with: (HyperJumpEffect with: { Parsecs with: 5. Lightyear with: 12 })
+		               with: (HyperJumpEffect with: { 
+					                (Parsecs with: 5).
+					                (Lightyear with: 12) })
 		               at: 4.
-	game := Game
-		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
+	game := SpaceRaceGame
+		        with: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
 		        distance: (Lightyear with: 60)
 		        laps: 2
 		        diceCup: aDiceCup
-		        and: (Deck with:{SpeedCard new}).
+		        and: (Deck with: { SpeedCard new }).
 	game playATurn.
-	self assert: (game positionOfShip: 'Valen') boxNumber equals: 7.
-	self assert: (game positionOfShip: 'Valen') parsecNumber equals: 1.
+	self assert: (game spaceshipOf: 'Valen') boxNumber equals: 7.
+	self assert: (game spaceshipOf: 'Valen') distanceInBox equals: 1.
 	game playATurn.
-	self assert: (game positionOfShip: 'Pablo') boxNumber equals: 7.
-	self assert: (game positionOfShip: 'Pablo') parsecNumber equals: 0.
+	self assert: (game spaceshipOf: 'Pablo') boxNumber equals: 7.
+	self assert: (game spaceshipOf: 'Pablo') distanceInBox equals: 0.
 	game playATurn.
-	self assert: (game positionOfShip: 'Seba') boxNumber equals: 7.
-	self assert: (game positionOfShip: 'Seba') parsecNumber equals: 1
+	self assert: (game spaceshipOf: 'Seba') boxNumber equals: 7.
+	self assert: (game spaceshipOf: 'Seba') distanceInBox equals: 1
 ]
 
 { #category : #tests }
@@ -309,18 +304,18 @@ GameTest >> testGameCannotBeInitializedWithLessThanTwoShips [
 	boxSequence := (BoxesGenerator
 		                generate: 13
 		                for: { NoEffectBox new }
-		                with: { 1 }) boxSequence.
+		                with: { 100 }) boxSequence.
 
 
 	self
 		should: [ 
-			Game
-				spaceships: { 'Valen' }
+			SpaceRaceGame
+				with: { 'Valen' }
 				boardWith: boxSequence
 				distance: 200
 				laps: 2
 				diceCup: aDiceCup
-				and: (Deck with:{SpeedCard new}) ]
+				and: (Deck with: { SpeedCard new }) ]
 		raise: Error
 		withMessage: 'Game must have more than one Ship'
 ]
@@ -340,8 +335,8 @@ GameTest >> testValenLandsInAMoonwalkAtBoxSevenAndMakeTheOthersGoBackTwoPosition
 		               sequenceOfNoEffectsOf: 10
 		               with: (MoonwalkEffect with:2)
 		               at: 6.
-	game := Game
-		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
+	game := SpaceRaceGame
+		        with: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with:200)
 		        laps: 2
@@ -349,12 +344,12 @@ GameTest >> testValenLandsInAMoonwalkAtBoxSevenAndMakeTheOthersGoBackTwoPosition
 		        and: (Deck with:{SpeedCard new}).
 	game playATurn.
 	game playATurn.
-	self assert: (game positionOfShip: 'Pablo') boxNumber equals: 4.
+	self assert: (game spaceshipOf: 'Pablo') boxNumber equals: 4.
 	game playATurn.
 	game playATurn.
-	self assert: (game positionOfShip: 'Valen') boxNumber equals: 7.
-	self assert: (game positionOfShip: 'Pablo') boxNumber equals: 2.
-	self assert: (game positionOfShip: 'Seba') boxNumber equals: 2
+	self assert: (game spaceshipOf: 'Valen') boxNumber equals: 7.
+	self assert: (game spaceshipOf: 'Pablo') boxNumber equals: 2.
+	self assert: (game spaceshipOf: 'Seba') boxNumber equals: 2
 ]
 
 { #category : #tests }
@@ -370,23 +365,23 @@ GameTest >> testValenLandsInAMoonwalkAtBoxSixAndMakeTheOthersGoBackTwoPositions 
 			            dieThree }.
 	boxSequence := self
 		               sequenceOfNoEffectsOf: 10
-		               with: (MoonwalkEffect with:2)
+		               with: (MoonwalkEffect with: 2)
 		               at: 6.
-	game := Game
-		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
+	game := SpaceRaceGame
+		        with: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
-		        distance: (Parsecs with:200)
+		        distance: (Parsecs with: 200)
 		        laps: 2
 		        diceCup: aDiceCup
-		        and: (Deck with:{SpeedCard new}).
+		        and: (Deck with: { SpeedCard new }).
 	game playATurn.
 	game playATurn.
-	self assert: (game positionOfShip: 'Pablo') boxNumber equals: 4.
+	self assert: (game spaceshipOf: 'Pablo') boxNumber equals: 4.
 	game playATurn.
 	game playATurn.
-	self assert: (game positionOfShip: 'Valen') boxNumber equals: 7.
-	self assert: (game positionOfShip: 'Pablo') boxNumber equals: 2.
-	self assert: (game positionOfShip: 'Seba') boxNumber equals: 2
+	self assert: (game spaceshipOf: 'Valen') boxNumber equals: 7.
+	self assert: (game spaceshipOf: 'Pablo') boxNumber equals: 2.
+	self assert: (game spaceshipOf: 'Seba') boxNumber equals: 2
 ]
 
 { #category : #tests }
@@ -402,17 +397,17 @@ GameTest >> testValenLandsInASpeedupBoxInPositionFiveAndMovesToPositionNine [
 			            dieThree }.
 	boxSequence := self
 		               sequenceOfNoEffectsOf: 10
-		               with: (SpeedUpEffect new)
+		               with: SpeedUpEffect new
 		               at: 4.
-	game := Game
-		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
+	game := SpaceRaceGame
+		        with: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
 		        laps: 2
 		        diceCup: aDiceCup
-		        and: (Deck with:{SpeedCard new}).
+		        and: (Deck with: { SpeedCard new }).
 	game playATurn.
-	newPosition := game positionOfShip: 'Valen'.
+	newPosition := game spaceshipOf: 'Valen'.
 	self assert: newPosition boxNumber equals: 9
 ]
 
@@ -432,15 +427,15 @@ GameTest >> testValenLandsInWormholeAtBoxSevenAndGoesBackFourBoxesToEndAtBoxNumb
 		               with: WormHoleEffect new
 		               at: 6.
 
-	game := Game
-		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
+	game := SpaceRaceGame
+		        with: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
 		        laps: 2
 		        diceCup: aDiceCup
 		        and: (Deck with: { SpeedCard new }).
 	game playATurn.
-	newPosition := game positionOfShip: 'Valen'.
+	newPosition := game spaceshipOf: 'Valen'.
 	self assert: newPosition boxNumber equals: 3.
 	self assert: newPosition lapNumber equals: 1
 ]
@@ -448,8 +443,7 @@ GameTest >> testValenLandsInWormholeAtBoxSevenAndGoesBackFourBoxesToEndAtBoxNumb
 { #category : #tests }
 GameTest >> testValenLandsInWormholeAtBoxThreeOfLapTwoAndStepBackFourBoxesToEndAtBoxNumberNineAndLapOne [
 
-	| dieOne dieTwo dieThree aDiceCup game newPosition wormhole boxSequence |
-	wormhole := WormHoleEffect with: 2.
+	| dieOne dieTwo dieThree aDiceCup game boxSequence |
 	dieOne := LoadedDie with: 9.
 	dieTwo := LoadedDie with: 2.
 	dieThree := LoadedDie with: 1.
@@ -457,19 +451,18 @@ GameTest >> testValenLandsInWormholeAtBoxThreeOfLapTwoAndStepBackFourBoxesToEndA
 			            dieOne.
 			            dieTwo.
 			            dieThree }.
-				boxSequence := self
+	boxSequence := self
 		               sequenceOfNoEffectsOf: 9
-		               with: (WormHoleEffect new)
+		               with: WormHoleEffect new
 		               at: 2.
-	game := Game
-		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
+	game := SpaceRaceGame
+		        with: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
-		        distance: (Parsecs with:200)
+		        distance: (Parsecs with: 200)
 		        laps: 2
 		        diceCup: aDiceCup
-		        and: (Deck with:{SpeedCard new}).
+		        and: (Deck with: { SpeedCard new }).
 	game playATurn.
-	newPosition := game positionOfShip: 'Valen'.
-	self assert: newPosition boxNumber equals: 9.
-	self assert: newPosition lapNumber equals: 1
+	self assert: (game spaceshipOf: 'Valen') boxNumber equals: 9.
+	self assert: (game spaceshipOf: 'Valen') lapNumber equals: 1
 ]

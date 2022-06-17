@@ -14,7 +14,7 @@ Class {
 }
 
 { #category : #asserting }
-Board class >> assertCollectionOfShipsIsValid:aCollectionOfShips [
+Board class >> assertCollectionOfSpaceshipsIsValid:aCollectionOfShips [
 
 	(aCollectionOfShips size  > 1) ifFalse: [ 
 		Error signal: 'Game must have more than one Ship']
@@ -43,8 +43,8 @@ Board class >> ships: spaceships with: aBoxSequence distance: aDistance laps: la
 ]
 
 { #category : #accessing }
-Board >> allShips [
-	^spaceshipsController positions.
+Board >> allSpaceships [
+	^spaceshipsController allSpaceships.
 ]
 
 { #category : #accessing }
@@ -54,7 +54,7 @@ Board >> boxes [
 ]
 
 { #category : #accesing }
-Board >> boxesDistance [
+Board >> distancePerBox [
 
 	^ distancePerBox 
 ]
@@ -65,7 +65,7 @@ Board >> effectAt: aBoxNumber for: ships appliedBy: aShip [
 	(boxes at: aBoxNumber)
 		applyTo: ships
 		triggeredBy: aShip
-		with: self lastPosition
+		with: self sizeOfBoard
 		distance: distancePerBox
 		laps: self laps.
 	lastBoxEffect := boxes at:aBoxNumber.
@@ -93,47 +93,48 @@ Board >> lastBoxEffect [
 	^lastBoxEffect.
 ]
 
-{ #category : #accesing }
-Board >> lastPosition [
-
-	^ boxes size
-]
-
 { #category : #actions }
-Board >> play: aShip with: aDiceResult [
+Board >> move: aShip with: aDiceResult [
 
-	| oldPosition shipPositionWithoutEffect |
-	oldPosition := spaceshipsController positionOf: aShip.
+	| oldSpaceship spaceshipWithoutEffectsApplied |
+	oldSpaceship := spaceshipsController spaceshipOf: aShip.
 	spaceshipsController
-		moveForward: oldPosition ownerShip
+		moveForward: oldSpaceship nameOfSpaceship
 		to: aDiceResult
-		with: self lastPosition
+		with: self sizeOfBoard
 		and: self laps.
-	shipPositionWithoutEffect := spaceshipsController positionOf: aShip.
+	spaceshipWithoutEffectsApplied := spaceshipsController spaceshipOf:
+		                                  aShip.
 	self
-		effectAt: shipPositionWithoutEffect boxNumber
+		effectAt: spaceshipWithoutEffectsApplied boxNumber
 		for: spaceshipsController
-		appliedBy: shipPositionWithoutEffect ownerShip
-]
-
-{ #category : #accesing }
-Board >> positionOf: aShip [
-
-	^ spaceshipsController positionOf: aShip.
+		appliedBy: spaceshipWithoutEffectsApplied nameOfSpaceship
 ]
 
 { #category : #accesing }
 Board >> rankingOf: aShip [
 
 	spaceshipsController sortPositionsByRanking.
-	spaceshipsController positions do: [ :positionOfAShip | 
-		positionOfAShip ownerShip = aShip ifTrue: [ 
-			^ spaceshipsController positions indexOf: positionOfAShip ] ]
+	spaceshipsController allSpaceships do: [ :spaceship | 
+		spaceship nameOfSpaceship = aShip ifTrue: [ 
+			^ spaceshipsController allSpaceships indexOf: spaceship ] ]
+]
+
+{ #category : #accesing }
+Board >> sizeOfBoard [
+
+	^ boxes size
 ]
 
 { #category : #accessing }
 Board >> spaceshipController [
 	^spaceshipsController.
+]
+
+{ #category : #accesing }
+Board >> spaceshipOf: aShipsName [
+
+	^ spaceshipsController spaceshipOf: aShipsName
 ]
 
 { #category : #accesing }

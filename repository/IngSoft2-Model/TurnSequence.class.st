@@ -2,8 +2,8 @@ Class {
 	#name : #TurnSequence,
 	#superclass : #Object,
 	#instVars : [
-		'ships',
-		'turnNumber'
+		'turnNumber',
+		'spaceshipsNames'
 	],
 	#classInstVars : [
 		'ships',
@@ -13,14 +13,15 @@ Class {
 }
 
 { #category : #'instance creation' }
-TurnSequence class >> with: aCollectionOfShips [
-	^self new initializeWith:aCollectionOfShips.
+TurnSequence class >> with: aCollectionOfNames [
+
+	^ self new initializeWith: aCollectionOfNames
 ]
 
 { #category : #initialization }
-TurnSequence >> initializeWith: aCollectionOfShips [
+TurnSequence >> initializeWith: aCollectionOfNames [
 
-	ships := aCollectionOfShips.
+	spaceshipsNames := aCollectionOfNames.
 	turnNumber := 1
 ]
 
@@ -28,14 +29,11 @@ TurnSequence >> initializeWith: aCollectionOfShips [
 TurnSequence >> next [
 
 	turnNumber := turnNumber + 1.
-	turnNumber > ships size ifTrue: [ turnNumber := 1 ].
-
+	turnNumber > spaceshipsNames size ifTrue: [ turnNumber := 1 ]
 ]
 
 { #category : #action }
 TurnSequence >> whoPlays [
 
-	| actualTurn |
-	actualTurn := ships at: turnNumber.
-	^ actualTurn
+	^ (spaceshipsNames at: turnNumber).
 ]

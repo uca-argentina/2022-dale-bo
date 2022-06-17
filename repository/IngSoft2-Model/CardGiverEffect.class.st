@@ -13,9 +13,9 @@ CardGiverEffect class >> with: aDeck [
 ]
 
 { #category : #action }
-CardGiverEffect >> applyTo: ships triggeredBy: aShip with: aCard distance: aDistance laps: laps [
- ships
-		giveTo: aShip
+CardGiverEffect >> applyTo: spaceships triggeredBy: aSpaceship with: aCard distance: aDistance laps: laps [
+ spaceships
+		giveTo: aSpaceship
 		card: deck giveCard.
 ]
 

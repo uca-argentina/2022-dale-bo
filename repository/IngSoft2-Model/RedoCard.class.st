@@ -4,6 +4,13 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #actions }
+RedoCard >> checkIfThereIsACardPlayed: lastPlayedCard [
+
+	lastPlayedCard isNil ifTrue: [ 
+		Error signal: 'There is no cards played to apply redo' ]
+]
+
 { #category : #operations }
 RedoCard >> isPermanent [
 
@@ -15,11 +22,9 @@ RedoCard >> playedUsing: aGame by: aSpaceship to: anotherSpaceship for: aCardEff
 
 	| lastPlayedCard |
 	lastPlayedCard := aGame lastCardPlayed.
-	( lastPlayedCard  isNil) ifTrue: [ 
-		Error signal:
-			'There is no cards played to apply redo' ].
+	self checkIfThereIsACardPlayed: lastPlayedCard.
 	aGame checkValidTurn: aSpaceship andCardType: self.
-	(aGame positionOfShip: aSpaceship) removeFromHand: self.
+	(aGame spaceshipOf: aSpaceship) removeFromHand: self.
 	lastPlayedCard card
 		redoUsing: aGame
 		by: aSpaceship

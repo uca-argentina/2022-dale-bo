@@ -14,9 +14,9 @@ SpeedUpEffect class >> with:aNumberOfParsecs [
 ]
 
 { #category : #action }
-SpeedUpEffect >> applyTo: ships triggeredBy: aShip with: endPosition distance: aDistance laps: laps [
- ships
-		moveForward: aShip
+SpeedUpEffect >> applyTo: spaceships triggeredBy: aSpaceship with: endPosition distance: aDistance laps: laps [
+ spaceships
+		moveForward: aSpaceship
 		to: self boxesToSpeedUp
 		with: endPosition
 		and: laps
@@ -24,10 +24,12 @@ SpeedUpEffect >> applyTo: ships triggeredBy: aShip with: endPosition distance: a
 
 { #category : #action }
 SpeedUpEffect >> boxesToSpeedUp [
-	^4
+
+	^ 4
 ]
 
 { #category : #action }
-SpeedUpEffect >> initializeWith:aNumberOfParsecs [
-	parsecs:= aNumberOfParsecs.
+SpeedUpEffect >> initializeWith: aNumberOfParsecs [
+
+	parsecs := aNumberOfParsecs
 ]

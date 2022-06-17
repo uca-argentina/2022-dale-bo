@@ -6,7 +6,8 @@ Class {
 
 { #category : #actions }
 Distance >> amount [
-^self subclassResponsibility.
+
+	^ self subclassResponsibility
 ]
 
 { #category : #actions }

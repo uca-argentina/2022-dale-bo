@@ -9,21 +9,24 @@ Class {
 
 { #category : #'instance creation' }
 Lightyear class >> with: aDistance [
-	^ self new initializeWith: aDistance.
+
+	^ self new initializeWith: aDistance
 ]
 
 { #category : #accesing }
 Lightyear >> amount [
-	^amount.
+
+	^ amount
 ]
 
 { #category : #actions }
 Lightyear >> amountInParsecs [
 
-	^ amount/3.
+	^ amount / 3
 ]
 
 { #category : #initialize }
 Lightyear >> initializeWith: aDistance [
-	amount:=aDistance.
+
+	amount := aDistance
 ]

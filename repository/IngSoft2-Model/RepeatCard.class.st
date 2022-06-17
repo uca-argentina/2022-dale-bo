@@ -20,12 +20,12 @@ RepeatCard >> playedUsing: aGame by: aSpaceship to: anotherSpaceship for: aCardE
 	lastBoxEffect
 		applyTo: board spaceshipController
 		triggeredBy: anotherSpaceship
-		with: board lastPosition
-		distance: board boxesDistance
+		with: board sizeOfBoard
+		distance: board distancePerBox
 		laps: board laps.
-	aGame lastCardPlayed:
+	aGame updateLastCardPlayedWith:
 		(LastPlayedCard type: self to: anotherSpaceship).
-	(aGame positionOfShip: aSpaceship) removeFromHand: self
+	(aGame spaceshipOf: aSpaceship) removeFromHand: self
 ]
 
 { #category : #actions }
@@ -38,9 +38,9 @@ RepeatCard >> redoUsing: aGame by: aSpaceship to: anotherSpaceship for: aCardEff
 	lastBoxEffect
 		applyTo: board spaceshipController
 		triggeredBy: anotherSpaceship
-		with: board lastPosition
-		distance: board boxesDistance
+		with: board sizeOfBoard
+		distance: board distancePerBox
 		laps: board laps.
-	aGame lastCardPlayed:
-		(LastPlayedCard type: self to: anotherSpaceship).
+	aGame updateLastCardPlayedWith:
+		(LastPlayedCard type: self to: anotherSpaceship)
 ]
