@@ -1,11 +1,11 @@
 Class {
-	#name : #CardTest,
+	#name : #OtherCardTest,
 	#superclass : #TestCase,
 	#category : #'IngSoft2-Tests'
 }
 
 { #category : #tests }
-CardTest >> should: aBlock raise: anError withMessage: anErrorMessage [
+OtherCardTest >> should: aBlock raise: anError withMessage: anErrorMessage [
 
 	| tmp2 tmp3 |
 	aBlock
@@ -22,7 +22,7 @@ CardTest >> should: aBlock raise: anError withMessage: anErrorMessage [
 ]
 
 { #category : #tests }
-CardTest >> testADeckCannotBeCreatedWithNoCards [
+OtherCardTest >> testADeckCannotBeCreatedWithNoCards [
 
 	 self
 		should: [Deck with: {} ]
@@ -34,77 +34,7 @@ CardTest >> testADeckCannotBeCreatedWithNoCards [
 ]
 
 { #category : #tests }
-CardTest >> testPabloPlaysARepeatCardAfterValenLandsInACardGiver [
-
-	| dieOne dieTwo dieThree aDiceCup game boxSequence deck repeatCard |
-	dieOne := LoadedDie with: 3.
-	dieTwo := LoadedDie with: 2.
-	dieThree := LoadedDie with: 1.
-	aDiceCup := DiceCup withAll: { 
-			            dieOne.
-			            dieTwo.
-			            dieThree }.
-	repeatCard := RepeatCard new.
-	deck := Deck with: { repeatCard }.
-	boxSequence := (BoxesGenerator
-		                generate: 16
-		                for: { (CardGiverEffect with: deck) }
-		                with: { 1 }) boxSequence.
-	game := Game
-		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
-		        boardWith: boxSequence
-		        distance: (Parsecs with: 200)
-		        laps: 2
-		        diceCup: aDiceCup
-		        and: deck.
-	game playATurn.
-	self assert: (game positionOfShip: 'Valen') boxNumber equals: 7.
-	repeatCard
-		playedUsing: game
-		by: 'Pablo'
-		to: 'Pablo'
-		for: repeatCard.
-	game playATurn.
-	self assert: (game positionOfShip: 'Pablo') hand size equals: 3
-]
-
-{ #category : #tests }
-CardTest >> testPabloPlaysARepeatCardAfterValenLandsInASpeedUpEffect [
-
-	| dieOne dieTwo dieThree aDiceCup game boxSequence deck repeatCard |
-	dieOne := LoadedDie with: 3.
-	dieTwo := LoadedDie with: 2.
-	dieThree := LoadedDie with: 1.
-	aDiceCup := DiceCup withAll: { 
-			            dieOne.
-			            dieTwo.
-			            dieThree }.
-	repeatCard :=RepeatCard new.
-	deck := Deck with: { repeatCard }.
-	boxSequence := (BoxesGenerator
-		                generate: 16
-		                for: { SpeedUpEffect new. }
-		                with: { 1 }) boxSequence.
-	game := Game
-		        spaceships: { 'Valen'. 'Pablo'. 'Seba' }
-		        boardWith: boxSequence
-		        distance: (Parsecs with: 200)
-		        laps: 2
-		        diceCup: aDiceCup
-		        and: deck.
-	game playATurn.
-	self assert: (game positionOfShip: 'Valen') boxNumber equals: 11.
-		repeatCard
-		playedUsing: game
-		by: 'Pablo'
-		to: 'Pablo'
-		for: repeatCard.
-	game playATurn.
-	self assert: (game positionOfShip: 'Pablo') boxNumber equals: 15.
-]
-
-{ #category : #tests }
-CardTest >> testPabloTriesToCancelWhenThereWasNoCardPlayedPreviously [
+OtherCardTest >> testPabloTriesToCancelWhenThereWasNoCardPlayedPreviously [
 
 	| dieOne dieTwo dieThree aDiceCup game boxSequence deckForGame cancelationCard redoCard deckForCardGiver |
 	dieOne := LoadedDie with: 3.
@@ -143,7 +73,7 @@ CardTest >> testPabloTriesToCancelWhenThereWasNoCardPlayedPreviously [
 ]
 
 { #category : #tests }
-CardTest >> testPlayerLandsInABoxAndReceivesACard [
+OtherCardTest >> testPlayerLandsInABoxAndReceivesACard [
 
 	| dieOne dieTwo dieThree aDiceCup game boxSequence deck |
 	dieOne := LoadedDie with: 3.
@@ -173,7 +103,7 @@ CardTest >> testPlayerLandsInABoxAndReceivesACard [
 ]
 
 { #category : #tests }
-CardTest >> testValenPlaysASpeedCardToPablo [
+OtherCardTest >> testValenPlaysASpeedCardToPablo [
 
 	| dieOne dieTwo dieThree aDiceCup game boxSequence deck speedCard |
 	dieOne := LoadedDie with: 3.
@@ -205,7 +135,7 @@ CardTest >> testValenPlaysASpeedCardToPablo [
 ]
 
 { #category : #tests }
-CardTest >> testValenPlaysAnAccelerationCardAndPabloUseCancelationCardToValenInValensTurn [
+OtherCardTest >> testValenPlaysAnAccelerationCardAndPabloUseCancelationCardToValenInValensTurn [
 
 	| dieOne dieTwo dieThree aDiceCup game boxSequence deckForGame deckForBoxes accelerationCard cancellationCard |
 	dieOne := LoadedDie with: 3.
@@ -246,7 +176,7 @@ CardTest >> testValenPlaysAnAccelerationCardAndPabloUseCancelationCardToValenInV
 ]
 
 { #category : #tests }
-CardTest >> testValenPlaysAnAccelerationCardToAllPlayers [
+OtherCardTest >> testValenPlaysAnAccelerationCardToAllPlayers [
 
 	| dieOne dieTwo dieThree aDiceCup game boxSequence deck accelerationCard |
 	dieOne := LoadedDie with: 3.
@@ -281,7 +211,7 @@ CardTest >> testValenPlaysAnAccelerationCardToAllPlayers [
 ]
 
 { #category : #tests }
-CardTest >> testValenPlaysAnOverloadCardToPablo [
+OtherCardTest >> testValenPlaysAnOverloadCardToPablo [
 
 	| dieOne dieTwo dieThree aDiceCup game boxSequence deck overloadCard |
 	dieOne := LoadedDie with: 3.
@@ -312,7 +242,7 @@ CardTest >> testValenPlaysAnOverloadCardToPablo [
 ]
 
 { #category : #tests }
-CardTest >> testValenTriesToPlayACardInPablosTurnAndHeCantsBecauseItAPermanentCard [
+OtherCardTest >> testValenTriesToPlayACardInPablosTurnAndHeCantsBecauseItAPermanentCard [
 
 	| dieOne dieTwo dieThree aDiceCup game boxSequence deck speedCard |
 	dieOne := LoadedDie with: 3.
@@ -345,7 +275,7 @@ CardTest >> testValenTriesToPlayACardInPablosTurnAndHeCantsBecauseItAPermanentCa
 ]
 
 { #category : #tests }
-CardTest >> testValenTriesToPlayACardThatIsNotInHisHand [
+OtherCardTest >> testValenTriesToPlayACardThatIsNotInHisHand [
 
 	| dieOne dieTwo dieThree aDiceCup game boxSequence deck speedCard overloadCard |
 	dieOne := LoadedDie with: 3.
