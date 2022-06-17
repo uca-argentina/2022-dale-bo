@@ -5,12 +5,17 @@ Class {
 }
 
 { #category : #asserting }
-DiceCupTest >> should: aBlock raise: anErrorClass whoseDescriptionIncludes: anErrorMessage [ 
+DiceCupTest >> should: aBlock raise: anError withMessage: anErrorMessage [
+
+	| tmp2 tmp3 |
+	aBlock
+		on: anError
+		do: [ :error | 
+			tmp2 := true.
+			tmp3 := error messageText ].
 	self
-			should: aBlock
-			raise: anErrorClass
-			whoseDescriptionIncludes: anErrorMessage
-			description: 'Test did not fail as expected'
+		assert: tmp2;
+		assert: tmp3 equals: anErrorMessage
 ]
 
 { #category : #tests }
@@ -19,7 +24,7 @@ DiceCupTest >> testDiceCupCannotBeEmpty [
 	self
 		should: [ DiceCup withAll: {  } ]
 		raise: Error
-		whoseDescriptionIncludes: 'DiceCup can´t be empty'
+		withMessage: 'DiceCup can´t be empty'
 ]
 
 { #category : #tests }
@@ -45,7 +50,7 @@ DiceCupTest >> testDieCannotBeCreatedWithNumberOfSidesMinorThanThree [
 	self
 		should: [ Die with: 2 ]
 		raise: Error
-		whoseDescriptionIncludes: 'Number of faces should be greater than 2'
+		withMessage: 'Number of faces should be greater than 2'
 ]
 
 { #category : #tests }
@@ -64,7 +69,7 @@ DiceCupTest >> testLoadedDieCantBeLoadedWithNegativeNumber [
 	self
 		should: [ LoadedDie with: -1 ]
 		raise: Error
-		whoseDescriptionIncludes: 'Number of faces should be greater than 0'
+		withMessage: 'Number of faces should be greater than 0'
 ]
 
 { #category : #tests }
@@ -73,7 +78,7 @@ DiceCupTest >> testLoadedDieCantBeLoadedWithZero [
 	self
 		should: [ LoadedDie with: 0 ]
 		raise: Error
-		whoseDescriptionIncludes: 'Number of faces should be greater than 0'
+		withMessage: 'Number of faces should be greater than 0'
 ]
 
 { #category : #tests }

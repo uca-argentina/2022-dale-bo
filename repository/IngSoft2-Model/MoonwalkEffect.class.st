@@ -15,10 +15,15 @@ MoonwalkEffect class >> with: aNumberOfBoxesToSendBack [
 ]
 
 { #category : #action }
-MoonwalkEffect >> applyTo: ships triggeredBy: aShip with: endPosition distance: aDistance and: laps [
- ships positions do: [ :each | 
-		each ownerShip ~= aShip ifTrue: [ 
-			ships moveBackwards: each ownerShip to: self numberOfBoxesToMoonwalk with: endPosition and:laps] ]
+MoonwalkEffect >> applyTo: spaceships triggeredBy: aSpaceship with: endPosition distance: aDistance laps: laps [
+
+	spaceships allSpaceships do: [ :each | 
+		each nameOfSpaceship ~= aSpaceship ifTrue: [ 
+			spaceships
+				moveBackwards: each nameOfSpaceship
+				to: self numberOfBoxesToMoonwalk
+				with: endPosition
+				and: laps ] ]
 ]
 
 { #category : #initialization }
@@ -28,5 +33,6 @@ MoonwalkEffect >> initializeWith: aNumberOfBoxesToSendBack [
 
 { #category : #action }
 MoonwalkEffect >> numberOfBoxesToMoonwalk [
-	^ retroPositions.
+
+	^ retroPositions
 ]

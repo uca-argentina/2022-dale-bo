@@ -14,9 +14,10 @@ WormHoleEffect class >> with:aNumberOfParsecs [
 ]
 
 { #category : #action }
-WormHoleEffect >> applyTo: ships triggeredBy: aShip with: endPosition distance: aDistance and: laps [
- ships
-		moveBackwards: aShip
+WormHoleEffect >> applyTo: spaceships triggeredBy: aSpaceship with: endPosition distance: aDistance laps: laps [
+
+	spaceships
+		moveBackwards: aSpaceship
 		to: self numberOfBoxesAffectedByWormhole
 		with: endPosition
 		and: laps

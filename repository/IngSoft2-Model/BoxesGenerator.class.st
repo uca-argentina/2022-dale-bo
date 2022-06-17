@@ -15,30 +15,45 @@ Class {
 
 { #category : #asserting }
 BoxesGenerator class >> assertDistributionsAreValid: distributions [
-	distributions sum = 1 ifFalse: [ 
-        Error signal: 'Distributions sum must be 1' ].
+
+	(distributions sum) = 100 ifFalse: [ 
+		Error signal: 'Distributions sum must be 100' ]
 ]
 
 { #category : #'instance creation' }
 BoxesGenerator class >> generate: aNumberOfBoxes for: effects with: distributions [
-	self assertDistributionsAreValid:distributions.
-	^self new initializeWith:aNumberOfBoxes for: effects with: distributions.
-]
 
-{ #category : #'class initialization' }
-BoxesGenerator class >> generateWithNoEffectsOf: aNumberOfBoxes [
-	^self new initializeWithAllNoEffectsOf: aNumberOfBoxes.
-]
-
-{ #category : #'instance creation' }
-BoxesGenerator class >> generateWithOnly: anEffect at: aNumberOfBox of: aNumberOfBoxes [ 
-	^self new initializeWithOnly: anEffect at: aNumberOfBox of:aNumberOfBoxes.
+	self assertDistributionsAreValid: distributions.
+	^ self new
+		  initializeWith: aNumberOfBoxes
+		  for: effects
+		  with: distributions
 ]
 
 { #category : #action }
 BoxesGenerator >> boxSequence [
 
-	^ boxesSequence
+	^ boxesSequence.
+]
+
+{ #category : #action }
+BoxesGenerator >> calculateBoxesFor: effects with: distributions [
+
+	| quantityOfBoxesByEffect boxesOfEffect |
+	quantityOfBoxesByEffect := Dictionary new.
+	(1 to: effects size by: 1) do: [ :index | 
+		boxesOfEffect := (boxes * ((distributions/100) at: index)) floor.
+		self checkIfBoxCanBeCreatedWith:boxesOfEffect.
+		quantityOfBoxesByEffect at: (effects at: index) put: boxesOfEffect ].
+	self createBoxesSequenceWith: quantityOfBoxesByEffect
+]
+
+{ #category : #action }
+BoxesGenerator >> checkIfBoxCanBeCreatedWith: boxesOfEffect [
+
+	boxesOfEffect = 0 ifTrue: [ 
+		Error signal:
+			'Distribution of some boxes does not fit to create at least one box' ]
 ]
 
 { #category : #action }
@@ -54,52 +69,10 @@ BoxesGenerator >> createBoxesSequenceWith: quantityOfBoxesByEffect [
 	boxesSequence := boxesSequence shuffled first: boxes
 ]
 
-{ #category : #actions }
-BoxesGenerator >> generateBoxesAllNoEffect [
-	| quantityOfBoxesByEffect |
-	quantityOfBoxesByEffect := Dictionary newFrom: { 		                          
-			                           ((NoEffectBox distance: parsecPerBox)
-			                            -> boxes) }.
-	self createBoxesSequenceWith: quantityOfBoxesByEffect
-]
-
-{ #category : #action }
-BoxesGenerator >> generateBoxesWith: effects and: distributions [
-
-	| quantityOfBoxesByEffect boxesOfEffect |
-	quantityOfBoxesByEffect := Dictionary new.
-	(1 to: effects size by: 1) do: [ :index | 
-		boxesOfEffect := (boxes * (distributions at: index)) floor.
-		quantityOfBoxesByEffect at: (effects at: index) put: boxesOfEffect ].
-	self createBoxesSequenceWith: quantityOfBoxesByEffect
-]
-
-{ #category : #actions }
-BoxesGenerator >> generateBoxesWithOnly: anEffect at: aBoxNumber [
-
-	[boxesSequence size < boxes] whileTrue: [ 
-		((boxesSequence size) == aBoxNumber)
-			ifTrue: [ boxesSequence add: anEffect  ]
-			ifFalse: [ boxesSequence add:  NoEffectBox new ] ]
-]
-
 { #category : #initialization }
-BoxesGenerator >> initializeWith: aNumberOfBoxes for: effects with: distributions [ 
-	boxes:= aNumberOfBoxes.
-	boxesSequence:= OrderedCollection new.
-	self generateBoxesWith:effects and:distributions.
-]
+BoxesGenerator >> initializeWith: aNumberOfBoxes for: effects with: distributions [
 
-{ #category : #initialization }
-BoxesGenerator >> initializeWithAllNoEffectsOf: aNumberOfBoxes [
-	boxes:= aNumberOfBoxes.
-	boxesSequence:= OrderedCollection new.
-	self generateBoxesAllNoEffect
-]
-
-{ #category : #initialization }
-BoxesGenerator >> initializeWithOnly: anEffect at: aNumberOfBox of: aNumberOfBoxes [ 
-	boxes:= aNumberOfBoxes.
-	boxesSequence:= OrderedCollection new.
-	self generateBoxesWithOnly:anEffect at: aNumberOfBox 
+	boxes := aNumberOfBoxes.
+	boxesSequence := OrderedCollection new.
+	self calculateBoxesFor: effects with: distributions
 ]

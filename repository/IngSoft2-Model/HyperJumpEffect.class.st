@@ -16,9 +16,9 @@ HyperJumpEffect class >> with: aCollectionOfPosiblesMoves [
 ]
 
 { #category : #action }
-HyperJumpEffect >> applyTo: ships triggeredBy: aShip with: endPosition distance: aDistance and: laps [
- ships
-		move: aShip
+HyperJumpEffect >> applyTo: spaceships triggeredBy: aSpaceship with: endPosition distance: aDistance laps: laps [
+ spaceships
+		move: aSpaceship
 		to: self numberOfDistanceByHyperJump
 		finalDistance: aDistance
 		with: endPosition

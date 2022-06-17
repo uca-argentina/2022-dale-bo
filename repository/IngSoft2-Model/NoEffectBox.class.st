@@ -14,9 +14,10 @@ NoEffectBox class >> distance: aNumberOfParsecs [
 ]
 
 { #category : #action }
-NoEffectBox >> applyTo: ships triggeredBy: aShip with: endPosition distance: aDistance and: laps [
- ships
-		moveForward: aShip
+NoEffectBox >> applyTo: spaceships triggeredBy: aSpaceship with: endPosition distance: aDistance laps: laps [
+
+	spaceships
+		moveForward: aSpaceship
 		to: 0
 		with: endPosition
 		and: laps
