@@ -4,12 +4,17 @@ Class {
 	#category : #'IngSoft2-Tests'
 }
 
+{ #category : #accessing }
+GameTest >> assert: aSpaceshipName isAtPosition: aPositionNumber in:aGame [
+	^((aGame spaceshipOf:aSpaceshipName) position)boxNumber = aPositionNumber.
+]
+
 { #category : #tests }
 GameTest >> sequenceOfNoEffectsOf: boardSize with: effectToBePlaced at: positionOfEffectToBePlaced [
 
 	| boxSequence |
 	boxSequence := OrderedCollection new.
-	boardSize timesRepeat: [ boxSequence add: NoEffectBox new ].
+	boardSize timesRepeat: [ boxSequence add: NoEffect new ].
 	boxSequence
 		add: effectToBePlaced
 		afterIndex: positionOfEffectToBePlaced.
@@ -43,7 +48,7 @@ GameTest >> testAGameCannotBePlayedAfterItHasFinished [
 			            dieThree }.
 	boxSequence := (BoxesGenerator
 		                generate: 13
-		                for: { NoEffectBox new }
+		                for: { NoEffect new }
 		                with: { 100 }) boxSequence.
 	game := SpaceRaceGame
 		        with: { 'Valen'. 'Pablo'. 'Seba' }
@@ -82,7 +87,7 @@ GameTest >> testAGameHasABoardWithAAtomicBombInPositionElevenAndTheEffectDoenstC
 		        diceCup: aDiceCup
 		        and: (Deck with: { SpeedCard new }).
 	game playATurn.
-	self assert: (game spaceshipOf: 'Valen') boxNumber equals: 6.
+	self assert:  'Valen' isAtPosition: 6 in:game.
 	game playATurn.
 	self assert: (game spaceshipOf: 'Pablo') boxNumber equals: 6.
 	game playATurn.
@@ -104,7 +109,7 @@ GameTest >> testAGameHasFinishedWhenAShipInTheLastPositionOfTheLastLap [
 			            dieThree }.
 	boxSequence := (BoxesGenerator
 		                generate: 13
-		                for: { NoEffectBox new }
+		                for: { NoEffect new }
 		                with: { 100 }) boxSequence.
 	game := SpaceRaceGame
 		        with: { 'Valen'. 'Pablo'. 'Seba' }
@@ -133,7 +138,7 @@ GameTest >> testAGameHasNoWinnerBeforeItsFinished [
 			            dieThree }.
 	boxSequence := (BoxesGenerator
 		                generate: 13
-		                for: { NoEffectBox new }
+		                for: { NoEffect new }
 		                with: { 100 }) boxSequence.
 	game := SpaceRaceGame
 		        with: { 'Valen'. 'Pablo'. 'Seba' }
@@ -159,7 +164,7 @@ GameTest >> testAGameIsPlayedAndValenEndsInLapTwo [
 			            dieThree }.
 	boxSequence := (BoxesGenerator
 		                generate: 13
-		                for: { NoEffectBox new }
+		                for: { NoEffect new }
 		                with: { 100 }) boxSequence.
 	game := SpaceRaceGame
 		        with: { 'Valen'. 'Pablo'. 'Seba' }
@@ -185,7 +190,7 @@ GameTest >> testAGameIsPlayedAndValenEndsInPositionOneAndTheOthersInTheSecondPos
 			            dieThree }.
 	boxSequence := (BoxesGenerator
 		                generate: 13
-		                for: { NoEffectBox new }
+		                for: { NoEffect new }
 		                with: { 100 }) boxSequence.
 	game := SpaceRaceGame
 		        with: { 'Valen'. 'Pablo'. 'Seba' }
@@ -216,7 +221,7 @@ GameTest >> testAGameReturnsPositionOfShipAfterItMoves [
 			            dieThree }.
 	boxSequence := (BoxesGenerator
 		                generate: 13
-		                for: { NoEffectBox new }
+		                for: { NoEffect new }
 		                with: { 100 }) boxSequence.
 	game := SpaceRaceGame
 		        with: { 'Valen'. 'Pablo'. 'Seba' }
@@ -243,7 +248,7 @@ GameTest >> testAGameStartsWithShipsAtPositionOne [
 			            dieThree }.
 	boxSequence := (BoxesGenerator
 		                generate: 13
-		                for: { NoEffectBox new }
+		                for: { NoEffect new }
 		                with: { 100 }) boxSequence.
 	game := SpaceRaceGame
 		        with: { 'Valen'. 'Pablo'. 'Seba' }
@@ -303,7 +308,7 @@ GameTest >> testGameCannotBeInitializedWithLessThanTwoShips [
 			            dieThree }.
 	boxSequence := (BoxesGenerator
 		                generate: 13
-		                for: { NoEffectBox new }
+		                for: { NoEffect new }
 		                with: { 100 }) boxSequence.
 
 
@@ -344,7 +349,7 @@ GameTest >> testValenLandsInAMoonwalkAtBoxSevenAndMakeTheOthersGoBackTwoPosition
 		        and: (Deck with:{SpeedCard new}).
 	game playATurn.
 	game playATurn.
-	self assert: (game spaceshipOf: 'Pablo') boxNumber equals: 4.
+	self assert: 'Pablo' isAtPosition:4 in:game.
 	game playATurn.
 	game playATurn.
 	self assert: (game spaceshipOf: 'Valen') boxNumber equals: 7.
@@ -387,7 +392,7 @@ GameTest >> testValenLandsInAMoonwalkAtBoxSixAndMakeTheOthersGoBackTwoPositions 
 { #category : #tests }
 GameTest >> testValenLandsInASpeedupBoxInPositionFiveAndMovesToPositionNine [
 
-	| dieOne dieTwo dieThree aDiceCup game newPosition boxSequence |
+	| dieOne dieTwo dieThree aDiceCup game boxSequence |
 	dieOne := LoadedDie with: 1.
 	dieTwo := LoadedDie with: 2.
 	dieThree := LoadedDie with: 1.
@@ -407,8 +412,7 @@ GameTest >> testValenLandsInASpeedupBoxInPositionFiveAndMovesToPositionNine [
 		        diceCup: aDiceCup
 		        and: (Deck with: { SpeedCard new }).
 	game playATurn.
-	newPosition := game spaceshipOf: 'Valen'.
-	self assert: newPosition boxNumber equals: 9
+	self assert: 'Valen' isAtPosition: 9 in: game.
 ]
 
 { #category : #tests }

@@ -31,7 +31,7 @@ BoardTest >> testABoardCantBeCreatedBecauseOfDistributions [
 						 MoonwalkEffect.
 						 SpeedUpEffect.
 						 WormHoleEffect.
-						 NoEffectBox }
+						 NoEffect }
 				 with: { 2. 8. 20. 10. 10. 50 }) boxSequence ]
 		raise: Error
 		withMessage:
@@ -50,7 +50,7 @@ BoardTest >> testABoardIsCreatedWith10RandomGeneratedBoxes [
 				                MoonwalkEffect.
 				                SpeedUpEffect.
 				                WormHoleEffect.
-				                NoEffectBox }
+				                NoEffect }
 		                with: { 10. 10. 10. 10. 10. 50 }) boxSequence.
 	aBoard := Board
 		          ships: { 'Valen'. 'Pablo'. 'Seba' }
@@ -73,7 +73,7 @@ BoardTest >> testABoardIsCreatedWithRigthDistributions [
 				                MoonwalkEffect.
 				                SpeedUpEffect.
 				                WormHoleEffect.
-				                NoEffectBox.
+				                NoEffect.
 				                CardGiverEffect }
 		                with: { 2. 8. 10. 20. 20. 30. 10 }) boxSequence.
 	aBoard := Board

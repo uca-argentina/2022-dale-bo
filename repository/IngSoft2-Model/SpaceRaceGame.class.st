@@ -86,7 +86,7 @@ SpaceRaceGame >> hasFinished [
 { #category : #initialize }
 SpaceRaceGame >> initializeWith: spaceships aBoardWith: aBoxSequence distance: aDistance laps: aNumberOfLaps aDiceCup: aDiceCup and: aDeck [
 
-	board := Board
+	board := Board2
 		         ships: spaceships
 		         with: aBoxSequence
 		         distance: aDistance
@@ -112,7 +112,7 @@ SpaceRaceGame >> playATurn [
 	diceResult := diceCup roll.
 	currentSpaceship := turnSequence whoPlays.
 	effectsOnCurrentSpaceship := (board spaceshipOf: currentSpaceship)
-		                        sumOfCardsEffects.
+		                        sumOfeffectsOnSpaceship .
 	board move: currentSpaceship with: diceResult + effectsOnCurrentSpaceship.
 	turnSequence next
 ]

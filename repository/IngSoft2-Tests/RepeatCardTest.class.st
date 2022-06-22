@@ -9,7 +9,7 @@ RepeatCardTest >> sequenceOfNoEffectsOf: boardSize with: effectToBePlaced at: po
 
 	| boxSequence |
 	boxSequence := OrderedCollection new.
-	boardSize timesRepeat: [ boxSequence add: NoEffectBox new ].
+	boardSize timesRepeat: [ boxSequence add: NoEffect new ].
 	boxSequence
 		add: effectToBePlaced
 		afterIndex: positionOfEffectToBePlaced.
@@ -178,7 +178,7 @@ RepeatCardTest >> testPabloPlaysARepeatCardAfterValenLandsInANoEffect [
 	deck := Deck with: { repeatCard }.
 	boxSequence := (BoxesGenerator
 		                generate: 16
-		                for: { NoEffectBox new }
+		                for: { NoEffect new }
 		                with: { 100 }) boxSequence.
 	game := SpaceRaceGame
 		        with: { 'Valen'. 'Pablo'. 'Seba' }
