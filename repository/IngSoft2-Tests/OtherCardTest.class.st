@@ -36,14 +36,8 @@ OtherCardTest >> testADeckCannotBeCreatedWithNoCards [
 { #category : #tests }
 OtherCardTest >> testPabloTriesToCancelWhenThereWasNoCardPlayedPreviously [
 
-	| dieOne dieTwo dieThree aDiceCup game boxSequence deckForGame cancelationCard redoCard deckForCardGiver |
-	dieOne := LoadedDie with: 3.
-	dieTwo := LoadedDie with: 2.
-	dieThree := LoadedDie with: 1.
-	aDiceCup := DiceCup withAll: { 
-			            dieOne.
-			            dieTwo.
-			            dieThree }.
+	| die game boxSequence deckForGame cancelationCard redoCard deckForCardGiver |
+	die := LoadedDie with: 6.
 	cancelationCard := CancellationCard new.
 	redoCard := RedoCard new.
 	deckForCardGiver := Deck with: { redoCard }.
@@ -57,7 +51,7 @@ OtherCardTest >> testPabloTriesToCancelWhenThereWasNoCardPlayedPreviously [
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
 		        laps: 2
-		        diceCup: aDiceCup
+		        diceCup: die
 		        and: deckForGame.
 	game playATurn.
 	self

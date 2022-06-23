@@ -9,9 +9,27 @@ Class {
 }
 
 { #category : #'instance creation' }
+MoonwalkEffect class >> assertNumberOfBoxesIsPositive: aNumberOfBoxesToSendBack [
+
+	aNumberOfBoxesToSendBack > 0 ifFalse: [ 
+		Error signal: 'Number of boxes to send back muste be positive' ]
+]
+
+{ #category : #'instance creation' }
 MoonwalkEffect class >> with: aNumberOfBoxesToSendBack [
 
+	self assertNumberOfBoxesIsPositive:aNumberOfBoxesToSendBack.
 	^ self new initializeWith: aNumberOfBoxesToSendBack
+]
+
+{ #category : #action }
+MoonwalkEffect >> applyTo: spaceships triggeredBy: aSpaceship with: aBoard [
+	
+	spaceships do: [ :each | 
+		each nameOfSpaceship ~= aSpaceship ifTrue: [ 
+			(aBoard allSpaceships)
+				moveBackwards: each nameOfSpaceship
+				to: self numberOfBoxesToMoonwalk ] ]
 ]
 
 { #category : #action }

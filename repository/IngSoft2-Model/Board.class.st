@@ -77,7 +77,7 @@ Board >> initializeWithShips: spaceships with: aBoxSequence distance: aDistance 
 	distancePerBox := (aDistance amountInParsecs) // (boxes size).
 	laps := numberOfLaps.
 	deck:= aDeck.
-	spaceshipsController := SpaceshipsController for: spaceships and:deck.
+	spaceshipsController := PositionBoard for: spaceships and:deck.
 	lastBoxEffect := nil.
 	
 ]

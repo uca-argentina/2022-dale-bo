@@ -10,9 +10,21 @@ Class {
 }
 
 { #category : #'class initialization' }
-HyperJumpEffect class >> with: aCollectionOfPosiblesMoves [
+HyperJumpEffect class >> assertPosibleMovesAreValid:aCollectionOfPosiblesMoves [
+]
 
+{ #category : #'class initialization' }
+HyperJumpEffect class >> with: aCollectionOfPosiblesMoves [
+	self assertPosibleMovesAreValid:aCollectionOfPosiblesMoves.
 	^ self new initializeWith: aCollectionOfPosiblesMoves
+]
+
+{ #category : #action }
+HyperJumpEffect >> applyTo: spaceships triggeredBy: aSpaceship with: aBoard [
+
+	aBoard 
+		move: aSpaceship
+		to: self numberOfDistanceByHyperJump
 ]
 
 { #category : #action }

@@ -121,8 +121,7 @@ Spaceship >> removeFromHand: aCard [
 { #category : #accesing }
 Spaceship >> sumOfCardsEffects [
 
-	| sum |
-	sum := 0.
-	effectsOnMe do: [ :each | sum := sum + each effect ].
-	^ sum
+	
+	^effectsOnMe sum
+	
 ]

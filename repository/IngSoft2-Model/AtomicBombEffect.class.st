@@ -14,6 +14,12 @@ AtomicBombEffect class >> with:aNumberOfParsecs [
 ]
 
 { #category : #action }
+AtomicBombEffect >> applyTo: spaceships triggeredBy: aSpaceship with: aBoard [
+
+	spaceships applyAtomicBomb
+]
+
+{ #category : #action }
 AtomicBombEffect >> applyTo: spaceships triggeredBy: aSpaceship with: endPosition distance: aDistance laps: laps [
 
 	spaceships applyAtomicBomb

@@ -1,5 +1,5 @@
 Class {
-	#name : #SpaceshipsController,
+	#name : #PositionBoard,
 	#superclass : #Object,
 	#instVars : [
 		'winner',
@@ -9,19 +9,19 @@ Class {
 }
 
 { #category : #'instance creation' }
-SpaceshipsController class >> for: spaceships and: aDeck [
+PositionBoard class >> for: spaceships and: aDeck [
 
 	^ self new initializeWith: spaceships and: aDeck
 ]
 
 { #category : #accesing }
-SpaceshipsController >> allSpaceships [
+PositionBoard >> allSpaceships [
 
 	^ spaceships
 ]
 
 { #category : #accesing }
-SpaceshipsController >> applyAtomicBomb [
+PositionBoard >> applyAtomicBomb [
 
 	spaceships do: [ :each | 
 		spaceships replaceAll: each with: (self
@@ -32,13 +32,13 @@ SpaceshipsController >> applyAtomicBomb [
 ]
 
 { #category : #action }
-SpaceshipsController >> giveTo: aSpaceship card: aCard [
+PositionBoard >> giveTo: aSpaceship card: aCard [
 
 	(self spaceshipOf: aSpaceship) receive: aCard
 ]
 
 { #category : #initialization }
-SpaceshipsController >> initializeWith: nameOfSpaceships and: aDeck [
+PositionBoard >> initializeWith: nameOfSpaceships and: aDeck [
 
 	| hand |
 	spaceships := nameOfSpaceships collect: [ :ship | 
@@ -56,7 +56,7 @@ SpaceshipsController >> initializeWith: nameOfSpaceships and: aDeck [
 ]
 
 { #category : #actions }
-SpaceshipsController >> move: aSpaceship to: aDistanceInBox finalDistance: finalDistanceInBox with: endPosition and: laps [
+PositionBoard >> move: aSpaceship to: aDistanceInBox finalDistance: finalDistanceInBox with: endPosition and: laps [
 
 	| oldSpaceship spaceshipNewDistanceInBox |
 	oldSpaceship := spaceships detect: [ :each | 
@@ -78,7 +78,7 @@ SpaceshipsController >> move: aSpaceship to: aDistanceInBox finalDistance: final
 ]
 
 { #category : #action }
-SpaceshipsController >> moveBackwards: aSpaceship to: aBox with: endPosition and: laps [
+PositionBoard >> moveBackwards: aSpaceship to: aBox with: endPosition and: laps [
 
 	| oldSpaceship spaceshipNewBoxNumber spaceshipNewLapNumber |
 	oldSpaceship := spaceships detect: [ :each | each nameOfSpaceship = aSpaceship ].
@@ -98,7 +98,7 @@ SpaceshipsController >> moveBackwards: aSpaceship to: aBox with: endPosition and
 ]
 
 { #category : #action }
-SpaceshipsController >> moveForward: aSpaceship to: aBox with: endPosition and: laps [
+PositionBoard >> moveForward: aSpaceship to: aBox with: endPosition and: laps [
 
 	| oldSpaceship spaceshipNewBoxNumber spaceshipNewLapNumber |
 	oldSpaceship := spaceships detect: [ :each | 
@@ -122,20 +122,22 @@ SpaceshipsController >> moveForward: aSpaceship to: aBox with: endPosition and: 
 ]
 
 { #category : #accesing }
-SpaceshipsController >> sortPositionsByRanking [
+PositionBoard >> sortPositionsByRanking [
 
 	spaceships sort: [ :positionOfShip1 :positionOfShip2 | 
-		 positionOfShip1 lapNumber > positionOfShip2 lapNumber  or: [ positionOfShip1 lapNumber = positionOfShip2 lapNumber and: positionOfShip1 boxNumber  > positionOfShip2 boxNumber ]  ]
+		positionOfShip1 lapNumber > positionOfShip2 lapNumber or: [ 
+			positionOfShip1 lapNumber = positionOfShip2 lapNumber and:
+				positionOfShip1 boxNumber > positionOfShip2 boxNumber ] ]
 ]
 
 { #category : #accesing }
-SpaceshipsController >> spaceshipOf: aShipsName [
+PositionBoard >> spaceshipOf: aShipsName [
 
 	^ spaceships detect: [ :each | each nameOfSpaceship = aShipsName ]
 ]
 
 { #category : #action }
-SpaceshipsController >> updateSpaceshipOf: aShip from: oldPosition to: shipNewBoxNumber and: shipNewLapNumber [
+PositionBoard >> updateSpaceshipOf: aShip from: oldPosition to: shipNewBoxNumber and: shipNewLapNumber [
 
 	^ Spaceship
 		  of: aShip
@@ -147,7 +149,7 @@ SpaceshipsController >> updateSpaceshipOf: aShip from: oldPosition to: shipNewBo
 ]
 
 { #category : #accesing }
-SpaceshipsController >> winner [
+PositionBoard >> winner [
 
 	^ winner
 ]

@@ -80,7 +80,7 @@ SpaceRaceGame >> checkValidTurn: aSpaceship andCardType: aCard [
 { #category : #accessing }
 SpaceRaceGame >> hasFinished [
 
-	^ self winner notNil 
+	^ board winner notNil
 ]
 
 { #category : #initialize }
@@ -139,5 +139,9 @@ SpaceRaceGame >> updateLastCardPlayedWith: aLastPlayedCard [
 { #category : #actions }
 SpaceRaceGame >> winner [
 
-	^ board winner
+	board winner
+		ifNil: [ 
+			Error signal:
+				'Game does not have a winner beacause is not finished yet' ]
+		ifNotNil: [ ^ board winner ]
 ]
