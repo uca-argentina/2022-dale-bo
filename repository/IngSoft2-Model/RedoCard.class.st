@@ -18,6 +18,13 @@ RedoCard >> isPermanent [
 ]
 
 { #category : #actions }
+RedoCard >> playedOn: aGame by: aSpaceship to: anotherSpaceship [
+	| aCardPlay |
+	aCardPlay:=CardPlay by:aSpaceship type:self to:anotherSpaceship for:(aGame lastCardPlayed).
+	aGame redoCardPlay:aCardPlay.
+]
+
+{ #category : #actions }
 RedoCard >> playedUsing: aGame by: aSpaceship to: anotherSpaceship for: aCardEffect [
 
 	| lastPlayedCard |

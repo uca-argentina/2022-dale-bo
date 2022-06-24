@@ -20,7 +20,17 @@ SpaceshipHand >> checkSpaceshipHas: aCard [
 		  ifNone: [ Error signal: 'The spaceship does not have this card' ]
 ]
 
+{ #category : #accessing }
+SpaceshipHand >> hand [
+	^ hand
+]
+
 { #category : #initialization }
 SpaceshipHand >> initializeWith: aCollectionOfCards [
 	hand:= aCollectionOfCards.
+]
+
+{ #category : #accessing }
+SpaceshipHand >> numberOfCards [
+	^hand size.
 ]

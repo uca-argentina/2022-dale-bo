@@ -57,13 +57,20 @@ SpaceRaceGame >> allSpaceships [
 SpaceRaceGame >> applyCardPlay: aCardPlay [
 
 	self assertValidTurnFor: (aCardPlay) playedBy andCardType: aCardPlay cardType.
-	cardEffectApplier apply: aCardPlay using: board
+	cardEffectApplier apply: aCardPlay using: board.
+	lastCardPlayed:=aCardPlay.
 ]
 
 { #category : #actions }
 SpaceRaceGame >> assertGameIsNotFinished [
 
 	(self hasFinished) ifTrue: [Error signal: 'Turn cannot be played, game has finished' ].
+]
+
+{ #category : #asserting }
+SpaceRaceGame >> assertThereIsACardPlayed [
+	lastCardPlayed ifNil: [ 
+		Error signal: 'There is no cards played to be canceled' ]
 ]
 
 { #category : #actions }
@@ -85,6 +92,15 @@ SpaceRaceGame >> board [
 	^ board
 ]
 
+{ #category : #actions }
+SpaceRaceGame >> cancelCardPlay: aCardPlay [ 
+	self assertValidTurnFor: (aCardPlay) playedBy andCardType: aCardPlay cardType.
+	self assertThereIsACardPlayed.
+	cardEffectApplier cancel: aCardPlay using: board.
+	lastCardPlayed:=aCardPlay.
+	
+]
+
 { #category : #accessing }
 SpaceRaceGame >> hasFinished [
 
@@ -94,7 +110,7 @@ SpaceRaceGame >> hasFinished [
 { #category : #initialize }
 SpaceRaceGame >> initializeWith: spaceships aBoardWith: aBoxSequence distance: aDistance laps: aNumberOfLaps aDiceCup: aDiceCup and: aDeck [
 
-	board := Board2
+	board := Board
 		         ships: spaceships
 		         with: aBoxSequence
 		         distance: aDistance
@@ -104,7 +120,7 @@ SpaceRaceGame >> initializeWith: spaceships aBoardWith: aBoxSequence distance: a
 	turnSequence := TurnSequence with: spaceships.
 	finished := false.
 	lastCardPlayed:= nil.
-	cardEffectApplier:= CardEffectApplier new.
+	cardEffectApplier:= CardEffectApplicator new.
 ]
 
 { #category : #actions }
@@ -121,7 +137,7 @@ SpaceRaceGame >> playATurn [
 	diceResult := diceCup roll.
 	currentSpaceship := turnSequence whoPlays.
 	effectsOnCurrentSpaceship := (board spaceshipOf: currentSpaceship)
-		                        sumOfeffectsOnSpaceship .
+		                        effectsOnSpaceship sumOfCardsEffects .
 	board move: currentSpaceship with: diceResult + effectsOnCurrentSpaceship.
 	turnSequence next
 ]
@@ -131,6 +147,18 @@ SpaceRaceGame >> rankingOf: aShip [
 
 
 			^ board rankingOf: aShip.
+]
+
+{ #category : #actions }
+SpaceRaceGame >> redoCardPlay: aCardPlay [ 
+	self assertValidTurnFor: (aCardPlay) playedBy andCardType: (aCardPlay targetedCard) cardType.
+	cardEffectApplier redo: aCardPlay using: board.
+]
+
+{ #category : #actions }
+SpaceRaceGame >> repeatCardPlay: aCardPlay [ 
+	self assertValidTurnFor: (aCardPlay) playedBy andCardType: aCardPlay cardType.
+	cardEffectApplier repeat: aCardPlay using: board.
 ]
 
 { #category : #action }

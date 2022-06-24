@@ -21,6 +21,13 @@ CancellationCard >> isPermanent [
 ]
 
 { #category : #actions }
+CancellationCard >> playedOn: aGame by: aSpaceship to: anotherSpaceship for: aCard [ 
+	| aCardPlay |
+	aCardPlay:=CardPlay by:aSpaceship type:self to:anotherSpaceship for:aCard.
+	aGame cancelCardPlay:aCardPlay.
+]
+
+{ #category : #actions }
 CancellationCard >> playedUsing: aGame by: aSpaceship to: anotherSpaceship for: aCardEffect [
 
 	lastCancelledEffect := aCardEffect.

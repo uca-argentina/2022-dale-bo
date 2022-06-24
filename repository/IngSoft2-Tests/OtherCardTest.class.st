@@ -5,6 +5,15 @@ Class {
 }
 
 { #category : #tests }
+OtherCardTest >> assert: aSpaceshipName isAt: aPositionNumber with: aLapNumber in: aGame [
+
+	^ (aGame spaceshipOf: aSpaceshipName) position boxNumber
+	  = aPositionNumber
+
+
+]
+
+{ #category : #tests }
 OtherCardTest >> should: aBlock raise: anError withMessage: anErrorMessage [
 
 	| tmp2 tmp3 |
@@ -54,13 +63,14 @@ OtherCardTest >> testPabloTriesToCancelWhenThereWasNoCardPlayedPreviously [
 		        diceCup: die
 		        and: deckForGame.
 	game playATurn.
+	
 	self
 		should: [ 
 			cancelationCard
-				playedUsing: game
+				playedOn: game
 				by: 'Valen'
 				to: 'Valen'
-				for: cancelationCard ]
+				for: cancelationCard.]
 		raise: Error
 		withMessage: 'There is no cards played to be canceled'
 ]
@@ -92,7 +102,7 @@ OtherCardTest >> testPlayerLandsInABoxAndReceivesACard [
 		        and: deck.
 	game playATurn.
 
-	self assert: (game spaceshipOf: 'Valen') numberOfCards equals: 3
+	self assert: ((game spaceshipOf: 'Valen') hand) numberOfCards equals: 3
 ]
 
 { #category : #tests }
@@ -110,7 +120,7 @@ OtherCardTest >> testValenPlaysASpeedCardToPablo [
 	deck := Deck with: { speedCard }.
 	boxSequence := (BoxesGenerator
 		                generate: 13
-		                for: { (CardGiverEffect with: deck) }
+		                for: { (NoEffect new) }
 		                with: { 100 }) boxSequence.
 	game := SpaceRaceGame
 		        with: { 'Valen'. 'Pablo'. 'Seba' }
@@ -121,14 +131,12 @@ OtherCardTest >> testValenPlaysASpeedCardToPablo [
 		        and: deck.
 
 	speedCard
-		playedUsing: game
+		playedOn: game
 		by: 'Valen'
-		to: 'Pablo'
-		for: speedCard.
+		to: 'Pablo'.
 	game playATurn.
 	game playATurn.
-
-	self assert: (game spaceshipOf: 'Pablo') boxNumber equals: 8
+	self assert:'Pablo' isAt:8 with:1 in:game.
 ]
 
 { #category : #tests }
@@ -158,26 +166,22 @@ OtherCardTest >> testValenPlaysAnAccelerationCardAndPabloUseCancelationCardToVal
 		        diceCup: aDiceCup
 		        and: deckForGame.
 	accelerationCard
-		playedUsing: game
-		by: 'Valen'
-		to: ''
-		for: accelerationCard.
+		playedOn: game
+		by: 'Valen'.
 	game playATurn.
-	self assert: (game spaceshipOf: 'Valen') boxNumber equals: 8.
+	self assert:'Valen' isAt:8 with:1 in:game.
 	game playATurn.
-	self assert: (game spaceshipOf: 'Valen') boxNumber equals: 8.
+	self assert:'Valen' isAt:8 with:1 in:game.
 	cancellationCard
-		playedUsing: game
+		playedOn: game
 		by: 'Pablo'
 		to: 'Valen'
 		for: accelerationCard.
 	game playATurn.
 	game playATurn.
-	self assert: (game spaceshipOf: 'Valen') boxNumber equals: 1.
-	self assert: (game spaceshipOf: 'Valen') lapNumber equals: 2.
+	self assert:'Valen' isAt:1 with:2 in:game.
 	game playATurn.
-	self assert: (game spaceshipOf: 'Pablo') boxNumber equals: 2.
-	self assert: (game spaceshipOf: 'Pablo') lapNumber equals: 2
+	self assert:'Pablo' isAt:2 with:2 in:game.
 ]
 
 { #category : #tests }
@@ -195,7 +199,7 @@ OtherCardTest >> testValenPlaysAnAccelerationCardToAllPlayers [
 	deck := Deck with: { accelerationCard }.
 	boxSequence := (BoxesGenerator
 		                generate: 13
-		                for: { (CardGiverEffect with: deck) }
+		                for: { (NoEffect new) }
 		                with: { 100 }) boxSequence.
 	game := SpaceRaceGame
 		        with: { 'Valen'. 'Pablo'. 'Seba' }
@@ -208,13 +212,13 @@ OtherCardTest >> testValenPlaysAnAccelerationCardToAllPlayers [
 		playedOn: game
 		by: 'Valen'.
 	game playATurn.
-	self assert: (game spaceshipOf: 'Pablo') boxNumber equals: 1.
-	self assert: (game spaceshipOf: 'Valen') boxNumber equals: 8.
+	self assert:'Pablo' isAt:1 with:1 in:game.
+	self assert:'Valen' isAt:8 with:1 in:game.
 	game playATurn.
-	self assert: (game spaceshipOf: 'Pablo') boxNumber equals: 8.
+	self assert:'Pablo' isAt:8 with:1 in:game.
 	game playATurn.
 	game playATurn.
-	self assert: (game spaceshipOf: 'Valen') boxNumber equals: 2
+	self assert:'Pablo' isAt:2 with:1 in:game.
 ]
 
 { #category : #tests }
@@ -242,14 +246,12 @@ OtherCardTest >> testValenPlaysAnOverloadCardToPablo [
 		        diceCup: aDiceCup
 		        and: deck.
 	overloadCard
-		playedUsing: game
+		playedOn: game
 		by: 'Valen'
-		to: 'Pablo'
-		for: overloadCard.
+		to: 'Pablo'.
 	game playATurn.
 	game playATurn.
-
-	self assert: (game spaceshipOf: 'Pablo') boxNumber equals: 5
+	self assert: 'Pablo' isAt:5 with:1 in:game.
 ]
 
 { #category : #tests }
@@ -280,10 +282,9 @@ OtherCardTest >> testValenTriesToPlayACardInPablosTurnAndHeCantsBecauseItAPerman
 	self
 		should: [ 
 			speedCard
-				playedUsing: game
-				by: 'Valen'
-				to: 'Pablo'
-				for: speedCard ]
+		playedOn: game
+		by: 'Valen'
+		to: 'Pablo'. ]
 		raise: Error
 		withMessage:
 		'A permanent card cannot be played on another spaceship turn'

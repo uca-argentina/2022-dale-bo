@@ -5,6 +5,13 @@ Class {
 }
 
 { #category : #tests }
+RepeatCardTest >> assert: aSpaceshipName isAt: aPositionNumber with: aLapNumber in: aGame [
+
+	^ (aGame spaceshipOf: aSpaceshipName) position boxNumber
+	  = aPositionNumber
+]
+
+{ #category : #tests }
 RepeatCardTest >> sequenceOfNoEffectsOf: boardSize with: effectToBePlaced at: positionOfEffectToBePlaced [
 
 	| boxSequence |
@@ -42,15 +49,14 @@ RepeatCardTest >> testPabloPlaysARepeatCardAfterValenLandsInAAtomicBombEffect [
 		        diceCup: aDiceCup
 		        and: deck.
 	game playATurn.
-	self assert: (game spaceshipOf: 'Valen') boxNumber equals: 1.
+	self assert:'Valen' isAt:1 with:1 in:game.
 	repeatCard
-		playedUsing: game
+		playedOn: game
 		by: 'Pablo'
-		to: 'Valen'
-		for: repeatCard.
+		to: 'Valen'.
 	game playATurn.
-	self assert: (game spaceshipOf: 'Pablo') boxNumber equals: 1.
-	self assert: (game spaceshipOf: 'Valen') boxNumber equals: 1
+	self assert:'Pablo' isAt:1 with:1 in:game.
+	self assert:'Valen' isAt:3 with:1 in:game.
 ]
 
 { #category : #tests }
@@ -78,14 +84,13 @@ RepeatCardTest >> testPabloPlaysARepeatCardAfterValenLandsInACardGiver [
 		        diceCup: aDiceCup
 		        and: deck.
 	game playATurn.
-	self assert: (game spaceshipOf: 'Valen') boxNumber equals: 7.
+	self assert:'Valen' isAt:7 with:1 in:game.
 	repeatCard
-		playedUsing: game
+		playedOn: game
 		by: 'Pablo'
-		to: 'Pablo'
-		for: repeatCard.
+		to: 'Pablo'.
 	game playATurn.
-	self assert: (game spaceshipOf: 'Pablo') hand size equals: 3
+	self assert: ((game spaceshipOf: 'Pablo') hand) hand size equals: 4.
 ]
 
 { #category : #tests }
@@ -115,16 +120,15 @@ RepeatCardTest >> testPabloPlaysARepeatCardAfterValenLandsInAHyperJumpEffect [
 		        diceCup: aDiceCup
 		        and: deck.
 	game playATurn.
-	self assert: (game spaceshipOf: 'Valen') boxNumber equals: 9.
-	self assert: (game spaceshipOf: 'Valen') distanceInBox equals: 1.
+	self assert:'Valen' isAt:9 with:1 in:game.
+	self assert: (game spaceshipOf: 'Valen') position distance equals: 1.
 	repeatCard
-		playedUsing: game
+		playedOn: game
 		by: 'Pablo'
-		to: 'Pablo'
-		for: repeatCard.
+		to: 'Pablo'.
 	game playATurn.
-	self assert: (game spaceshipOf: 'Pablo') boxNumber equals: 9.
-	self assert: (game spaceshipOf: 'Valen') distanceInBox equals: 1
+	self assert:'Pablo' isAt:9 with:1 in:game.
+	self assert: (game spaceshipOf: 'Valen') position distance equals: 1.
 ]
 
 { #category : #tests }
@@ -152,15 +156,14 @@ RepeatCardTest >> testPabloPlaysARepeatCardAfterValenLandsInAMoonwalkEffect [
 		        diceCup: aDiceCup
 		        and: deck.
 	game playATurn.
-	self assert: (game spaceshipOf: 'Valen') boxNumber equals: 7.
+	self assert:'Valen' isAt:7 with:1 in:game.
 	repeatCard
-		playedUsing: game
+		playedOn: game
 		by: 'Pablo'
-		to: 'Pablo'
-		for: repeatCard.
+		to: 'Pablo'.
 	game playATurn.
-	self assert: (game spaceshipOf: 'Pablo') boxNumber equals: 7.
-	self assert: (game spaceshipOf: 'Valen') boxNumber equals: 3
+	self assert:'Pablo' isAt:7 with:1 in:game.
+	self assert:'Valen' isAt:3 with:1 in:game.
 ]
 
 { #category : #tests }
@@ -188,14 +191,13 @@ RepeatCardTest >> testPabloPlaysARepeatCardAfterValenLandsInANoEffect [
 		        diceCup: aDiceCup
 		        and: deck.
 	game playATurn.
-	self assert: (game spaceshipOf: 'Valen') boxNumber equals: 7.
+	self assert:'Valen' isAt:7 with:1 in:game.
 	repeatCard
-		playedUsing: game
+		playedOn: game
 		by: 'Pablo'
-		to: 'Pablo'
-		for: repeatCard.
+		to: 'Pablo'.
 	game playATurn.
-	self assert: (game spaceshipOf: 'Pablo') boxNumber equals: 7
+	self assert:'Pablo' isAt:7 with:1 in:game.
 ]
 
 { #category : #tests }
@@ -223,14 +225,13 @@ RepeatCardTest >> testPabloPlaysARepeatCardAfterValenLandsInASpeedUpEffect [
 		        diceCup: aDiceCup
 		        and: deck.
 	game playATurn.
-	self assert: (game spaceshipOf: 'Valen') boxNumber equals: 11.
+	self assert:'Valen' isAt:11 with:1 in:game.
 	repeatCard
-		playedUsing: game
+		playedOn: game
 		by: 'Pablo'
-		to: 'Pablo'
-		for: repeatCard.
+		to: 'Pablo'.
 	game playATurn.
-	self assert: (game spaceshipOf: 'Pablo') boxNumber equals: 11
+	self assert:'Pablo' isAt:11 with:1 in:game.
 ]
 
 { #category : #tests }
@@ -259,13 +260,12 @@ RepeatCardTest >> testPabloPlaysARepeatCardAfterValenLandsInAWormholeEffect [
 		        diceCup: aDiceCup
 		        and: deck.
 	game playATurn.
-	self assert: (game spaceshipOf: 'Valen') boxNumber equals: 3.
+	self assert:'Valen' isAt:3 with:1 in:game.
 	repeatCard
-		playedUsing: game
+		playedOn: game
 		by: 'Pablo'
-		to: 'Valen'
-		for: repeatCard.
+		to: 'Valen'.
 	game playATurn.
-	self assert: (game spaceshipOf: 'Pablo') boxNumber equals: 3.
-	self assert: (game spaceshipOf: 'Valen') boxNumber equals: 1
+	self assert:'Pablo' isAt:3 with:1 in:game.
+	self assert:'Valen' isAt:1 with:1 in:game.
 ]

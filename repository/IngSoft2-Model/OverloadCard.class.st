@@ -16,6 +16,17 @@ OverloadCard >> isPermanent [
 ]
 
 { #category : #actions }
+OverloadCard >> playedOn: aGame by: aSpaceship to: anotherSpaceship [
+	| aCardPlay |
+	aCardPlay := CardPlay
+		             by: aSpaceship
+		             type: self
+		             to: anotherSpaceship
+		             for: nil.
+	aGame applyCardPlay: aCardPlay
+]
+
+{ #category : #actions }
 OverloadCard >> playedUsing: aGame by: aSpaceship to: anotherSpaceship for: aCardEffect [
 
 	aGame assertValidTurnFor: aSpaceship andCardType: aCardEffect.

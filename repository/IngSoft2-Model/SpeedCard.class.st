@@ -17,6 +17,17 @@ SpeedCard >> isPermanent [
 ]
 
 { #category : #actions }
+SpeedCard >> playedOn: aGame by: aSpaceship to: anotherSpaceship [
+
+	| aCardPlay |
+	aCardPlay := CardPlay
+		             by: aSpaceship
+		             type: self
+		             to: anotherSpaceship for:nil.
+	aGame applyCardPlay: aCardPlay
+]
+
+{ #category : #actions }
 SpeedCard >> playedUsing: aGame by: aSpaceship to: anotherSpaceship for: aCardEffect [
 
 	aGame assertValidTurnFor: aSpaceship andCardType: self.

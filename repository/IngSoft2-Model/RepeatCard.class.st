@@ -11,6 +11,13 @@ RepeatCard >> isPermanent [
 ]
 
 { #category : #actions }
+RepeatCard >> playedOn: aGame by: aSpaceship to: anotherSpaceship [
+	| aCardPlay |
+	aCardPlay:=CardPlay by:aSpaceship type:self to:anotherSpaceship for:nil.
+	aGame repeatCardPlay:aCardPlay.
+]
+
+{ #category : #actions }
 RepeatCard >> playedUsing: aGame by: aSpaceship to: anotherSpaceship for: aCardEffect [
 
 	| lastBoxEffect board |

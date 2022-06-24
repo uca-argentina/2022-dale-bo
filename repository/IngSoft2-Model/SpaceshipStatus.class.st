@@ -55,9 +55,3 @@ SpaceshipStatus >> nameOfSpaceship [
 SpaceshipStatus >> position [
 	^ position
 ]
-
-{ #category : #initialization }
-SpaceshipStatus >> sumOfeffectsOnSpaceship [
-
-	^ effectsOnMe sumOfCardsEffects.
-]

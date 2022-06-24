@@ -5,6 +5,13 @@ Class {
 }
 
 { #category : #tests }
+RedoCardTest >> assert: aSpaceshipName isAt: aPositionNumber with: aLapNumber in: aGame [
+
+	^ (aGame spaceshipOf: aSpaceshipName) position boxNumber
+	  = aPositionNumber
+]
+
+{ #category : #tests }
 RedoCardTest >> should: aBlock raise: anError withMessage: anErrorMessage [
 
 	| tmp2 tmp3 |
@@ -55,25 +62,22 @@ RedoCardTest >> testPabloPlaysARedoAfterACancelation [
 	game playATurn.
 	game playATurn.
 	accelerationCard
-		playedUsing: game
-		by: 'Valen'
-		to: ''
-		for: accelerationCard.
+		playedOn: game
+		by: 'Valen'.
 	game playATurn.
 	cancelationCard
-		playedUsing: game
+		playedOn: game
 		by: 'Pablo'
 		to: 'Pablo'
 		for: accelerationCard.
 	game playATurn.
 	redoCard
-		playedUsing: game
+		playedOn: game
 		by: 'Pablo'
-		to: 'Seba'
-		for: accelerationCard.
-	self assert: (game spaceshipOf: 'Pablo') boxNumber equals: 13.
+		to: 'Seba'.
+	self assert:'Pablo' isAt:13 with:1 in:game.
 	game playATurn.
-	self assert: (game spaceshipOf: 'Seba') boxNumber equals: 13
+	self assert:'Seba' isAt:13 with:1 in:game.
 ]
 
 { #category : #tests }
@@ -104,7 +108,7 @@ RedoCardTest >> testPabloPlaysARedoAfterValenPlaysARepeat [
 		        and: deckForGame.
 	game playATurn.
 	repeatCard
-		playedUsing: game
+		playedOn: game
 		by: 'Valen'
 		to: 'Valen'
 		for: repeatCard.
@@ -143,18 +147,16 @@ RedoCardTest >> testPabloPlaysARedoAfterValenPlaysAnAccellerationCard [
 		        and: deckForGame.
 	
 	accellerationCard
-		playedUsing: game
-		by: 'Valen'
-		to: ''
-		for: accellerationCard.
+		playedOn: game
+		by: 'Valen'.
 	game playATurn.
 	game playATurn.
 	game playATurn.
 	game playATurn.
-	redoCard playedUsing: game by:'Pablo'  to:'Valen'  for:redoCard.
+	redoCard playedOn: game by:'Pablo'  to:'Valen'.
 	game playATurn.
 	game playATurn.
-	self assert: (game spaceshipOf:'Seba') boxNumber equals: 16.
+	self assert: 'Seba' isAt:16 with:1 in:game.
 	
 	
 	
@@ -190,20 +192,18 @@ RedoCardTest >> testPabloPlaysARedoCardAfterPabloPlaysAOverloadCard [
 	game playATurn.
 	game playATurn.
 	game playATurn.
-	self assert: (game spaceshipOf: 'Seba') boxNumber equals: 7.
+	self assert:'Seba' isAt:7 with:1 in:game.
 	overloadCard
-		playedUsing: game
+		playedOn: game
 		by: 'Pablo'
-		to: 'Seba'
-		for: overloadCard.
+		to: 'Seba'.
 	redoCard
-		playedUsing: game
+		playedOn: game
 		by: 'Pablo'
-		to: 'Seba'
-		for: redoCard.
+		to: 'Seba'.
 	game playATurn.
 	game playATurn.
-	self assert: (game spaceshipOf: 'Seba') boxNumber equals: 9
+	self assert:'Seba' isAt:9 with:1 in:game.
 ]
 
 { #category : #tests }
@@ -275,25 +275,22 @@ RedoCardTest >> testPabloPlaysTwoRedoCardsAfterPlaysASpeedCard [
 	game playATurn.
 	game playATurn.
 	aSpeedCard
-		playedUsing: game
+		playedOn: game
 		by: 'Valen'
-		to: 'Valen'
-		for: aSpeedCard.
+		to: 'Valen'.
 	game playATurn.
-	self assert: (game spaceshipOf: 'Valen') boxNumber equals: 14.
-	self assert: (game spaceshipOf: 'Pablo') boxNumber equals: 7.
+	self assert:'Valen' isAt:14 with:1 in:game.
+	self assert:'Pablo' isAt:7 with:1 in:game.
 	redoCard
-		playedUsing: game
+		playedOn: game
 		by: 'Pablo'
-		to: 'Pablo'
-		for: redoCard.
+		to: 'Pablo'.
 	redoCard
-		playedUsing: game
+		playedOn: game
 		by: 'Pablo'
-		to: 'Pablo'
-		for: redoCard.
+		to: 'Pablo'.
 	game playATurn.
-	self assert: (game spaceshipOf: 'Pablo') boxNumber equals: 15.
+	self assert:'Pablo' isAt:15 with:1 in:game.
 ]
 
 { #category : #tests }
@@ -323,19 +320,17 @@ RedoCardTest >> testPabloTriesToPlaysARedoCardNotInHisTurnAfterPabloPlaysAOverlo
 		        diceCup: aDiceCup
 		        and: deckForGame.
 	game playATurn.
-	self assert: (game spaceshipOf: 'Valen') boxNumber equals: 7.
+	self assert:'Valen' isAt:7 with:1 in:game.
 	overloadCard
-		playedUsing: game
+		playedOn: game
 		by: 'Pablo'
-		to: 'Valen'
-		for: overloadCard.
+		to: 'Valen'.
 	game playATurn.
 	self
 		should: [ redoCard
-		playedUsing: game
+		playedOn: game
 		by: 'Pablo'
-		to: ''
-		for: redoCard. ]
+		to: 'Valen'. ]
 		raise: Error
 		withMessage:
 		'A permanent card cannot be played on another spaceship turn'

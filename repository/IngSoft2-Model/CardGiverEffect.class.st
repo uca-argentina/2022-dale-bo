@@ -23,3 +23,11 @@ CardGiverEffect >> applyTo: spaceships triggeredBy: aSpaceship with: aCard dista
 CardGiverEffect >> initializeWith: aDeck [ 
 	deck:= aDeck.
 ]
+
+{ #category : #action }
+CardGiverEffect >> triggeredBy: aSpaceship with: aBoard [
+
+	aBoard 
+		giveTo: aSpaceship
+		card: deck giveCard.
+]

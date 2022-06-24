@@ -59,5 +59,5 @@ HyperJumpEffect >> triggeredBy: aSpaceship with: aBoard [
 
 	aBoard 
 		move: aSpaceship
-		to: self numberOfDistanceByHyperJump
+		toFinalDistance: self numberOfDistanceByHyperJump
 ]

@@ -19,14 +19,16 @@ SpaceshipEffects >> effectsOnMe [
 ]
 
 { #category : #initialization }
-SpaceshipEffects >> initializeWith: aCollectionOfEffects [ 
-	effectsOnSpaceship:=aCollectionOfEffects.
+SpaceshipEffects >> initializeWith: aCollectionOfEffects [
+
+	effectsOnSpaceship := aCollectionOfEffects.
 ]
 
 { #category : #initialization }
 SpaceshipEffects >> sumOfCardsEffects [
 
-	
-	^effectsOnSpaceship sum.
+	| cardEffects |
+	cardEffects:=effectsOnSpaceship collect:[:card| card effect].
+	cardEffects ifNotEmpty:[^cardEffects sum] ifEmpty:[^0] .
 	
 ]
