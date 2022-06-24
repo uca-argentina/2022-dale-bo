@@ -119,13 +119,13 @@ SpaceRaceGame >> initializeWith: spaceships aBoardWith: aBoxSequence distance: a
 	turnSequence := TurnSequence with: spaceships.
 	finished := false.
 	lastCardPlayed:= nil.
-	cardEffectApplier:= CardEffectApplicator new.
+	cardEffectApplier:= CardEffectApplicator with:board.
 ]
 
 { #category : #actions }
 SpaceRaceGame >> lastCardPlayed [
 
-	^ lastCardPlayed
+	^ cardEffectApplier lastCardPlayed.
 ]
 
 { #category : #actions }

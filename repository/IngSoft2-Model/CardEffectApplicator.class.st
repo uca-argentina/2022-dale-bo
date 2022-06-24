@@ -1,8 +1,17 @@
 Class {
 	#name : #CardEffectApplicator,
 	#superclass : #Object,
+	#instVars : [
+		'board',
+		'lastCardPlay'
+	],
 	#category : #'IngSoft2-Model'
 }
+
+{ #category : #'instance creation' }
+CardEffectApplicator class >> with: aBoard [ 
+	^self new initializeWith:aBoard.
+]
 
 { #category : #actions }
 CardEffectApplicator >> apply: aCardPlay [ 
@@ -19,8 +28,37 @@ CardEffectApplicator >> apply: aCardPlay using: aBoard [
 ]
 
 { #category : #actions }
-CardEffectApplicator >> applySpeedBasedOn: aCardPlay [ 
-	self shouldBeImplemented.
+CardEffectApplicator >> applyAccelerationBasedOn: aCardPlay [ 
+	| effectsOnSpaceship |
+	board allSpaceships do: [ :each | 
+		effectsOnSpaceship := each effectsOnSpaceship effectsOnMe.
+		effectsOnSpaceship add: aCardPlay cardType.
+		board updateSpaceshipEffectsOf: each to: (SpaceshipEffects with:
+				  (effectsOnSpaceship) ) ].
+	lastCardPlay:=aCardPlay.
+]
+
+{ #category : #actions }
+CardEffectApplicator >> applyEffectBasedOn: aCardPlay [ 
+	| affectedSpaceship effectsOnSpaceship |
+	affectedSpaceship := board spaceshipOf: (aCardPlay appliedTo).
+	effectsOnSpaceship := affectedSpaceship effectsOnSpaceship effectsOnMe.
+	(effectsOnSpaceship add: aCardPlay cardType).
+	board
+		updateSpaceshipEffectsOf: affectedSpaceship
+		to: (SpaceshipEffects with:
+				 effectsOnSpaceship).
+	lastCardPlay:=aCardPlay.
+		
+]
+
+{ #category : #actions }
+CardEffectApplicator >> applyRedoBasedOn: aCardPlay [ 
+	| targetedCard |
+	targetedCard := aCardPlay targetedCard cardType.
+	targetedCard = CancellationCard
+		ifTrue: [ self cancel: aCardPlay targetedCard using: board ]
+		ifFalse: [ self apply: aCardPlay targetedCard using: board ]
 ]
 
 { #category : #actions }
@@ -57,6 +95,16 @@ CardEffectApplicator >> cancel: aCardPlay using: aBoard [
 		updateSpaceshipEffectsOf: affectedSpaceship
 		to: (SpaceshipEffects with:
 				 effectsOnSpaceship)
+]
+
+{ #category : #initialization }
+CardEffectApplicator >> initializeWith: aBoard [ 
+	board:= aBoard.
+]
+
+{ #category : #accessing }
+CardEffectApplicator >> lastCardPlayed [
+	^lastCardPlay.
 ]
 
 { #category : #actions }

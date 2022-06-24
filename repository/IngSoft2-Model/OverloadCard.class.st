@@ -4,6 +4,11 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #actions }
+OverloadCard >> applyUsing: aCardEffectApplicator basedOn: aCardPlay [ 
+	aCardEffectApplicator applyEffectBasedOn:aCardPlay.
+]
+
 { #category : #action }
 OverloadCard >> effect [
 	^-2.

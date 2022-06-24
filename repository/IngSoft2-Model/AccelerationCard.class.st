@@ -4,6 +4,11 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #actions }
+AccelerationCard >> applyUsing: aCardEffectApplicator basedOn: aCardPlay [ 
+	aCardEffectApplicator applyAccelerationBasedOn:aCardPlay.
+]
+
 { #category : #operations }
 AccelerationCard >> effect [
 

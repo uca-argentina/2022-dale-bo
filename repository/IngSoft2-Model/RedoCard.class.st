@@ -5,6 +5,11 @@ Class {
 }
 
 { #category : #actions }
+RedoCard >> applyUsing: aCardEffectApplicator basedOn: aCardPlay [ 
+	aCardEffectApplicator applyRedoBasedOn:aCardPlay.
+]
+
+{ #category : #actions }
 RedoCard >> checkIfThereIsACardPlayed: lastPlayedCard [
 
 	lastPlayedCard isNil ifTrue: [ 
@@ -21,7 +26,7 @@ RedoCard >> isPermanent [
 RedoCard >> playedOn: aGame by: aSpaceship to: anotherSpaceship [
 	| aCardPlay |
 	aCardPlay:=CardPlay by:aSpaceship type:self to:anotherSpaceship for:(aGame lastCardPlayed).
-	aGame redoCardPlay:aCardPlay.
+	aGame applyCardPlay:aCardPlay.
 ]
 
 { #category : #actions }

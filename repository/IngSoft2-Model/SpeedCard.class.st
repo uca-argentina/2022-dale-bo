@@ -6,7 +6,7 @@ Class {
 
 { #category : #actions }
 SpeedCard >> applyUsing: aCardEffectApplicator basedOn: aCardPlay [ 
-	aCardEffectApplicator applySpeedBasedOn:aCardPlay.
+	aCardEffectApplicator applyEffectBasedOn:aCardPlay.
 ]
 
 { #category : #accesing }
