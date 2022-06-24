@@ -4,6 +4,11 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #actions }
+SpeedCard >> applyUsing: aCardEffectApplicator basedOn: aCardPlay [ 
+	aCardEffectApplicator applySpeedBasedOn:aCardPlay.
+]
+
 { #category : #accesing }
 SpeedCard >> effect [
 

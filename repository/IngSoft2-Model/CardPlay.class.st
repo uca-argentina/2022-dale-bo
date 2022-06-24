@@ -33,6 +33,11 @@ CardPlay >> appliedTo [
 	^ appliedTo
 ]
 
+{ #category : #actions }
+CardPlay >> applyUsing: aCardEffectApplicator [ 
+	card applyUsing:aCardEffectApplicator basedOn:self.
+]
+
 { #category : #accessing }
 CardPlay >> cardType [
 	^card.

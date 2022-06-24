@@ -172,12 +172,9 @@ Board >> moveBackwards: aSpaceship to: aBox [
 	spaceshipNewBoxNumber := oldSpaceshipPosition boxNumber - aBox.
 	spaceshipNewLapNumber := oldSpaceshipPosition lapNumber.
 	
-	(spaceshipNewBoxNumber < 1 and: oldSpaceshipPosition lapNumber > 1) ifTrue: [ 
-		spaceshipNewBoxNumber := boxes size + spaceshipNewBoxNumber.
-		spaceshipNewLapNumber := oldSpaceshipPosition lapNumber - 1 ].
-	(spaceshipNewBoxNumber < 1 and: oldSpaceshipPosition lapNumber = 1) ifTrue: [ 
-		spaceshipNewBoxNumber := 1 ].
-
+	spaceshipNewBoxNumber < 1 ifTrue:[
+		spaceshipNewLapNumber:= oldSpaceshipPosition lapNumber - 1 max:1.
+		spaceshipNewBoxNumber := boxes size + spaceshipNewBoxNumber].
 	self
 		updateSpaceshipPositionOf: oldSpaceshipStatus
 		to: (SpaceshipPosition

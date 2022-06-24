@@ -5,11 +5,22 @@ Class {
 }
 
 { #category : #actions }
+CardEffectApplicator >> apply: aCardPlay [ 
+	
+	aCardPlay applyUsing:self.
+]
+
+{ #category : #actions }
 CardEffectApplicator >> apply: aCardPlay using: aBoard [
 
 	aCardPlay appliedTo = 'all'
 		ifTrue: [ self applyToAllUsing: aBoard with: aCardPlay ]
 		ifFalse: [ self applyToASpaceshipUsing: aBoard with: aCardPlay ]
+]
+
+{ #category : #actions }
+CardEffectApplicator >> applySpeedBasedOn: aCardPlay [ 
+	self shouldBeImplemented.
 ]
 
 { #category : #actions }

@@ -55,10 +55,9 @@ SpaceRaceGame >> allSpaceships [
 
 { #category : #actions }
 SpaceRaceGame >> applyCardPlay: aCardPlay [
-
-	self assertValidTurnFor: (aCardPlay) playedBy andCardType: aCardPlay cardType.
-	cardEffectApplier apply: aCardPlay using: board.
-	lastCardPlayed:=aCardPlay.
+	
+	
+	cardEffectApplier apply:aCardPlay
 ]
 
 { #category : #actions }
