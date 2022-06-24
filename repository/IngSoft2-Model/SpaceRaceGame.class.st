@@ -6,7 +6,8 @@ Class {
 		'diceCup',
 		'finished',
 		'turnSequence',
-		'lastCardPlayed'
+		'lastCardPlayed',
+		'cardEffectApplier'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -53,28 +54,35 @@ SpaceRaceGame >> allSpaceships [
 ]
 
 { #category : #actions }
-SpaceRaceGame >> board [
+SpaceRaceGame >> applyCardPlay: aCardPlay [
 
-	^ board
+	self assertValidTurnFor: (aCardPlay) playedBy andCardType: aCardPlay cardType.
+	cardEffectApplier apply: aCardPlay using: board
 ]
 
 { #category : #actions }
-SpaceRaceGame >> checkIfGameIsNotFinished [
+SpaceRaceGame >> assertGameIsNotFinished [
 
-	(self hasFinished) ifTrue: [Error signal: 'Turn cannot be played, games has finished' ].
+	(self hasFinished) ifTrue: [Error signal: 'Turn cannot be played, game has finished' ].
 ]
 
 { #category : #actions }
-SpaceRaceGame >> checkValidTurn: aSpaceship andCardType: aCard [
+SpaceRaceGame >> assertValidTurnFor: aSpaceship andCardType: aCard [
 
 	| whoWantsToPlay |
 	whoWantsToPlay := self spaceshipOf: aSpaceship.
-	whoWantsToPlay checkSpaceshipHas:aCard.
+	(whoWantsToPlay hand) checkSpaceshipHas:aCard.
 
 	(turnSequence whoPlays ~= whoWantsToPlay nameOfSpaceship and:
 		 aCard isPermanent) ifTrue: [ 
 		Error signal:
 			'A permanent card cannot be played on another spaceship turn' ].
+]
+
+{ #category : #actions }
+SpaceRaceGame >> board [
+
+	^ board
 ]
 
 { #category : #accessing }
@@ -96,6 +104,7 @@ SpaceRaceGame >> initializeWith: spaceships aBoardWith: aBoxSequence distance: a
 	turnSequence := TurnSequence with: spaceships.
 	finished := false.
 	lastCardPlayed:= nil.
+	cardEffectApplier:= CardEffectApplier new.
 ]
 
 { #category : #actions }
@@ -108,7 +117,7 @@ SpaceRaceGame >> lastCardPlayed [
 SpaceRaceGame >> playATurn [
 
 	| diceResult currentSpaceship effectsOnCurrentSpaceship |
-	self checkIfGameIsNotFinished.
+	self assertGameIsNotFinished.
 	diceResult := diceCup roll.
 	currentSpaceship := turnSequence whoPlays.
 	effectsOnCurrentSpaceship := (board spaceshipOf: currentSpaceship)

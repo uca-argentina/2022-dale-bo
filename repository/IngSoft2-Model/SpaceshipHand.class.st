@@ -13,6 +13,14 @@ SpaceshipHand class >> with: aCollectionOfCards [
 ]
 
 { #category : #initialization }
+SpaceshipHand >> checkSpaceshipHas: aCard [
+
+	^ hand
+		  detect: [ :each | each className = aCard className ]
+		  ifNone: [ Error signal: 'The spaceship does not have this card' ]
+]
+
+{ #category : #initialization }
 SpaceshipHand >> initializeWith: aCollectionOfCards [
 	hand:= aCollectionOfCards.
 ]

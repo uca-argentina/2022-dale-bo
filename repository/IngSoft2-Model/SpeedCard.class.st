@@ -19,18 +19,18 @@ SpeedCard >> isPermanent [
 { #category : #actions }
 SpeedCard >> playedUsing: aGame by: aSpaceship to: anotherSpaceship for: aCardEffect [
 
-	aGame checkValidTurn: aSpaceship andCardType: self.
+	aGame assertValidTurnFor: aSpaceship andCardType: self.
 	(aGame spaceshipOf: anotherSpaceship) isAffectedBy: self.
 	aGame updateLastCardPlayedWith:
-		(LastPlayedCard type: self to: anotherSpaceship).
+		(CardPlay type: self to: anotherSpaceship).
 	(aGame spaceshipOf: aSpaceship) removeFromHand: self
 ]
 
 { #category : #actions }
 SpeedCard >> redoUsing: aGame by: aSpaceship to: anotherSpaceship for: aCardEffect [
 
-	aGame checkValidTurn: aSpaceship andCardType: self.
+	aGame assertValidTurnFor: aSpaceship andCardType: self.
 	(aGame spaceshipOf: anotherSpaceship) isAffectedBy: self.
 	aGame updateLastCardPlayedWith:
-		(LastPlayedCard type: self to: anotherSpaceship)
+		(CardPlay type: self to: anotherSpaceship)
 ]

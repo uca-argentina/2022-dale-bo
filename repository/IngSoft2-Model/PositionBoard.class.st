@@ -20,17 +20,6 @@ PositionBoard >> allSpaceships [
 	^ spaceships
 ]
 
-{ #category : #accesing }
-PositionBoard >> applyAtomicBomb [
-
-	spaceships do: [ :each | 
-		spaceships replaceAll: each with: (self
-				 updateSpaceshipOf: each nameOfSpaceship
-				 from: each
-				 to: 1
-				 and: each lapNumber) ]
-]
-
 { #category : #action }
 PositionBoard >> giveTo: aSpaceship card: aCard [
 
@@ -119,6 +108,17 @@ PositionBoard >> moveForward: aSpaceship to: aBox with: endPosition and: laps [
 			 from: oldSpaceship
 			 to: spaceshipNewBoxNumber
 			 and: spaceshipNewLapNumber)
+]
+
+{ #category : #accesing }
+PositionBoard >> moveSpaceshipsToTheBeggining [
+
+	spaceships do: [ :each | 
+		spaceships replaceAll: each with: (self
+				 updateSpaceshipOf: each nameOfSpaceship
+				 from: each
+				 to: 1
+				 and: each lapNumber) ]
 ]
 
 { #category : #accesing }

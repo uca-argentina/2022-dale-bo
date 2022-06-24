@@ -60,10 +60,11 @@ GameTest >> testAGameCannotBePlayedAfterItHasFinished [
 		        diceCup: aDiceCup
 		        and: (Deck with: { SpeedCard new }).
 	[ game hasFinished ] whileFalse: [ game playATurn ].
+	self assert:'Valen' isAt:13 with:2 in:game.
 	self
 		should: [ game playATurn ]
 		raise: Error
-		withMessage: 'Turn cannot be played, games has finished'
+		withMessage: 'Turn cannot be played, game has finished'
 ]
 
 { #category : #tests }
@@ -118,7 +119,6 @@ GameTest >> testAGameHasABoardWithAAtomicBombInPositionElevenAndTheEffectDoenstC
 	game playATurn.
 	game playATurn.
 	self assert:  'Pablo' isAt: 6 with:1 in:game.
-	self assert: (game spaceshipOf: 'Valen') boxNumber equals: 1.
 	self assert:  'Valen' isAt: 1 with: 1 in: game.
 ]
 
@@ -286,13 +286,13 @@ GameTest >> testAllPlayersLandInHyperJumpAtBoxFiveAndTheyMoveFirstFiveParsecsAnd
 		        and: (Deck with: { SpeedCard new }).
 	game playATurn.
 	self assert:'Valen' isAt:7 with:1 in: game.
-	self assert: (game spaceshipOf: 'Valen') distanceInBox equals: 1.
+	self assert: ((game spaceshipOf: 'Valen') position) distance equals: 1.
 	game playATurn.
 	self assert:'Valen' isAt:7 with:1 in: game.
-	self assert: (game spaceshipOf: 'Pablo') distanceInBox equals: 0.
+	self assert: ((game spaceshipOf: 'Pablo') position) distance equals: 0.
 	game playATurn.
-	self assert: (game spaceshipOf: 'Seba') boxNumber equals: 7.
-	self assert: (game spaceshipOf: 'Seba') distanceInBox equals: 1
+	self assert:'Seba' isAt:7 with:1 in: game.
+	self assert: ((game spaceshipOf: 'Seba')position) distance equals: 1
 ]
 
 { #category : #tests }
@@ -326,42 +326,6 @@ GameTest >> testGameCannotBeInitializedWithLessThanTwoShips [
 ]
 
 { #category : #tests }
-GameTest >> testValenLandsInAMoonwalkAtBoxSevenAndMakeTheOthersGoBackTwoPositions [
-
-	| dieOne dieTwo dieThree game aDiceCup boxSequence |
-	dieOne := LoadedDie with: 1.
-	dieTwo := LoadedDie with: 1.
-	dieThree := LoadedDie with: 1.
-	aDiceCup := DiceCup withAll: { 
-			            dieOne.
-			            dieTwo.
-			            dieThree }.
-	boxSequence := self
-		               sequenceOfNoEffectsOf: 10
-		               with: (MoonwalkEffect with: 2)
-		               at: 6.
-	game := SpaceRaceGame
-		        with: { 'Valen'. 'Pablo'. 'Seba' }
-		        boardWith: boxSequence
-		        distance: (Parsecs with: 200)
-		        laps: 2
-		        diceCup: aDiceCup
-		        and: (Deck with: { SpeedCard new }).
-	game playATurn.
-	game playATurn.
-	self
-		assert: 'Pablo'
-		isAt: 4
-		with: 1
-		in: game.
-	game playATurn.
-	game playATurn.
-	self assert: (game spaceshipOf: 'Valen') boxNumber equals: 7.
-	self assert: (game spaceshipOf: 'Pablo') boxNumber equals: 2.
-	self assert: (game spaceshipOf: 'Seba') boxNumber equals: 2
-]
-
-{ #category : #tests }
 GameTest >> testValenLandsInAMoonwalkAtBoxSixAndMakeTheOthersGoBackTwoPositions [
 
 	| dieOne dieTwo dieThree game aDiceCup boxSequence |
@@ -385,12 +349,13 @@ GameTest >> testValenLandsInAMoonwalkAtBoxSixAndMakeTheOthersGoBackTwoPositions 
 		        and: (Deck with: { SpeedCard new }).
 	game playATurn.
 	game playATurn.
-	self assert: (game spaceshipOf: 'Pablo') boxNumber equals: 4.
+	self assert:'Pablo' isAt:4 with:1 in: game.
 	game playATurn.
 	game playATurn.
-	self assert: (game spaceshipOf: 'Valen') boxNumber equals: 7.
-	self assert: (game spaceshipOf: 'Pablo') boxNumber equals: 2.
-	self assert: (game spaceshipOf: 'Seba') boxNumber equals: 2
+	self assert:'Valen' isAt:7 with:1 in: game.
+	self assert:'Pablo' isAt:2 with:1 in: game.
+	self assert:'Seba' isAt:2 with:1 in: game.
+	
 ]
 
 { #category : #tests }
@@ -426,7 +391,7 @@ GameTest >> testValenLandsInASpeedupBoxInPositionFiveAndMovesToPositionNine [
 { #category : #tests }
 GameTest >> testValenLandsInWormholeAtBoxSevenAndGoesBackFourBoxesToEndAtBoxNumberThree [
 
-	| dieOne dieTwo dieThree aDiceCup game newPosition boxSequence |
+	| dieOne dieTwo dieThree aDiceCup game boxSequence |
 	dieOne := LoadedDie with: 3.
 	dieTwo := LoadedDie with: 2.
 	dieThree := LoadedDie with: 1.

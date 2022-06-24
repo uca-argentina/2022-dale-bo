@@ -13,6 +13,11 @@ SpaceshipEffects class >> with: aCollectionOfEffects [
 	^self new initializeWith:aCollectionOfEffects.
 ]
 
+{ #category : #accessing }
+SpaceshipEffects >> effectsOnMe [
+	^effectsOnSpaceship.
+]
+
 { #category : #initialization }
 SpaceshipEffects >> initializeWith: aCollectionOfEffects [ 
 	effectsOnSpaceship:=aCollectionOfEffects.
@@ -21,8 +26,7 @@ SpaceshipEffects >> initializeWith: aCollectionOfEffects [
 { #category : #initialization }
 SpaceshipEffects >> sumOfCardsEffects [
 
-	| sum |
-	sum := 0.
-	effectsOnSpaceship do: [ :each | sum := sum + each effect ].
-	^ sum
+	
+	^effectsOnSpaceship sum.
+	
 ]

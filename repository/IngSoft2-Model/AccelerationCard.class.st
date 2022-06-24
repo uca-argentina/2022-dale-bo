@@ -17,20 +17,28 @@ AccelerationCard >> isPermanent [
 ]
 
 { #category : #actions }
+AccelerationCard >> playedOn: aGame by: aSpaceship [
+	
+	| aCardPlay |
+	aCardPlay:=CardPlay by:aSpaceship type:self to:'all'.
+	aGame applyCardPlay:aCardPlay.
+]
+
+{ #category : #actions }
 AccelerationCard >> playedUsing: aGame by: aSpaceship to: anotherSpaceship for: aCardEffect [
 
-	aGame checkValidTurn: aSpaceship andCardType: aCardEffect.
+	aGame assertValidTurnFor: aSpaceship andCardType: aCardEffect.
 	aGame allSpaceships do: [ :each | each isAffectedBy: aCardEffect ].
 	aGame updateLastCardPlayedWith:
-		(LastPlayedCard type: self to: anotherSpaceship).
+		(CardPlay type: self to: anotherSpaceship).
 	(aGame spaceshipOf: aSpaceship) removeFromHand: self
 ]
 
 { #category : #actions }
 AccelerationCard >> redoUsing: aGame by: aSpaceship to: anotherSpaceship for: aCardEffect [
 
-	aGame checkValidTurn: aSpaceship andCardType: aCardEffect.
+	aGame assertValidTurnFor: aSpaceship andCardType: aCardEffect.
 	aGame allSpaceships do: [ :each | each isAffectedBy: aCardEffect ].
 	aGame updateLastCardPlayedWith:
-		(LastPlayedCard type: self to: anotherSpaceship)
+		(CardPlay type: self to: anotherSpaceship)
 ]

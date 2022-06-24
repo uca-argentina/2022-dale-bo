@@ -16,7 +16,7 @@ RepeatCard >> playedUsing: aGame by: aSpaceship to: anotherSpaceship for: aCardE
 	| lastBoxEffect board |
 	board := aGame board.
 	lastBoxEffect := board lastBoxEffect.
-	aGame checkValidTurn: aSpaceship andCardType: self.
+	aGame assertValidTurnFor: aSpaceship andCardType: self.
 	lastBoxEffect
 		applyTo: board spaceshipController
 		triggeredBy: anotherSpaceship
@@ -24,7 +24,7 @@ RepeatCard >> playedUsing: aGame by: aSpaceship to: anotherSpaceship for: aCardE
 		distance: board distancePerBox
 		laps: board laps.
 	aGame updateLastCardPlayedWith:
-		(LastPlayedCard type: self to: anotherSpaceship).
+		(CardPlay type: self to: anotherSpaceship).
 	(aGame spaceshipOf: aSpaceship) removeFromHand: self
 ]
 
@@ -34,7 +34,7 @@ RepeatCard >> redoUsing: aGame by: aSpaceship to: anotherSpaceship for: aCardEff
 	| lastBoxEffect board |
 	board := aGame board.
 	lastBoxEffect := board lastBoxEffect.
-	aGame checkValidTurn: aSpaceship andCardType: self.
+	aGame assertValidTurnFor: aSpaceship andCardType: self.
 	lastBoxEffect
 		applyTo: board spaceshipController
 		triggeredBy: anotherSpaceship
@@ -42,5 +42,5 @@ RepeatCard >> redoUsing: aGame by: aSpaceship to: anotherSpaceship for: aCardEff
 		distance: board distancePerBox
 		laps: board laps.
 	aGame updateLastCardPlayedWith:
-		(LastPlayedCard type: self to: anotherSpaceship)
+		(CardPlay type: self to: anotherSpaceship)
 ]

@@ -205,10 +205,8 @@ OtherCardTest >> testValenPlaysAnAccelerationCardToAllPlayers [
 		        diceCup: aDiceCup
 		        and: deck.
 	accelerationCard
-		playedUsing: game
-		by: 'Valen'
-		to: ''
-		for: accelerationCard.
+		playedOn: game
+		by: 'Valen'.
 	game playATurn.
 	self assert: (game spaceshipOf: 'Pablo') boxNumber equals: 1.
 	self assert: (game spaceshipOf: 'Valen') boxNumber equals: 8.

@@ -23,7 +23,7 @@ RedoCard >> playedUsing: aGame by: aSpaceship to: anotherSpaceship for: aCardEff
 	| lastPlayedCard |
 	lastPlayedCard := aGame lastCardPlayed.
 	self checkIfThereIsACardPlayed: lastPlayedCard.
-	aGame checkValidTurn: aSpaceship andCardType: self.
+	aGame assertValidTurnFor: aSpaceship andCardType: self.
 	(aGame spaceshipOf: aSpaceship) removeFromHand: self.
 	lastPlayedCard card
 		redoUsing: aGame
@@ -37,7 +37,7 @@ RedoCard >> redoUsing: aGame by: aSpaceship to: anotherSpaceship for: aCardEffec
 
 	| lastPlayedCard |
 	lastPlayedCard := aGame lastCardPlayed.
-	aGame checkValidTurn: aSpaceship andCardType: self.
+	aGame assertValidTurnFor: aSpaceship andCardType: self.
 	lastPlayedCard card
 		redoUsing: aGame
 		by: aSpaceship

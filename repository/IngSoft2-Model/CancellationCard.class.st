@@ -25,19 +25,19 @@ CancellationCard >> playedUsing: aGame by: aSpaceship to: anotherSpaceship for: 
 
 	lastCancelledEffect := aCardEffect.
 	self checkIfThereIsACardPlayedIn: aGame.
-	aGame checkValidTurn: aSpaceship andCardType: self.
+	aGame assertValidTurnFor: aSpaceship andCardType: self.
 	(aGame spaceshipOf: anotherSpaceship) removeEffect: aCardEffect.
 	aGame updateLastCardPlayedWith:
-		(LastPlayedCard type: self to: anotherSpaceship).
+		(CardPlay type: self to: anotherSpaceship).
 	(aGame spaceshipOf: aSpaceship) removeFromHand: self
 ]
 
 { #category : #actions }
 CancellationCard >> redoUsing: aGame by: aSpaceship to: anotherSpaceship for: aCardEffect [
 
-	aGame checkValidTurn: aSpaceship andCardType: self.
+	aGame assertValidTurnFor: aSpaceship andCardType: self.
 	(aGame spaceshipOf: anotherSpaceship) removeEffect:
 		lastCancelledEffect.
 	aGame updateLastCardPlayedWith:
-		(LastPlayedCard type: self to: anotherSpaceship)
+		(CardPlay type: self to: anotherSpaceship)
 ]

@@ -14,14 +14,6 @@ NoEffect class >> distance: aNumberOfParsecs [
 ]
 
 { #category : #action }
-NoEffect >> applyTo: spaceships triggeredBy: aSpaceship with: aBoard [
-
-	aBoard
-		moveForward: aSpaceship
-		to: 0.
-]
-
-{ #category : #action }
 NoEffect >> applyTo: spaceships triggeredBy: aSpaceship with: endPosition distance: aDistance laps: laps [
 
 	spaceships
@@ -35,4 +27,12 @@ NoEffect >> applyTo: spaceships triggeredBy: aSpaceship with: endPosition distan
 NoEffect >> initializeWith: aNumberOfParsecs [
 
 	parsecs := aNumberOfParsecs
+]
+
+{ #category : #action }
+NoEffect >> triggeredBy: aSpaceship with: aBoard [
+
+	aBoard
+		moveForward: aSpaceship
+		to: 0.
 ]

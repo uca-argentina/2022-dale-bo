@@ -30,9 +30,10 @@ SpaceshipPosition >> distance [
 
 { #category : #initialization }
 SpaceshipPosition >> initializeAt: aBoxNumber distance: aDistance lap: aLapNumber [
+
 	boxNumber := aBoxNumber.
 	distance := aDistance.
-	lapNumber:=aLapNumber.
+	lapNumber := aLapNumber
 ]
 
 { #category : #accessing }

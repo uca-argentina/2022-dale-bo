@@ -75,19 +75,16 @@ Board2 >> distancePerBox [
 ]
 
 { #category : #accessing }
-Board2 >> effectAt: aBoxNumber for: ships appliedBy: aShip [
+Board2 >> effectAt: aBoxNumber for: ships appliedBy: aSpacehip [
 
-	(boxes at: aBoxNumber)
-		applyTo: ships
-		triggeredBy: aShip
-		with: self.
-	lastBoxEffect := boxes at:aBoxNumber.
+	(boxes at: aBoxNumber) triggeredBy: aSpacehip with: self.
+	lastBoxEffect := boxes at: aBoxNumber
 ]
 
 { #category : #initialization }
 Board2 >> initializeWithShips: aCollectionOfSpaceships with: aBoxSequence distance: aDistance laps: numberOfLaps and: aDeck [
 	boxes := aBoxSequence.
-	distancePerBox := (aDistance amountInParsecs) // (boxes size).
+	distancePerBox := (aDistance amountInParsecs) / (boxes size).
 	laps := numberOfLaps.
 	deck:= aDeck.
 	self createPositionsFor:aCollectionOfSpaceships.
@@ -106,6 +103,23 @@ Board2 >> lastBoxEffect [
 	^lastBoxEffect.
 ]
 
+{ #category : #actions }
+Board2 >> move: aSpaceship to: aDistanceNumber [ 
+	| oldSpaceshipPosition  spaceshipNewDistanceInBox oldSpaceshipStatus |
+	oldSpaceshipStatus := spaceships detect: [ :each | each nameOfSpaceship = aSpaceship ].
+	oldSpaceshipPosition:= oldSpaceshipStatus position.
+	spaceshipNewDistanceInBox :=oldSpaceshipPosition  distance + aDistanceNumber amountInParsecs.
+
+	self updateSpaceshipPositionOf: oldSpaceshipStatus
+		to: (SpaceshipPosition
+				 at: oldSpaceshipPosition boxNumber
+				 distance: spaceshipNewDistanceInBox % distancePerBox 
+				 laps: oldSpaceshipPosition lapNumber).
+	self
+		moveForward: aSpaceship
+		to: spaceshipNewDistanceInBox // distancePerBox 
+]
+
 { #category : #accessing }
 Board2 >> move: aSpaceship to: aDistanceInBox finalDistance: finalDistanceInBox [
 
@@ -121,7 +135,7 @@ Board2 >> move: aSpaceship to: aDistanceInBox finalDistance: finalDistanceInBox 
 				 laps: oldSpaceshipPosition lapNumber).
 	self
 		moveForward: aSpaceship
-		to: spaceshipNewDistanceInBox // finalDistanceInBox
+		to: spaceshipNewDistanceInBox / finalDistanceInBox
 ]
 
 { #category : #actions }
@@ -135,6 +149,14 @@ Board2 >> move: aShip with: aDiceResult [
 		effectAt: spaceshipWithoutEffectsApplied boxNumber
 		for: spaceships
 		appliedBy: oldSpaceship name
+]
+
+{ #category : #actions }
+Board2 >> moveBackwards: aNumberOfBoxes AllSpaceshipsExcept: aSpaceship [
+
+	spaceships do: [ :each | 
+		each nameOfSpaceship ~= aSpaceship ifTrue: [ 
+			self moveBackwards: each name to: aNumberOfBoxes ] ].
 ]
 
 { #category : #accessing }
@@ -167,6 +189,7 @@ Board2 >> moveForward: aSpaceship to: aBox [
 	oldSpaceshipStatus := spaceships detect: [ :each | each nameOfSpaceship = aSpaceship ].
 	oldSpaceshipPosition := oldSpaceshipStatus position.
 	spaceshipNewBoxNumber := oldSpaceshipPosition boxNumber + aBox.
+	
 	(spaceshipNewBoxNumber > boxes size and:
 		 oldSpaceshipPosition lapNumber = laps) ifTrue: [ 
 		spaceshipNewBoxNumber := boxes size.
@@ -177,12 +200,24 @@ Board2 >> moveForward: aSpaceship to: aBox [
 			spaceshipNewLapNumber := oldSpaceshipPosition lapNumber + 1.
 			spaceshipNewBoxNumber := spaceshipNewBoxNumber - boxes size ]
 		ifFalse: [ spaceshipNewLapNumber := oldSpaceshipPosition lapNumber ].
+		
 	self
 		updateSpaceshipPositionOf: oldSpaceshipStatus
 		to: (SpaceshipPosition
 				 at: spaceshipNewBoxNumber
 				 distance: oldSpaceshipPosition distance
 				 laps: spaceshipNewLapNumber)
+]
+
+{ #category : #action }
+Board2 >> moveSpaceshipsToTheBeggining [
+	spaceships do: [ :each | 
+		self
+		updateSpaceshipPositionOf: each
+		to: (SpaceshipPosition
+				 at: 1
+				 distance: 0
+				 laps: (each position) lapNumber) ].
 ]
 
 { #category : #accesing }
@@ -209,6 +244,16 @@ Board2 >> spaceshipController [
 Board2 >> spaceshipOf: aShipsName [
 
 	^ spaceships detect: [ :each | each nameOfSpaceship = aShipsName ]
+]
+
+{ #category : #actions }
+Board2 >> updateSpaceshipEffectsOf: aSpaceshipOldStatus to: spaceshipNewEffects [
+
+	spaceships replaceAll: aSpaceshipOldStatus with: (SpaceshipStatus
+			 of: aSpaceshipOldStatus name
+			 position: aSpaceshipOldStatus position
+			 cards: aSpaceshipOldStatus hand
+			 effects: spaceshipNewEffects ).
 ]
 
 { #category : #actions }
