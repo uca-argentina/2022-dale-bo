@@ -64,6 +64,11 @@ CardPlay >> initializeBy: aSpaceship card: aCard to: anotherSpaceship  itsRedo: 
 ]
 
 { #category : #accessing }
+CardPlay >> isRedo [
+	^redo.
+]
+
+{ #category : #accessing }
 CardPlay >> playedBy [
 	^ playedBy
 ]

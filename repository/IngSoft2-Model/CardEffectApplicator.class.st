@@ -137,8 +137,9 @@ CardEffectApplicator >> assertValidTurnFor: aSpaceship andCardType: aCard [
 ]
 
 { #category : #actions }
-CardEffectApplicator >> checkIfIsRedo: aCardPlay [ 
-	self removeCardFromASpaceshipsHandUsing: aCardPlay.
+CardEffectApplicator >> checkIfIsRedo: aCardPlay [
+	aCardPlay isRedo ifFalse:[
+	self removeCardFromASpaceshipsHandUsing: aCardPlay].
 ]
 
 { #category : #initialization }
