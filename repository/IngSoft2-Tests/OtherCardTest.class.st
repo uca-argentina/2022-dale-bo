@@ -318,10 +318,9 @@ OtherCardTest >> testValenTriesToPlayACardThatIsNotInHisHand [
 	self
 		should: [ 
 			overloadCard
-				playedUsing: game
+				playedOn: game
 				by: 'Valen'
-				to: 'Pablo'
-				for: overloadCard ]
+				to: 'Pablo']
 		raise: Error
 		withMessage: 'The spaceship does not have this card'
 ]

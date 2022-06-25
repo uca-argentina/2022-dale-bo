@@ -222,12 +222,12 @@ Board >> moveSpaceshipsToTheFirstBox [
 ]
 
 { #category : #accesing }
-Board >> rankingOf: aShip [
+Board >> rankingOf: aSpaceship [
 
-	spaceshipsController sortPositionsByRanking.
-	spaceshipsController allSpaceships do: [ :spaceship | 
-		spaceship nameOfSpaceship = aShip ifTrue: [ 
-			^ spaceshipsController allSpaceships indexOf: spaceship ] ]
+	self sortPositionsByRanking.
+	spaceships do: [ :spaceship | 
+		spaceship nameOfSpaceship = aSpaceship  ifTrue: [ 
+			^ spaceships indexOf: spaceship ] ]
 ]
 
 { #category : #accesing }
@@ -237,8 +237,12 @@ Board >> sizeOfBoard [
 ]
 
 { #category : #accessing }
-Board >> spaceshipController [
-	^spaceshipsController.
+Board >> sortPositionsByRanking [
+
+	spaceships sort: [ :spaceshipStatus1 :spaceshipStatus2 | 
+		(spaceshipStatus1 position) lapNumber > (spaceshipStatus2 position) lapNumber or: [ 
+			(spaceshipStatus1 position) lapNumber = (spaceshipStatus2 position) lapNumber and:
+				(spaceshipStatus1 position) boxNumber > (spaceshipStatus2 position) boxNumber ] ]
 ]
 
 { #category : #accesing }
@@ -255,6 +259,16 @@ Board >> updateSpaceshipEffectsOf: aSpaceshipOldStatus to: spaceshipNewEffects [
 			 position: aSpaceshipOldStatus position
 			 cards: aSpaceshipOldStatus hand
 			 effects: spaceshipNewEffects ).
+]
+
+{ #category : #actions }
+Board >> updateSpaceshipHandOf: aSpaceshipOldStatus with: spaceshipNewHand [
+
+	spaceships replaceAll: aSpaceshipOldStatus with: (SpaceshipStatus
+			 of: aSpaceshipOldStatus name
+			 position: aSpaceshipOldStatus position
+			 cards: spaceshipNewHand
+			 effects: aSpaceshipOldStatus effectsOnSpaceship)
 ]
 
 { #category : #actions }

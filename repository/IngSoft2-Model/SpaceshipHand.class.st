@@ -13,7 +13,7 @@ SpaceshipHand class >> with: aCollectionOfCards [
 ]
 
 { #category : #initialization }
-SpaceshipHand >> checkSpaceshipHas: aCard [
+SpaceshipHand >> assertSpaceshipHas: aCard [
 
 	^ hand
 		  detect: [ :each | each className = aCard className ]

@@ -8,6 +8,12 @@ Class {
 }
 
 { #category : #actions }
+CancellationCard >> applyUsing: aCardEffectApplicator basedOn: aCardPlay [
+
+	aCardEffectApplicator applyCancellationBasedOn: aCardPlay.
+]
+
+{ #category : #actions }
 CancellationCard >> checkIfThereIsACardPlayedIn: aGame [
 
 	aGame lastCardPlayed isNil ifTrue: [ 
@@ -21,10 +27,19 @@ CancellationCard >> isPermanent [
 ]
 
 { #category : #actions }
-CancellationCard >> playedOn: aGame by: aSpaceship to: anotherSpaceship for: aCard [ 
+CancellationCard >> playedOn: aGame by: aSpaceship to: anotherSpaceship for: aCard [
+
 	| aCardPlay |
-	aCardPlay:=CardPlay by:aSpaceship type:self to:anotherSpaceship for:aCard.
-	aGame cancelCardPlay:aCardPlay.
+	aCardPlay := CardPlay
+		             by: aSpaceship
+		             card: self
+		             to: (CardPlay
+				              by: aSpaceship
+				              card: aCard
+				              to: anotherSpaceship
+				              itsRedo: itsRedo)
+		             itsRedo: itsRedo.
+	aGame applyCardPlay: aCardPlay
 ]
 
 { #category : #actions }

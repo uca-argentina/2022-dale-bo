@@ -4,6 +4,12 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #actions }
+RepeatCard >> applyUsing: aCardEffectApplicator basedOn: aCardPlay [
+
+	aCardEffectApplicator applyRepeatBasedOn: aCardPlay
+]
+
 { #category : #operations }
 RepeatCard >> isPermanent [
 
@@ -12,9 +18,14 @@ RepeatCard >> isPermanent [
 
 { #category : #actions }
 RepeatCard >> playedOn: aGame by: aSpaceship to: anotherSpaceship [
+
 	| aCardPlay |
-	aCardPlay:=CardPlay by:aSpaceship type:self to:anotherSpaceship for:nil.
-	aGame repeatCardPlay:aCardPlay.
+	aCardPlay := CardPlay
+		             by: aSpaceship
+		             card: self
+		             to: anotherSpaceship
+		             itsRedo: itsRedo.
+	aGame applyCardPlay: aCardPlay
 ]
 
 { #category : #actions }

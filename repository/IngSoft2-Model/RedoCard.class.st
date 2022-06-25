@@ -24,9 +24,14 @@ RedoCard >> isPermanent [
 
 { #category : #actions }
 RedoCard >> playedOn: aGame by: aSpaceship to: anotherSpaceship [
+
 	| aCardPlay |
-	aCardPlay:=CardPlay by:aSpaceship type:self to:anotherSpaceship for:(aGame lastCardPlayed).
-	aGame applyCardPlay:aCardPlay.
+	aCardPlay := CardPlay
+		             by: aSpaceship
+		             card: self
+		             to: anotherSpaceship
+		             itsRedo: itsRedo.
+	aGame applyCardPlay: aCardPlay
 ]
 
 { #category : #actions }

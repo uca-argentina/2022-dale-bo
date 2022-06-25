@@ -32,18 +32,18 @@ Spaceship class >> of: aSpaceship at: aBoxNumber distance: aDistance laps: aLapN
 		  and: effectsApplied
 ]
 
-{ #category : #accesing }
-Spaceship >> boxNumber [
-
-	^ boxNumber
-]
-
 { #category : #action }
-Spaceship >> checkSpaceshipHas: aCard [
+Spaceship >> assertSpaceshipHas: aCard [
 
 	^ hand
 		  detect: [ :each | each className = aCard className ]
 		  ifNone: [ Error signal: 'The spaceship does not have this card' ]
+]
+
+{ #category : #accesing }
+Spaceship >> boxNumber [
+
+	^ boxNumber
 ]
 
 { #category : #accessing }

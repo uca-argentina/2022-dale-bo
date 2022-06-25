@@ -11,6 +11,14 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #'instance creation' }
+CardPlay class >> by: aSpaceship card: aCard to: aTarget itsRedo: isRedo [
+	^ self new
+		  initializeBy: aSpaceship
+		  card: aCard
+		  to: aTarget.
+]
+
 { #category : #'class initialization' }
 CardPlay class >> by: aSpaceship type: aCard to: anotherSpaceship for: anotherCard [
 
@@ -19,6 +27,7 @@ CardPlay class >> by: aSpaceship type: aCard to: anotherSpaceship for: anotherCa
 		  type: aCard
 		  to: anotherSpaceship
 		  for: anotherCard
+		  itsRedo: its
 ]
 
 { #category : #'class initialization' }
@@ -44,7 +53,14 @@ CardPlay >> cardType [
 ]
 
 { #category : #initialization }
-CardPlay >> initializeBy: aSpaceship type: aCard to: anotherSpaceship for: anotherCard [
+CardPlay >> initializeBy: aSpaceship card: aCard to: aTarget [
+	playedBy := aSpaceship.
+	card := aCard.
+	appliedTo := aTarget.
+]
+
+{ #category : #initialization }
+CardPlay >> initializeBy: aSpaceship type: aCard to: anotherSpaceship for: anotherCard itsRedo: isRedo [
 
 	playedBy := aSpaceship.
 	card := aCard.

@@ -27,8 +27,8 @@ AccelerationCard >> playedOn: aGame by: aSpaceship [
 	| aCardPlay |
 	aCardPlay := CardPlay
 		             by: aSpaceship
-		             type: self
-		             to: 'all'
-		             for: nil.
+		             card: self
+		             to: aGame allSpaceships
+		             itsRedo: itsRedo.
 	aGame applyCardPlay: aCardPlay
 ]

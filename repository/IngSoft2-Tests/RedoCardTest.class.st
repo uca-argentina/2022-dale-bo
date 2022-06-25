@@ -29,55 +29,55 @@ RedoCardTest >> should: aBlock raise: anError withMessage: anErrorMessage [
 RedoCardTest >> testPabloPlaysARedoAfterACancelation [
 
 	| dieOne dieTwo dieThree aDiceCup game boxSequence deckForGame cancelationCard redoCard deckForCardGiver accelerationCard deckForAccelerationCardGiver |
-	dieOne := LoadedDie with: 3.
-	dieTwo := LoadedDie with: 2.
-	dieThree := LoadedDie with: 1.
-	aDiceCup := DiceCup withAll: { 
-			            dieOne.
-			            dieTwo.
-			            dieThree }.
-	cancelationCard := CancellationCard new.
-	redoCard := RedoCard new.
-	accelerationCard := AccelerationCard new.
-	deckForCardGiver := Deck with: { redoCard }.
-	deckForAccelerationCardGiver := Deck with: { accelerationCard }.
-	deckForGame := Deck with: { cancelationCard }.
-	boxSequence := (BoxesGenerator
-		                generate: 16
-		                for:
-		                { (CardGiverEffect with:
-			                 deckForAccelerationCardGiver) }
-		                with: { 100 }) boxSequence.
-	boxSequence
-		add: (CardGiverEffect with: deckForCardGiver)
-		afterIndex: 12.
-	game := SpaceRaceGame
-		        with: { 'Valen'. 'Pablo'. 'Seba' }
-		        boardWith: boxSequence
-		        distance: (Parsecs with: 200)
-		        laps: 2
-		        diceCup: aDiceCup
-		        and: deckForGame.
-	game playATurn.
-	game playATurn.
-	game playATurn.
-	accelerationCard
-		playedOn: game
-		by: 'Valen'.
-	game playATurn.
-	cancelationCard
-		playedOn: game
-		by: 'Pablo'
-		to: 'Pablo'
-		for: accelerationCard.
-	game playATurn.
-	redoCard
-		playedOn: game
-		by: 'Pablo'
-		to: 'Seba'.
-	self assert:'Pablo' isAt:13 with:1 in:game.
-	game playATurn.
-	self assert:'Seba' isAt:13 with:1 in:game.
+    dieOne := LoadedDie with: 3.
+    dieTwo := LoadedDie with: 2.
+    dieThree := LoadedDie with: 1.
+    aDiceCup := DiceCup withAll: { 
+                        dieOne.
+                        dieTwo.
+                        dieThree }.
+    cancelationCard := CancellationCard new.
+    redoCard := RedoCard new.
+    accelerationCard := AccelerationCard new.
+    deckForCardGiver := Deck with: { redoCard }.
+    deckForAccelerationCardGiver := Deck with: { accelerationCard }.
+    deckForGame := Deck with: { cancelationCard }.
+    boxSequence := (BoxesGenerator
+                        generate: 16
+                        for:
+                        { (CardGiverEffect with:
+                             deckForAccelerationCardGiver) }
+                        with: { 100 }) boxSequence.
+    boxSequence
+        add: (CardGiverEffect with: deckForCardGiver)
+        afterIndex: 12.
+    game := SpaceRaceGame
+                with: { 'Valen'. 'Pablo'. 'Seba' }
+                boardWith: boxSequence
+                distance: (Parsecs with: 200)
+                laps: 2
+                diceCup: aDiceCup
+                and: deckForGame.
+    game playATurn.
+    game playATurn.
+    game playATurn.
+    accelerationCard
+        playedOn: game
+        by: 'Valen'.
+    game playATurn.
+    cancelationCard
+        playedOn: game
+        by: 'Pablo'
+        to: 'Pablo'
+        for: accelerationCard.
+    game playATurn.
+    redoCard
+        playedOn: game
+        by: 'Pablo'
+        to: 'Seba'.
+    self assert:'Pablo' isAt:13 with:1 in:game.
+    game playATurn.
+    self assert:'Seba' isAt:13 with:1 in:game.
 ]
 
 { #category : #tests }
@@ -110,12 +110,11 @@ RedoCardTest >> testPabloPlaysARedoAfterValenPlaysARepeat [
 	repeatCard
 		playedOn: game
 		by: 'Valen'
-		to: 'Valen'
-		for: repeatCard.
+		to: 'Valen'.
 	game playATurn.
-	redoCard playedUsing: game by:'Pablo'  to:'Pablo'  for:redoCard.
-	self assert: (game spaceshipOf: 'Valen') hand size equals: 3.
-	self assert: (game spaceshipOf: 'Pablo') hand size equals: 3.
+	redoCard playedOn: game by:'Pablo'  to:'Pablo'.
+	self assert: ((game spaceshipOf: 'Valen') hand ) hand size equals: 3.
+	self assert: ((game spaceshipOf: 'Pablo') hand) hand size equals: 3.
 	
 ]
 

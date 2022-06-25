@@ -22,12 +22,14 @@ OverloadCard >> isPermanent [
 
 { #category : #actions }
 OverloadCard >> playedOn: aGame by: aSpaceship to: anotherSpaceship [
+
 	| aCardPlay |
 	aCardPlay := CardPlay
 		             by: aSpaceship
-		             type: self
+		             card: self
 		             to: anotherSpaceship
-		             for: nil.
+		             itsRedo: itsRedo.
+
 	aGame applyCardPlay: aCardPlay
 ]
 

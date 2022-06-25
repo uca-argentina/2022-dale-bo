@@ -6,7 +6,6 @@ Class {
 		'diceCup',
 		'finished',
 		'turnSequence',
-		'lastCardPlayed',
 		'cardEffectApplier'
 	],
 	#category : #'IngSoft2-Model'
@@ -66,38 +65,10 @@ SpaceRaceGame >> assertGameIsNotFinished [
 	(self hasFinished) ifTrue: [Error signal: 'Turn cannot be played, game has finished' ].
 ]
 
-{ #category : #asserting }
-SpaceRaceGame >> assertThereIsACardPlayed [
-	lastCardPlayed ifNil: [ 
-		Error signal: 'There is no cards played to be canceled' ]
-]
-
-{ #category : #actions }
-SpaceRaceGame >> assertValidTurnFor: aSpaceship andCardType: aCard [
-
-	| whoWantsToPlay |
-	whoWantsToPlay := self spaceshipOf: aSpaceship.
-	(whoWantsToPlay hand) checkSpaceshipHas:aCard.
-
-	(turnSequence whoPlays ~= whoWantsToPlay nameOfSpaceship and:
-		 aCard isPermanent) ifTrue: [ 
-		Error signal:
-			'A permanent card cannot be played on another spaceship turn' ].
-]
-
 { #category : #actions }
 SpaceRaceGame >> board [
 
 	^ board
-]
-
-{ #category : #actions }
-SpaceRaceGame >> cancelCardPlay: aCardPlay [ 
-	self assertValidTurnFor: (aCardPlay) playedBy andCardType: aCardPlay cardType.
-	self assertThereIsACardPlayed.
-	cardEffectApplier cancel: aCardPlay using: board.
-	lastCardPlayed:=aCardPlay.
-	
 ]
 
 { #category : #accessing }
@@ -118,14 +89,7 @@ SpaceRaceGame >> initializeWith: spaceships aBoardWith: aBoxSequence distance: a
 	diceCup := aDiceCup.
 	turnSequence := TurnSequence with: spaceships.
 	finished := false.
-	lastCardPlayed:= nil.
-	cardEffectApplier:= CardEffectApplicator with:board.
-]
-
-{ #category : #actions }
-SpaceRaceGame >> lastCardPlayed [
-
-	^ cardEffectApplier lastCardPlayed.
+	cardEffectApplier:= CardEffectApplicator with:board using:turnSequence.
 ]
 
 { #category : #actions }
@@ -148,28 +112,10 @@ SpaceRaceGame >> rankingOf: aShip [
 			^ board rankingOf: aShip.
 ]
 
-{ #category : #actions }
-SpaceRaceGame >> redoCardPlay: aCardPlay [ 
-	self assertValidTurnFor: (aCardPlay) playedBy andCardType: (aCardPlay targetedCard) cardType.
-	cardEffectApplier redo: aCardPlay using: board.
-]
-
-{ #category : #actions }
-SpaceRaceGame >> repeatCardPlay: aCardPlay [ 
-	self assertValidTurnFor: (aCardPlay) playedBy andCardType: aCardPlay cardType.
-	cardEffectApplier repeat: aCardPlay using: board.
-]
-
 { #category : #action }
 SpaceRaceGame >> spaceshipOf: aShip [
 
 	^ board spaceshipOf:aShip.
-]
-
-{ #category : #actions }
-SpaceRaceGame >> updateLastCardPlayedWith: aLastPlayedCard [
-
-	lastCardPlayed := aLastPlayedCard
 ]
 
 { #category : #actions }

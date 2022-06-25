@@ -27,8 +27,9 @@ SpeedCard >> playedOn: aGame by: aSpaceship to: anotherSpaceship [
 	| aCardPlay |
 	aCardPlay := CardPlay
 		             by: aSpaceship
-		             type: self
-		             to: anotherSpaceship for:nil.
+		             card: self
+		             to: anotherSpaceship
+		             itsRedo: itsRedo.
 	aGame applyCardPlay: aCardPlay
 ]
 
