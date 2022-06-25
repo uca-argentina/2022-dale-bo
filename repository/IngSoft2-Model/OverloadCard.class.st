@@ -28,7 +28,7 @@ OverloadCard >> playedOn: aGame by: aSpaceship to: anotherSpaceship [
 		             by: aSpaceship
 		             card: self
 		             to: anotherSpaceship
-		             itsRedo: itsRedo.
+		             itsRedo: false.
 
 	aGame applyCardPlay: aCardPlay
 ]

@@ -6,7 +6,8 @@ Class {
 		'affectedSpaceship',
 		'playedBy',
 		'appliedTo',
-		'targetedCard'
+		'targetedCard',
+		'redo'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -16,7 +17,8 @@ CardPlay class >> by: aSpaceship card: aCard to: aTarget itsRedo: isRedo [
 	^ self new
 		  initializeBy: aSpaceship
 		  card: aCard
-		  to: aTarget.
+		  to: aTarget
+		itsRedo:isRedo.
 ]
 
 { #category : #'class initialization' }
@@ -53,19 +55,12 @@ CardPlay >> cardType [
 ]
 
 { #category : #initialization }
-CardPlay >> initializeBy: aSpaceship card: aCard to: aTarget [
-	playedBy := aSpaceship.
-	card := aCard.
-	appliedTo := aTarget.
-]
-
-{ #category : #initialization }
-CardPlay >> initializeBy: aSpaceship type: aCard to: anotherSpaceship for: anotherCard itsRedo: isRedo [
+CardPlay >> initializeBy: aSpaceship card: aCard to: anotherSpaceship  itsRedo: isRedo [
 
 	playedBy := aSpaceship.
 	card := aCard.
 	appliedTo := anotherSpaceship.
-	targetedCard:=anotherCard.
+	redo:= isRedo.
 ]
 
 { #category : #accessing }

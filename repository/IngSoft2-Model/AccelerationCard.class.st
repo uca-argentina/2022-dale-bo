@@ -29,6 +29,6 @@ AccelerationCard >> playedOn: aGame by: aSpaceship [
 		             by: aSpaceship
 		             card: self
 		             to: aGame allSpaceships
-		             itsRedo: itsRedo.
+		             itsRedo: false.
 	aGame applyCardPlay: aCardPlay
 ]

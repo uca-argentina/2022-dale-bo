@@ -37,8 +37,8 @@ CancellationCard >> playedOn: aGame by: aSpaceship to: anotherSpaceship for: aCa
 				              by: aSpaceship
 				              card: aCard
 				              to: anotherSpaceship
-				              itsRedo: itsRedo)
-		             itsRedo: itsRedo.
+				              itsRedo: false)
+		             itsRedo: false.
 	aGame applyCardPlay: aCardPlay
 ]
 
