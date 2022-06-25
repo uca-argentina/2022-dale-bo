@@ -77,12 +77,6 @@ Board >> createStatusFor: aCollectionOfShips [
 ]
 
 { #category : #accessing }
-Board >> distancePerBox [
-
-	^ distancePerBox 
-]
-
-{ #category : #accessing }
 Board >> effectAt: aBoxNumber for: ships appliedBy: aSpacehip [
 
 	(boxes at: aBoxNumber) triggeredBy: aSpacehip with: self.
@@ -112,12 +106,6 @@ Board >> initializeWithShips: aCollectionOfSpaceships with: aBoxSequence distanc
 	self createStatusFor:aCollectionOfSpaceships.
 	lastBoxEffect := nil.
 	winner:=nil.
-]
-
-{ #category : #accessing }
-Board >> laps [
-
-	^ laps
 ]
 
 { #category : #accessing }
@@ -228,12 +216,6 @@ Board >> rankingOf: aSpaceship [
 	spaceships do: [ :spaceship | 
 		spaceship nameOfSpaceship = aSpaceship  ifTrue: [ 
 			^ spaceships indexOf: spaceship ] ]
-]
-
-{ #category : #accesing }
-Board >> sizeOfBoard [
-
-	^ boxes size
 ]
 
 { #category : #accessing }

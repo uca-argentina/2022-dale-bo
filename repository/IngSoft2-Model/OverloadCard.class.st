@@ -32,22 +32,3 @@ OverloadCard >> playedOn: aGame by: aSpaceship to: anotherSpaceship [
 
 	aGame applyCardPlay: aCardPlay
 ]
-
-{ #category : #actions }
-OverloadCard >> playedUsing: aGame by: aSpaceship to: anotherSpaceship for: aCardEffect [
-
-	aGame assertValidTurnFor: aSpaceship andCardType: aCardEffect.
-	(aGame spaceshipOf: anotherSpaceship) isAffectedBy: self.
-	aGame updateLastCardPlayedWith:
-		(CardPlay type: self to: anotherSpaceship).
-	(aGame spaceshipOf: aSpaceship) removeFromHand: self
-]
-
-{ #category : #actions }
-OverloadCard >> redoUsing: aGame by: aSpaceship to: anotherSpaceship for: aCardEffect [
-
-	aGame assertValidTurnFor: aSpaceship andCardType: aCardEffect.
-	(aGame spaceshipOf: anotherSpaceship) isAffectedBy: self.
-	aGame updateLastCardPlayedWith:
-		(CardPlay type: self to: anotherSpaceship)
-]

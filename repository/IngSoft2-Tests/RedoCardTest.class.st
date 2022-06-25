@@ -234,13 +234,12 @@ RedoCardTest >> testPabloPlaysARedoWhenNoCardWasPlayedPreviously [
 	game playATurn.
 	self
 		should: [ redoCard 
-		playedUsing: game
+		playedOn: game
 		by: 'Valen'
-		to: 'Valen'
-		for: redoCard . ]
+		to: 'Valen' ]
 		raise: Error
 		withMessage:
-		'There is no cards played to apply redo'.
+		'There are no cards played'.
 	
 ]
 

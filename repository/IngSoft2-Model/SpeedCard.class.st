@@ -32,22 +32,3 @@ SpeedCard >> playedOn: aGame by: aSpaceship to: anotherSpaceship [
 		             itsRedo: false.
 	aGame applyCardPlay: aCardPlay
 ]
-
-{ #category : #actions }
-SpeedCard >> playedUsing: aGame by: aSpaceship to: anotherSpaceship for: aCardEffect [
-
-	aGame assertValidTurnFor: aSpaceship andCardType: self.
-	(aGame spaceshipOf: anotherSpaceship) isAffectedBy: self.
-	aGame updateLastCardPlayedWith:
-		(CardPlay type: self to: anotherSpaceship).
-	(aGame spaceshipOf: aSpaceship) removeFromHand: self
-]
-
-{ #category : #actions }
-SpeedCard >> redoUsing: aGame by: aSpaceship to: anotherSpaceship for: aCardEffect [
-
-	aGame assertValidTurnFor: aSpaceship andCardType: self.
-	(aGame spaceshipOf: anotherSpaceship) isAffectedBy: self.
-	aGame updateLastCardPlayedWith:
-		(CardPlay type: self to: anotherSpaceship)
-]

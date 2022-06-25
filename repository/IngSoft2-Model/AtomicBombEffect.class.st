@@ -13,12 +13,6 @@ AtomicBombEffect class >> with:aNumberOfParsecs [
 	^self new initializeWith:aNumberOfParsecs .
 ]
 
-{ #category : #action }
-AtomicBombEffect >> applyTo: spaceships triggeredBy: aSpaceship with: endPosition distance: aDistance laps: laps [
-
-	spaceships moveSpaceshipsToTheFirstBox
-]
-
 { #category : #initialization }
 AtomicBombEffect >> initializeWith: aNumberOfParsecs [
 

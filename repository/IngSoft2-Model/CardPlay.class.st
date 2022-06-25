@@ -6,7 +6,6 @@ Class {
 		'affectedSpaceship',
 		'playedBy',
 		'appliedTo',
-		'targetedCard',
 		'redo'
 	],
 	#category : #'IngSoft2-Model'
@@ -71,9 +70,4 @@ CardPlay >> isRedo [
 { #category : #accessing }
 CardPlay >> playedBy [
 	^ playedBy
-]
-
-{ #category : #accessing }
-CardPlay >> targetedCard [
-	^ targetedCard
 ]

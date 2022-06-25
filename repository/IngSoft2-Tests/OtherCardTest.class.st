@@ -72,7 +72,7 @@ OtherCardTest >> testPabloTriesToCancelWhenThereWasNoCardPlayedPreviously [
 				to: 'Valen'
 				for: cancelationCard.]
 		raise: Error
-		withMessage: 'There is no cards played to be canceled'
+		withMessage: 'There are no cards played'
 ]
 
 { #category : #tests }

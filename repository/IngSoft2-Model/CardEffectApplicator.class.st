@@ -82,6 +82,7 @@ CardEffectApplicator >> applyEffectBasedOn: aCardPlay [
 CardEffectApplicator >> applyRedoBasedOn: aCardPlay [
 
 	| redoPlay targetedCard |
+	self assertThereIsACardPlayed.
 	(board spaceshipOf: aCardPlay playedBy) hand assertSpaceshipHas:
 		aCardPlay cardType.
 	targetedCard := lastCardPlay cardType.
@@ -122,7 +123,7 @@ CardEffectApplicator >> applyRepeatBasedOn: aCardPlay [
 CardEffectApplicator >> assertThereIsACardPlayed [
 
 	lastCardPlay ifNil: [ 
-		Error signal: 'There is no cards played to be canceled' ]
+		Error signal: 'There are no cards played' ]
 ]
 
 { #category : #actions }
@@ -168,12 +169,4 @@ CardEffectApplicator >> removeCardFromASpaceshipsHandUsing: aCardPlay [
 	spaceshipHand remove:(aCardPlay cardType).
 	spaceshipNewHand:= SpaceshipHand with: (spaceshipHand).
 	board updateSpaceshipHandOf:spaceshipOldStatus with:spaceshipNewHand.
-]
-
-{ #category : #actions }
-CardEffectApplicator >> repeat: aCardPlay using: aBoard [
-
-	|lastBoxEffect |
-	lastBoxEffect := aBoard lastBoxEffect.
-	lastBoxEffect triggeredBy: aCardPlay playedBy with: aBoard.
 ]

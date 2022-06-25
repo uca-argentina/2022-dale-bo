@@ -65,12 +65,6 @@ SpaceRaceGame >> assertGameIsNotFinished [
 	(self hasFinished) ifTrue: [Error signal: 'Turn cannot be played, game has finished' ].
 ]
 
-{ #category : #actions }
-SpaceRaceGame >> board [
-
-	^ board
-]
-
 { #category : #accessing }
 SpaceRaceGame >> hasFinished [
 
