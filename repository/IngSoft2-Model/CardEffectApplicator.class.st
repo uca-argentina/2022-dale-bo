@@ -10,11 +10,6 @@ Class {
 }
 
 { #category : #'instance creation' }
-CardEffectApplicator class >> with: aBoard [ 
-	^self new initializeWith:aBoard.
-]
-
-{ #category : #'instance creation' }
 CardEffectApplicator class >> with: aBoard using:aTurnSequence [
 	^self new initializeWith:aBoard and:aTurnSequence.
 ]
@@ -49,10 +44,9 @@ CardEffectApplicator >> applyCancellationBasedOn: aCardPlay [
 	self
 		assertValidTurnFor: aCardPlay playedBy
 		andCardType: aCardPlay cardType.
-	self assertThereIsACardPlayed.
 	affectedSpaceship := board spaceshipOf: aCardPlay appliedTo appliedTo.
-	effectsOnSpaceship := affectedSpaceship effectsOnSpaceship
-		                      effectsOnMe.
+	effectsOnSpaceship := affectedSpaceship effectsOnSpaceship effectsOnMe.
+	self assertSpaceship:effectsOnSpaceship hasBeenAffectedBy:aCardPlay appliedTo cardType.
 	effectsOnSpaceship remove: aCardPlay appliedTo cardType.
 	board
 		updateSpaceshipEffectsOf: affectedSpaceship
@@ -82,7 +76,6 @@ CardEffectApplicator >> applyEffectBasedOn: aCardPlay [
 CardEffectApplicator >> applyRedoBasedOn: aCardPlay [
 
 	| redoPlay targetedCard |
-	self assertThereIsACardPlayed.
 	(board spaceshipOf: aCardPlay playedBy) hand assertSpaceshipHas:
 		aCardPlay cardType.
 	targetedCard := lastCardPlay cardType.
@@ -119,6 +112,14 @@ CardEffectApplicator >> applyRepeatBasedOn: aCardPlay [
 	lastCardPlay:= aCardPlay.
 ]
 
+{ #category : #asserting }
+CardEffectApplicator >> assertSpaceship: effectsOnSpaceship hasBeenAffectedBy: aCard [
+
+	(effectsOnSpaceship occurrencesOf: aCard) >= 1
+		ifTrue: [ ^ true ]
+		ifFalse: [ Error signal: 'The spaceship does not have this effect applied on' ]
+]
+
 { #category : #accessing }
 CardEffectApplicator >> assertThereIsACardPlayed [
 
@@ -144,15 +145,9 @@ CardEffectApplicator >> checkIfIsRedo: aCardPlay [
 ]
 
 { #category : #initialization }
-CardEffectApplicator >> initializeWith: aBoard [ 
-	board:= aBoard.
-	lastCardPlay:= nil.
-]
-
-{ #category : #initialization }
 CardEffectApplicator >> initializeWith: aBoard and: aTurnSequence [ 
 	board:= aBoard.
-	lastCardPlay:= nil.
+	lastCardPlay:= NoCardPlay new.
 	turnSequence:=aTurnSequence.
 ]
 

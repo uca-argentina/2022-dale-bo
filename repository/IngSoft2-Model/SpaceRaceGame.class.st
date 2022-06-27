@@ -4,7 +4,6 @@ Class {
 	#instVars : [
 		'board',
 		'diceCup',
-		'finished',
 		'turnSequence',
 		'cardEffectApplier'
 	],
@@ -82,7 +81,6 @@ SpaceRaceGame >> initializeWith: spaceships aBoardWith: aBoxSequence distance: a
 		         and: aDeck.
 	diceCup := aDiceCup.
 	turnSequence := TurnSequence with: spaceships.
-	finished := false.
 	cardEffectApplier:= CardEffectApplicator with:board using:turnSequence.
 ]
 

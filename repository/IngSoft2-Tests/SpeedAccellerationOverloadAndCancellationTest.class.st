@@ -73,9 +73,9 @@ SpeedAccellerationOverloadAndCancellationTest >> testPabloCantPlayCancellationBe
 				playedOn: game
 				by: 'Valen'
 				to: 'Valen'
-				for: cancelationCard.]
+				for: (SpeedCard new).]
 		raise: Error
-		withMessage: 'There are no cards played'
+		withMessage: 'The spaceship does not have this effect applied on'
 ]
 
 { #category : #tests }

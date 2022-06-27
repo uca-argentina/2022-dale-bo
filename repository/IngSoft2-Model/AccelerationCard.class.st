@@ -21,7 +21,7 @@ AccelerationCard >> isPermanent [
 	^true.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #actions }
 AccelerationCard >> playedOn: aGame by: aSpaceship [
 
 	| aCardPlay |

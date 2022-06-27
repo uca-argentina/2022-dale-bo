@@ -20,23 +20,6 @@ CardPlay class >> by: aSpaceship card: aCard to: aTarget itsRedo: isRedo [
 		itsRedo:isRedo.
 ]
 
-{ #category : #'class initialization' }
-CardPlay class >> by: aSpaceship type: aCard to: anotherSpaceship for: anotherCard [
-
-	^ self new
-		  initializeBy: aSpaceship
-		  type: aCard
-		  to: anotherSpaceship
-		  for: anotherCard
-		  itsRedo: its
-]
-
-{ #category : #'class initialization' }
-CardPlay class >> type: aCard to: aSpaceship [
-
-	^ self new initializeWithType: aCard to: aSpaceship
-]
-
 { #category : #accessing }
 CardPlay >> appliedTo [
 
