@@ -1,20 +1,23 @@
 Class {
-	#name : #OtherCardTest,
+	#name : #SpeedAccellerationOverloadAndCancellationTest,
 	#superclass : #TestCase,
 	#category : #'IngSoft2-Tests'
 }
 
 { #category : #tests }
-OtherCardTest >> assert: aSpaceshipName isAt: aPositionNumber with: aLapNumber in: aGame [
+SpeedAccellerationOverloadAndCancellationTest >> assert: aSpaceshipName isAt: aPositionNumber with: aLapNumber in: aGame [
 
-	^ (aGame spaceshipOf: aSpaceshipName) position boxNumber
-	  = aPositionNumber
+	| spaceshipPosition |
+	spaceshipPosition := (aGame spaceshipOf: aSpaceshipName) position.
+	
+	self assert: spaceshipPosition boxNumber equals: aPositionNumber.
+	self assert: spaceshipPosition lapNumber equals: aLapNumber.
 
 
 ]
 
 { #category : #tests }
-OtherCardTest >> should: aBlock raise: anError withMessage: anErrorMessage [
+SpeedAccellerationOverloadAndCancellationTest >> should: aBlock raise: anError withMessage: anErrorMessage [
 
 	| tmp2 tmp3 |
 	aBlock
@@ -31,7 +34,7 @@ OtherCardTest >> should: aBlock raise: anError withMessage: anErrorMessage [
 ]
 
 { #category : #tests }
-OtherCardTest >> testADeckCannotBeCreatedWithNoCards [
+SpeedAccellerationOverloadAndCancellationTest >> testADeckCannotBeCreatedWithNoCards [
 
 	 self
 		should: [Deck with: {} ]
@@ -43,7 +46,7 @@ OtherCardTest >> testADeckCannotBeCreatedWithNoCards [
 ]
 
 { #category : #tests }
-OtherCardTest >> testPabloTriesToCancelWhenThereWasNoCardPlayedPreviously [
+SpeedAccellerationOverloadAndCancellationTest >> testPabloCantPlayCancellationBecauseThereWasnACardPlayedBefore [
 
 	| die game boxSequence deckForGame cancelationCard redoCard deckForCardGiver |
 	die := LoadedDie with: 6.
@@ -76,7 +79,7 @@ OtherCardTest >> testPabloTriesToCancelWhenThereWasNoCardPlayedPreviously [
 ]
 
 { #category : #tests }
-OtherCardTest >> testPlayerLandsInABoxAndReceivesACard [
+SpeedAccellerationOverloadAndCancellationTest >> testPlayerLandsInABoxAndReceivesACard [
 
 	| dieOne dieTwo dieThree aDiceCup game boxSequence deck |
 	dieOne := LoadedDie with: 3.
@@ -106,7 +109,7 @@ OtherCardTest >> testPlayerLandsInABoxAndReceivesACard [
 ]
 
 { #category : #tests }
-OtherCardTest >> testValenPlaysASpeedCardToPablo [
+SpeedAccellerationOverloadAndCancellationTest >> testValenPlaysASpeedCardToPablo [
 
 	| dieOne dieTwo dieThree aDiceCup game boxSequence deck speedCard |
 	dieOne := LoadedDie with: 3.
@@ -140,7 +143,7 @@ OtherCardTest >> testValenPlaysASpeedCardToPablo [
 ]
 
 { #category : #tests }
-OtherCardTest >> testValenPlaysAnAccelerationCardAndPabloUseCancelationCardToValenInValensTurn [
+SpeedAccellerationOverloadAndCancellationTest >> testValenPlaysAnAccelerationCardAndPabloUseCancelationCardToValenInValensTurn [
 
 	| dieOne dieTwo dieThree aDiceCup game boxSequence deckForGame deckForBoxes accelerationCard cancellationCard |
 	dieOne := LoadedDie with: 3.
@@ -185,7 +188,7 @@ OtherCardTest >> testValenPlaysAnAccelerationCardAndPabloUseCancelationCardToVal
 ]
 
 { #category : #tests }
-OtherCardTest >> testValenPlaysAnAccelerationCardToAllPlayers [
+SpeedAccellerationOverloadAndCancellationTest >> testValenPlaysAnAccelerationCardToAllPlayers [
 
 	| dieOne dieTwo dieThree aDiceCup game boxSequence deck accelerationCard |
 	dieOne := LoadedDie with: 3.
@@ -218,11 +221,12 @@ OtherCardTest >> testValenPlaysAnAccelerationCardToAllPlayers [
 	self assert:'Pablo' isAt:8 with:1 in:game.
 	game playATurn.
 	game playATurn.
-	self assert:'Pablo' isAt:2 with:1 in:game.
+	game playATurn.
+	self assert:'Pablo' isAt:2 with:2 in:game.
 ]
 
 { #category : #tests }
-OtherCardTest >> testValenPlaysAnOverloadCardToPablo [
+SpeedAccellerationOverloadAndCancellationTest >> testValenPlaysAnOverloadCardToPabloAndReduceItsDieRollByOne [
 
 	| dieOne dieTwo dieThree aDiceCup game boxSequence deck overloadCard |
 	dieOne := LoadedDie with: 3.
@@ -255,7 +259,7 @@ OtherCardTest >> testValenPlaysAnOverloadCardToPablo [
 ]
 
 { #category : #tests }
-OtherCardTest >> testValenTriesToPlayACardInPablosTurnAndHeCantsBecauseItAPermanentCard [
+SpeedAccellerationOverloadAndCancellationTest >> testValenTriesToPlayACardInPablosTurnAndHeCantsBecauseItAPermanentCard [
 
 	| dieOne dieTwo dieThree aDiceCup game boxSequence deck speedCard |
 	dieOne := LoadedDie with: 3.
@@ -291,7 +295,7 @@ OtherCardTest >> testValenTriesToPlayACardInPablosTurnAndHeCantsBecauseItAPerman
 ]
 
 { #category : #tests }
-OtherCardTest >> testValenTriesToPlayACardThatIsNotInHisHand [
+SpeedAccellerationOverloadAndCancellationTest >> testValenTriesToPlayACardThatIsNotInHisHand [
 
 	| dieOne dieTwo dieThree aDiceCup game boxSequence deck speedCard overloadCard |
 	dieOne := LoadedDie with: 3.

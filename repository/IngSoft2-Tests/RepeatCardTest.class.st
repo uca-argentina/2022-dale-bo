@@ -7,8 +7,11 @@ Class {
 { #category : #tests }
 RepeatCardTest >> assert: aSpaceshipName isAt: aPositionNumber with: aLapNumber in: aGame [
 
-	^ (aGame spaceshipOf: aSpaceshipName) position boxNumber
-	  = aPositionNumber
+	| spaceshipPosition |
+	spaceshipPosition := (aGame spaceshipOf: aSpaceshipName) position.
+	
+	self assert: spaceshipPosition boxNumber equals: aPositionNumber.
+	self assert: spaceshipPosition lapNumber equals: aLapNumber.
 ]
 
 { #category : #tests }
@@ -16,10 +19,10 @@ RepeatCardTest >> sequenceOfNoEffectsOf: boardSize with: effectToBePlaced at: po
 
 	| boxSequence |
 	boxSequence := OrderedCollection new.
-	boardSize timesRepeat: [ boxSequence add: NoEffect new ].
+	boardSize-1 timesRepeat: [ boxSequence add: NoEffect new ].
 	boxSequence
 		add: effectToBePlaced
-		afterIndex: positionOfEffectToBePlaced.
+		afterIndex: positionOfEffectToBePlaced-1.
 	^ boxSequence
 ]
 
@@ -40,7 +43,7 @@ RepeatCardTest >> testPabloPlaysARepeatCardAfterValenLandsInAAtomicBombEffect [
 	boxSequence := self
 		               sequenceOfNoEffectsOf: 15
 		               with: AtomicBombEffect new
-		               at: 6.
+		               at: 7.
 	game := SpaceRaceGame
 		        with: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
@@ -54,9 +57,8 @@ RepeatCardTest >> testPabloPlaysARepeatCardAfterValenLandsInAAtomicBombEffect [
 		playedOn: game
 		by: 'Pablo'
 		to: 'Valen'.
-	game playATurn.
 	self assert:'Pablo' isAt:1 with:1 in:game.
-	self assert:'Valen' isAt:3 with:1 in:game.
+	self assert:'Valen' isAt:1 with:1 in:game.
 ]
 
 { #category : #tests }
@@ -75,7 +77,7 @@ RepeatCardTest >> testPabloPlaysARepeatCardAfterValenLandsInACardGiver [
 	boxSequence := self
 		               sequenceOfNoEffectsOf: 16
 		               with: (CardGiverEffect with: deck)
-		               at: 6.
+		               at: 7.
 	game := SpaceRaceGame
 		        with: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
@@ -107,11 +109,11 @@ RepeatCardTest >> testPabloPlaysARepeatCardAfterValenLandsInAHyperJumpEffect [
 	repeatCard := RepeatCard new.
 	deck := Deck with: { repeatCard }.
 	boxSequence := self
-		               sequenceOfNoEffectsOf: 9
+		               sequenceOfNoEffectsOf: 10
 		               with: (HyperJumpEffect with: { 
 					                (Parsecs with: 5).
 					                (Lightyear with: 12) })
-		               at: 6.
+		               at: 7.
 	game := SpaceRaceGame
 		        with: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
@@ -145,9 +147,9 @@ RepeatCardTest >> testPabloPlaysARepeatCardAfterValenLandsInAMoonwalkEffect [
 	repeatCard := RepeatCard new.
 	deck := Deck with: { repeatCard }.
 	boxSequence := self
-		               sequenceOfNoEffectsOf: 9
+		               sequenceOfNoEffectsOf: 10
 		               with: (MoonwalkEffect with: 2)
-		               at: 6.
+		               at: 7.
 	game := SpaceRaceGame
 		        with: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
@@ -216,7 +218,7 @@ RepeatCardTest >> testPabloPlaysARepeatCardAfterValenLandsInASpeedUpEffect [
 	boxSequence := self
 		               sequenceOfNoEffectsOf: 15
 		               with: SpeedUpEffect new
-		               at: 6.
+		               at: 7.
 	game := SpaceRaceGame
 		        with: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
@@ -251,7 +253,7 @@ RepeatCardTest >> testPabloPlaysARepeatCardAfterValenLandsInAWormholeEffect [
 	boxSequence := self
 		               sequenceOfNoEffectsOf: 15
 		               with: WormHoleEffect new
-		               at: 6.
+		               at: 7.
 	game := SpaceRaceGame
 		        with: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
@@ -265,7 +267,5 @@ RepeatCardTest >> testPabloPlaysARepeatCardAfterValenLandsInAWormholeEffect [
 		playedOn: game
 		by: 'Pablo'
 		to: 'Valen'.
-	game playATurn.
-	self assert:'Pablo' isAt:3 with:1 in:game.
 	self assert:'Valen' isAt:1 with:1 in:game.
 ]

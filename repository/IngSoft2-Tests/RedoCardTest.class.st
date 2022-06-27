@@ -7,8 +7,11 @@ Class {
 { #category : #tests }
 RedoCardTest >> assert: aSpaceshipName isAt: aPositionNumber with: aLapNumber in: aGame [
 
-	^ (aGame spaceshipOf: aSpaceshipName) position boxNumber
-	  = aPositionNumber
+	| spaceshipPosition |
+	spaceshipPosition := (aGame spaceshipOf: aSpaceshipName) position.
+	
+	self assert: spaceshipPosition boxNumber equals: aPositionNumber.
+	self assert: spaceshipPosition lapNumber equals: aLapNumber.
 ]
 
 { #category : #tests }

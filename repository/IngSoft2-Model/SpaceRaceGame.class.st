@@ -68,7 +68,7 @@ SpaceRaceGame >> assertGameIsNotFinished [
 { #category : #accessing }
 SpaceRaceGame >> hasFinished [
 
-	^ board winner notNil
+	^ board assertHasAWinner.
 ]
 
 { #category : #initialize }
@@ -115,9 +115,5 @@ SpaceRaceGame >> spaceshipOf: aShip [
 { #category : #actions }
 SpaceRaceGame >> winner [
 
-	board winner
-		ifNil: [ 
-			Error signal:
-				'Game does not have a winner beacause is not finished yet' ]
-		ifNotNil: [ ^ board winner ]
+	^board winner.
 ]

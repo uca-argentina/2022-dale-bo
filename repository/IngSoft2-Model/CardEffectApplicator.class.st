@@ -114,7 +114,7 @@ CardEffectApplicator >> applyRepeatBasedOn: aCardPlay [
 	(board spaceshipOf:aCardPlay playedBy) hand assertSpaceshipHas:(aCardPlay cardType).
 	self assertValidTurnFor:(aCardPlay playedBy) andCardType:(aCardPlay cardType).
 	lastBoxEffect := board lastBoxEffect.
-	lastBoxEffect triggeredBy: aCardPlay playedBy with: board.
+	lastBoxEffect triggeredBy: aCardPlay appliedTo with: board.
 	self checkIfIsRedo:aCardPlay.
 	lastCardPlay:= aCardPlay.
 ]
