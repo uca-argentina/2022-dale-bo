@@ -103,7 +103,7 @@ Board >> giveTo: aSpaceship card: aCard [
 Board >> initializeWithShips: aCollectionOfSpaceships with: aBoxSequence distance: aDistance laps: numberOfLaps and: aDeck [
 	boxes := aBoxSequence.
 	distanceOfBoard :=boxes size.
-	distancePerBox := (aDistance amountInParsecs) / distanceOfBoard.
+	distancePerBox := Parsecs with:((aDistance amountInParsecs) / distanceOfBoard).
 	laps := numberOfLaps.
 	deck:= aDeck.
 	self createStatusFor:aCollectionOfSpaceships.
@@ -125,11 +125,11 @@ Board >> move: aSpaceship toFinalDistance: aDistanceNumber [
 	self updateSpaceshipPositionOf: oldSpaceshipStatus
 		to: (SpaceshipPosition
 				 at: oldSpaceshipPosition boxNumber
-				 distance: spaceshipNewDistanceInBox % distancePerBox 
+				 distance: spaceshipNewDistanceInBox % (distancePerBox amountInParsecs) 
 				 laps: oldSpaceshipPosition lapNumber).
 	self
 		moveForward: aSpaceship
-		to: spaceshipNewDistanceInBox // distancePerBox.
+		to: spaceshipNewDistanceInBox // (distancePerBox amountInParsecs).
 ]
 
 { #category : #actions }

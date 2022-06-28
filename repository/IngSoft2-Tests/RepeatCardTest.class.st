@@ -1,8 +1,16 @@
 Class {
 	#name : #RepeatCardTest,
 	#superclass : #TestCase,
+	#instVars : [
+		'die'
+	],
 	#category : #'IngSoft2-Tests'
 }
+
+{ #category : #tests }
+RepeatCardTest >> assert: aSpaceship handHas: aNumberOfCards in: aGame [ 
+	self assert: ((aGame spaceshipOf: aSpaceship) hand ) numberOfCards equals: aNumberOfCards.
+]
 
 { #category : #tests }
 RepeatCardTest >> assert: aSpaceshipName isAt: aPositionNumber with: aLapNumber in: aGame [
@@ -24,6 +32,11 @@ RepeatCardTest >> sequenceOfNoEffectsOf: boardSize with: effectToBePlaced at: po
 		add: effectToBePlaced
 		afterIndex: positionOfEffectToBePlaced-1.
 	^ boxSequence
+]
+
+{ #category : #running }
+RepeatCardTest >> setUp [
+	die:= LoadedDie with:6.
 ]
 
 { #category : #tests }
@@ -64,14 +77,7 @@ RepeatCardTest >> testPabloPlaysARepeatCardAfterValenLandsInAAtomicBombEffect [
 { #category : #tests }
 RepeatCardTest >> testPabloPlaysARepeatCardAfterValenLandsInACardGiver [
 
-	| dieOne dieTwo dieThree aDiceCup game boxSequence deck repeatCard |
-	dieOne := LoadedDie with: 3.
-	dieTwo := LoadedDie with: 2.
-	dieThree := LoadedDie with: 1.
-	aDiceCup := DiceCup withAll: { 
-			            dieOne.
-			            dieTwo.
-			            dieThree }.
+	| game boxSequence deck repeatCard |
 	repeatCard := RepeatCard new.
 	deck := Deck with: { repeatCard }.
 	boxSequence := self
@@ -83,7 +89,7 @@ RepeatCardTest >> testPabloPlaysARepeatCardAfterValenLandsInACardGiver [
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
 		        laps: 2
-		        diceCup: aDiceCup
+		        diceCup: die
 		        and: deck.
 	game playATurn.
 	self assert:'Valen' isAt:7 with:1 in:game.
@@ -92,20 +98,13 @@ RepeatCardTest >> testPabloPlaysARepeatCardAfterValenLandsInACardGiver [
 		by: 'Pablo'
 		to: 'Pablo'.
 	game playATurn.
-	self assert: ((game spaceshipOf: 'Pablo') hand) cards size equals: 3.
+	self assert:'Pablo' handHas:3 in:game.
 ]
 
 { #category : #tests }
 RepeatCardTest >> testPabloPlaysARepeatCardAfterValenLandsInAHyperJumpEffect [
 
-	| dieOne dieTwo dieThree aDiceCup game boxSequence deck repeatCard |
-	dieOne := LoadedDie with: 3.
-	dieTwo := LoadedDie with: 2.
-	dieThree := LoadedDie with: 1.
-	aDiceCup := DiceCup withAll: { 
-			            dieOne.
-			            dieTwo.
-			            dieThree }.
+	| game boxSequence deck repeatCard |
 	repeatCard := RepeatCard new.
 	deck := Deck with: { repeatCard }.
 	boxSequence := self
@@ -119,7 +118,7 @@ RepeatCardTest >> testPabloPlaysARepeatCardAfterValenLandsInAHyperJumpEffect [
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 20)
 		        laps: 2
-		        diceCup: aDiceCup
+		        diceCup: die
 		        and: deck.
 	game playATurn.
 	self assert:'Valen' isAt:9 with:1 in:game.
@@ -136,14 +135,7 @@ RepeatCardTest >> testPabloPlaysARepeatCardAfterValenLandsInAHyperJumpEffect [
 { #category : #tests }
 RepeatCardTest >> testPabloPlaysARepeatCardAfterValenLandsInAMoonwalkEffect [
 
-	| dieOne dieTwo dieThree aDiceCup game boxSequence deck repeatCard |
-	dieOne := LoadedDie with: 3.
-	dieTwo := LoadedDie with: 2.
-	dieThree := LoadedDie with: 1.
-	aDiceCup := DiceCup withAll: { 
-			            dieOne.
-			            dieTwo.
-			            dieThree }.
+	| game boxSequence deck repeatCard |
 	repeatCard := RepeatCard new.
 	deck := Deck with: { repeatCard }.
 	boxSequence := self
@@ -155,7 +147,7 @@ RepeatCardTest >> testPabloPlaysARepeatCardAfterValenLandsInAMoonwalkEffect [
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
 		        laps: 2
-		        diceCup: aDiceCup
+		        diceCup: die
 		        and: deck.
 	game playATurn.
 	self assert:'Valen' isAt:7 with:1 in:game.
@@ -171,48 +163,38 @@ RepeatCardTest >> testPabloPlaysARepeatCardAfterValenLandsInAMoonwalkEffect [
 { #category : #tests }
 RepeatCardTest >> testPabloPlaysARepeatCardAfterValenLandsInANoEffect [
 
-	| dieOne dieTwo dieThree aDiceCup game boxSequence deck repeatCard |
-	dieOne := LoadedDie with: 3.
-	dieTwo := LoadedDie with: 2.
-	dieThree := LoadedDie with: 1.
-	aDiceCup := DiceCup withAll: { 
-			            dieOne.
-			            dieTwo.
-			            dieThree }.
+	| game boxSequence deck repeatCard noEffect |
 	repeatCard := RepeatCard new.
 	deck := Deck with: { repeatCard }.
-	boxSequence := (BoxesGenerator
-		                generate: 16
-		                for: { NoEffect new }
-		                with: { 100 }) boxSequence.
+	noEffect := DiscreteProbabilityEvent for: NoEffect new with: 100.
+	boxSequence := (BoxesGenerator generate: 16 for: { noEffect })
+		               boxSequence.
 	game := SpaceRaceGame
 		        with: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
 		        laps: 2
-		        diceCup: aDiceCup
+		        diceCup: die
 		        and: deck.
 	game playATurn.
-	self assert:'Valen' isAt:7 with:1 in:game.
-	repeatCard
-		playedOn: game
-		by: 'Pablo'
-		to: 'Pablo'.
+	self
+		assert: 'Valen'
+		isAt: 7
+		with: 1
+		in: game.
+	repeatCard playedOn: game by: 'Pablo' to: 'Pablo'.
 	game playATurn.
-	self assert:'Pablo' isAt:7 with:1 in:game.
+	self
+		assert: 'Pablo'
+		isAt: 7
+		with: 1
+		in: game
 ]
 
 { #category : #tests }
 RepeatCardTest >> testPabloPlaysARepeatCardAfterValenLandsInASpeedUpEffect [
 
-	| dieOne dieTwo dieThree aDiceCup game boxSequence deck repeatCard |
-	dieOne := LoadedDie with: 3.
-	dieTwo := LoadedDie with: 2.
-	dieThree := LoadedDie with: 1.
-	aDiceCup := DiceCup withAll: { 
-			            dieOne.
-			            dieTwo.
-			            dieThree }.
+	| game boxSequence deck repeatCard |
 	repeatCard := RepeatCard new.
 	deck := Deck with: { repeatCard }.
 	boxSequence := self
@@ -224,7 +206,7 @@ RepeatCardTest >> testPabloPlaysARepeatCardAfterValenLandsInASpeedUpEffect [
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
 		        laps: 2
-		        diceCup: aDiceCup
+		        diceCup: die
 		        and: deck.
 	game playATurn.
 	self assert:'Valen' isAt:11 with:1 in:game.
@@ -239,14 +221,7 @@ RepeatCardTest >> testPabloPlaysARepeatCardAfterValenLandsInASpeedUpEffect [
 { #category : #tests }
 RepeatCardTest >> testPabloPlaysARepeatCardAfterValenLandsInAWormholeEffect [
 
-	| dieOne dieTwo dieThree aDiceCup game boxSequence deck repeatCard |
-	dieOne := LoadedDie with: 3.
-	dieTwo := LoadedDie with: 2.
-	dieThree := LoadedDie with: 1.
-	aDiceCup := DiceCup withAll: { 
-			            dieOne.
-			            dieTwo.
-			            dieThree }.
+	| game boxSequence deck repeatCard |
 	repeatCard := RepeatCard new.
 	deck := Deck with: { repeatCard }.
 
@@ -259,7 +234,7 @@ RepeatCardTest >> testPabloPlaysARepeatCardAfterValenLandsInAWormholeEffect [
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
 		        laps: 2
-		        diceCup: aDiceCup
+		        diceCup: die
 		        and: deck.
 	game playATurn.
 	self assert:'Valen' isAt:3 with:1 in:game.

@@ -5,13 +5,14 @@ Class {
 }
 
 { #category : #accessing }
-HyperjumpTest >> assert: aSpaceshipName isAt: aPositionNumber with: aLapNumber in: aGame [
+HyperjumpTest >> assert: aSpaceshipName isAtPostion: aPositionNumber with: aLapNumber atDistance: aDistance in: aGame [
 
 	| spaceshipPosition |
 	spaceshipPosition := (aGame spaceshipOf: aSpaceshipName) position.
 	
 	self assert: spaceshipPosition boxNumber equals: aPositionNumber.
 	self assert: spaceshipPosition lapNumber equals: aLapNumber.
+	self assert: spaceshipPosition distance equals: aDistance.
 ]
 
 { #category : #tests }
@@ -43,14 +44,8 @@ HyperjumpTest >> should: aBlock raise: anError withMessage: anErrorMessage [
 { #category : #tests }
 HyperjumpTest >> testAllPlayersLandInHyperJumpAtBoxFiveAndTheyMoveFirstFiveParsecsAndThenFourAndTheSequenceRestarts [
 
-	| dieOne dieTwo dieThree aDiceCup game boxSequence |
-	dieOne := LoadedDie with: 1.
-	dieTwo := LoadedDie with: 1.
-	dieThree := LoadedDie with: 2.
-	aDiceCup := DiceCup withAll: { 
-			            dieOne.
-			            dieTwo.
-			            dieThree }.
+	| die game boxSequence |
+	die:= LoadedDie with: 4.
 	boxSequence := self
 		               sequenceOfNoEffectsOf: 10
 		               with: (HyperJumpEffect with: { 
@@ -62,30 +57,36 @@ HyperjumpTest >> testAllPlayersLandInHyperJumpAtBoxFiveAndTheyMoveFirstFiveParse
 		        boardWith: boxSequence
 		        distance: (Lightyear with: 60)
 		        laps: 2
-		        diceCup: aDiceCup
+		        diceCup: die
 		        and: (Deck with: { SpeedCard new }).
 	game playATurn.
-	self assert:'Valen' isAt:7 with:1 in: game.
-	self assert: ((game spaceshipOf: 'Valen') position) distance equals: 1.
+	self
+		assert: 'Valen'
+		isAtPostion: 7
+		with: 1
+		atDistance: 1
+		in: game.
 	game playATurn.
-	self assert:'Valen' isAt:7 with:1 in: game.
-	self assert: ((game spaceshipOf: 'Pablo') position) distance equals: 0.
+	self
+		assert: 'Pablo'
+		isAtPostion: 7
+		with: 1
+		atDistance: 0
+		in: game.
 	game playATurn.
-	self assert:'Seba' isAt:7 with:1 in: game.
-	self assert: ((game spaceshipOf: 'Seba')position) distance equals: 1
+	self
+		assert: 'Seba'
+		isAtPostion: 7
+		with: 1
+		atDistance: 1
+		in: game.
 ]
 
 { #category : #tests }
 HyperjumpTest >> testHyperjumpDistanceSequenceIsAlwaysInDecreasingOrder [
 
-	| dieOne dieTwo dieThree aDiceCup game boxSequence |
-	dieOne := LoadedDie with: 1.
-	dieTwo := LoadedDie with: 1.
-	dieThree := LoadedDie with: 2.
-	aDiceCup := DiceCup withAll: { 
-			            dieOne.
-			            dieTwo.
-			            dieThree }.
+	| die game boxSequence |
+	die := LoadedDie with: 4.
 	boxSequence := self
 		               sequenceOfNoEffectsOf: 10
 		               with: (HyperJumpEffect with: { 
@@ -97,15 +98,27 @@ HyperjumpTest >> testHyperjumpDistanceSequenceIsAlwaysInDecreasingOrder [
 		        boardWith: boxSequence
 		        distance: (Lightyear with: 60)
 		        laps: 2
-		        diceCup: aDiceCup
+		        diceCup: die
 		        and: (Deck with: { SpeedCard new }).
 	game playATurn.
-	self assert:'Valen' isAt:8 with:1 in: game.
-	self assert: ((game spaceshipOf: 'Valen') position) distance equals: 1.
+	self
+		assert: 'Valen'
+		isAtPostion: 8
+		with: 1
+		atDistance: 1
+		in: game.
 	game playATurn.
-	self assert:'Pablo' isAt:7 with:1 in: game.
-	self assert: ((game spaceshipOf: 'Pablo') position) distance equals: 1.
+	self
+		assert: 'Pablo'
+		isAtPostion: 7
+		with: 1
+		atDistance: 1
+		in: game.
 	game playATurn.
-	self assert:'Seba' isAt:8 with:1 in: game.
-	self assert: ((game spaceshipOf: 'Seba')position) distance equals: 1
+	self
+		assert: 'Seba'
+		isAtPostion: 8
+		with: 1
+		atDistance: 1
+		in: game.
 ]

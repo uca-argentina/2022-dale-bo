@@ -1,8 +1,17 @@
 Class {
 	#name : #SpeedAccellerationOverloadAndCancellationTest,
 	#superclass : #TestCase,
+	#instVars : [
+		'die'
+	],
 	#category : #'IngSoft2-Tests'
 }
+
+{ #category : #tests }
+SpeedAccellerationOverloadAndCancellationTest >> assert: aSpaceship handHas: aNumberOfCards in: aGame [ 
+	self assert: ((aGame spaceshipOf: aSpaceship) hand ) numberOfCards equals: aNumberOfCards.
+
+]
 
 { #category : #tests }
 SpeedAccellerationOverloadAndCancellationTest >> assert: aSpaceshipName isAt: aPositionNumber with: aLapNumber in: aGame [
@@ -14,6 +23,11 @@ SpeedAccellerationOverloadAndCancellationTest >> assert: aSpaceshipName isAt: aP
 	self assert: spaceshipPosition lapNumber equals: aLapNumber.
 
 
+]
+
+{ #category : #running }
+SpeedAccellerationOverloadAndCancellationTest >> setUp [
+	die:= LoadedDie with:6.
 ]
 
 { #category : #tests }
@@ -48,16 +62,15 @@ SpeedAccellerationOverloadAndCancellationTest >> testADeckCannotBeCreatedWithNoC
 { #category : #tests }
 SpeedAccellerationOverloadAndCancellationTest >> testPabloCantPlayCancellationBecauseThereWasnACardPlayedBefore [
 
-	| die game boxSequence deckForGame cancelationCard redoCard deckForCardGiver |
-	die := LoadedDie with: 6.
+	| game boxSequence deckForGame cancelationCard redoCard deckForCardGiver cardGiverBox |
 	cancelationCard := CancellationCard new.
 	redoCard := RedoCard new.
 	deckForCardGiver := Deck with: { redoCard }.
 	deckForGame := Deck with: { cancelationCard }.
+	cardGiverBox:=DiscreteProbabilityEvent for:(CardGiverEffect with: deckForCardGiver) with:100.
 	boxSequence := (BoxesGenerator
 		                generate: 16
-		                for: { (CardGiverEffect with: deckForCardGiver) }
-		                with: { 100 }) boxSequence.
+		                for: { cardGiverBox }) boxSequence.
 	game := SpaceRaceGame
 		        with: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
@@ -81,56 +94,40 @@ SpeedAccellerationOverloadAndCancellationTest >> testPabloCantPlayCancellationBe
 { #category : #tests }
 SpeedAccellerationOverloadAndCancellationTest >> testPlayerLandsInABoxAndReceivesACard [
 
-	| dieOne dieTwo dieThree aDiceCup game boxSequence deck |
-	dieOne := LoadedDie with: 3.
-	dieTwo := LoadedDie with: 2.
-	dieThree := LoadedDie with: 1.
-	aDiceCup := DiceCup withAll: { 
-			            dieOne.
-			            dieTwo.
-			            dieThree }.
+	| game boxSequence deck cardGiverBox |
 	deck := Deck with: { 
 			        SpeedCard new.
 			        OverloadCard new }.
-	boxSequence := (BoxesGenerator
-		                generate: 13
-		                for: { (CardGiverEffect with: deck) }
-		                with: { 100 }) boxSequence.
+	cardGiverBox := DiscreteProbabilityEvent for: (CardGiverEffect with:deck) with: 100.
+	boxSequence := (BoxesGenerator generate: 16 for: { cardGiverBox })
+		               boxSequence.
 	game := SpaceRaceGame
 		        with: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
 		        laps: 2
-		        diceCup: aDiceCup
+		        diceCup: die
 		        and: deck.
 	game playATurn.
-
-	self assert: ((game spaceshipOf: 'Valen') hand) numberOfCards equals: 3
+	self assert:'Valen' handHas:3 in:game.
 ]
 
 { #category : #tests }
 SpeedAccellerationOverloadAndCancellationTest >> testValenPlaysASpeedCardToPablo [
 
-	| dieOne dieTwo dieThree aDiceCup game boxSequence deck speedCard |
-	dieOne := LoadedDie with: 3.
-	dieTwo := LoadedDie with: 2.
-	dieThree := LoadedDie with: 1.
-	aDiceCup := DiceCup withAll: { 
-			            dieOne.
-			            dieTwo.
-			            dieThree }.
+	| game boxSequence deck speedCard noEffect |
 	speedCard := SpeedCard new.
 	deck := Deck with: { speedCard }.
+	noEffect:=DiscreteProbabilityEvent for:(NoEffect new) with:100.
 	boxSequence := (BoxesGenerator
 		                generate: 13
-		                for: { (NoEffect new) }
-		                with: { 100 }) boxSequence.
+		                for: { noEffect }) boxSequence.
 	game := SpaceRaceGame
 		        with: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
 		        laps: 2
-		        diceCup: aDiceCup
+		        diceCup: die
 		        and: deck.
 
 	speedCard
@@ -145,28 +142,21 @@ SpeedAccellerationOverloadAndCancellationTest >> testValenPlaysASpeedCardToPablo
 { #category : #tests }
 SpeedAccellerationOverloadAndCancellationTest >> testValenPlaysAnAccelerationCardAndPabloUseCancelationCardToValenInValensTurn [
 
-	| dieOne dieTwo dieThree aDiceCup game boxSequence deckForGame deckForBoxes accelerationCard cancellationCard |
-	dieOne := LoadedDie with: 3.
-	dieTwo := LoadedDie with: 2.
-	dieThree := LoadedDie with: 1.
-	aDiceCup := DiceCup withAll: { 
-			            dieOne.
-			            dieTwo.
-			            dieThree }.
+	| game boxSequence deckForGame deckForBoxes accelerationCard cancellationCard cardGiverBox |
 	accelerationCard := AccelerationCard new.
 	cancellationCard := CancellationCard new.
 	deckForGame := Deck with: { accelerationCard }.
 	deckForBoxes := Deck with: { cancellationCard }.
+	cardGiverBox:=DiscreteProbabilityEvent for:(CardGiverEffect with: deckForBoxes) with:100.
 	boxSequence := (BoxesGenerator
 		                generate: 13
-		                for: { (CardGiverEffect with: deckForBoxes) }
-		                with: { 100 }) boxSequence.
+		                for: { cardGiverBox }) boxSequence.
 	game := SpaceRaceGame
 		        with: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
 		        laps: 2
-		        diceCup: aDiceCup
+		        diceCup: die
 		        and: deckForGame.
 	accelerationCard
 		playedOn: game
@@ -190,26 +180,19 @@ SpeedAccellerationOverloadAndCancellationTest >> testValenPlaysAnAccelerationCar
 { #category : #tests }
 SpeedAccellerationOverloadAndCancellationTest >> testValenPlaysAnAccelerationCardToAllPlayers [
 
-	| dieOne dieTwo dieThree aDiceCup game boxSequence deck accelerationCard |
-	dieOne := LoadedDie with: 3.
-	dieTwo := LoadedDie with: 2.
-	dieThree := LoadedDie with: 1.
-	aDiceCup := DiceCup withAll: { 
-			            dieOne.
-			            dieTwo.
-			            dieThree }.
+	| game boxSequence deck accelerationCard noEffect |
 	accelerationCard := AccelerationCard new.
 	deck := Deck with: { accelerationCard }.
+	noEffect:=DiscreteProbabilityEvent for:(NoEffect new) with:100.
 	boxSequence := (BoxesGenerator
 		                generate: 13
-		                for: { (NoEffect new) }
-		                with: { 100 }) boxSequence.
+		                for: { noEffect }) boxSequence.
 	game := SpaceRaceGame
 		        with: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
 		        laps: 2
-		        diceCup: aDiceCup
+		        diceCup: die
 		        and: deck.
 	accelerationCard
 		playedOn: game
@@ -228,26 +211,18 @@ SpeedAccellerationOverloadAndCancellationTest >> testValenPlaysAnAccelerationCar
 { #category : #tests }
 SpeedAccellerationOverloadAndCancellationTest >> testValenPlaysAnOverloadCardToPabloAndReduceItsDieRollByOne [
 
-	| dieOne dieTwo dieThree aDiceCup game boxSequence deck overloadCard |
-	dieOne := LoadedDie with: 3.
-	dieTwo := LoadedDie with: 2.
-	dieThree := LoadedDie with: 1.
-	aDiceCup := DiceCup withAll: { 
-			            dieOne.
-			            dieTwo.
-			            dieThree }.
+	|  game boxSequence deck overloadCard cardGiverBox |
 	overloadCard := OverloadCard new.
 	deck := Deck with: { overloadCard }.
-	boxSequence := (BoxesGenerator
-		                generate: 13
-		                for: { (CardGiverEffect with: deck) }
-		                with: { 100 }) boxSequence.
+	cardGiverBox := DiscreteProbabilityEvent for: (CardGiverEffect with:deck) with: 100.
+	boxSequence := (BoxesGenerator generate: 13 for: { cardGiverBox })
+		               boxSequence.
 	game := SpaceRaceGame
 		        with: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
 		        laps: 2
-		        diceCup: aDiceCup
+		        diceCup: die
 		        and: deck.
 	overloadCard
 		playedOn: game
@@ -261,26 +236,18 @@ SpeedAccellerationOverloadAndCancellationTest >> testValenPlaysAnOverloadCardToP
 { #category : #tests }
 SpeedAccellerationOverloadAndCancellationTest >> testValenTriesToPlayACardInPablosTurnAndHeCantsBecauseItAPermanentCard [
 
-	| dieOne dieTwo dieThree aDiceCup game boxSequence deck speedCard |
-	dieOne := LoadedDie with: 3.
-	dieTwo := LoadedDie with: 2.
-	dieThree := LoadedDie with: 1.
-	aDiceCup := DiceCup withAll: { 
-			            dieOne.
-			            dieTwo.
-			            dieThree }.
+	| game boxSequence deck speedCard cardGiverBox |
 	speedCard := SpeedCard new.
 	deck := Deck with: { speedCard }.
-	boxSequence := (BoxesGenerator
-		                generate: 13
-		                for: { (CardGiverEffect with: deck) }
-		                with: { 100 }) boxSequence.
+	cardGiverBox := DiscreteProbabilityEvent for: (CardGiverEffect with:deck) with: 100.
+	boxSequence := (BoxesGenerator generate: 13 for: { cardGiverBox })
+		               boxSequence.
 	game := SpaceRaceGame
 		        with: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
 		        laps: 2
-		        diceCup: aDiceCup
+		        diceCup: die
 		        and: deck.
 	game playATurn.
 	self
@@ -297,27 +264,19 @@ SpeedAccellerationOverloadAndCancellationTest >> testValenTriesToPlayACardInPabl
 { #category : #tests }
 SpeedAccellerationOverloadAndCancellationTest >> testValenTriesToPlayACardThatIsNotInHisHand [
 
-	| dieOne dieTwo dieThree aDiceCup game boxSequence deck speedCard overloadCard |
-	dieOne := LoadedDie with: 3.
-	dieTwo := LoadedDie with: 2.
-	dieThree := LoadedDie with: 1.
-	aDiceCup := DiceCup withAll: { 
-			            dieOne.
-			            dieTwo.
-			            dieThree }.
+	| game boxSequence deck speedCard overloadCard cardGiverBox |
 	overloadCard := OverloadCard new.
 	speedCard := SpeedCard new.
 	deck := Deck with: { speedCard }.
-	boxSequence := (BoxesGenerator
-		                generate: 13
-		                for: { CardGiverEffect new }
-		                with: { 100 }) boxSequence.
+	cardGiverBox := DiscreteProbabilityEvent for: (CardGiverEffect with:deck) with: 100.
+	boxSequence := (BoxesGenerator generate: 13 for: { cardGiverBox })
+		               boxSequence.
 	game := SpaceRaceGame
 		        with: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
 		        laps: 2
-		        diceCup: aDiceCup
+		        diceCup: die
 		        and: deck.
 	self
 		should: [ 

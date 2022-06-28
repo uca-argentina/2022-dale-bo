@@ -47,7 +47,7 @@ CardEffectApplicator >> applyCancellationBasedOn: aCardPlay [
 	self
 		assertValidTurnFor: aCardPlay playedBy
 		andCardType: aCardPlay cardType.
-	affectedSpaceship := board spaceshipOf: aCardPlay target target.
+	affectedSpaceship := board spaceshipOf: (aCardPlay target) target.
 	effectsOnSpaceship := affectedSpaceship effectsOnSpaceship effectsOnMe.
 	self assertSpaceship:effectsOnSpaceship hasBeenAffectedBy:aCardPlay target cardType.
 	effectsOnSpaceship remove: aCardPlay target cardType.
