@@ -54,6 +54,6 @@ BoxesGeneratorTest >> testABoardIsCreatedWithRigthDistributions [
 				                CardGiverEffect }
 		                with: { 2. 8. 10. 20. 20. 30. 10 }) boxSequence.
 
-	self assert: randomBoxes size equals: 90.
+	self assert: randomBoxes size equals: 100.
 	
 ]

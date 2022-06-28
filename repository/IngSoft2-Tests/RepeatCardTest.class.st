@@ -92,7 +92,7 @@ RepeatCardTest >> testPabloPlaysARepeatCardAfterValenLandsInACardGiver [
 		by: 'Pablo'
 		to: 'Pablo'.
 	game playATurn.
-	self assert: ((game spaceshipOf: 'Pablo') hand) hand size equals: 3.
+	self assert: ((game spaceshipOf: 'Pablo') hand) cards size equals: 3.
 ]
 
 { #category : #tests }

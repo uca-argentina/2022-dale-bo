@@ -116,8 +116,8 @@ RedoCardTest >> testPabloPlaysARedoAfterValenPlaysARepeat [
 		to: 'Valen'.
 	game playATurn.
 	redoCard playedOn: game by:'Pablo'  to:'Pablo'.
-	self assert: ((game spaceshipOf: 'Valen') hand ) hand size equals: 3.
-	self assert: ((game spaceshipOf: 'Pablo') hand) hand size equals: 3.
+	self assert: ((game spaceshipOf: 'Valen') hand ) cards size equals: 3.
+	self assert: ((game spaceshipOf: 'Pablo') hand) cards size equals: 3.
 	
 ]
 

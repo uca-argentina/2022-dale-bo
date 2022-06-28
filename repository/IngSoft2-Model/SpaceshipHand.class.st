@@ -21,7 +21,7 @@ SpaceshipHand >> assertSpaceshipHas: aCard [
 ]
 
 { #category : #accessing }
-SpaceshipHand >> hand [
+SpaceshipHand >> cards [
 	^ hand
 ]
 

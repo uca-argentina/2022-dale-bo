@@ -90,7 +90,7 @@ Board >> giveTo: aSpaceship card: aCard [
 
 	| aSpaceshipOldStatus  aSpaceshipHand |
 	aSpaceshipOldStatus:= self spaceshipOf: aSpaceship.
-	aSpaceshipHand:=  (aSpaceshipOldStatus hand)hand.
+	aSpaceshipHand:=  (aSpaceshipOldStatus hand) cards.
 	aSpaceshipHand add:aCard.
 	spaceships replaceAll: aSpaceshipOldStatus with: (SpaceshipStatus
 			 of: aSpaceshipOldStatus name
@@ -118,7 +118,7 @@ Board >> lastBoxEffect [
 { #category : #actions }
 Board >> move: aSpaceship toFinalDistance: aDistanceNumber [ 
 	| oldSpaceshipPosition  spaceshipNewDistanceInBox oldSpaceshipStatus |
-	oldSpaceshipStatus := spaceships detect: [ :each | each nameOfSpaceship = aSpaceship ].
+	oldSpaceshipStatus := spaceships detect: [ :each | each name = aSpaceship ].
 	oldSpaceshipPosition:= oldSpaceshipStatus position.
 	spaceshipNewDistanceInBox :=oldSpaceshipPosition  distance + aDistanceNumber amountInParsecs.
 
@@ -137,19 +137,20 @@ Board >> move: aShip with: aDiceResult [
 
 	| oldSpaceship spaceshipWithoutEffectsApplied |
 	oldSpaceship := self spaceshipOf: aShip.
-	self moveForward: oldSpaceship nameOfSpaceship to: aDiceResult.
+	self moveForward: oldSpaceship name to: aDiceResult.
 	spaceshipWithoutEffectsApplied := (self spaceshipOf: aShip) position.
 	self
 		effectAt: spaceshipWithoutEffectsApplied boxNumber
 		for: spaceships
-		appliedBy: oldSpaceship name
+		appliedBy: oldSpaceship name.
+	self sortPositionsByRanking.
 ]
 
 { #category : #actions }
 Board >> moveBackwards: aNumberOfBoxes AllSpaceshipsExcept: aSpaceship [
 
 	spaceships do: [ :each | 
-		each nameOfSpaceship ~= aSpaceship ifTrue: [ 
+		each name ~= aSpaceship ifTrue: [ 
 			self moveBackwards: each name to: aNumberOfBoxes ] ].
 ]
 
@@ -157,7 +158,7 @@ Board >> moveBackwards: aNumberOfBoxes AllSpaceshipsExcept: aSpaceship [
 Board >> moveBackwards: aSpaceship to: aBox [
 
 	| oldSpaceshipPosition spaceshipNewBoxNumber spaceshipNewLapNumber oldSpaceshipStatus|
-	oldSpaceshipStatus := spaceships detect: [ :each | each nameOfSpaceship = aSpaceship ].
+	oldSpaceshipStatus := spaceships detect: [ :each | each name = aSpaceship ].
 	oldSpaceshipPosition := oldSpaceshipStatus position.
 	spaceshipNewBoxNumber := oldSpaceshipPosition boxNumber - aBox.
 	spaceshipNewLapNumber := oldSpaceshipPosition lapNumber.
@@ -179,7 +180,7 @@ Board >> moveBackwards: aSpaceship to: aBox [
 Board >> moveForward: aSpaceship to: aBox [
 
 	| oldSpaceshipPosition spaceshipNewBoxNumber spaceshipNewLapNumber oldSpaceshipStatus |
-	oldSpaceshipStatus := spaceships detect: [ :each | each nameOfSpaceship = aSpaceship ].
+	oldSpaceshipStatus := spaceships detect: [ :each | each name = aSpaceship ].
 	oldSpaceshipPosition := oldSpaceshipStatus position.
 	spaceshipNewBoxNumber := oldSpaceshipPosition boxNumber + aBox.
 	
@@ -203,36 +204,33 @@ Board >> moveForward: aSpaceship to: aBox [
 
 { #category : #action }
 Board >> moveSpaceshipsToTheFirstBox [
+
 	spaceships do: [ :each | 
 		self
-		updateSpaceshipPositionOf: each
-		to: (SpaceshipPosition
-				 at: 1
-				 distance: 0
-				 laps: (each position) lapNumber) ].
+			updateSpaceshipPositionOf: each
+			to:
+			(SpaceshipPosition at: 1 distance: 0 laps: each position lapNumber) ]
 ]
 
 { #category : #accesing }
 Board >> rankingOf: aSpaceship [
-	self sortPositionsByRanking.
+
 	spaceships do: [ :spaceship | 
-		spaceship nameOfSpaceship = aSpaceship ifTrue: [ 
+		spaceship name = aSpaceship ifTrue: [ 
 			^ spaceships indexOf: spaceship ] ]
 ]
 
 { #category : #accessing }
 Board >> sortPositionsByRanking [
 
-	spaceships sort: [ :spaceshipStatus1 :spaceshipStatus2 | 
-        (spaceshipStatus1 position) lapNumber > (spaceshipStatus2 position) lapNumber or: [ 
-            (spaceshipStatus1 position) lapNumber = (spaceshipStatus2 position) lapNumber and:
-                (spaceshipStatus1 position) boxNumber > (spaceshipStatus2 position) boxNumber ] ]
+	spaceships sort: [ :spaceship1 :spaceship2 | 
+		spaceship1 position > spaceship2 position ]
 ]
 
 { #category : #accesing }
 Board >> spaceshipOf: aShipsName [
 
-	^ spaceships detect: [ :each | each nameOfSpaceship = aShipsName ]
+	^ spaceships detect: [ :each | each name = aShipsName ]
 ]
 
 { #category : #actions }
@@ -242,7 +240,7 @@ Board >> updateSpaceshipEffectsOf: aSpaceshipOldStatus to: spaceshipNewEffects [
 			 of: aSpaceshipOldStatus name
 			 position: aSpaceshipOldStatus position
 			 cards: aSpaceshipOldStatus hand
-			 effects: spaceshipNewEffects ).
+			 effects: spaceshipNewEffects)
 ]
 
 { #category : #actions }

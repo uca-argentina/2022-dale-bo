@@ -20,12 +20,6 @@ CardPlay class >> by: aSpaceship card: aCard to: aTarget itsRedo: isRedo [
 		itsRedo:isRedo.
 ]
 
-{ #category : #accessing }
-CardPlay >> appliedTo [
-
-	^ appliedTo
-]
-
 { #category : #actions }
 CardPlay >> applyUsing: aCardEffectApplicator [ 
 	card applyUsing:aCardEffectApplicator basedOn:self.
@@ -53,4 +47,10 @@ CardPlay >> isRedo [
 { #category : #accessing }
 CardPlay >> playedBy [
 	^ playedBy
+]
+
+{ #category : #accessing }
+CardPlay >> target [
+
+	^ appliedTo
 ]
