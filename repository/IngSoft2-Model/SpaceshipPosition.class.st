@@ -19,6 +19,13 @@ SpaceshipPosition class >> at: aBoxNumber distance: aDistance laps: aLapNumber [
 ]
 
 { #category : #accessing }
+SpaceshipPosition >> > anotherPoisiton [
+         ^ lapNumber > (anotherPoisiton ) lapNumber or: [ 
+             lapNumber = (anotherPoisiton ) lapNumber and:
+                 boxNumber > (anotherPoisiton ) boxNumber ] .
+]
+
+{ #category : #accessing }
 SpaceshipPosition >> boxNumber [
 	^ boxNumber
 ]

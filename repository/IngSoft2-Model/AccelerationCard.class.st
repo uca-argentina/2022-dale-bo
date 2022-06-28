@@ -4,6 +4,11 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #actions }
+AccelerationCard >> applyUsing: aCardEffectApplicator basedOn: aCardPlay [ 
+	aCardEffectApplicator applyAccelerationBasedOn:aCardPlay.
+]
+
 { #category : #operations }
 AccelerationCard >> effect [
 
@@ -16,14 +21,14 @@ AccelerationCard >> isPermanent [
 	^true.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #actions }
 AccelerationCard >> playedOn: aGame by: aSpaceship [
 
 	| aCardPlay |
 	aCardPlay := CardPlay
 		             by: aSpaceship
-		             type: self
-		             to: 'all'
-		             for: nil.
+		             card: self
+		             to: aGame allSpaceships
+		             itsRedo: false.
 	aGame applyCardPlay: aCardPlay
 ]

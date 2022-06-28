@@ -8,8 +8,7 @@ Class {
 		'distancePerBox',
 		'deck',
 		'lastBoxEffect',
-		'spaceships',
-		'winner'
+		'spaceships'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -49,9 +48,12 @@ Board >> allSpaceships [
 ]
 
 { #category : #accessing }
-Board >> boxes [
+Board >> assertHasAWinner [
 
-	^ boxes
+	| possibleWinnerPosition |
+	possibleWinnerPosition := (spaceships at:1) position.
+	^((possibleWinnerPosition boxNumber = distanceOfBoard and:
+		 possibleWinnerPosition lapNumber = laps))
 ]
 
 { #category : #action }
@@ -77,12 +79,6 @@ Board >> createStatusFor: aCollectionOfShips [
 ]
 
 { #category : #accessing }
-Board >> distancePerBox [
-
-	^ distancePerBox 
-]
-
-{ #category : #accessing }
 Board >> effectAt: aBoxNumber for: ships appliedBy: aSpacehip [
 
 	(boxes at: aBoxNumber) triggeredBy: aSpacehip with: self.
@@ -94,7 +90,7 @@ Board >> giveTo: aSpaceship card: aCard [
 
 	| aSpaceshipOldStatus  aSpaceshipHand |
 	aSpaceshipOldStatus:= self spaceshipOf: aSpaceship.
-	aSpaceshipHand:=  (aSpaceshipOldStatus hand)hand.
+	aSpaceshipHand:=  (aSpaceshipOldStatus hand) cards.
 	aSpaceshipHand add:aCard.
 	spaceships replaceAll: aSpaceshipOldStatus with: (SpaceshipStatus
 			 of: aSpaceshipOldStatus name
@@ -106,40 +102,34 @@ Board >> giveTo: aSpaceship card: aCard [
 { #category : #initialization }
 Board >> initializeWithShips: aCollectionOfSpaceships with: aBoxSequence distance: aDistance laps: numberOfLaps and: aDeck [
 	boxes := aBoxSequence.
-	distancePerBox := (aDistance amountInParsecs) / (boxes size).
+	distanceOfBoard :=boxes size.
+	distancePerBox := Parsecs with:((aDistance amountInParsecs) / distanceOfBoard).
 	laps := numberOfLaps.
 	deck:= aDeck.
 	self createStatusFor:aCollectionOfSpaceships.
-	lastBoxEffect := nil.
-	winner:=nil.
-]
-
-{ #category : #accessing }
-Board >> laps [
-
-	^ laps
+	lastBoxEffect := NoEffect new.
 ]
 
 { #category : #accessing }
 Board >> lastBoxEffect [
-	^lastBoxEffect.
+	^lastBoxEffect .
 ]
 
 { #category : #actions }
 Board >> move: aSpaceship toFinalDistance: aDistanceNumber [ 
 	| oldSpaceshipPosition  spaceshipNewDistanceInBox oldSpaceshipStatus |
-	oldSpaceshipStatus := spaceships detect: [ :each | each nameOfSpaceship = aSpaceship ].
+	oldSpaceshipStatus := spaceships detect: [ :each | each name = aSpaceship ].
 	oldSpaceshipPosition:= oldSpaceshipStatus position.
 	spaceshipNewDistanceInBox :=oldSpaceshipPosition  distance + aDistanceNumber amountInParsecs.
 
 	self updateSpaceshipPositionOf: oldSpaceshipStatus
 		to: (SpaceshipPosition
 				 at: oldSpaceshipPosition boxNumber
-				 distance: spaceshipNewDistanceInBox % distancePerBox 
+				 distance: spaceshipNewDistanceInBox % (distancePerBox amountInParsecs) 
 				 laps: oldSpaceshipPosition lapNumber).
 	self
 		moveForward: aSpaceship
-		to: spaceshipNewDistanceInBox // distancePerBox 
+		to: spaceshipNewDistanceInBox // (distancePerBox amountInParsecs).
 ]
 
 { #category : #actions }
@@ -147,19 +137,20 @@ Board >> move: aShip with: aDiceResult [
 
 	| oldSpaceship spaceshipWithoutEffectsApplied |
 	oldSpaceship := self spaceshipOf: aShip.
-	self moveForward: oldSpaceship nameOfSpaceship to: aDiceResult.
+	self moveForward: oldSpaceship name to: aDiceResult.
 	spaceshipWithoutEffectsApplied := (self spaceshipOf: aShip) position.
 	self
 		effectAt: spaceshipWithoutEffectsApplied boxNumber
 		for: spaceships
-		appliedBy: oldSpaceship name
+		appliedBy: oldSpaceship name.
+	self sortPositionsByRanking.
 ]
 
 { #category : #actions }
 Board >> moveBackwards: aNumberOfBoxes AllSpaceshipsExcept: aSpaceship [
 
 	spaceships do: [ :each | 
-		each nameOfSpaceship ~= aSpaceship ifTrue: [ 
+		each name ~= aSpaceship ifTrue: [ 
 			self moveBackwards: each name to: aNumberOfBoxes ] ].
 ]
 
@@ -167,42 +158,40 @@ Board >> moveBackwards: aNumberOfBoxes AllSpaceshipsExcept: aSpaceship [
 Board >> moveBackwards: aSpaceship to: aBox [
 
 	| oldSpaceshipPosition spaceshipNewBoxNumber spaceshipNewLapNumber oldSpaceshipStatus|
-	oldSpaceshipStatus := spaceships detect: [ :each | each nameOfSpaceship = aSpaceship ].
+	oldSpaceshipStatus := spaceships detect: [ :each | each name = aSpaceship ].
 	oldSpaceshipPosition := oldSpaceshipStatus position.
 	spaceshipNewBoxNumber := oldSpaceshipPosition boxNumber - aBox.
 	spaceshipNewLapNumber := oldSpaceshipPosition lapNumber.
 	
 	(spaceshipNewBoxNumber < 1 and: oldSpaceshipPosition lapNumber > 1) ifTrue: [ 
-		spaceshipNewBoxNumber := boxes size + spaceshipNewBoxNumber.
-		spaceshipNewLapNumber := oldSpaceshipPosition lapNumber - 1 ].
-	(spaceshipNewBoxNumber < 1 and: oldSpaceshipPosition lapNumber = 1) ifTrue: [ 
-		spaceshipNewBoxNumber := 1 ].
-
+        spaceshipNewBoxNumber := distanceOfBoard + spaceshipNewBoxNumber.
+        spaceshipNewLapNumber := oldSpaceshipPosition lapNumber - 1 ].
+    (spaceshipNewBoxNumber < 1 and: oldSpaceshipPosition lapNumber = 1) ifTrue: [ 
+        spaceshipNewBoxNumber := 1 ].
 	self
 		updateSpaceshipPositionOf: oldSpaceshipStatus
 		to: (SpaceshipPosition
 				 at: spaceshipNewBoxNumber
 				 distance: oldSpaceshipPosition distance
-				 laps: spaceshipNewLapNumber)
+				 laps: spaceshipNewLapNumber).
 ]
 
 { #category : #accessing }
 Board >> moveForward: aSpaceship to: aBox [
 
 	| oldSpaceshipPosition spaceshipNewBoxNumber spaceshipNewLapNumber oldSpaceshipStatus |
-	oldSpaceshipStatus := spaceships detect: [ :each | each nameOfSpaceship = aSpaceship ].
+	oldSpaceshipStatus := spaceships detect: [ :each | each name = aSpaceship ].
 	oldSpaceshipPosition := oldSpaceshipStatus position.
 	spaceshipNewBoxNumber := oldSpaceshipPosition boxNumber + aBox.
 	
-	(spaceshipNewBoxNumber > boxes size and:
+	(spaceshipNewBoxNumber > distanceOfBoard and:
 		 oldSpaceshipPosition lapNumber = laps) ifTrue: [ 
-		spaceshipNewBoxNumber := boxes size.
-		winner := oldSpaceshipStatus name ].
-	(spaceshipNewBoxNumber > boxes size and:
+		spaceshipNewBoxNumber := distanceOfBoard ].
+	(spaceshipNewBoxNumber > distanceOfBoard and:
 		 oldSpaceshipPosition lapNumber < laps)
 		ifTrue: [ 
-			spaceshipNewLapNumber := oldSpaceshipPosition lapNumber + 1.
-			spaceshipNewBoxNumber := spaceshipNewBoxNumber - boxes size ]
+			spaceshipNewLapNumber := (oldSpaceshipPosition lapNumber + (spaceshipNewBoxNumber // distanceOfBoard)) min:laps.
+			spaceshipNewBoxNumber := spaceshipNewBoxNumber - distanceOfBoard min:distanceOfBoard ] 
 		ifFalse: [ spaceshipNewLapNumber := oldSpaceshipPosition lapNumber ].
 		
 	self
@@ -210,44 +199,38 @@ Board >> moveForward: aSpaceship to: aBox [
 		to: (SpaceshipPosition
 				 at: spaceshipNewBoxNumber
 				 distance: oldSpaceshipPosition distance
-				 laps: spaceshipNewLapNumber)
+				 laps: spaceshipNewLapNumber).
 ]
 
 { #category : #action }
 Board >> moveSpaceshipsToTheFirstBox [
+
 	spaceships do: [ :each | 
 		self
-		updateSpaceshipPositionOf: each
-		to: (SpaceshipPosition
-				 at: 1
-				 distance: 0
-				 laps: (each position) lapNumber) ].
+			updateSpaceshipPositionOf: each
+			to:
+			(SpaceshipPosition at: 1 distance: 0 laps: each position lapNumber) ]
 ]
 
 { #category : #accesing }
-Board >> rankingOf: aShip [
+Board >> rankingOf: aSpaceship [
 
-	spaceshipsController sortPositionsByRanking.
-	spaceshipsController allSpaceships do: [ :spaceship | 
-		spaceship nameOfSpaceship = aShip ifTrue: [ 
-			^ spaceshipsController allSpaceships indexOf: spaceship ] ]
-]
-
-{ #category : #accesing }
-Board >> sizeOfBoard [
-
-	^ boxes size
+	spaceships do: [ :spaceship | 
+		spaceship name = aSpaceship ifTrue: [ 
+			^ spaceships indexOf: spaceship ] ]
 ]
 
 { #category : #accessing }
-Board >> spaceshipController [
-	^spaceshipsController.
+Board >> sortPositionsByRanking [
+
+	spaceships sort: [ :spaceship1 :spaceship2 | 
+		spaceship1 position > spaceship2 position ]
 ]
 
 { #category : #accesing }
 Board >> spaceshipOf: aShipsName [
 
-	^ spaceships detect: [ :each | each nameOfSpaceship = aShipsName ]
+	^ spaceships detect: [ :each | each name = aShipsName ]
 ]
 
 { #category : #actions }
@@ -257,21 +240,36 @@ Board >> updateSpaceshipEffectsOf: aSpaceshipOldStatus to: spaceshipNewEffects [
 			 of: aSpaceshipOldStatus name
 			 position: aSpaceshipOldStatus position
 			 cards: aSpaceshipOldStatus hand
-			 effects: spaceshipNewEffects ).
+			 effects: spaceshipNewEffects)
+]
+
+{ #category : #actions }
+Board >> updateSpaceshipHandOf: aSpaceshipOldStatus with: spaceshipNewHand [
+
+	spaceships replaceAll: aSpaceshipOldStatus with: (SpaceshipStatus
+			 of: aSpaceshipOldStatus name
+			 position: aSpaceshipOldStatus position
+			 cards: spaceshipNewHand
+			 effects: aSpaceshipOldStatus effectsOnSpaceship)
 ]
 
 { #category : #actions }
 Board >> updateSpaceshipPositionOf: aSpaceshipOldStatus to: spaceshipNewPosition [
 
+
 	spaceships replaceAll: aSpaceshipOldStatus with: (SpaceshipStatus
 			 of: aSpaceshipOldStatus name
 			 position: spaceshipNewPosition
 			 cards: aSpaceshipOldStatus hand
-			 effects: aSpaceshipOldStatus effectsOnSpaceship)
+			 effects: aSpaceshipOldStatus effectsOnSpaceship).
 ]
 
 { #category : #accesing }
 Board >> winner [
 
-	 ^ winner
+	self assertHasAWinner
+		ifTrue: [ ^ (spaceships at: 1) name ]
+		ifFalse: [ 
+			Error signal:
+				'Game does not have a winner beacause is not finished yet' ]
 ]

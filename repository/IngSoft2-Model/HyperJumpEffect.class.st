@@ -24,16 +24,6 @@ HyperJumpEffect class >> with: aCollectionOfPosiblesMoves [
 	^ self new initializeWith: aCollectionOfPosiblesMoves
 ]
 
-{ #category : #action }
-HyperJumpEffect >> applyTo: spaceships triggeredBy: aSpaceship with: endPosition distance: aDistance laps: laps [
- spaceships
-		move: aSpaceship
-		to: self numberOfDistanceByHyperJump
-		finalDistance: aDistance
-		with: endPosition
-		and: laps
-]
-
 { #category : #accessing }
 HyperJumpEffect >> decreasingSort: aCollectionOfPosibleMoves [
 

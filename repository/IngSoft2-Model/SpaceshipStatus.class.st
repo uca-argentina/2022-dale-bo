@@ -45,12 +45,6 @@ SpaceshipStatus >> name [
 	^ name
 ]
 
-{ #category : #initialization }
-SpaceshipStatus >> nameOfSpaceship [
-
-	^ name
-]
-
 { #category : #accessing }
 SpaceshipStatus >> position [
 	^ position
