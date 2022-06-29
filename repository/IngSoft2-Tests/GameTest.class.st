@@ -41,6 +41,27 @@ GameTest >> should: aBlock raise: anError withMessage: anErrorMessage [
 ]
 
 { #category : #tests }
+GameTest >> testAGameCannotBeCreatedWithABoardWithNegativeDistance [
+
+	| die boxSequence noEffect |
+	die := LoadedDie with: 6.
+	noEffect:=DiscreteProbabilityEvent for:(NoEffect new) with:100.
+	boxSequence := (BoxesGenerator
+		                generate: 13
+		                for: { noEffect }) boxSequence.
+	self
+		should: [ SpaceRaceGame
+		        with: { 'Valen'. 'Pablo'. 'Seba' }
+		        boardWith: boxSequence
+		        distance: (Parsecs with: -200)
+		        laps: 2
+		        diceCup: die
+		        and: (Deck with: { SpeedCard new }) ]
+		raise: Error
+		withMessage: 'Distances must be greater than zero'
+]
+
+{ #category : #tests }
 GameTest >> testAGameCannotBePlayedAfterItHasFinished [
 
 	| die game boxSequence noEffect |
@@ -281,6 +302,24 @@ GameTest >> testAGameStartsWithShipsAtPositionOne [
 		        diceCup: die
 		        and: (Deck with: { SpeedCard new }).
 	self assert:  'Valen' isAt: 1 with:1 in:game.
+]
+
+{ #category : #tests }
+GameTest >> testAMoonwalkEffectCannotBeCreatedWithNegativePositionsToGoBack [
+
+	self
+		should: [ MoonwalkEffect with: -2 ]
+		raise: Error
+		withMessage: 'Number of boxes to send back muste be positive'
+]
+
+{ #category : #tests }
+GameTest >> testCardGiverEffectCannotBeCreatedWithAnEmptyDeck [
+
+	self
+		should: [ CardGiverEffect with: (Deck with:{}) ]
+		raise: Error
+		withMessage: 'A deck must have at least one card'
 ]
 
 { #category : #tests }
