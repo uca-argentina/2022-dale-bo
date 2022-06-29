@@ -83,6 +83,24 @@ HyperjumpTest >> testAllPlayersLandInHyperJumpAtBoxFiveAndTheyMoveFirstFiveParse
 ]
 
 { #category : #tests }
+HyperjumpTest >> testHyperjumpCannotBeCreatedWithNegativeDistances [
+
+	self
+		should: [ HyperJumpEffect with: { Parsecs with:-1. } ]
+		raise: Error
+		withMessage: 'Distances must be greater than zero'
+]
+
+{ #category : #tests }
+HyperjumpTest >> testHyperjumpCannotBeCreatedWithoutDistances [
+
+	self
+		should: [ HyperJumpEffect with: {  } ]
+		raise: Error
+		withMessage: 'There are no posible moves'
+]
+
+{ #category : #tests }
 HyperjumpTest >> testHyperjumpDistanceSequenceIsAlwaysInDecreasingOrder [
 
 	| die game boxSequence |

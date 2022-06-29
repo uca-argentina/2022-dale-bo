@@ -8,6 +8,12 @@ Class {
 }
 
 { #category : #'instance creation' }
+Lightyear class >> assertDistanceIsValid:aDistance [
+	aDistance < 0 ifTrue: [ 
+		Error signal: 'Distances must be greater than zero' ]
+]
+
+{ #category : #'instance creation' }
 Lightyear class >> with: aDistance [
 
 	^ self new initializeWith: aDistance

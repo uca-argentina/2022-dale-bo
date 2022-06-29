@@ -136,7 +136,7 @@ GameTest >> testAGameHasFinishedWhenAShipInTheLastPositionOfTheLastLap [
 ]
 
 { #category : #tests }
-GameTest >> testAGameIsPlayedAndValenEndsInPositionOneAndTheOthersInTheSecondPosition [
+GameTest >> testAGameIsPlayedAndValenEndsInPositionOneAndTheOthersInTheSecondAndThirdPosition [
 
 	| die game boxSequence noEffect |
 	die := LoadedDie with: 3.
@@ -158,6 +158,30 @@ GameTest >> testAGameIsPlayedAndValenEndsInPositionOneAndTheOthersInTheSecondPos
 	self assert: (game rankingOf: 'Valen') equals: 1.
 	self assert: (game rankingOf: 'Pablo') equals: 2.
 	self assert: (game rankingOf: 'Seba') equals: 3
+]
+
+{ #category : #tests }
+GameTest >> testAGameIsPlayedAndValenWinsAndCannotGoThroughLastPositionOfLastLap [
+
+	| die game boxSequence noEffect |
+	die := LoadedDie with: 6.
+	noEffect := DiscreteProbabilityEvent for: NoEffect new with: 100.
+	boxSequence := (BoxesGenerator generate: 13 for: { noEffect })
+		               boxSequence.
+	game := SpaceRaceGame
+		        with: { 'Valen'. 'Pablo'. 'Seba' }
+		        boardWith: boxSequence
+		        distance: (Parsecs with: 200)
+		        laps: 2
+		        diceCup: die
+		        and: (Deck with: { SpeedCard new }).
+	[ game hasFinished ] whileFalse: [ game playATurn ].
+	self
+		assert: 'Valen'
+		isAt: 13
+		with: 2
+		in: game.
+	self assert:(game winner) equals:'Valen'.
 ]
 
 { #category : #tests }
@@ -196,9 +220,9 @@ GameTest >> testAGameIsPlayedWithRandomDiceCupAndRandomBoardUntilItsFinished [
 GameTest >> testAGameIsPlayedWithRandomDiceCupUntilItsFinished [
 
 	| dieOne dieTwo dieThree aDiceCup game boxSequence noEffect |
-	dieOne := Die with: 6.
-	dieTwo := Die with: 6.
-	dieThree := Die with: 6.
+	dieOne := Die with: 10.
+	dieTwo := Die with: 10.
+	dieThree := Die with: 10.
 	aDiceCup := DiceCup withAll: { 
 			            dieOne.
 			            dieTwo.

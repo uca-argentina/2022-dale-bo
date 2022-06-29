@@ -14,8 +14,6 @@ HyperJumpEffect class >> assertPosibleMovesAreValid: aCollectionOfPosiblesMoves 
 
 	aCollectionOfPosiblesMoves size < 1 ifTrue: [ 
 		Error signal: 'There are no posible moves' ].
-	(aCollectionOfPosiblesMoves select: [ :element | element amount <= 0 ]) 
-		ifNotEmpty: [ Error signal: 'Possbile moves cannot be negative' ]
 ]
 
 { #category : #'class initialization' }

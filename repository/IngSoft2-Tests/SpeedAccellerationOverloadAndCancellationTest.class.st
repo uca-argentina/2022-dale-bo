@@ -113,7 +113,34 @@ SpeedAccellerationOverloadAndCancellationTest >> testPlayerLandsInABoxAndReceive
 ]
 
 { #category : #tests }
-SpeedAccellerationOverloadAndCancellationTest >> testValenPlaysASpeedCardToPablo [
+SpeedAccellerationOverloadAndCancellationTest >> testValenCantPlayACardThatIsNotInHisHand [
+
+	| game boxSequence deck speedCard overloadCard cardGiverBox |
+	overloadCard := OverloadCard new.
+	speedCard := SpeedCard new.
+	deck := Deck with: { speedCard }.
+	cardGiverBox := DiscreteProbabilityEvent for: (CardGiverEffect with:deck) with: 100.
+	boxSequence := (BoxesGenerator generate: 13 for: { cardGiverBox })
+		               boxSequence.
+	game := SpaceRaceGame
+		        with: { 'Valen'. 'Pablo'. 'Seba' }
+		        boardWith: boxSequence
+		        distance: (Parsecs with: 200)
+		        laps: 2
+		        diceCup: die
+		        and: deck.
+	self
+		should: [ 
+			overloadCard
+				playedOn: game
+				by: 'Valen'
+				to: 'Pablo']
+		raise: Error
+		withMessage: 'The spaceship does not have this card'
+]
+
+{ #category : #tests }
+SpeedAccellerationOverloadAndCancellationTest >> testValenPlaysASpeedCardToPabloAndAddsOneToPablosRoll [
 
 	| game boxSequence deck speedCard noEffect |
 	speedCard := SpeedCard new.
@@ -178,7 +205,7 @@ SpeedAccellerationOverloadAndCancellationTest >> testValenPlaysAnAccelerationCar
 ]
 
 { #category : #tests }
-SpeedAccellerationOverloadAndCancellationTest >> testValenPlaysAnAccelerationCardToAllPlayers [
+SpeedAccellerationOverloadAndCancellationTest >> testValenPlaysAnAccelerationCardToAllPlayersAndTheyAddOneToTheirRoll [
 
 	| game boxSequence deck accelerationCard noEffect |
 	accelerationCard := AccelerationCard new.
@@ -259,31 +286,4 @@ SpeedAccellerationOverloadAndCancellationTest >> testValenTriesToPlayACardInPabl
 		raise: Error
 		withMessage:
 		'A permanent card cannot be played on another spaceship turn'
-]
-
-{ #category : #tests }
-SpeedAccellerationOverloadAndCancellationTest >> testValenTriesToPlayACardThatIsNotInHisHand [
-
-	| game boxSequence deck speedCard overloadCard cardGiverBox |
-	overloadCard := OverloadCard new.
-	speedCard := SpeedCard new.
-	deck := Deck with: { speedCard }.
-	cardGiverBox := DiscreteProbabilityEvent for: (CardGiverEffect with:deck) with: 100.
-	boxSequence := (BoxesGenerator generate: 13 for: { cardGiverBox })
-		               boxSequence.
-	game := SpaceRaceGame
-		        with: { 'Valen'. 'Pablo'. 'Seba' }
-		        boardWith: boxSequence
-		        distance: (Parsecs with: 200)
-		        laps: 2
-		        diceCup: die
-		        and: deck.
-	self
-		should: [ 
-			overloadCard
-				playedOn: game
-				by: 'Valen'
-				to: 'Pablo']
-		raise: Error
-		withMessage: 'The spaceship does not have this card'
 ]
