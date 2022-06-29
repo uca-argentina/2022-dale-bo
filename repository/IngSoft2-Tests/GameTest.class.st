@@ -220,9 +220,9 @@ GameTest >> testAGameIsPlayedWithRandomDiceCupAndRandomBoardUntilItsFinished [
 GameTest >> testAGameIsPlayedWithRandomDiceCupUntilItsFinished [
 
 	| dieOne dieTwo dieThree aDiceCup game boxSequence noEffect |
-	dieOne := Die with: 6.
-	dieTwo := Die with: 6.
-	dieThree := Die with: 6.
+	dieOne := Die with: 10.
+	dieTwo := Die with: 10.
+	dieThree := Die with: 10.
 	aDiceCup := DiceCup withAll: { 
 			            dieOne.
 			            dieTwo.
