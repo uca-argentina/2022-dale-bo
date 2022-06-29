@@ -4,9 +4,8 @@ Class {
 	#instVars : [
 		'board',
 		'diceCup',
-		'finished',
 		'turnSequence',
-		'lastCardPlayed'
+		'cardEffectApplier'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -53,34 +52,22 @@ SpaceRaceGame >> allSpaceships [
 ]
 
 { #category : #actions }
-SpaceRaceGame >> board [
-
-	^ board
+SpaceRaceGame >> applyCardPlay: aCardPlay [
+	
+	
+	cardEffectApplier apply:aCardPlay
 ]
 
 { #category : #actions }
-SpaceRaceGame >> checkIfGameIsNotFinished [
+SpaceRaceGame >> assertGameIsNotFinished [
 
-	(self hasFinished) ifTrue: [Error signal: 'Turn cannot be played, games has finished' ].
-]
-
-{ #category : #actions }
-SpaceRaceGame >> checkValidTurn: aSpaceship andCardType: aCard [
-
-	| whoWantsToPlay |
-	whoWantsToPlay := self spaceshipOf: aSpaceship.
-	whoWantsToPlay checkSpaceshipHas:aCard.
-
-	(turnSequence whoPlays ~= whoWantsToPlay nameOfSpaceship and:
-		 aCard isPermanent) ifTrue: [ 
-		Error signal:
-			'A permanent card cannot be played on another spaceship turn' ].
+	(self hasFinished) ifTrue: [Error signal: 'Turn cannot be played, game has finished' ].
 ]
 
 { #category : #accessing }
 SpaceRaceGame >> hasFinished [
 
-	^ self winner notNil 
+	^ board assertHasAWinner.
 ]
 
 { #category : #initialize }
@@ -94,25 +81,18 @@ SpaceRaceGame >> initializeWith: spaceships aBoardWith: aBoxSequence distance: a
 		         and: aDeck.
 	diceCup := aDiceCup.
 	turnSequence := TurnSequence with: spaceships.
-	finished := false.
-	lastCardPlayed:= nil.
-]
-
-{ #category : #actions }
-SpaceRaceGame >> lastCardPlayed [
-
-	^ lastCardPlayed
+	cardEffectApplier:= CardEffectApplicator with:board using:turnSequence.
 ]
 
 { #category : #actions }
 SpaceRaceGame >> playATurn [
 
 	| diceResult currentSpaceship effectsOnCurrentSpaceship |
-	self checkIfGameIsNotFinished.
+	self assertGameIsNotFinished.
 	diceResult := diceCup roll.
 	currentSpaceship := turnSequence whoPlays.
 	effectsOnCurrentSpaceship := (board spaceshipOf: currentSpaceship)
-		                        sumOfCardsEffects.
+		                        effectsOnSpaceship sumOfCardsEffects .
 	board move: currentSpaceship with: diceResult + effectsOnCurrentSpaceship.
 	turnSequence next
 ]
@@ -131,13 +111,7 @@ SpaceRaceGame >> spaceshipOf: aShip [
 ]
 
 { #category : #actions }
-SpaceRaceGame >> updateLastCardPlayedWith: aLastPlayedCard [
-
-	lastCardPlayed := aLastPlayedCard
-]
-
-{ #category : #actions }
 SpaceRaceGame >> winner [
 
-	^ board winner
+	^board winner.
 ]

@@ -4,7 +4,12 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #action }
+{ #category : #actions }
+AccelerationCard >> applyUsing: aCardEffectApplicator basedOn: aCardPlay [ 
+	aCardEffectApplicator applyAccelerationBasedOn:aCardPlay.
+]
+
+{ #category : #operations }
 AccelerationCard >> effect [
 
 	^ 1
@@ -17,20 +22,13 @@ AccelerationCard >> isPermanent [
 ]
 
 { #category : #actions }
-AccelerationCard >> playedUsing: aGame by: aSpaceship to: anotherSpaceship for: aCardEffect [
+AccelerationCard >> playedOn: aGame by: aSpaceship [
 
-	aGame checkValidTurn: aSpaceship andCardType: aCardEffect.
-	aGame allSpaceships do: [ :each | each isAffectedBy: aCardEffect ].
-	aGame updateLastCardPlayedWith:
-		(LastPlayedCard type: self to: anotherSpaceship).
-	(aGame spaceshipOf: aSpaceship) removeFromHand: self
-]
-
-{ #category : #actions }
-AccelerationCard >> redoUsing: aGame by: aSpaceship to: anotherSpaceship for: aCardEffect [
-
-	aGame checkValidTurn: aSpaceship andCardType: aCardEffect.
-	aGame allSpaceships do: [ :each | each isAffectedBy: aCardEffect ].
-	aGame updateLastCardPlayedWith:
-		(LastPlayedCard type: self to: anotherSpaceship)
+	| aCardPlay |
+	aCardPlay := CardPlay
+		             by: aSpaceship
+		             card: self
+		             to: aGame allSpaceships
+		             itsRedo: false.
+	aGame applyCardPlay: aCardPlay
 ]

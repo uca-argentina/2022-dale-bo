@@ -4,6 +4,11 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #actions }
+OverloadCard >> applyUsing: aCardEffectApplicator basedOn: aCardPlay [ 
+	aCardEffectApplicator applyEffectBasedOn:aCardPlay.
+]
+
 { #category : #action }
 OverloadCard >> effect [
 	^-2.
@@ -16,20 +21,14 @@ OverloadCard >> isPermanent [
 ]
 
 { #category : #actions }
-OverloadCard >> playedUsing: aGame by: aSpaceship to: anotherSpaceship for: aCardEffect [
+OverloadCard >> playedOn: aGame by: aSpaceship to: anotherSpaceship [
 
-	aGame checkValidTurn: aSpaceship andCardType: aCardEffect.
-	(aGame spaceshipOf: anotherSpaceship) isAffectedBy: self.
-	aGame updateLastCardPlayedWith:
-		(LastPlayedCard type: self to: anotherSpaceship).
-	(aGame spaceshipOf: aSpaceship) removeFromHand: self
-]
+	| aCardPlay |
+	aCardPlay := CardPlay
+		             by: aSpaceship
+		             card: self
+		             to: anotherSpaceship
+		             itsRedo: false.
 
-{ #category : #actions }
-OverloadCard >> redoUsing: aGame by: aSpaceship to: anotherSpaceship for: aCardEffect [
-
-	aGame checkValidTurn: aSpaceship andCardType: aCardEffect.
-	(aGame spaceshipOf: anotherSpaceship) isAffectedBy: self.
-	aGame updateLastCardPlayedWith:
-		(LastPlayedCard type: self to: anotherSpaceship)
+	aGame applyCardPlay: aCardPlay
 ]

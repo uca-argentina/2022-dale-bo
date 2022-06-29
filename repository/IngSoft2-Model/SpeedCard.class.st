@@ -4,6 +4,11 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #actions }
+SpeedCard >> applyUsing: aCardEffectApplicator basedOn: aCardPlay [ 
+	aCardEffectApplicator applyEffectBasedOn:aCardPlay.
+]
+
 { #category : #accesing }
 SpeedCard >> effect [
 
@@ -17,20 +22,13 @@ SpeedCard >> isPermanent [
 ]
 
 { #category : #actions }
-SpeedCard >> playedUsing: aGame by: aSpaceship to: anotherSpaceship for: aCardEffect [
+SpeedCard >> playedOn: aGame by: aSpaceship to: anotherSpaceship [
 
-	aGame checkValidTurn: aSpaceship andCardType: self.
-	(aGame spaceshipOf: anotherSpaceship) isAffectedBy: self.
-	aGame updateLastCardPlayedWith:
-		(LastPlayedCard type: self to: anotherSpaceship).
-	(aGame spaceshipOf: aSpaceship) removeFromHand: self
-]
-
-{ #category : #actions }
-SpeedCard >> redoUsing: aGame by: aSpaceship to: anotherSpaceship for: aCardEffect [
-
-	aGame checkValidTurn: aSpaceship andCardType: self.
-	(aGame spaceshipOf: anotherSpaceship) isAffectedBy: self.
-	aGame updateLastCardPlayedWith:
-		(LastPlayedCard type: self to: anotherSpaceship)
+	| aCardPlay |
+	aCardPlay := CardPlay
+		             by: aSpaceship
+		             card: self
+		             to: anotherSpaceship
+		             itsRedo: false.
+	aGame applyCardPlay: aCardPlay
 ]

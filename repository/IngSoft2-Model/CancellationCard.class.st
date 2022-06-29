@@ -8,10 +8,9 @@ Class {
 }
 
 { #category : #actions }
-CancellationCard >> checkIfThereIsACardPlayedIn: aGame [
+CancellationCard >> applyUsing: aCardEffectApplicator basedOn: aCardPlay [
 
-	aGame lastCardPlayed isNil ifTrue: [ 
-		Error signal: 'There is no cards played to be canceled' ]
+	aCardEffectApplicator applyCancellationBasedOn: aCardPlay.
 ]
 
 { #category : #operations }
@@ -21,23 +20,17 @@ CancellationCard >> isPermanent [
 ]
 
 { #category : #actions }
-CancellationCard >> playedUsing: aGame by: aSpaceship to: anotherSpaceship for: aCardEffect [
+CancellationCard >> playedOn: aGame by: aSpaceship to: anotherSpaceship for: aCard [
 
-	lastCancelledEffect := aCardEffect.
-	self checkIfThereIsACardPlayedIn: aGame.
-	aGame checkValidTurn: aSpaceship andCardType: self.
-	(aGame spaceshipOf: anotherSpaceship) removeEffect: aCardEffect.
-	aGame updateLastCardPlayedWith:
-		(LastPlayedCard type: self to: anotherSpaceship).
-	(aGame spaceshipOf: aSpaceship) removeFromHand: self
-]
-
-{ #category : #actions }
-CancellationCard >> redoUsing: aGame by: aSpaceship to: anotherSpaceship for: aCardEffect [
-
-	aGame checkValidTurn: aSpaceship andCardType: self.
-	(aGame spaceshipOf: anotherSpaceship) removeEffect:
-		lastCancelledEffect.
-	aGame updateLastCardPlayedWith:
-		(LastPlayedCard type: self to: anotherSpaceship)
+	| aCardPlay |
+	aCardPlay := CardPlay
+		             by: aSpaceship
+		             card: self
+		             to: (CardPlay
+				              by: aSpaceship
+				              card: aCard
+				              to: anotherSpaceship
+				              itsRedo: false)
+		             itsRedo: false.
+	aGame applyCardPlay: aCardPlay
 ]

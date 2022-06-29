@@ -8,8 +8,16 @@ Class {
 }
 
 { #category : #'instance cre' }
+Parsecs class >> assertDistanceIsValid:aDistance [
+
+	aDistance < 0 ifTrue: [ 
+		Error signal: 'Distances must be greater than zero' ]
+]
+
+{ #category : #'instance cre' }
 Parsecs class >> with: aTotalDistance [
 
+	self assertDistanceIsValid: aTotalDistance.
 	^ self new initializeWith: aTotalDistance
 ]
 

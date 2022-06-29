@@ -4,15 +4,25 @@ Class {
 	#category : #'IngSoft2-Tests'
 }
 
+{ #category : #accessing }
+GameTest >> assert: aSpaceshipName isAt: aPositionNumber with: aLapNumber in: aGame [
+
+	| spaceshipPosition |
+	spaceshipPosition := (aGame spaceshipOf: aSpaceshipName) position.
+	
+	self assert: spaceshipPosition boxNumber equals: aPositionNumber.
+	self assert: spaceshipPosition lapNumber equals: aLapNumber.
+]
+
 { #category : #tests }
 GameTest >> sequenceOfNoEffectsOf: boardSize with: effectToBePlaced at: positionOfEffectToBePlaced [
 
 	| boxSequence |
 	boxSequence := OrderedCollection new.
-	boardSize timesRepeat: [ boxSequence add: NoEffectBox new ].
+	(boardSize-1) timesRepeat: [ boxSequence add: NoEffect new ].
 	boxSequence
 		add: effectToBePlaced
-		afterIndex: positionOfEffectToBePlaced.
+		afterIndex: positionOfEffectToBePlaced-1.
 	^ boxSequence
 ]
 
@@ -31,168 +41,136 @@ GameTest >> should: aBlock raise: anError withMessage: anErrorMessage [
 ]
 
 { #category : #tests }
-GameTest >> testAGameCannotBePlayedAfterItHasFinished [
+GameTest >> testAGameCannotBeCreatedWithABoardWithNegativeDistance [
 
-	| dieOne dieTwo dieThree aDiceCup game boxSequence |
-	dieOne := LoadedDie with: 1.
-	dieTwo := LoadedDie with: 2.
-	dieThree := LoadedDie with: 3.
-	aDiceCup := DiceCup withAll: { 
-			            dieOne.
-			            dieTwo.
-			            dieThree }.
+	| die boxSequence noEffect |
+	die := LoadedDie with: 6.
+	noEffect:=DiscreteProbabilityEvent for:(NoEffect new) with:100.
 	boxSequence := (BoxesGenerator
 		                generate: 13
-		                for: { NoEffectBox new }
-		                with: { 100 }) boxSequence.
+		                for: { noEffect }) boxSequence.
+	self
+		should: [ SpaceRaceGame
+		        with: { 'Valen'. 'Pablo'. 'Seba' }
+		        boardWith: boxSequence
+		        distance: (Parsecs with: -200)
+		        laps: 2
+		        diceCup: die
+		        and: (Deck with: { SpeedCard new }) ]
+		raise: Error
+		withMessage: 'Distances must be greater than zero'
+]
+
+{ #category : #tests }
+GameTest >> testAGameCannotBePlayedAfterItHasFinished [
+
+	| die game boxSequence noEffect |
+	die := LoadedDie with: 6.
+	noEffect:=DiscreteProbabilityEvent for:(NoEffect new) with:100.
+	boxSequence := (BoxesGenerator
+		                generate: 13
+		                for: { noEffect }) boxSequence.
 	game := SpaceRaceGame
 		        with: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
 		        laps: 2
-		        diceCup: aDiceCup
+		        diceCup: die
 		        and: (Deck with: { SpeedCard new }).
 	[ game hasFinished ] whileFalse: [ game playATurn ].
+	self assert:'Valen' isAt:13 with:2 in:game.
 	self
 		should: [ game playATurn ]
 		raise: Error
-		withMessage: 'Turn cannot be played, games has finished'
+		withMessage: 'Turn cannot be played, game has finished'
+]
+
+{ #category : #tests }
+GameTest >> testAGameDoesNotHaveAWinnerBecauseIsNotFinished [
+
+	| die game boxSequence noEffect |
+	die := Die with: 6.
+	noEffect:=DiscreteProbabilityEvent for:(NoEffect new) with:100.
+	boxSequence := (BoxesGenerator
+		                generate: 13
+		                for: { noEffect }) boxSequence.
+	game := SpaceRaceGame
+		        with: { 'Valen'. 'Pablo'. 'Seba' }
+		        boardWith: boxSequence
+		        distance: (Parsecs with: 200)
+		        laps: 2
+		        diceCup: die
+		        and: (Deck with: { SpeedCard new }).
+	self
+		should: [ game winner ]
+		raise: Error
+		withMessage:
+		'Game does not have a winner beacause is not finished yet'.
 ]
 
 { #category : #tests }
 GameTest >> testAGameHasABoardWithAAtomicBombInPositionElevenAndTheEffectDoenstChangeLaps [
 
-	| dieOne dieTwo dieThree aDiceCup game boxSequence |
-	dieOne := LoadedDie with: 1.
-	dieTwo := LoadedDie with: 2.
-	dieThree := LoadedDie with: 2.
-	aDiceCup := DiceCup withAll: { 
-			            dieOne.
-			            dieTwo.
-			            dieThree }.
+	| die game boxSequence |
+	die := LoadedDie with: 5.
 	boxSequence := self
 		               sequenceOfNoEffectsOf: 13
 		               with: AtomicBombEffect new
-		               at: 10.
+		               at: 11.
 	game := SpaceRaceGame
 		        with: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
 		        laps: 2
-		        diceCup: aDiceCup
+		        diceCup: die
 		        and: (Deck with: { SpeedCard new }).
 	game playATurn.
-	self assert: (game spaceshipOf: 'Valen') boxNumber equals: 6.
+	self assert:  'Valen' isAt: 6 with: 1 in: game.
 	game playATurn.
-	self assert: (game spaceshipOf: 'Pablo') boxNumber equals: 6.
+	self assert:  'Pablo' isAt: 6 with:1 in:game.
 	game playATurn.
 	game playATurn.
-	self assert: (game spaceshipOf: 'Pablo') boxNumber equals: 1.
-	self assert: (game spaceshipOf: 'Valen') boxNumber equals: 1
+	self assert:  'Pablo' isAt: 1 with:1 in:game.
+	self assert:  'Valen' isAt: 1 with: 1 in: game.
 ]
 
 { #category : #tests }
 GameTest >> testAGameHasFinishedWhenAShipInTheLastPositionOfTheLastLap [
 
-	| dieOne dieTwo dieThree aDiceCup game boxSequence |
-	dieOne := LoadedDie with: 1.
-	dieTwo := LoadedDie with: 1.
-	dieThree := LoadedDie with: 1.
-	aDiceCup := DiceCup withAll: { 
-			            dieOne.
-			            dieTwo.
-			            dieThree }.
+	| die game boxSequence noEffect |
+	die := LoadedDie with: 3.
+	noEffect:=DiscreteProbabilityEvent for:(NoEffect new) with:100.
 	boxSequence := (BoxesGenerator
 		                generate: 13
-		                for: { NoEffectBox new }
-		                with: { 100 }) boxSequence.
+		                for: { noEffect }) boxSequence.
 	game := SpaceRaceGame
 		        with: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
 		        laps: 2
-		        diceCup: aDiceCup
+		        diceCup: die
 		        and: (Deck with: { SpeedCard new }).
 	self deny: game hasFinished.
 	[ game hasFinished ] whileFalse: [ game playATurn ].
 	self assert: game hasFinished.
-	self assert: (game spaceshipOf: game winner) boxNumber equals: 13.
-	self assert: (game spaceshipOf: game winner) lapNumber equals: 2
+	self assert:(game winner) isAt:13 with:2 in:game.
 ]
 
 { #category : #tests }
-GameTest >> testAGameHasNoWinnerBeforeItsFinished [
+GameTest >> testAGameIsPlayedAndValenEndsInPositionOneAndTheOthersInTheSecondAndThirdPosition [
 
-	| dieOne dieTwo dieThree aDiceCup game boxSequence |
-	dieOne := LoadedDie with: 1.
-	dieTwo := LoadedDie with: 2.
-	dieThree := LoadedDie with: 3.
-	aDiceCup := DiceCup withAll: { 
-			            dieOne.
-			            dieTwo.
-			            dieThree }.
+	| die game boxSequence noEffect |
+	die := LoadedDie with: 3.
+	noEffect:=DiscreteProbabilityEvent for:(NoEffect new) with:100.
 	boxSequence := (BoxesGenerator
 		                generate: 13
-		                for: { NoEffectBox new }
-		                with: { 100 }) boxSequence.
+		                for: { noEffect }) boxSequence.
 	game := SpaceRaceGame
 		        with: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
 		        laps: 2
-		        diceCup: aDiceCup
-		        and: (Deck with: { SpeedCard new }).
-	game playATurn.
-	self assert: game winner equals: nil
-]
-
-{ #category : #tests }
-GameTest >> testAGameIsPlayedAndValenEndsInLapTwo [
-
-	| dieOne dieTwo dieThree aDiceCup game boxSequence |
-	dieOne := LoadedDie with: 1.
-	dieTwo := LoadedDie with: 2.
-	dieThree := LoadedDie with: 3.
-	aDiceCup := DiceCup withAll: { 
-			            dieOne.
-			            dieTwo.
-			            dieThree }.
-	boxSequence := (BoxesGenerator
-		                generate: 13
-		                for: { NoEffectBox new }
-		                with: { 100 }) boxSequence.
-	game := SpaceRaceGame
-		        with: { 'Valen'. 'Pablo'. 'Seba' }
-		        boardWith: boxSequence
-		        distance: (Parsecs with: 200)
-		        laps: 2
-		        diceCup: aDiceCup
-		        and: (Deck with: { SpeedCard new }).
-	[ game hasFinished ] whileFalse: [ game playATurn ].
-	self assert: (game spaceshipOf: 'Valen') lapNumber equals: 2
-]
-
-{ #category : #tests }
-GameTest >> testAGameIsPlayedAndValenEndsInPositionOneAndTheOthersInTheSecondPosition [
-
-	| dieOne dieTwo dieThree aDiceCup game boxSequence |
-	dieOne := LoadedDie with: 1.
-	dieTwo := LoadedDie with: 1.
-	dieThree := LoadedDie with: 1.
-	aDiceCup := DiceCup withAll: { 
-			            dieOne.
-			            dieTwo.
-			            dieThree }.
-	boxSequence := (BoxesGenerator
-		                generate: 13
-		                for: { NoEffectBox new }
-		                with: { 100 }) boxSequence.
-	game := SpaceRaceGame
-		        with: { 'Valen'. 'Pablo'. 'Seba' }
-		        boardWith: boxSequence
-		        distance: (Parsecs with: 200)
-		        laps: 2
-		        diceCup: aDiceCup
+		        diceCup: die
 		        and: (Deck with: { SpeedCard new }).
 	game playATurn.
 	game playATurn.
@@ -200,24 +178,80 @@ GameTest >> testAGameIsPlayedAndValenEndsInPositionOneAndTheOthersInTheSecondPos
 	game playATurn.
 	self assert: (game rankingOf: 'Valen') equals: 1.
 	self assert: (game rankingOf: 'Pablo') equals: 2.
-	self assert: (game rankingOf: 'Seba') equals: 2
+	self assert: (game rankingOf: 'Seba') equals: 3
 ]
 
 { #category : #tests }
-GameTest >> testAGameReturnsPositionOfShipAfterItMoves [
+GameTest >> testAGameIsPlayedAndValenWinsAndCannotGoThroughLastPositionOfLastLap [
 
-	| dieOne dieTwo dieThree aDiceCup game boxSequence |
-	dieOne := LoadedDie with: 1.
-	dieTwo := LoadedDie with: 2.
-	dieThree := LoadedDie with: 3.
+	| die game boxSequence noEffect |
+	die := LoadedDie with: 6.
+	noEffect := DiscreteProbabilityEvent for: NoEffect new with: 100.
+	boxSequence := (BoxesGenerator generate: 13 for: { noEffect })
+		               boxSequence.
+	game := SpaceRaceGame
+		        with: { 'Valen'. 'Pablo'. 'Seba' }
+		        boardWith: boxSequence
+		        distance: (Parsecs with: 200)
+		        laps: 2
+		        diceCup: die
+		        and: (Deck with: { SpeedCard new }).
+	[ game hasFinished ] whileFalse: [ game playATurn ].
+	self
+		assert: 'Valen'
+		isAt: 13
+		with: 2
+		in: game.
+	self assert:(game winner) equals:'Valen'.
+]
+
+{ #category : #tests }
+GameTest >> testAGameIsPlayedWithRandomDiceCupAndRandomBoardUntilItsFinished [
+
+	| dieOne dieTwo dieThree aDiceCup game boxSequence noEffectBox speedUpBox moonwalkBox atomicBombBox wormholeEffectBox hyperjumpBox cardGiverBox effectsDistributions deck |
+	dieOne := Die with: 6.
+	dieTwo := Die with: 6.
+	dieThree := Die with: 6.
 	aDiceCup := DiceCup withAll: { 
 			            dieOne.
 			            dieTwo.
 			            dieThree }.
+	deck:= Deck with: { SpeedCard new }.
+	noEffectBox:=DiscreteProbabilityEvent for:(NoEffect new) with:30.
+	speedUpBox:= DiscreteProbabilityEvent for:(SpeedUpEffect new) with:20.
+	moonwalkBox:= DiscreteProbabilityEvent for:(MoonwalkEffect with:2) with:10.
+	atomicBombBox:= DiscreteProbabilityEvent for:(AtomicBombEffect new) with:2.
+	wormholeEffectBox:= DiscreteProbabilityEvent for:(WormHoleEffect new) with:20.
+	hyperjumpBox:= DiscreteProbabilityEvent for:(HyperJumpEffect with:{Parsecs with:2. Lightyear with:12}) with:8.
+	cardGiverBox:= DiscreteProbabilityEvent for:(CardGiverEffect with: deck) with:10.
+	effectsDistributions:= { noEffectBox. speedUpBox. moonwalkBox.atomicBombBox. wormholeEffectBox. hyperjumpBox. cardGiverBox. }.
+	boxSequence:= (BoxesGenerator generate: 100 for: effectsDistributions) boxSequence.
+	game := SpaceRaceGame
+		        with: { 'Valen'. 'Pablo'. 'Seba' }
+		        boardWith: boxSequence
+		        distance: (Parsecs with: 200)
+		        laps: 2
+		        diceCup: aDiceCup
+		        and: deck.
+	[ game hasFinished ] whileFalse: [ game playATurn ].
+	self assert: (game hasFinished) equals:true.
+]
+
+{ #category : #tests }
+GameTest >> testAGameIsPlayedWithRandomDiceCupUntilItsFinished [
+
+	| dieOne dieTwo dieThree aDiceCup game boxSequence noEffect |
+	dieOne := Die with: 10.
+	dieTwo := Die with: 10.
+	dieThree := Die with: 10.
+	aDiceCup := DiceCup withAll: { 
+			            dieOne.
+			            dieTwo.
+			            dieThree }.
+	noEffect:=DiscreteProbabilityEvent for:(NoEffect new) with:100.
 	boxSequence := (BoxesGenerator
 		                generate: 13
-		                for: { NoEffectBox new }
-		                with: { 100 }) boxSequence.
+		                for: { noEffect }) boxSequence.
 	game := SpaceRaceGame
 		        with: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
@@ -226,85 +260,76 @@ GameTest >> testAGameReturnsPositionOfShipAfterItMoves [
 		        diceCup: aDiceCup
 		        and: (Deck with: { SpeedCard new }).
 	[ game hasFinished ] whileFalse: [ game playATurn ].
-	self assert: (game spaceshipOf: 'Valen') boxNumber equals: 13.
-	self assert: (game spaceshipOf: 'Pablo') boxNumber equals: 12
+	self assert: (game hasFinished) equals:true.
 ]
 
 { #category : #tests }
-GameTest >> testAGameStartsWithShipsAtPositionOne [
+GameTest >> testAGameReturnsPositionOfShipAfterItMoves [
 
-	| dieOne dieTwo dieThree aDiceCup game boxSequence |
-	dieOne := LoadedDie with: 1.
-	dieTwo := LoadedDie with: 2.
-	dieThree := LoadedDie with: 3.
-	aDiceCup := DiceCup withAll: { 
-			            dieOne.
-			            dieTwo.
-			            dieThree }.
+	| die game boxSequence noEffect |
+	die := LoadedDie with: 6.
+	noEffect:=DiscreteProbabilityEvent for:(NoEffect new) with:100.
 	boxSequence := (BoxesGenerator
 		                generate: 13
-		                for: { NoEffectBox new }
-		                with: { 100 }) boxSequence.
+		                for: { noEffect }) boxSequence.
 	game := SpaceRaceGame
 		        with: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
 		        laps: 2
-		        diceCup: aDiceCup
+		        diceCup: die
 		        and: (Deck with: { SpeedCard new }).
-	self assert: (game spaceshipOf: 'Valen') boxNumber equals: 1
+	[ game hasFinished ] whileFalse: [ game playATurn ].
+	self assert:'Valen' isAt:13 with:2 in: game.
+	self assert:'Pablo' isAt:12 with:2 in: game.
+	
 ]
 
 { #category : #tests }
-GameTest >> testAllPlayersLandInHyperJumpAtBoxFiveAndTheyMoveFirstFiveParsecsAndThenFourAndTheSequenceRestarts [
+GameTest >> testAGameStartsWithShipsAtPositionOne [
 
-	| dieOne dieTwo dieThree aDiceCup game boxSequence |
-	dieOne := LoadedDie with: 1.
-	dieTwo := LoadedDie with: 1.
-	dieThree := LoadedDie with: 2.
-	aDiceCup := DiceCup withAll: { 
-			            dieOne.
-			            dieTwo.
-			            dieThree }.
-	boxSequence := self
-		               sequenceOfNoEffectsOf: 9
-		               with: (HyperJumpEffect with: { 
-					                (Parsecs with: 5).
-					                (Lightyear with: 12) })
-		               at: 4.
+	| die game boxSequence noEffect |
+	die := LoadedDie with: 6.
+	noEffect:=DiscreteProbabilityEvent for:(NoEffect new) with:100.
+	boxSequence := (BoxesGenerator
+		                generate: 13
+		                for: { noEffect }) boxSequence.
 	game := SpaceRaceGame
 		        with: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
-		        distance: (Lightyear with: 60)
+		        distance: (Parsecs with: 200)
 		        laps: 2
-		        diceCup: aDiceCup
+		        diceCup: die
 		        and: (Deck with: { SpeedCard new }).
-	game playATurn.
-	self assert: (game spaceshipOf: 'Valen') boxNumber equals: 7.
-	self assert: (game spaceshipOf: 'Valen') distanceInBox equals: 1.
-	game playATurn.
-	self assert: (game spaceshipOf: 'Pablo') boxNumber equals: 7.
-	self assert: (game spaceshipOf: 'Pablo') distanceInBox equals: 0.
-	game playATurn.
-	self assert: (game spaceshipOf: 'Seba') boxNumber equals: 7.
-	self assert: (game spaceshipOf: 'Seba') distanceInBox equals: 1
+	self assert:  'Valen' isAt: 1 with:1 in:game.
+]
+
+{ #category : #tests }
+GameTest >> testAMoonwalkEffectCannotBeCreatedWithNegativePositionsToGoBack [
+
+	self
+		should: [ MoonwalkEffect with: -2 ]
+		raise: Error
+		withMessage: 'Number of boxes to send back muste be positive'
+]
+
+{ #category : #tests }
+GameTest >> testCardGiverEffectCannotBeCreatedWithAnEmptyDeck [
+
+	self
+		should: [ CardGiverEffect with: (Deck with:{}) ]
+		raise: Error
+		withMessage: 'A deck must have at least one card'
 ]
 
 { #category : #tests }
 GameTest >> testGameCannotBeInitializedWithLessThanTwoShips [
 
-	| dieOne dieTwo dieThree aDiceCup boxSequence |
-	dieOne := LoadedDie with: 1.
-	dieTwo := LoadedDie with: 2.
-	dieThree := LoadedDie with: 3.
-	aDiceCup := DiceCup withAll: { 
-			            dieOne.
-			            dieTwo.
-			            dieThree }.
-	boxSequence := (BoxesGenerator
-		                generate: 13
-		                for: { NoEffectBox new }
-		                with: { 100 }) boxSequence.
+	| die boxSequence noEffect |
+	die := LoadedDie with: 6.
+	noEffect := DiscreteProbabilityEvent for: NoEffect new with: 100.
+	boxSequence := (BoxesGenerator generate: 13 for: { noEffect })
+		               boxSequence.
 
 
 	self
@@ -314,7 +339,7 @@ GameTest >> testGameCannotBeInitializedWithLessThanTwoShips [
 				boardWith: boxSequence
 				distance: 200
 				laps: 2
-				diceCup: aDiceCup
+				diceCup: die
 				and: (Deck with: { SpeedCard new }) ]
 		raise: Error
 		withMessage: 'Game must have more than one Ship'
@@ -333,40 +358,8 @@ GameTest >> testValenLandsInAMoonwalkAtBoxSevenAndMakeTheOthersGoBackTwoPosition
 			            dieThree }.
 	boxSequence := self
 		               sequenceOfNoEffectsOf: 10
-		               with: (MoonwalkEffect with:2)
-		               at: 6.
-	game := SpaceRaceGame
-		        with: { 'Valen'. 'Pablo'. 'Seba' }
-		        boardWith: boxSequence
-		        distance: (Parsecs with:200)
-		        laps: 2
-		        diceCup: aDiceCup
-		        and: (Deck with:{SpeedCard new}).
-	game playATurn.
-	game playATurn.
-	self assert: (game spaceshipOf: 'Pablo') boxNumber equals: 4.
-	game playATurn.
-	game playATurn.
-	self assert: (game spaceshipOf: 'Valen') boxNumber equals: 7.
-	self assert: (game spaceshipOf: 'Pablo') boxNumber equals: 2.
-	self assert: (game spaceshipOf: 'Seba') boxNumber equals: 2
-]
-
-{ #category : #tests }
-GameTest >> testValenLandsInAMoonwalkAtBoxSixAndMakeTheOthersGoBackTwoPositions [
-
-	| dieOne dieTwo dieThree game aDiceCup boxSequence |
-	dieOne := LoadedDie with: 1.
-	dieTwo := LoadedDie with: 1.
-	dieThree := LoadedDie with: 1.
-	aDiceCup := DiceCup withAll: { 
-			            dieOne.
-			            dieTwo.
-			            dieThree }.
-	boxSequence := self
-		               sequenceOfNoEffectsOf: 10
 		               with: (MoonwalkEffect with: 2)
-		               at: 6.
+		               at: 7.
 	game := SpaceRaceGame
 		        with: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
@@ -376,18 +369,20 @@ GameTest >> testValenLandsInAMoonwalkAtBoxSixAndMakeTheOthersGoBackTwoPositions 
 		        and: (Deck with: { SpeedCard new }).
 	game playATurn.
 	game playATurn.
-	self assert: (game spaceshipOf: 'Pablo') boxNumber equals: 4.
+	self assert:'Pablo' isAt:4 with:1 in: game.
 	game playATurn.
+	self assert:'Seba' isAt:4 with:1 in: game.
 	game playATurn.
-	self assert: (game spaceshipOf: 'Valen') boxNumber equals: 7.
-	self assert: (game spaceshipOf: 'Pablo') boxNumber equals: 2.
-	self assert: (game spaceshipOf: 'Seba') boxNumber equals: 2
+	self assert:'Valen' isAt:7 with:1 in: game.
+	"self assert:'Pablo' isAt:2 with:1 in: game."
+	self assert:'Seba' isAt:2 with:1 in: game.
+	
 ]
 
 { #category : #tests }
 GameTest >> testValenLandsInASpeedupBoxInPositionFiveAndMovesToPositionNine [
 
-	| dieOne dieTwo dieThree aDiceCup game newPosition boxSequence |
+	| dieOne dieTwo dieThree aDiceCup game boxSequence |
 	dieOne := LoadedDie with: 1.
 	dieTwo := LoadedDie with: 2.
 	dieThree := LoadedDie with: 1.
@@ -398,7 +393,7 @@ GameTest >> testValenLandsInASpeedupBoxInPositionFiveAndMovesToPositionNine [
 	boxSequence := self
 		               sequenceOfNoEffectsOf: 10
 		               with: SpeedUpEffect new
-		               at: 4.
+		               at: 5.
 	game := SpaceRaceGame
 		        with: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
@@ -407,14 +402,17 @@ GameTest >> testValenLandsInASpeedupBoxInPositionFiveAndMovesToPositionNine [
 		        diceCup: aDiceCup
 		        and: (Deck with: { SpeedCard new }).
 	game playATurn.
-	newPosition := game spaceshipOf: 'Valen'.
-	self assert: newPosition boxNumber equals: 9
+	self
+		assert: 'Valen'
+		isAt: 9
+		with: 1
+		in: game
 ]
 
 { #category : #tests }
 GameTest >> testValenLandsInWormholeAtBoxSevenAndGoesBackFourBoxesToEndAtBoxNumberThree [
 
-	| dieOne dieTwo dieThree aDiceCup game newPosition boxSequence |
+	| dieOne dieTwo dieThree aDiceCup game boxSequence |
 	dieOne := LoadedDie with: 3.
 	dieTwo := LoadedDie with: 2.
 	dieThree := LoadedDie with: 1.
@@ -425,7 +423,7 @@ GameTest >> testValenLandsInWormholeAtBoxSevenAndGoesBackFourBoxesToEndAtBoxNumb
 	boxSequence := self
 		               sequenceOfNoEffectsOf: 10
 		               with: WormHoleEffect new
-		               at: 6.
+		               at: 7.
 
 	game := SpaceRaceGame
 		        with: { 'Valen'. 'Pablo'. 'Seba' }
@@ -435,13 +433,11 @@ GameTest >> testValenLandsInWormholeAtBoxSevenAndGoesBackFourBoxesToEndAtBoxNumb
 		        diceCup: aDiceCup
 		        and: (Deck with: { SpeedCard new }).
 	game playATurn.
-	newPosition := game spaceshipOf: 'Valen'.
-	self assert: newPosition boxNumber equals: 3.
-	self assert: newPosition lapNumber equals: 1
+	self assert:'Valen' isAt:3 with:1 in: game.
 ]
 
 { #category : #tests }
-GameTest >> testValenLandsInWormholeAtBoxThreeOfLapTwoAndStepBackFourBoxesToEndAtBoxNumberNineAndLapOne [
+GameTest >> testValenLandsInWormholeAtBoxThreeOfLapTwoAndGoesBackOneLapEndingAtBoxSeven [
 
 	| dieOne dieTwo dieThree aDiceCup game boxSequence |
 	dieOne := LoadedDie with: 9.
@@ -452,9 +448,9 @@ GameTest >> testValenLandsInWormholeAtBoxThreeOfLapTwoAndStepBackFourBoxesToEndA
 			            dieTwo.
 			            dieThree }.
 	boxSequence := self
-		               sequenceOfNoEffectsOf: 9
+		               sequenceOfNoEffectsOf: 10
 		               with: WormHoleEffect new
-		               at: 2.
+		               at: 3.
 	game := SpaceRaceGame
 		        with: { 'Valen'. 'Pablo'. 'Seba' }
 		        boardWith: boxSequence
@@ -463,6 +459,25 @@ GameTest >> testValenLandsInWormholeAtBoxThreeOfLapTwoAndStepBackFourBoxesToEndA
 		        diceCup: aDiceCup
 		        and: (Deck with: { SpeedCard new }).
 	game playATurn.
-	self assert: (game spaceshipOf: 'Valen') boxNumber equals: 9.
-	self assert: (game spaceshipOf: 'Valen') lapNumber equals: 1
+	self assert:'Valen' isAt:9 with:1 in:game.
+]
+
+{ #category : #tests }
+GameTest >> testValenRollsTenInATenBoxesBoardAndEndsUpWithAnExtraLap [
+
+	| die game boxSequence noEffect |
+	die:=LoadedDie with:10.
+	noEffect:=DiscreteProbabilityEvent for:(NoEffect new) with:100.
+	boxSequence := (BoxesGenerator
+		                generate: 10
+		                for: { noEffect }) boxSequence.
+	game := SpaceRaceGame
+		        with: { 'Valen'. 'Pablo'. 'Seba' }
+		        boardWith: boxSequence
+		        distance: (Parsecs with: 200)
+		        laps: 2
+		        diceCup: die
+		        and: (Deck with: { SpeedCard new }).
+	game playATurn.
+	self assert:  'Valen' isAt: 1 with:2 in:game.
 ]

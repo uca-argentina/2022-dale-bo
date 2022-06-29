@@ -9,15 +9,3 @@ Card >> isPermanent [
 
 	self subclassResponsibility.
 ]
-
-{ #category : #operations }
-Card >> playedUsing: aGame by: aSpaceship to: anotherSpaceship for: aCardEffect [
-
-	self subclassResponsibility.
-]
-
-{ #category : #operations }
-Card >> redoUsing: aGame by: aSpaceship to: anotherSpaceship for: aCardEffect [
-
-	self subclassResponsibility.
-]
