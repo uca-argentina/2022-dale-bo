@@ -374,7 +374,7 @@ GameTest >> testValenLandsInAMoonwalkAtBoxSevenAndMakeTheOthersGoBackTwoPosition
 	self assert:'Seba' isAt:4 with:1 in: game.
 	game playATurn.
 	self assert:'Valen' isAt:7 with:1 in: game.
-	"self assert:'Pablo' isAt:2 with:1 in: game."
+	self assert:'Pablo' isAt:2 with:1 in: game.
 	self assert:'Seba' isAt:2 with:1 in: game.
 	
 ]

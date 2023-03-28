@@ -12,7 +12,7 @@ Class {
 { #category : #'class initialization' }
 HyperJumpEffect class >> assertPosibleMovesAreValid: aCollectionOfPosiblesMoves [
 
-	aCollectionOfPosiblesMoves size < 1 ifTrue: [ 
+	aCollectionOfPosiblesMoves isEmpty ifTrue: [ 
 		Error signal: 'There are no posible moves' ].
 ]
 

@@ -2,8 +2,8 @@ Class {
 	#name : #BoxesGenerator,
 	#superclass : #Object,
 	#instVars : [
-		'boxes',
-		'boxesSequence'
+		'boxesSequence',
+		'numberOfBoxes'
 	],
 	#classInstVars : [
 		'boxes'
@@ -14,9 +14,10 @@ Class {
 { #category : #asserting }
 BoxesGenerator class >> assertDistributionsAreValid: distributions [
 
-	| probabilities |
-	probabilities:=distributions collect:[:element| element probability].
-	(probabilities sum) = 100 ifFalse: [ 
+	"| probabilities |"
+	"probabilities:=distributions collect:[:element| element probability].
+	(probabilities sum) = 100 ifFalse: [" 
+	(distributions  sum: [:element| element probability]) = 100 ifFalse: [ 
 		Error signal: 'Distributions sum must be 100' ]
 ]
 
@@ -47,15 +48,16 @@ BoxesGenerator >> createBoxesWith: effectsWithDistribution [
 
 	| boxesForAnEffect |
 	effectsWithDistribution do: [ :each | 
-		boxesForAnEffect := (boxes * (each probability / 100)) floor.
-		self checkIfBoxCanBeCreatedWith:boxesForAnEffect.
-		boxesForAnEffect timesRepeat: [ boxesSequence add: each box ] ].
-	boxesSequence := boxesSequence shuffled first: boxes
+		boxesForAnEffect := (numberOfBoxes  * (each probability / 100)) floor.
+		self checkIfBoxCanBeCreatedWith:boxesForAnEffect. " creo que se puede sacar"
+		boxesForAnEffect timesRepeat: [ boxesSequence add: each box ] ]. 
+	"si boxesforAnEffect es 0, agrega timerepeat? sino agrega se puede sacar lo anterior"
+	boxesSequence := boxesSequence shuffled first: numberOfBoxes 
 ]
 
 { #category : #initialization }
 BoxesGenerator >> initializeWith: aNumberOfBoxes for: effectsWithDistribution [
-	boxes := aNumberOfBoxes.
+	numberOfBoxes := aNumberOfBoxes.
 	boxesSequence := OrderedCollection new.
 	self createBoxesWith: effectsWithDistribution
 ]

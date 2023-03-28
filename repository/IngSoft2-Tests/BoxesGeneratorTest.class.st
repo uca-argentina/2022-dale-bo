@@ -119,7 +119,7 @@ BoxesGeneratorTest >> testBoxesGeneratorCreatesOneHundredBoxesWithTheIndicatedDi
 { #category : #tests }
 BoxesGeneratorTest >> testBoxesGeneratorProbabilitiesCantBeLowerThanOneHundred [
 
-	| noEffectBox speedUpBox moonwalkBox effectsDistributions atomicBombBox wormholeEffectBox hyperjumpBox cardGiverBox deck |
+	| noEffectBox speedUpBox moonwalkBox effectsDistributions atomicBombBox wormholeEffectBox hyperjumpBox cardGiverBox  |
 	deck:= Deck with:{SpeedCard new}.
 	noEffectBox := DiscreteProbabilityEvent for: NoEffect new with: 30.
 	speedUpBox := DiscreteProbabilityEvent

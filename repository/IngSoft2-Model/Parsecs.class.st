@@ -21,12 +21,6 @@ Parsecs class >> with: aTotalDistance [
 	^ self new initializeWith: aTotalDistance
 ]
 
-{ #category : #accesing }
-Parsecs >> amount [
-
-	^ amount
-]
-
 { #category : #actions }
 Parsecs >> amountInParsecs [
 
@@ -37,4 +31,10 @@ Parsecs >> amountInParsecs [
 Parsecs >> initializeWith: aDistance [
 
 	amount := aDistance
+]
+
+{ #category : #accesing }
+Parsecs >> negative [
+
+	^ amount < 1
 ]

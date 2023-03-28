@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : #accessing }
-NoCardPlay >> cardType [
+NoCardPlay >> card [
 	 
 		^Error signal: 'There are no cards played'
 ]

@@ -24,7 +24,7 @@ CardEffectApplicator >> apply: aCardPlay [
 CardEffectApplicator >> applyAccelerationBasedOn: aCardPlay [
 
 	| aCard spaceshipNameThatPlaysCard |
-	aCard := aCardPlay cardType.
+	aCard := aCardPlay card.
 	spaceshipNameThatPlaysCard := aCardPlay playedBy.
 	self assert: aCard canBePlayedBy: spaceshipNameThatPlaysCard.
 	self applyToAll: aCard.
@@ -37,7 +37,7 @@ CardEffectApplicator >> applyCancellationBasedOn: aCardPlay [
 
 	| affectedSpaceship effectsOnSpaceship spaceshipNameThatPlaysCard aCard cardPlayToBeRemoved |
 	spaceshipNameThatPlaysCard := aCardPlay playedBy.
-	aCard := aCardPlay cardType.
+	aCard := aCardPlay card.
 	cardPlayToBeRemoved := aCardPlay target.
 	self assert: aCard canBePlayedBy: spaceshipNameThatPlaysCard.
 	affectedSpaceship := board spaceshipOf: cardPlayToBeRemoved target.
@@ -45,8 +45,8 @@ CardEffectApplicator >> applyCancellationBasedOn: aCardPlay [
 		                      effectsOnMe.
 	self
 		assertSpaceship: effectsOnSpaceship
-		hasBeenAffectedBy: cardPlayToBeRemoved cardType.
-	effectsOnSpaceship remove: cardPlayToBeRemoved cardType.
+		hasBeenAffectedBy: cardPlayToBeRemoved card.
+	effectsOnSpaceship remove: cardPlayToBeRemoved card.
 	board
 		updateSpaceshipEffectsOf: affectedSpaceship
 		to: (SpaceshipEffects with: effectsOnSpaceship).
@@ -58,11 +58,11 @@ CardEffectApplicator >> applyCancellationBasedOn: aCardPlay [
 CardEffectApplicator >> applyEffectBasedOn: aCardPlay [
 
 	| affectedSpaceship effectsOnSpaceship |
-	self assert: aCardPlay cardType canBePlayedBy: aCardPlay playedBy.
+	self assert: aCardPlay card canBePlayedBy: aCardPlay playedBy.
 	affectedSpaceship := board spaceshipOf: aCardPlay target.
 	effectsOnSpaceship := affectedSpaceship effectsOnSpaceship
 		                      effectsOnMe.
-	effectsOnSpaceship add: aCardPlay cardType.
+	effectsOnSpaceship add: aCardPlay card.
 	board
 		updateSpaceshipEffectsOf: affectedSpaceship
 		to: (SpaceshipEffects with: effectsOnSpaceship).
@@ -74,9 +74,9 @@ CardEffectApplicator >> applyEffectBasedOn: aCardPlay [
 CardEffectApplicator >> applyRedoBasedOn: aCardPlay [
 
 	| redoPlay targetedCard |
-	targetedCard := lastCardPlay cardType.
+	targetedCard := lastCardPlay card.
 	(board spaceshipOf: aCardPlay playedBy) hand assertSpaceshipHas:
-		aCardPlay cardType.
+		aCardPlay card.
 	self assertValidTurnFor: aCardPlay playedBy andCardType: targetedCard.
 	targetedCard className = CancellationCard new className
 		ifTrue: [ 
@@ -85,7 +85,7 @@ CardEffectApplicator >> applyRedoBasedOn: aCardPlay [
 				            card: targetedCard
 				            to:
 				            (self
-					             createRedoPlay: lastCardPlay target cardType
+					             createRedoPlay: lastCardPlay target card
 					             with: aCardPlay)
 				            itsRedo: true ]
 		ifFalse: [ redoPlay := self createRedoPlay: targetedCard with: aCardPlay ].
@@ -97,7 +97,7 @@ CardEffectApplicator >> applyRedoBasedOn: aCardPlay [
 CardEffectApplicator >> applyRepeatBasedOn: aCardPlay [
 
 	| lastBoxEffect |
-	self assert: aCardPlay cardType canBePlayedBy: aCardPlay playedBy.
+	self assert: aCardPlay card canBePlayedBy: aCardPlay playedBy.
 	lastBoxEffect := board lastBoxEffect.
 	lastBoxEffect triggeredBy: aCardPlay target with: board.
 	self checkIfIsRedo: aCardPlay.
@@ -170,18 +170,13 @@ CardEffectApplicator >> initializeWith: aBoard and: aTurnSequence [
 	turnSequence:=aTurnSequence.
 ]
 
-{ #category : #accessing }
-CardEffectApplicator >> lastCardPlayed [
-	^lastCardPlay.
-]
-
 { #category : #actions }
 CardEffectApplicator >> removeCardFromASpaceshipsHandUsing: aCardPlay [
 
 	| spaceshipOldStatus spaceshipNewHand spaceshipHand |
 	spaceshipOldStatus := board spaceshipOf: aCardPlay playedBy.
 	spaceshipHand := spaceshipOldStatus hand cards.
-	spaceshipHand remove: aCardPlay cardType.
+	spaceshipHand remove: aCardPlay card.
 	spaceshipNewHand := SpaceshipHand with: spaceshipHand.
 	board
 		updateSpaceshipHandOf: spaceshipOldStatus

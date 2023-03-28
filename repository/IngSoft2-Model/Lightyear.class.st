@@ -19,12 +19,6 @@ Lightyear class >> with: aDistance [
 	^ self new initializeWith: aDistance
 ]
 
-{ #category : #accesing }
-Lightyear >> amount [
-
-	^ amount
-]
-
 { #category : #actions }
 Lightyear >> amountInParsecs [
 
@@ -35,4 +29,9 @@ Lightyear >> amountInParsecs [
 Lightyear >> initializeWith: aDistance [
 
 	amount := aDistance
+]
+
+{ #category : #accesing }
+Lightyear >> negative [
+	^ amount < 1
 ]

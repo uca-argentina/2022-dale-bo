@@ -20,16 +20,6 @@ Board class >> assertCollectionOfSpaceshipsIsValid:aCollectionOfShips [
 		Error signal: 'Game must have more than one Ship']
 ]
 
-{ #category : #asserting }
-Board class >> assertValidDistance: distance [
-	distance < 1 ifTrue: [ Error signal: 'A board must have a distance greater than zero' ].
-]
-
-{ #category : #asserting }
-Board class >> assertValidLaps:laps [
-	laps > 0 ifFalse: [ Error signal: 'A board must have at least one lap' ].
-]
-
 { #category : #'instance creation' }
 Board class >> ships: spaceships with: aBoxSequence distance: aDistance laps: laps and: aDeck [
 
@@ -45,15 +35,6 @@ Board class >> ships: spaceships with: aBoxSequence distance: aDistance laps: la
 { #category : #accessing }
 Board >> allSpaceships [
 	^allSpaceshipsStatuses.
-]
-
-{ #category : #accessing }
-Board >> assertHasAWinner [
-
-	| possibleWinnerPosition |
-	possibleWinnerPosition := (allSpaceshipsStatuses at:1) position.
-	^((possibleWinnerPosition boxNumber = distanceOfBoard and:
-		 possibleWinnerPosition lapNumber = laps))
 ]
 
 { #category : #action }
@@ -147,7 +128,7 @@ Board >> move: aSpaceship with: aDiceResult [
 ]
 
 { #category : #actions }
-Board >> moveBackwards: aNumberOfBoxes AllSpaceshipsExcept: aSpaceship [
+Board >> moveBackwards: aNumberOfBoxes allSpaceshipsExcept: aSpaceship [
 
 	allSpaceshipsStatuses do: [ :each | 
 		each name ~= aSpaceship ifTrue: [ 
@@ -233,6 +214,15 @@ Board >> spaceshipOf: aSpacehipsName [
 	^ allSpaceshipsStatuses detect: [ :each | each name = aSpacehipsName ]
 ]
 
+{ #category : #accessing }
+Board >> thereIsAWinner [
+
+	| possibleWinnerPosition |
+	possibleWinnerPosition := (allSpaceshipsStatuses first) position.
+	^((possibleWinnerPosition boxNumber = distanceOfBoard and:
+		 possibleWinnerPosition lapNumber = laps))
+]
+
 { #category : #actions }
 Board >> updateSpaceshipEffectsOf: aSpaceshipOldStatus to: spaceshipNewEffects [
 
@@ -267,8 +257,8 @@ Board >> updateSpaceshipPositionOf: aSpaceshipOldStatus to: spaceshipNewPosition
 { #category : #accesing }
 Board >> winner [
 
-	self assertHasAWinner
-		ifTrue: [ ^ (allSpaceshipsStatuses at: 1) name ]
+	self thereIsAWinner
+		ifTrue: [ ^ (allSpaceshipsStatuses first) name ]
 		ifFalse: [ 
 			Error signal:
 				'Game does not have a winner beacause is not finished yet' ]

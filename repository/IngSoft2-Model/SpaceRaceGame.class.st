@@ -20,7 +20,7 @@ SpaceRaceGame class >> assertCollectionOfSpaceshipsIsValid: aCollectionOfSpacesh
 { #category : #asserting }
 SpaceRaceGame class >> assertValidDistance: distance [
 
-	distance amount < 1 ifTrue: [ 
+	distance negative ifTrue: [ 
 		Error signal: 'A board must have a distance greater than zero' ]
 ]
 
@@ -67,7 +67,7 @@ SpaceRaceGame >> assertGameIsNotFinished [
 { #category : #accessing }
 SpaceRaceGame >> hasFinished [
 
-	^ board assertHasAWinner.
+	^ board thereIsAWinner.
 ]
 
 { #category : #initialize }

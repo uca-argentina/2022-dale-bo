@@ -27,7 +27,7 @@ CardPlay >> applyUsing: aCardEffectApplicator [
 ]
 
 { #category : #accessing }
-CardPlay >> cardType [
+CardPlay >> card [
 
 	^ card
 ]

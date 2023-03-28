@@ -5,13 +5,13 @@ Class {
 }
 
 { #category : #actions }
-Distance >> amount [
+Distance >> amountInParsecs [
 
 	^ self subclassResponsibility
 ]
 
 { #category : #actions }
-Distance >> amountInParsecs [
+Distance >> negative [
 
 	^ self subclassResponsibility
 ]
