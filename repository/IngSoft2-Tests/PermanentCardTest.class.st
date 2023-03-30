@@ -60,35 +60,41 @@ PermanentCardTest >> testADeckCannotBeCreatedWithNoCards [
 ]
 
 { #category : #tests }
-PermanentCardTest >> testPabloCantPlayCancellationBecauseThereWasnACardPlayedBefore [
+PermanentCardTest >> testAlphaPlaysAnAccelerationCardAndBetaUseCancelationCardToAlphaInAlphasTurn [
 
-	| game boxSequence deckForGame cancelationCard redoCard deckForCardGiver cardGiverBox |
-	cancelationCard := CancellationCard new.
-	redoCard := RedoCard new.
-	deckForCardGiver := Deck with: { redoCard }.
-	deckForGame := Deck with: { cancelationCard }.
-	cardGiverBox:=DiscreteProbabilityEvent for:(CardGiverEffect with: deckForCardGiver) with:100.
+	| game boxSequence deckForGame deckForBoxes accelerationCard cancellationCard cardGiverBox |
+	accelerationCard := AccelerationCard new.
+	cancellationCard := CancellationCard new.
+	deckForGame := Deck with: { accelerationCard }.
+	deckForBoxes := Deck with: { cancellationCard }.
+	cardGiverBox:=DiscreteProbabilityEvent for:(CardGiverEffect with: deckForBoxes) with:100.
 	boxSequence := (BoxesGenerator
-		                generate: 16
+		                generate: 13
 		                for: { cardGiverBox }) boxSequence.
 	game := SpaceRaceGame
-		        with: { 'Valen'. 'Pablo'. 'Seba' }
+		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
 		        laps: 2
 		        diceCup: die
 		        and: deckForGame.
+	accelerationCard
+		playedOn: game
+		by: 'Spaceship Alpha'.
 	game playATurn.
-	
-	self
-		should: [ 
-			cancelationCard
-				playedOn: game
-				by: 'Valen'
-				to: 'Valen'
-				for: (SpeedCard new).]
-		raise: Error
-		withMessage: 'The spaceship does not have this effect applied on'
+	self assert:'Spaceship Alpha' isAt:8 with:1 in:game.
+	game playATurn.
+	self assert:'Spaceship Alpha' isAt:8 with:1 in:game.
+	cancellationCard
+		playedOn: game
+		by: 'Spaceship Beta'
+		to: 'Spaceship Alpha'
+		for: accelerationCard.
+	game playATurn.
+	game playATurn.
+	self assert:'Spaceship Alpha' isAt:1 with:2 in:game.
+	game playATurn.
+	self assert:'Spaceship Beta' isAt:2 with:2 in:game.
 ]
 
 { #category : #tests }
@@ -102,18 +108,18 @@ PermanentCardTest >> testPlayerLandsInABoxAndReceivesACard [
 	boxSequence := (BoxesGenerator generate: 16 for: { cardGiverBox })
 		               boxSequence.
 	game := SpaceRaceGame
-		        with: { 'Valen'. 'Pablo'. 'Seba' }
+		        with: { 'Spacehip Alpha'. 'Spacehip Beta'. 'Spacehip Gamma' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
 		        laps: 2
 		        diceCup: die
 		        and: deck.
 	game playATurn.
-	self assert:'Valen' handHas:3 in:game.
+	self assert:'Spacehip Alpha' handHas:3 in:game.
 ]
 
 { #category : #tests }
-PermanentCardTest >> testValenCantPlayACardThatIsNotInHisHand [
+PermanentCardTest >> testSpaceshipAlphaCantPlayACardThatIsNotInHisHand [
 
 	| game boxSequence deck speedCard overloadCard cardGiverBox |
 	overloadCard := OverloadCard new.
@@ -123,7 +129,7 @@ PermanentCardTest >> testValenCantPlayACardThatIsNotInHisHand [
 	boxSequence := (BoxesGenerator generate: 13 for: { cardGiverBox })
 		               boxSequence.
 	game := SpaceRaceGame
-		        with: { 'Valen'. 'Pablo'. 'Seba' }
+		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
 		        laps: 2
@@ -133,14 +139,14 @@ PermanentCardTest >> testValenCantPlayACardThatIsNotInHisHand [
 		should: [ 
 			overloadCard
 				playedOn: game
-				by: 'Valen'
-				to: 'Pablo']
+				by: 'Spaceship Alpha'
+				to: 'Spaceship Beta']
 		raise: Error
 		withMessage: 'The spaceship does not have this card'
 ]
 
 { #category : #tests }
-PermanentCardTest >> testValenPlaysASpeedCardToPabloAndAddsOneToPablosRoll [
+PermanentCardTest >> testSpaceshipAlphaPlaysASpeedCardToSpaceshipBetaAndAddsOneToSpaceshipBetasRoll [
 
 	| game boxSequence deck speedCard noEffect |
 	speedCard := SpeedCard new.
@@ -150,7 +156,7 @@ PermanentCardTest >> testValenPlaysASpeedCardToPabloAndAddsOneToPablosRoll [
 		                generate: 13
 		                for: { noEffect }) boxSequence.
 	game := SpaceRaceGame
-		        with: { 'Valen'. 'Pablo'. 'Seba' }
+		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
 		        laps: 2
@@ -159,53 +165,15 @@ PermanentCardTest >> testValenPlaysASpeedCardToPabloAndAddsOneToPablosRoll [
 
 	speedCard
 		playedOn: game
-		by: 'Valen'
-		to: 'Pablo'.
+		by: 'Spaceship Alpha'
+		to: 'Spaceship Beta'.
 	game playATurn.
 	game playATurn.
-	self assert:'Pablo' isAt:8 with:1 in:game.
+	self assert:'Spaceship Beta' isAt:8 with:1 in:game.
 ]
 
 { #category : #tests }
-PermanentCardTest >> testValenPlaysAnAccelerationCardAndPabloUseCancelationCardToValenInValensTurn [
-
-	| game boxSequence deckForGame deckForBoxes accelerationCard cancellationCard cardGiverBox |
-	accelerationCard := AccelerationCard new.
-	cancellationCard := CancellationCard new.
-	deckForGame := Deck with: { accelerationCard }.
-	deckForBoxes := Deck with: { cancellationCard }.
-	cardGiverBox:=DiscreteProbabilityEvent for:(CardGiverEffect with: deckForBoxes) with:100.
-	boxSequence := (BoxesGenerator
-		                generate: 13
-		                for: { cardGiverBox }) boxSequence.
-	game := SpaceRaceGame
-		        with: { 'Valen'. 'Pablo'. 'Seba' }
-		        boardWith: boxSequence
-		        distance: (Parsecs with: 200)
-		        laps: 2
-		        diceCup: die
-		        and: deckForGame.
-	accelerationCard
-		playedOn: game
-		by: 'Valen'.
-	game playATurn.
-	self assert:'Valen' isAt:8 with:1 in:game.
-	game playATurn.
-	self assert:'Valen' isAt:8 with:1 in:game.
-	cancellationCard
-		playedOn: game
-		by: 'Pablo'
-		to: 'Valen'
-		for: accelerationCard.
-	game playATurn.
-	game playATurn.
-	self assert:'Valen' isAt:1 with:2 in:game.
-	game playATurn.
-	self assert:'Pablo' isAt:2 with:2 in:game.
-]
-
-{ #category : #tests }
-PermanentCardTest >> testValenPlaysAnAccelerationCardToAllPlayersAndTheyAddOneToTheirRoll [
+PermanentCardTest >> testSpaceshipAlphaPlaysAnAccelerationCardToAllPlayersAndTheyAddOneToTheirRoll [
 
 	| game boxSequence deck accelerationCard noEffect |
 	accelerationCard := AccelerationCard new.
@@ -215,7 +183,7 @@ PermanentCardTest >> testValenPlaysAnAccelerationCardToAllPlayersAndTheyAddOneTo
 		                generate: 13
 		                for: { noEffect }) boxSequence.
 	game := SpaceRaceGame
-		        with: { 'Valen'. 'Pablo'. 'Seba' }
+		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
 		        laps: 2
@@ -223,20 +191,20 @@ PermanentCardTest >> testValenPlaysAnAccelerationCardToAllPlayersAndTheyAddOneTo
 		        and: deck.
 	accelerationCard
 		playedOn: game
-		by: 'Valen'.
+		by: 'Spaceship Alpha'.
 	game playATurn.
-	self assert:'Pablo' isAt:1 with:1 in:game.
-	self assert:'Valen' isAt:8 with:1 in:game.
+	self assert:'Spaceship Beta' isAt:1 with:1 in:game.
+	self assert:'Spaceship Alpha' isAt:8 with:1 in:game.
 	game playATurn.
-	self assert:'Pablo' isAt:8 with:1 in:game.
+	self assert:'Spaceship Beta' isAt:8 with:1 in:game.
 	game playATurn.
 	game playATurn.
 	game playATurn.
-	self assert:'Pablo' isAt:2 with:2 in:game.
+	self assert:'Spaceship Beta' isAt:2 with:2 in:game.
 ]
 
 { #category : #tests }
-PermanentCardTest >> testValenPlaysAnOverloadCardToPabloAndReduceItsDieRollByOne [
+PermanentCardTest >> testSpaceshipAlphaPlaysAnOverloadCardToSpaceshipBetaAndReduceItsDieRollByOne [
 
 	|  game boxSequence deck overloadCard cardGiverBox |
 	overloadCard := OverloadCard new.
@@ -245,7 +213,7 @@ PermanentCardTest >> testValenPlaysAnOverloadCardToPabloAndReduceItsDieRollByOne
 	boxSequence := (BoxesGenerator generate: 13 for: { cardGiverBox })
 		               boxSequence.
 	game := SpaceRaceGame
-		        with: { 'Valen'. 'Pablo'. 'Seba' }
+		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
 		        laps: 2
@@ -253,15 +221,15 @@ PermanentCardTest >> testValenPlaysAnOverloadCardToPabloAndReduceItsDieRollByOne
 		        and: deck.
 	overloadCard
 		playedOn: game
-		by: 'Valen'
-		to: 'Pablo'.
+		by: 'Spaceship Alpha'
+		to: 'Spaceship Beta'.
 	game playATurn.
 	game playATurn.
-	self assert: 'Pablo' isAt:5 with:1 in:game.
+	self assert: 'Spaceship Beta' isAt:5 with:1 in:game.
 ]
 
 { #category : #tests }
-PermanentCardTest >> testValenTriesToPlayACardInPablosTurnAndHeCantsBecauseItAPermanentCard [
+PermanentCardTest >> testSpaceshipAlphaTriesToPlayACardInSpaceshipBetaTurnAndHeCantsBecauseItAPermanentCard [
 
 	| game boxSequence deck speedCard cardGiverBox |
 	speedCard := SpeedCard new.
@@ -270,7 +238,7 @@ PermanentCardTest >> testValenTriesToPlayACardInPablosTurnAndHeCantsBecauseItAPe
 	boxSequence := (BoxesGenerator generate: 13 for: { cardGiverBox })
 		               boxSequence.
 	game := SpaceRaceGame
-		        with: { 'Valen'. 'Pablo'. 'Seba' }
+		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
 		        laps: 2
@@ -281,9 +249,41 @@ PermanentCardTest >> testValenTriesToPlayACardInPablosTurnAndHeCantsBecauseItAPe
 		should: [ 
 			speedCard
 		playedOn: game
-		by: 'Valen'
-		to: 'Pablo'. ]
+		by: 'Spaceship Alpha'
+		to: 'Spaceship Beta'. ]
 		raise: Error
 		withMessage:
 		'A permanent card cannot be played on another spaceship turn'
+]
+
+{ #category : #tests }
+PermanentCardTest >> testSpaceshipBetaCantPlayCancellationBecauseThereWasntACardPlayedBefore [
+
+	| game boxSequence deckForGame cancelationCard redoCard deckForCardGiver cardGiverBox |
+	cancelationCard := CancellationCard new.
+	redoCard := RedoCard new.
+	deckForCardGiver := Deck with: { redoCard }.
+	deckForGame := Deck with: { cancelationCard }.
+	cardGiverBox:=DiscreteProbabilityEvent for:(CardGiverEffect with: deckForCardGiver) with:100.
+	boxSequence := (BoxesGenerator
+		                generate: 16
+		                for: { cardGiverBox }) boxSequence.
+	game := SpaceRaceGame
+		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
+		        boardWith: boxSequence
+		        distance: (Parsecs with: 200)
+		        laps: 2
+		        diceCup: die
+		        and: deckForGame.
+	game playATurn.
+	
+	self
+		should: [ 
+			cancelationCard
+				playedOn: game
+				by: 'Spaceship Alpha'
+				to: 'Spaceship Alpha'
+				for: (SpeedCard new).]
+		raise: Error
+		withMessage: 'The spaceship does not have this effect applied on'
 ]

@@ -36,11 +36,12 @@ RepeatCardTest >> sequenceOfNoEffectsOf: boardSize with: effectToBePlaced at: po
 
 { #category : #running }
 RepeatCardTest >> setUp [
+	super setUp.
 	die:= LoadedDie with:6.
 ]
 
 { #category : #tests }
-RepeatCardTest >> testPabloPlaysARepeatCardAfterValenLandsInAAtomicBombEffect [
+RepeatCardTest >> testSpaceshipBetaPlaysARepeatCardAfterSpaceshipAlphaLandsInAAtomicBombEffect [
 
 	| dieOne dieTwo dieThree aDiceCup game boxSequence deck repeatCard |
 	dieOne := LoadedDie with: 3.
@@ -58,24 +59,24 @@ RepeatCardTest >> testPabloPlaysARepeatCardAfterValenLandsInAAtomicBombEffect [
 		               with: AtomicBombEffect new
 		               at: 7.
 	game := SpaceRaceGame
-		        with: { 'Valen'. 'Pablo'. 'Seba' }
+		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
 		        laps: 2
 		        diceCup: aDiceCup
 		        and: deck.
 	game playATurn.
-	self assert:'Valen' isAt:1 with:1 in:game.
+	self assert:'Spaceship Alpha' isAt:1 with:1 in:game.
 	repeatCard
 		playedOn: game
-		by: 'Pablo'
-		to: 'Valen'.
-	self assert:'Pablo' isAt:1 with:1 in:game.
-	self assert:'Valen' isAt:1 with:1 in:game.
+		by: 'Spaceship Beta'
+		to: 'Spaceship Alpha'.
+	self assert:'Spaceship Beta' isAt:1 with:1 in:game.
+	self assert:'Spaceship Alpha' isAt:1 with:1 in:game.
 ]
 
 { #category : #tests }
-RepeatCardTest >> testPabloPlaysARepeatCardAfterValenLandsInACardGiver [
+RepeatCardTest >> testSpaceshipBetaPlaysARepeatCardAfterSpaceshipAlphaLandsInACardGiver [
 
 	| game boxSequence deck repeatCard |
 	repeatCard := RepeatCard new.
@@ -85,24 +86,24 @@ RepeatCardTest >> testPabloPlaysARepeatCardAfterValenLandsInACardGiver [
 		               with: (CardGiverEffect with: deck)
 		               at: 7.
 	game := SpaceRaceGame
-		        with: { 'Valen'. 'Pablo'. 'Seba' }
+		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
 		        laps: 2
 		        diceCup: die
 		        and: deck.
 	game playATurn.
-	self assert:'Valen' isAt:7 with:1 in:game.
+	self assert:'Spaceship Alpha' isAt:7 with:1 in:game.
 	repeatCard
 		playedOn: game
-		by: 'Pablo'
-		to: 'Pablo'.
+		by: 'Spaceship Beta'
+		to: 'Spaceship Beta'.
 	game playATurn.
-	self assert:'Pablo' handHas:3 in:game.
+	self assert:'Spaceship Beta' handHas:3 in:game.
 ]
 
 { #category : #tests }
-RepeatCardTest >> testPabloPlaysARepeatCardAfterValenLandsInAHyperJumpEffect [
+RepeatCardTest >> testSpaceshipBetaPlaysARepeatCardAfterSpaceshipAlphaLandsInAHyperJumpEffect [
 
 	| game boxSequence deck repeatCard |
 	repeatCard := RepeatCard new.
@@ -114,26 +115,26 @@ RepeatCardTest >> testPabloPlaysARepeatCardAfterValenLandsInAHyperJumpEffect [
 					                (Lightyear with: 12) })
 		               at: 7.
 	game := SpaceRaceGame
-		        with: { 'Valen'. 'Pablo'. 'Seba' }
+		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 20)
 		        laps: 2
 		        diceCup: die
 		        and: deck.
 	game playATurn.
-	self assert:'Valen' isAt:9 with:1 in:game.
-	self assert: (game spaceshipOf: 'Valen') position distance equals: 1.
+	self assert:'Spaceship Alpha' isAt:9 with:1 in:game.
+	self assert: (game spaceshipOf: 'Spaceship Alpha') position distanceInBox equals: 1.
 	repeatCard
 		playedOn: game
-		by: 'Pablo'
-		to: 'Pablo'.
+		by: 'Spaceship Beta'
+		to: 'Spaceship Beta'.
 	game playATurn.
-	self assert:'Pablo' isAt:9 with:1 in:game.
-	self assert: (game spaceshipOf: 'Valen') position distance equals: 1.
+	self assert:'Spaceship Beta' isAt:9 with:1 in:game.
+	self assert: (game spaceshipOf: 'Spaceship Alpha') position distanceInBox equals: 1.
 ]
 
 { #category : #tests }
-RepeatCardTest >> testPabloPlaysARepeatCardAfterValenLandsInAMoonwalkEffect [
+RepeatCardTest >> testSpaceshipBetaPlaysARepeatCardAfterSpaceshipAlphaLandsInAMoonwalkEffect [
 
 	| game boxSequence deck repeatCard |
 	repeatCard := RepeatCard new.
@@ -143,25 +144,25 @@ RepeatCardTest >> testPabloPlaysARepeatCardAfterValenLandsInAMoonwalkEffect [
 		               with: (MoonwalkEffect with: 2)
 		               at: 7.
 	game := SpaceRaceGame
-		        with: { 'Valen'. 'Pablo'. 'Seba' }
+		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
 		        laps: 2
 		        diceCup: die
 		        and: deck.
 	game playATurn.
-	self assert:'Valen' isAt:7 with:1 in:game.
+	self assert:'Spaceship Alpha' isAt:7 with:1 in:game.
 	repeatCard
 		playedOn: game
-		by: 'Pablo'
-		to: 'Pablo'.
+		by: 'Spaceship Beta'
+		to: 'Spaceship Beta'.
 	game playATurn.
-	self assert:'Pablo' isAt:7 with:1 in:game.
-	self assert:'Valen' isAt:3 with:1 in:game.
+	self assert:'Spaceship Beta' isAt:7 with:1 in:game.
+	self assert:'Spaceship Alpha' isAt:3 with:1 in:game.
 ]
 
 { #category : #tests }
-RepeatCardTest >> testPabloPlaysARepeatCardAfterValenLandsInANoEffect [
+RepeatCardTest >> testSpaceshipBetaPlaysARepeatCardAfterSpaceshipAlphaLandsInANoEffect [
 
 	| game boxSequence deck repeatCard noEffect |
 	repeatCard := RepeatCard new.
@@ -170,7 +171,7 @@ RepeatCardTest >> testPabloPlaysARepeatCardAfterValenLandsInANoEffect [
 	boxSequence := (BoxesGenerator generate: 16 for: { noEffect })
 		               boxSequence.
 	game := SpaceRaceGame
-		        with: { 'Valen'. 'Pablo'. 'Seba' }
+		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
 		        laps: 2
@@ -178,21 +179,21 @@ RepeatCardTest >> testPabloPlaysARepeatCardAfterValenLandsInANoEffect [
 		        and: deck.
 	game playATurn.
 	self
-		assert: 'Valen'
+		assert: 'Spaceship Alpha'
 		isAt: 7
 		with: 1
 		in: game.
-	repeatCard playedOn: game by: 'Pablo' to: 'Pablo'.
+	repeatCard playedOn: game by: 'Spaceship Beta' to: 'Spaceship Beta'.
 	game playATurn.
 	self
-		assert: 'Pablo'
+		assert: 'Spaceship Beta'
 		isAt: 7
 		with: 1
 		in: game
 ]
 
 { #category : #tests }
-RepeatCardTest >> testPabloPlaysARepeatCardAfterValenLandsInASpeedUpEffect [
+RepeatCardTest >> testSpaceshipBetaPlaysARepeatCardAfterSpaceshipAlphaLandsInASpeedUpEffect [
 
 	| game boxSequence deck repeatCard |
 	repeatCard := RepeatCard new.
@@ -202,24 +203,24 @@ RepeatCardTest >> testPabloPlaysARepeatCardAfterValenLandsInASpeedUpEffect [
 		               with: SpeedUpEffect new
 		               at: 7.
 	game := SpaceRaceGame
-		        with: { 'Valen'. 'Pablo'. 'Seba' }
+		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
 		        laps: 2
 		        diceCup: die
 		        and: deck.
 	game playATurn.
-	self assert:'Valen' isAt:11 with:1 in:game.
+	self assert:'Spaceship Alpha' isAt:11 with:1 in:game.
 	repeatCard
 		playedOn: game
-		by: 'Pablo'
-		to: 'Pablo'.
+		by: 'Spaceship Beta'
+		to: 'Spaceship Beta'.
 	game playATurn.
-	self assert:'Pablo' isAt:11 with:1 in:game.
+	self assert:'Spaceship Beta' isAt:11 with:1 in:game.
 ]
 
 { #category : #tests }
-RepeatCardTest >> testPabloPlaysARepeatCardAfterValenLandsInAWormholeEffect [
+RepeatCardTest >> testSpaceshipBetaPlaysARepeatCardAfterSpaceshipAlphaLandsInAWormholeEffect [
 
 	| game boxSequence deck repeatCard |
 	repeatCard := RepeatCard new.
@@ -230,17 +231,50 @@ RepeatCardTest >> testPabloPlaysARepeatCardAfterValenLandsInAWormholeEffect [
 		               with: WormHoleEffect new
 		               at: 7.
 	game := SpaceRaceGame
-		        with: { 'Valen'. 'Pablo'. 'Seba' }
+		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
 		        laps: 2
 		        diceCup: die
 		        and: deck.
 	game playATurn.
-	self assert:'Valen' isAt:3 with:1 in:game.
+	self assert:'Spaceship Alpha' isAt:3 with:1 in:game.
 	repeatCard
 		playedOn: game
-		by: 'Pablo'
-		to: 'Valen'.
-	self assert:'Valen' isAt:1 with:1 in:game.
+		by: 'Spaceship Beta'
+		to: 'Spaceship Alpha'.
+	self assert:'Spaceship Alpha' isAt:1 with:1 in:game.
+]
+
+{ #category : #tests }
+RepeatCardTest >> testSpaceshipBetaPlaysARepeatCardBeforeDiceAreThrown [
+
+	| dieOne dieTwo dieThree aDiceCup game boxSequence deck repeatCard |
+	dieOne := LoadedDie with: 3.
+	dieTwo := LoadedDie with: 2.
+	dieThree := LoadedDie with: 1.
+	aDiceCup := DiceCup withAll: { 
+			            dieOne.
+			            dieTwo.
+			            dieThree }.
+	repeatCard := RepeatCard new.
+	deck := Deck with: { repeatCard }.
+
+	boxSequence := self
+		               sequenceOfNoEffectsOf: 15
+		               with: AtomicBombEffect new
+		               at: 7.
+	game := SpaceRaceGame
+		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
+		        boardWith: boxSequence
+		        distance: (Parsecs with: 200)
+		        laps: 2
+		        diceCup: aDiceCup
+		        and: deck.
+	repeatCard
+		playedOn: game
+		by: 'Spaceship Beta'
+		to: 'Spaceship Alpha'.
+	
+	
 ]

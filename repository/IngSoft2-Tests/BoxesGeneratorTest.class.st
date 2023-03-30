@@ -25,6 +25,7 @@ BoxesGeneratorTest >> assert: aBoxSequence has: aCertainAmount occurrencesOf: aB
 
 { #category : #running }
 BoxesGeneratorTest >> setUp [
+	super setUp.
 	deck:= Deck with:{SpeedCard new}.
 	noEffect:= NoEffect new.
 	speedUpEffect:= SpeedUpEffect new.

@@ -31,7 +31,7 @@ SpaceshipPosition >> boxNumber [
 ]
 
 { #category : #accessing }
-SpaceshipPosition >> distance [
+SpaceshipPosition >> distanceInBox [
 	^ distance
 ]
 

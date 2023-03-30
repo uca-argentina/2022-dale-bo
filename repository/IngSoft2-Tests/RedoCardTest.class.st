@@ -24,6 +24,7 @@ RedoCardTest >> assert: aSpaceshipName isAt: aPositionNumber with: aLapNumber in
 
 { #category : #running }
 RedoCardTest >> setUp [
+	super setUp.
 	die:= LoadedDie with:6.
 ]
 
@@ -42,7 +43,7 @@ RedoCardTest >> should: aBlock raise: anError withMessage: anErrorMessage [
 ]
 
 { #category : #tests }
-RedoCardTest >> testPabloPlaysARedoAfterACancelation [
+RedoCardTest >> testSpaceshipBetaPlaysARedoAfterACancelation [
 
 	| game boxSequence deckForGame cancelationCard redoCard deckForCardGiver accelerationCard deckForAccelerationCardGiver cardGiverBox |
 	
@@ -62,7 +63,7 @@ RedoCardTest >> testPabloPlaysARedoAfterACancelation [
 		add: (CardGiverEffect with: deckForCardGiver)
 		afterIndex: 12.
 	game := SpaceRaceGame
-		        with: { 'Valen'. 'Pablo'. 'Seba' }
+		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
 		        laps: 2
@@ -71,61 +72,30 @@ RedoCardTest >> testPabloPlaysARedoAfterACancelation [
 	game playATurn.
 	game playATurn.
 	game playATurn.
-	accelerationCard playedOn: game by: 'Valen'.
+	accelerationCard playedOn: game by: 'Spaceship Alpha'.
 	game playATurn.
 	cancelationCard
 		playedOn: game
-		by: 'Pablo'
-		to: 'Pablo'
+		by: 'Spaceship Beta'
+		to: 'Spaceship Beta'
 		for: accelerationCard.
 	game playATurn.
-	redoCard playedOn: game by: 'Pablo' to: 'Seba'.
+	redoCard playedOn: game by: 'Spaceship Beta' to: 'Spaceship Gamma'.
 	self
-		assert: 'Pablo'
+		assert: 'Spaceship Beta'
 		isAt: 13
 		with: 1
 		in: game.
 	game playATurn.
 	self
-		assert: 'Seba'
+		assert: 'Spaceship Gamma'
 		isAt: 13
 		with: 1
 		in: game
 ]
 
 { #category : #tests }
-RedoCardTest >> testPabloPlaysARedoAfterValenPlaysARepeat [
-
-	|  game boxSequence deckForGame repeatCard redoCard deckForCardGiver cardGiverBox |
-	repeatCard := RepeatCard new.
-	redoCard := RedoCard new.
-	deckForCardGiver := Deck with: { redoCard }.
-	deckForGame := Deck with: { repeatCard }.
-	cardGiverBox:=DiscreteProbabilityEvent for:(CardGiverEffect with: deckForCardGiver) with:100.
-	boxSequence := (BoxesGenerator
-		                generate: 16
-		                for: { cardGiverBox }) boxSequence.
-	game := SpaceRaceGame
-		        with: { 'Valen'. 'Pablo'. 'Seba' }
-		        boardWith: boxSequence
-		        distance: (Parsecs with: 200)
-		        laps: 2
-		        diceCup: die
-		        and: deckForGame.
-	game playATurn.
-	repeatCard
-		playedOn: game
-		by: 'Valen'
-		to: 'Valen'.
-	game playATurn.
-	redoCard playedOn: game by:'Pablo'  to:'Pablo'.
-	self assert:'Valen' handHas:3 in:game.
-	self assert:'Pablo' handHas:3 in:game.
-	
-]
-
-{ #category : #tests }
-RedoCardTest >> testPabloPlaysARedoAfterValenPlaysAnAccellerationCard [
+RedoCardTest >> testSpaceshipBetaPlaysARedoAfterSpaceshipAlphaPlaysAnAccellerationCard [
 
 	|  game boxSequence deckForGame accellerationCard redoCard deckForCardGiver cardGiverBox |
 	accellerationCard := AccelerationCard  new.
@@ -137,7 +107,7 @@ RedoCardTest >> testPabloPlaysARedoAfterValenPlaysAnAccellerationCard [
 		                generate: 16
 		                for: { cardGiverBox }) boxSequence.
 	game := SpaceRaceGame
-		        with: { 'Valen'. 'Pablo'. 'Seba' }
+		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
 		        laps: 2
@@ -146,22 +116,53 @@ RedoCardTest >> testPabloPlaysARedoAfterValenPlaysAnAccellerationCard [
 	
 	accellerationCard
 		playedOn: game
-		by: 'Valen'.
+		by: 'Spaceship Alpha'.
 	game playATurn.
 	game playATurn.
 	game playATurn.
 	game playATurn.
-	redoCard playedOn: game by:'Pablo'  to:'Valen'.
+	redoCard playedOn: game by:'Spaceship Beta'  to:'Spaceship Alpha'.
 	game playATurn.
 	game playATurn.
-	self assert: 'Seba' isAt:16 with:1 in:game.
+	self assert: 'Spaceship Gamma' isAt:16 with:1 in:game.
 	
 	
 	
 ]
 
 { #category : #tests }
-RedoCardTest >> testPabloPlaysARedoCardAfterPabloPlaysAOverloadCard [
+RedoCardTest >> testSpaceshipBetaPlaysARedoAfterValenPlaysARepeat [
+
+	|  game boxSequence deckForGame repeatCard redoCard deckForCardGiver cardGiverBox |
+	repeatCard := RepeatCard new.
+	redoCard := RedoCard new.
+	deckForCardGiver := Deck with: { redoCard }.
+	deckForGame := Deck with: { repeatCard }.
+	cardGiverBox:=DiscreteProbabilityEvent for:(CardGiverEffect with: deckForCardGiver) with:100.
+	boxSequence := (BoxesGenerator
+		                generate: 16
+		                for: { cardGiverBox }) boxSequence.
+	game := SpaceRaceGame
+		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
+		        boardWith: boxSequence
+		        distance: (Parsecs with: 200)
+		        laps: 2
+		        diceCup: die
+		        and: deckForGame.
+	game playATurn.
+	repeatCard
+		playedOn: game
+		by: 'Spaceship Alpha'
+		to: 'Spaceship Alpha'.
+	game playATurn.
+	redoCard playedOn: game by:'Spaceship Beta'  to:'Spaceship Beta'.
+	self assert:'Spaceship Alpha' handHas:3 in:game.
+	self assert:'Spaceship Beta' handHas:3 in:game.
+	
+]
+
+{ #category : #tests }
+RedoCardTest >> testSpaceshipBetaPlaysARedoCardAfterHePlaysAOverloadCard [
 
 	| game boxSequence deckForGame deckForCardGiver overloadCard redoCard cardGiverBox |
 	overloadCard := OverloadCard new.
@@ -173,7 +174,7 @@ RedoCardTest >> testPabloPlaysARedoCardAfterPabloPlaysAOverloadCard [
 		                generate: 13
 		                for: { cardGiverBox }) boxSequence.
 	game := SpaceRaceGame
-		        with: { 'Valen'. 'Pablo'. 'Seba' }
+		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
 		        laps: 2
@@ -183,22 +184,22 @@ RedoCardTest >> testPabloPlaysARedoCardAfterPabloPlaysAOverloadCard [
 	game playATurn.
 	game playATurn.
 	game playATurn.
-	self assert:'Seba' isAt:7 with:1 in:game.
+	self assert:'Spaceship Gamma' isAt:7 with:1 in:game.
 	overloadCard
 		playedOn: game
-		by: 'Pablo'
-		to: 'Seba'.
+		by: 'Spaceship Beta'
+		to: 'Spaceship Gamma'.
 	redoCard
 		playedOn: game
-		by: 'Pablo'
-		to: 'Seba'.
+		by: 'Spaceship Beta'
+		to: 'Spaceship Gamma'.
 	game playATurn.
 	game playATurn.
-	self assert:'Seba' isAt:9 with:1 in:game.
+	self assert:'Spaceship Gamma' isAt:9 with:1 in:game.
 ]
 
 { #category : #tests }
-RedoCardTest >> testPabloPlaysARedoWhenNoCardWasPlayedPreviously [
+RedoCardTest >> testSpaceshipBetaPlaysARedoWhenNoCardWasPlayedPreviously [
 
 	| game boxSequence deckForGame cancelationCard redoCard deckForCardGiver cardGiverBox |
 	cancelationCard := CancellationCard new.
@@ -210,7 +211,7 @@ RedoCardTest >> testPabloPlaysARedoWhenNoCardWasPlayedPreviously [
 		                generate: 16
 		                for: { cardGiverBox }) boxSequence.
 	game := SpaceRaceGame
-		        with: { 'Valen'. 'Pablo'. 'Seba' }
+		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
 		        laps: 2
@@ -220,8 +221,8 @@ RedoCardTest >> testPabloPlaysARedoWhenNoCardWasPlayedPreviously [
 	self
 		should: [ redoCard 
 		playedOn: game
-		by: 'Valen'
-		to: 'Valen' ]
+		by: 'Spaceship Alpha'
+		to: 'Spaceship Alpha' ]
 		raise: Error
 		withMessage:
 		'There are no cards played'.
@@ -229,7 +230,7 @@ RedoCardTest >> testPabloPlaysARedoWhenNoCardWasPlayedPreviously [
 ]
 
 { #category : #tests }
-RedoCardTest >> testPabloPlaysTwoRedoCardsAfterPlaysASpeedCard [
+RedoCardTest >> testSpaceshipBetaPlaysTwoRedoCardsAfterPlaysASpeedCard [
 
 	| game boxSequence deckForGame redoCard deckForCardGiver aSpeedCard cardGiverBox |
 	redoCard := RedoCard new.
@@ -241,7 +242,7 @@ RedoCardTest >> testPabloPlaysTwoRedoCardsAfterPlaysASpeedCard [
 		                generate: 16
 		                for: { cardGiverBox }) boxSequence.
 	game := SpaceRaceGame
-		        with: { 'Valen'. 'Pablo'. 'Seba' }
+		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
 		        laps: 2
@@ -252,25 +253,25 @@ RedoCardTest >> testPabloPlaysTwoRedoCardsAfterPlaysASpeedCard [
 	game playATurn.
 	aSpeedCard
 		playedOn: game
-		by: 'Valen'
-		to: 'Valen'.
+		by: 'Spaceship Alpha'
+		to: 'Spaceship Alpha'.
 	game playATurn.
-	self assert:'Valen' isAt:14 with:1 in:game.
-	self assert:'Pablo' isAt:7 with:1 in:game.
+	self assert:'Spaceship Alpha' isAt:14 with:1 in:game.
+	self assert:'Spaceship Beta' isAt:7 with:1 in:game.
 	redoCard
 		playedOn: game
-		by: 'Pablo'
-		to: 'Pablo'.
+		by: 'Spaceship Beta'
+		to: 'Spaceship Beta'.
 	redoCard
 		playedOn: game
-		by: 'Pablo'
-		to: 'Pablo'.
+		by: 'Spaceship Beta'
+		to: 'Spaceship Beta'.
 	game playATurn.
-	self assert:'Pablo' isAt:15 with:1 in:game.
+	self assert:'Spaceship Beta' isAt:15 with:1 in:game.
 ]
 
 { #category : #tests }
-RedoCardTest >> testPabloTriesToPlaysARedoCardNotInHisTurnAfterPabloPlaysAOverloadCard [
+RedoCardTest >> testSpaceshipBetaTriesToPlaysARedoCardNotInHisTurnAfterBetaPlaysAOverloadCard [
 
 	|game boxSequence deckForGame deckForCardGiver overloadCard redoCard cardGiverBox |
 	overloadCard := OverloadCard new.
@@ -282,24 +283,24 @@ RedoCardTest >> testPabloTriesToPlaysARedoCardNotInHisTurnAfterPabloPlaysAOverlo
 		                generate: 13
 		                for: { cardGiverBox }) boxSequence.
 	game := SpaceRaceGame
-		        with: { 'Valen'. 'Pablo'. 'Seba' }
+		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
 		        laps: 2
 		        diceCup: die
 		        and: deckForGame.
 	game playATurn.
-	self assert:'Valen' isAt:7 with:1 in:game.
+	self assert:'Spaceship Alpha' isAt:7 with:1 in:game.
 	overloadCard
 		playedOn: game
-		by: 'Pablo'
-		to: 'Valen'.
+		by: 'Spaceship Beta'
+		to: 'Spaceship Alpha'.
 	game playATurn.
 	self
 		should: [ redoCard
 		playedOn: game
-		by: 'Pablo'
-		to: 'Valen'. ]
+		by: 'Spaceship Beta'
+		to: 'Spaceship Alpha'. ]
 		raise: Error
 		withMessage:
 		'A permanent card cannot be played on another spaceship turn'

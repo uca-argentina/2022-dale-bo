@@ -101,7 +101,7 @@ Board >> move: aSpaceship toFinalDistance: aDistanceNumber [
 	| oldSpaceshipPosition  spaceshipNewDistanceInBox oldSpaceshipStatus |
 	oldSpaceshipStatus := allSpaceshipsStatuses detect: [ :each | each name = aSpaceship ].
 	oldSpaceshipPosition:= oldSpaceshipStatus position.
-	spaceshipNewDistanceInBox :=oldSpaceshipPosition  distance + aDistanceNumber amountInParsecs.
+	spaceshipNewDistanceInBox :=oldSpaceshipPosition  distanceInBox + aDistanceNumber amountInParsecs.
 
 	self updateSpaceshipPositionOf: oldSpaceshipStatus
 		to: (SpaceshipPosition
@@ -153,7 +153,7 @@ Board >> moveBackwards: aSpaceship to: aBox [
 		updateSpaceshipPositionOf: oldSpaceshipStatus
 		to: (SpaceshipPosition
 				 at: spaceshipNewBoxNumber
-				 distance: oldSpaceshipPosition distance
+				 distance: oldSpaceshipPosition distanceInBox
 				 laps: spaceshipNewLapNumber).
 ]
 
@@ -179,7 +179,7 @@ Board >> moveForward: aSpaceship to: aBox [
 		updateSpaceshipPositionOf: oldSpaceshipStatus
 		to: (SpaceshipPosition
 				 at: spaceshipNewBoxNumber
-				 distance: oldSpaceshipPosition distance
+				 distance: oldSpaceshipPosition distanceInBox
 				 laps: spaceshipNewLapNumber).
 ]
 

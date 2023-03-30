@@ -166,7 +166,7 @@ CardEffectApplicator >> createRedoPlay: targetedCard with: aCardPlay [
 { #category : #initialization }
 CardEffectApplicator >> initializeWith: aBoard and: aTurnSequence [ 
 	board:= aBoard.
-	lastCardPlay:= NoCardPlay new.
+	lastCardPlay:= NullCardPlay new.
 	turnSequence:=aTurnSequence.
 ]
 
