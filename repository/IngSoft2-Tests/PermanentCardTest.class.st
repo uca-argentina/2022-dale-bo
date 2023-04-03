@@ -27,6 +27,7 @@ PermanentCardTest >> assert: aSpaceshipName isAt: aPositionNumber with: aLapNumb
 
 { #category : #running }
 PermanentCardTest >> setUp [
+	super setUp.
 	die:= LoadedDie with:6.
 ]
 
@@ -146,6 +147,38 @@ PermanentCardTest >> testSpaceshipAlphaCantPlayACardThatIsNotInHisHand [
 ]
 
 { #category : #tests }
+PermanentCardTest >> testSpaceshipAlphaCantPlayCancellationBecauseThereWasntACardPlayedBefore [
+
+	| game boxSequence deckForGame cancelationCard redoCard deckForCardGiver cardGiverBox |
+	cancelationCard := CancellationCard new.
+	redoCard := RedoCard new.
+	deckForCardGiver := Deck with: { redoCard }.
+	deckForGame := Deck with: { cancelationCard }.
+	cardGiverBox:=DiscreteProbabilityEvent for:(CardGiverEffect with: deckForCardGiver) with:100.
+	boxSequence := (BoxesGenerator
+		                generate: 16
+		                for: { cardGiverBox }) boxSequence.
+	game := SpaceRaceGame
+		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
+		        boardWith: boxSequence
+		        distance: (Parsecs with: 200)
+		        laps: 2
+		        diceCup: die
+		        and: deckForGame.
+	game playATurn.
+	
+	self
+		should: [ 
+			cancelationCard
+				playedOn: game
+				by: 'Spaceship Alpha'
+				to: 'Spaceship Alpha'
+				for: (SpeedCard new).]
+		raise: Error
+		withMessage: 'The spaceship does not have this effect applied on'
+]
+
+{ #category : #tests }
 PermanentCardTest >> testSpaceshipAlphaPlaysASpeedCardToSpaceshipBetaAndAddsOneToSpaceshipBetasRoll [
 
 	| game boxSequence deck speedCard noEffect |
@@ -254,36 +287,4 @@ PermanentCardTest >> testSpaceshipAlphaTriesToPlayACardInSpaceshipBetaTurnAndHeC
 		raise: Error
 		withMessage:
 		'A permanent card cannot be played on another spaceship turn'
-]
-
-{ #category : #tests }
-PermanentCardTest >> testSpaceshipBetaCantPlayCancellationBecauseThereWasntACardPlayedBefore [
-
-	| game boxSequence deckForGame cancelationCard redoCard deckForCardGiver cardGiverBox |
-	cancelationCard := CancellationCard new.
-	redoCard := RedoCard new.
-	deckForCardGiver := Deck with: { redoCard }.
-	deckForGame := Deck with: { cancelationCard }.
-	cardGiverBox:=DiscreteProbabilityEvent for:(CardGiverEffect with: deckForCardGiver) with:100.
-	boxSequence := (BoxesGenerator
-		                generate: 16
-		                for: { cardGiverBox }) boxSequence.
-	game := SpaceRaceGame
-		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
-		        boardWith: boxSequence
-		        distance: (Parsecs with: 200)
-		        laps: 2
-		        diceCup: die
-		        and: deckForGame.
-	game playATurn.
-	
-	self
-		should: [ 
-			cancelationCard
-				playedOn: game
-				by: 'Spaceship Alpha'
-				to: 'Spaceship Alpha'
-				for: (SpeedCard new).]
-		raise: Error
-		withMessage: 'The spaceship does not have this effect applied on'
 ]
