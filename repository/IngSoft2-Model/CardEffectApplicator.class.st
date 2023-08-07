@@ -131,7 +131,6 @@ CardEffectApplicator >> assert: aCard canBePlayedBy: spaceshipNameThatPlaysCard 
 CardEffectApplicator >> assertSpaceship: effectsOnSpaceship hasBeenAffectedBy: aCard [
 
 	(effectsOnSpaceship occurrencesOf: aCard) >= 1
-		ifTrue: [ ^ true ]
 		ifFalse: [ Error signal: 'The spaceship does not have this effect applied on' ]
 ]
 
@@ -150,7 +149,7 @@ CardEffectApplicator >> assertValidTurnFor: aSpaceship andCardType: aCard [
 CardEffectApplicator >> checkIfIsRedo: aCardPlay [
 
 	aCardPlay isRedo ifFalse: [ 
-		self removeCardFromASpaceshipsHandUsing: aCardPlay ]
+		self removeCardOf: aCardPlay ]
 ]
 
 { #category : #actions }
@@ -166,19 +165,11 @@ CardEffectApplicator >> createRedoPlay: targetedCard with: aCardPlay [
 { #category : #initialization }
 CardEffectApplicator >> initializeWith: aBoard and: aTurnSequence [ 
 	board:= aBoard.
-	lastCardPlay:= NullCardPlay new.
+	lastCardPlay:= InvalidCardPlay new.
 	turnSequence:=aTurnSequence.
 ]
 
 { #category : #actions }
-CardEffectApplicator >> removeCardFromASpaceshipsHandUsing: aCardPlay [
-
-	| spaceshipOldStatus spaceshipNewHand spaceshipHand |
-	spaceshipOldStatus := board spaceshipOf: aCardPlay playedBy.
-	spaceshipHand := spaceshipOldStatus hand cards.
-	spaceshipHand remove: aCardPlay card.
-	spaceshipNewHand := SpaceshipHand with: spaceshipHand.
-	board
-		updateSpaceshipHandOf: spaceshipOldStatus
-		with: spaceshipNewHand
+CardEffectApplicator >> removeCardOf: aCardPlay [
+	board remove: aCardPlay card from:aCardPlay playedBy .
 ]

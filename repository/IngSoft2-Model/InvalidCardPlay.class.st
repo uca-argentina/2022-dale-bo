@@ -1,11 +1,11 @@
 Class {
-	#name : #NullCardPlay,
+	#name : #InvalidCardPlay,
 	#superclass : #Object,
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #accessing }
-NullCardPlay >> card [
+InvalidCardPlay >> card [
 	 
 		^Error signal: 'There are no cards played'
 ]

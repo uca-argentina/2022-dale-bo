@@ -32,7 +32,7 @@ PermanentCardTest >> assert: aSpaceshipName isAt: aPositionNumber with: aLapNumb
 { #category : #tests }
 PermanentCardTest >> generateBoxesWith: cardGiverBox [
 
-	^ (BoxesGenerator generate: 13 for: { cardGiverBox }) boxSequence
+	^ (BoxesEffectsGenerator generate: 13 for: { cardGiverBox }) boxSequence
 ]
 
 { #category : #running }

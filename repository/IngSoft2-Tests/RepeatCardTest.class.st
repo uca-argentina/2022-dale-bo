@@ -169,7 +169,7 @@ RepeatCardTest >> testSpaceshipBetaPlaysARepeatCardAfterSpaceshipAlphaLandsInANo
 	| game boxSequence deck noEffect |
 	deck := Deck with: { repeatCard }.
 	noEffect := DiscreteProbabilityEvent for: NoEffect new with: 100.
-	boxSequence := (BoxesGenerator generate: 16 for: { noEffect })
+	boxSequence := (BoxesEffectsGenerator generate: 16 for: { noEffect })
 		               boxSequence.
 	game := SpaceRaceGame
 		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }

@@ -52,7 +52,7 @@ GameTest >> testAGameCannotBeCreatedWithABoardWithNegativeDistance [
 	| die boxSequence noEffect |
 	die := LoadedDie with: 6.
 	noEffect:=DiscreteProbabilityEvent for:(NoEffect new) with:100.
-	boxSequence := (BoxesGenerator
+	boxSequence := (BoxesEffectsGenerator
 		                generate: 13
 		                for: { noEffect }) boxSequence.
 	self
@@ -73,7 +73,7 @@ GameTest >> testAGameCannotBePlayedAfterItHasFinished [
 	| die game boxSequence noEffect |
 	die := LoadedDie with: 6.
 	noEffect := DiscreteProbabilityEvent for: NoEffect new with: 100.
-	boxSequence := (BoxesGenerator generate: 13 for: { noEffect })
+	boxSequence := (BoxesEffectsGenerator generate: 13 for: { noEffect })
 		               boxSequence.
 	game := SpaceRaceGame
 		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
@@ -100,7 +100,7 @@ GameTest >> testAGameDoesNotHaveAWinnerBecauseIsNotFinished [
 	| die game boxSequence noEffect |
 	die := Die with: 6.
 	noEffect:=DiscreteProbabilityEvent for:(NoEffect new) with:100.
-	boxSequence := (BoxesGenerator
+	boxSequence := (BoxesEffectsGenerator
 		                generate: 13
 		                for: { noEffect }) boxSequence.
 	game := SpaceRaceGame
@@ -149,7 +149,7 @@ GameTest >> testAGameHasFinishedWhenAShipInTheLastPositionOfTheLastLap [
 	| die game boxSequence noEffect |
 	die := LoadedDie with: 3.
 	noEffect := DiscreteProbabilityEvent for: NoEffect new with: 100.
-	boxSequence := (BoxesGenerator generate: 13 for: { noEffect })
+	boxSequence := (BoxesEffectsGenerator generate: 13 for: { noEffect })
 		               boxSequence.
 	game := SpaceRaceGame
 		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
@@ -174,7 +174,7 @@ GameTest >> testAGameIsPlayedAndSpaceshipAlphaEndsInPositionOneAndTheOthersInThe
 	| die game boxSequence noEffect |
 	die := LoadedDie with: 3.
 	noEffect:=DiscreteProbabilityEvent for:(NoEffect new) with:100.
-	boxSequence := (BoxesGenerator
+	boxSequence := (BoxesEffectsGenerator
 		                generate: 13
 		                for: { noEffect }) boxSequence.
 	game := SpaceRaceGame
@@ -199,7 +199,7 @@ GameTest >> testAGameIsPlayedAndSpaceshipAlphaWinsAndCannotGoThroughLastPosition
 	| die game boxSequence noEffect |
 	die := LoadedDie with: 6.
 	noEffect := DiscreteProbabilityEvent for: NoEffect new with: 100.
-	boxSequence := (BoxesGenerator generate: 13 for: { noEffect })
+	boxSequence := (BoxesEffectsGenerator generate: 13 for: { noEffect })
 		               boxSequence.
 	game := SpaceRaceGame
 		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
@@ -258,7 +258,7 @@ GameTest >> testAGameIsPlayedWithRandomDiceCupAndRandomBoardUntilItsFinished [
 		                        wormholeEffectBox.
 		                        hyperjumpBox.
 		                        cardGiverBox }.
-	boxSequence := (BoxesGenerator
+	boxSequence := (BoxesEffectsGenerator
 		                generate: 100
 		                for: effectsDistributions) boxSequence.
 	game := SpaceRaceGame
@@ -284,7 +284,7 @@ GameTest >> testAGameIsPlayedWithRandomDiceCupUntilItsFinished [
 			            dieTwo.
 			            dieThree }.
 	noEffect := DiscreteProbabilityEvent for: NoEffect new with: 100.
-	boxSequence := (BoxesGenerator generate: 13 for: { noEffect })
+	boxSequence := (BoxesEffectsGenerator generate: 13 for: { noEffect })
 		               boxSequence.
 	game := SpaceRaceGame
 		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
@@ -303,7 +303,7 @@ GameTest >> testAGameReturnsPositionOfShipAfterItMoves [
 	| die game boxSequence noEffect |
 	die := LoadedDie with: 6.
 	noEffect := DiscreteProbabilityEvent for: NoEffect new with: 100.
-	boxSequence := (BoxesGenerator generate: 13 for: { noEffect })
+	boxSequence := (BoxesEffectsGenerator generate: 13 for: { noEffect })
 		               boxSequence.
 	game := SpaceRaceGame
 		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
@@ -331,7 +331,7 @@ GameTest >> testAGameStartsWithAllSpaceshipsAtPositionOne [
 	| die game boxSequence noEffect |
 	die := LoadedDie with: 6.
 	noEffect:=DiscreteProbabilityEvent for:(NoEffect new) with:100.
-	boxSequence := (BoxesGenerator
+	boxSequence := (BoxesEffectsGenerator
 		                generate: 13
 		                for: { noEffect }) boxSequence.
 	game := SpaceRaceGame
@@ -370,7 +370,7 @@ GameTest >> testGameCannotBeInitializedWithLessThanTwoShips [
 	| die boxSequence noEffect |
 	die := LoadedDie with: 6.
 	noEffect := DiscreteProbabilityEvent for: NoEffect new with: 100.
-	boxSequence := (BoxesGenerator generate: 13 for: { noEffect })
+	boxSequence := (BoxesEffectsGenerator generate: 13 for: { noEffect })
 		               boxSequence.
 
 
@@ -535,7 +535,7 @@ GameTest >> testSpaceshipAlphaRollsTenInATenBoxesBoardAndEndsUpWithAnExtraLap [
 	| die game boxSequence noEffect |
 	die:=LoadedDie with:10.
 	noEffect:=DiscreteProbabilityEvent for:(NoEffect new) with:100.
-	boxSequence := (BoxesGenerator
+	boxSequence := (BoxesEffectsGenerator
 		                generate: 10
 		                for: { noEffect }) boxSequence.
 	game := SpaceRaceGame
@@ -554,7 +554,7 @@ GameTest >> testSpaceshipMovesSixPositionsWithLapsOfFiveBoxesAndTheSpaceshipEnds
 	| die game boxSequence noEffect |
 	die := LoadedDie with: 6.
 	noEffect:=DiscreteProbabilityEvent for:(NoEffect new) with:100.
-	boxSequence := (BoxesGenerator
+	boxSequence := (BoxesEffectsGenerator
 		                generate: 5
 		                for: { noEffect }) boxSequence.
 	game := SpaceRaceGame

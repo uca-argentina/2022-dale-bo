@@ -30,7 +30,7 @@ RedoCardTest >> assert: aSpaceshipName isAt: aPositionNumber with: aLapNumber in
 { #category : #tests }
 RedoCardTest >> generateBoxesWith: cardGiverBox [
 
-	^ (BoxesGenerator generate: 16 for: { cardGiverBox }) boxSequence
+	^ (BoxesEffectsGenerator generate: 16 for: { cardGiverBox }) boxSequence
 ]
 
 { #category : #tests }

@@ -202,6 +202,19 @@ Board >> rankingOf: aSpaceship [
 ]
 
 { #category : #accessing }
+Board >> remove:aCard from:aSpaceship [
+
+	| spaceshipOldStatus spaceshipNewHand spaceshipHand |
+	spaceshipOldStatus := self spaceshipOf:aSpaceship.
+	spaceshipHand := spaceshipOldStatus hand cards.
+	spaceshipHand remove: aCard.
+	spaceshipNewHand := SpaceshipHand with: spaceshipHand.
+	self
+		updateSpaceshipHandOf: spaceshipOldStatus
+		with: spaceshipNewHand
+]
+
+{ #category : #private }
 Board >> sortPositionsByRanking [
 
 	allSpaceshipsStatuses sort: [ :spaceship1 :spaceship2 | 
@@ -233,7 +246,7 @@ Board >> updateSpaceshipEffectsOf: aSpaceshipOldStatus to: spaceshipNewEffects [
 			 effects: spaceshipNewEffects)
 ]
 
-{ #category : #actions }
+{ #category : #private }
 Board >> updateSpaceshipHandOf: aSpaceshipOldStatus with: spaceshipNewHand [
 
 	allSpaceshipsStatuses replaceAll: aSpaceshipOldStatus with: (SpaceshipStatus
@@ -243,7 +256,7 @@ Board >> updateSpaceshipHandOf: aSpaceshipOldStatus with: spaceshipNewHand [
 			 effects: aSpaceshipOldStatus effectsOnSpaceship)
 ]
 
-{ #category : #actions }
+{ #category : #private }
 Board >> updateSpaceshipPositionOf: aSpaceshipOldStatus to: spaceshipNewPosition [
 
 

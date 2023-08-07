@@ -122,12 +122,6 @@ SpaceRaceGame >> rankingOf: aShip [
 			^ board rankingOf: aShip.
 ]
 
-{ #category : #action }
-SpaceRaceGame >> spaceshipOf: aShip [
-
-	^ board spaceshipOf:aShip.
-]
-
 { #category : #actions }
 SpaceRaceGame >> winner [
 
