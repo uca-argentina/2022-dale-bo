@@ -8,7 +8,7 @@ Class {
 HyperjumpTest >> assert: aSpaceshipName isAtPostion: aPositionNumber with: aLapNumber atDistance: aDistance in: aGame [
 
 	| spaceshipPosition |
-	spaceshipPosition := (aGame spaceshipOf: aSpaceshipName) position.
+	spaceshipPosition := aGame positionOf: aSpaceshipName.
 	
 	self assert: spaceshipPosition boxNumber equals: aPositionNumber.
 	self assert: spaceshipPosition lapNumber equals: aLapNumber.

@@ -64,6 +64,18 @@ SpaceRaceGame >> assertGameIsNotFinished [
 	(self hasFinished) ifTrue: [Error signal: 'Turn cannot be played, game has finished' ].
 ]
 
+{ #category : #action }
+SpaceRaceGame >> distanceInBoxOf: aSpaceship [
+
+	^ (board spaceshipOf:aSpaceship) position distanceInBox.
+]
+
+{ #category : #action }
+SpaceRaceGame >> handOf: aSpaceship [
+
+	^ (board spaceshipOf:aSpaceship) hand.
+]
+
 { #category : #accessing }
 SpaceRaceGame >> hasFinished [
 
@@ -95,6 +107,12 @@ SpaceRaceGame >> playATurn [
 		                        effectsOnSpaceship sumOfCardsEffects .
 	board move: currentSpaceship with: diceResult + effectsOnCurrentSpaceship.
 	turnSequence next
+]
+
+{ #category : #action }
+SpaceRaceGame >> positionOf: aSpaceship [
+
+	^ (board spaceshipOf:aSpaceship) position.
 ]
 
 { #category : #action }

@@ -8,7 +8,7 @@ Class {
 GameTest >> assert: aSpaceshipName isAt: aPositionNumber with: aLapNumber in: aGame [
 
 	| spaceshipPosition |
-	spaceshipPosition := (aGame spaceshipOf: aSpaceshipName) position.
+	spaceshipPosition := aGame positionOf: aSpaceshipName.
 	
 	self assert: spaceshipPosition boxNumber equals: aPositionNumber.
 	self assert: spaceshipPosition lapNumber equals: aLapNumber.
@@ -422,6 +422,31 @@ GameTest >> testSpaceshipAlphaLandsInAMoonwalkAtBoxSevenAndMakeTheOthersGoBackTw
 ]
 
 { #category : #tests }
+GameTest >> testSpaceshipAlphaLandsInAMoonwalkAtBoxTwoAndDoesntAffectTheOtherSpaceshipsBecauseTheyAreAtPositionOneOfFirstLap [
+
+	| dieOne game aDiceCup boxSequence |
+	dieOne := LoadedDie with: 1.
+	aDiceCup := DiceCup withAll: { 
+			            dieOne.}.
+	boxSequence := self
+		               sequenceOfNoEffectsOf: 10
+		               with: (MoonwalkEffect with: 2)
+		               at: 2.
+	game := SpaceRaceGame
+		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
+		        boardWith: boxSequence
+		        distance: (Parsecs with: 200)
+		        laps: 2
+		        diceCup: aDiceCup
+		        and: (Deck with: { SpeedCard new }).
+	game playATurn.
+	self assert:'Spaceship Alpha' isAt:2 with:1 in: game.
+	self assert:'Spaceship Beta' isAt:1 with:1 in: game.
+	self assert:'Spaceship Gamma' isAt:1 with:1 in: game.
+	
+]
+
+{ #category : #tests }
 GameTest >> testSpaceshipAlphaLandsInASpeedupBoxInPositionFiveAndMovesToPositionNine [
 
 	| dieOne dieTwo dieThree aDiceCup game boxSequence |
@@ -525,7 +550,7 @@ GameTest >> testSpaceshipAlphaRollsTenInATenBoxesBoardAndEndsUpWithAnExtraLap [
 ]
 
 { #category : #tests }
-GameTest >> testVERIFICARRRASpaceshipMovesSixPositionsWithLapsOfFiveBoxesAndTheSpaceshipEndsInLapTwoPositionTwo [
+GameTest >> testSpaceshipMovesSixPositionsWithLapsOfFiveBoxesAndTheSpaceshipEndsInLapTwoPositionTwo [
 	| die game boxSequence noEffect |
 	die := LoadedDie with: 6.
 	noEffect:=DiscreteProbabilityEvent for:(NoEffect new) with:100.
@@ -545,29 +570,4 @@ GameTest >> testVERIFICARRRASpaceshipMovesSixPositionsWithLapsOfFiveBoxesAndTheS
 		isAt: 2
 		with: 2
 		in: game.
-]
-
-{ #category : #tests }
-GameTest >> testVERIFICARRRSpaceshipAlphaLandsInAMoonwalkAtBoxTwoAndDoesntAffectTheOtherSpaceshipsBecauseTheyAreAtPositionOneOfFirstLap [
-
-	| dieOne dieTwo dieThree game aDiceCup boxSequence |
-	dieOne := LoadedDie with: 1.
-	aDiceCup := DiceCup withAll: { 
-			            dieOne.}.
-	boxSequence := self
-		               sequenceOfNoEffectsOf: 10
-		               with: (MoonwalkEffect with: 2)
-		               at: 2.
-	game := SpaceRaceGame
-		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
-		        boardWith: boxSequence
-		        distance: (Parsecs with: 200)
-		        laps: 2
-		        diceCup: aDiceCup
-		        and: (Deck with: { SpeedCard new }).
-	game playATurn.
-	self assert:'Spaceship Alpha' isAt:2 with:1 in: game.
-	self assert:'Spaceship Beta' isAt:1 with:1 in: game.
-	self assert:'Spaceship Gamma' isAt:1 with:1 in: game.
-	
 ]
