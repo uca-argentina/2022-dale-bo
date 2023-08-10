@@ -11,6 +11,6 @@ Class {
 NoEffect >> triggeredBy: aSpaceship with: aBoard [
 
 	aBoard
-		moveForward: aSpaceship
+		move: aSpaceship
 		to: 0.
 ]

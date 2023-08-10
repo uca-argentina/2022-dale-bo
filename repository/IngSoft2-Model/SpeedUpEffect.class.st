@@ -8,6 +8,6 @@ Class {
 SpeedUpEffect >> triggeredBy: aSpaceship with: aBoard [
 
 	aBoard
-		moveForward: aSpaceship
+		move: aSpaceship
 		to: 4.
 ]

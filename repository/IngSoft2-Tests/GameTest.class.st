@@ -259,7 +259,7 @@ GameTest >> testAGameIsPlayedWithRandomDiceCupAndRandomBoardUntilItsFinished [
 		                        hyperjumpBox.
 		                        cardGiverBox }.
 	boxSequence := (BoxesEffectsGenerator
-		                generate: 100
+		                generate: 50
 		                for: effectsDistributions) boxSequence.
 	game := SpaceRaceGame
 		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }

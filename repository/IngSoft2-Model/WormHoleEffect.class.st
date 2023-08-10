@@ -8,6 +8,6 @@ Class {
 WormHoleEffect >> triggeredBy: aSpaceship with: aBoard [
 
 	aBoard
-		moveBackwards: aSpaceship
-		to: 4.
+		move: aSpaceship
+		to: -4.
 ]
