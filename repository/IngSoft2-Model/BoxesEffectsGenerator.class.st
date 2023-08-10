@@ -32,7 +32,7 @@ BoxesEffectsGenerator >> boxSequence [
 	^ boxesSequence.
 ]
 
-{ #category : #action }
+{ #category : #private }
 BoxesEffectsGenerator >> checkIfBoxCanBeCreatedWith: boxesOfEffect [
 
 	boxesOfEffect = 0 ifTrue: [ 
@@ -40,7 +40,7 @@ BoxesEffectsGenerator >> checkIfBoxCanBeCreatedWith: boxesOfEffect [
 			'Distribution of some boxes does not fit to create at least one box' ]
 ]
 
-{ #category : #actions }
+{ #category : #private }
 BoxesEffectsGenerator >> createBoxesWith: effectsWithDistribution [
 
 	| boxesForAnEffect |

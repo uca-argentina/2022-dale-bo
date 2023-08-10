@@ -158,6 +158,28 @@ Board >> moveBackwards: aSpaceship to: aBox [
 ]
 
 { #category : #accessing }
+Board >> moveDef: aSpaceship to: aBox [
+
+	| oldSpaceshipPosition spaceshipNewBoxNumber spaceshipNewLapNumber oldSpaceshipStatus auxNewBoxNumber spaceshipAuxLapNumber |
+	oldSpaceshipStatus := allSpaceshipsStatuses detect: [ :each | each name = aSpaceship ].
+	oldSpaceshipPosition := oldSpaceshipStatus position.
+	
+	
+	auxNewBoxNumber := self newBoxNumberFor:oldSpaceshipPosition with:aBox.
+	spaceshipNewBoxNumber := auxNewBoxNumber % distanceOfBoard.
+	spaceshipAuxLapNumber:= (auxNewBoxNumber - 1 // distanceOfBoard + 1).
+	spaceshipNewLapNumber:=spaceshipAuxLapNumber min:laps.
+	((spaceshipAuxLapNumber > laps) or:spaceshipNewBoxNumber = 0) ifTrue:[spaceshipNewBoxNumber:=distanceOfBoard]. 
+	
+	self
+		updateSpaceshipPositionOf: oldSpaceshipStatus
+		to: (SpaceshipPosition
+				 at: spaceshipNewBoxNumber
+				 distance: oldSpaceshipPosition distanceInBox
+				 laps: spaceshipNewLapNumber).
+]
+
+{ #category : #accessing }
 Board >> moveForward: aSpaceship to: aBox [
 
 	| oldSpaceshipPosition spaceshipNewBoxNumber spaceshipNewLapNumber oldSpaceshipStatus |
@@ -193,12 +215,23 @@ Board >> moveSpaceshipsToTheFirstBox [
 			(SpaceshipPosition at: 1 distance: 0 laps: each position lapNumber) ]
 ]
 
+{ #category : #private }
+Board >> newBoxNumberFor: oldSpaceshipPosition with: aBox [
+
+	| newBoxNumber |
+	newBoxNumber := ((oldSpaceshipPosition lapNumber - 1) * distanceOfBoard)
+	                + aBox + oldSpaceshipPosition boxNumber.
+	newBoxNumber <= 0 ifTrue: [ ^ 1 ].
+	^newBoxNumber.
+]
+
 { #category : #accesing }
 Board >> rankingOf: aSpaceship [
 
 	allSpaceshipsStatuses do: [ :spaceship | 
 		spaceship name = aSpaceship ifTrue: [ 
 			^ allSpaceshipsStatuses indexOf: spaceship ] ]
+
 ]
 
 { #category : #accessing }

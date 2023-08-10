@@ -104,7 +104,7 @@ CardEffectApplicator >> applyRepeatBasedOn: aCardPlay [
 	lastCardPlay := aCardPlay
 ]
 
-{ #category : #actions }
+{ #category : #private }
 CardEffectApplicator >> applyToAll: aCardEffect [
 
 	| effectsOnSpaceship |
@@ -116,7 +116,7 @@ CardEffectApplicator >> applyToAll: aCardEffect [
 			to: (SpaceshipEffects with: effectsOnSpaceship) ]
 ]
 
-{ #category : #actions }
+{ #category : #private }
 CardEffectApplicator >> assert: aCard canBePlayedBy: spaceshipNameThatPlaysCard [
 
 	(board spaceshipOf: spaceshipNameThatPlaysCard) hand 
