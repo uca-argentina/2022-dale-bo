@@ -64,12 +64,6 @@ SpaceRaceGame >> assertGameIsNotFinished [
 	(self hasFinished) ifTrue: [Error signal: 'Turn cannot be played, game has finished' ].
 ]
 
-{ #category : #actions }
-SpaceRaceGame >> boardFalopa [
-
-	^board.
-]
-
 { #category : #action }
 SpaceRaceGame >> distanceInBoxOf: aSpaceship [
 
