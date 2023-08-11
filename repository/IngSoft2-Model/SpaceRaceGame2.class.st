@@ -7,7 +7,8 @@ Class {
 		'turnSequence',
 		'cardEffectApplier',
 		'deck',
-		'allSpaceshipsStatuses'
+		'allSpaceshipsStatuses',
+		'boxEffectApplicator'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -67,25 +68,16 @@ SpaceRaceGame2 >> assertGameIsNotFinished [
 ]
 
 { #category : #actions }
-SpaceRaceGame2 >> createStatusFor: aCollectionOfShips [
+SpaceRaceGame2 >> createHandFor: aCollectionOfShips [
 
-	| hand position spaceshipEffects cards |
-	allSpaceshipsStatuses := aCollectionOfShips collect: [ :ship | 
+	| hand spaceshipEffects cards allSpaceshipsHands |
+	allSpaceshipsHands := aCollectionOfShips collect: [ :ship | 
 		              cards := OrderedCollection new.
 		              cards add: deck giveCard.
 		              cards add: deck giveCard.
 		              hand := SpaceshipHand with: cards.
-		              position := SpaceshipPosition
-			                          at: 1
-			                          distance: 0
-			                          laps: 1.
 		              spaceshipEffects := SpaceshipEffects with:
-			                                  OrderedCollection new.
-		              SpaceshipStatus
-			              of: ship
-			              position: position
-			              cards: hand
-			              effects: spaceshipEffects ]
+			                                  OrderedCollection new.]
 ]
 
 { #category : #action }
@@ -102,16 +94,16 @@ SpaceRaceGame2 >> handOf: aSpaceship [
 
 { #category : #accessing }
 SpaceRaceGame2 >> hasFinished [
-	| spaceshipPositions |
-	spaceshipPositions:= allSpaceshipsStatuses collect:[:each | each position ].
-	^ board thereIsAWinnerWith:spaceshipPositions.
+	^ board thereIsAWinner.
 ]
 
 { #category : #initialize }
 SpaceRaceGame2 >> initializeWith: spaceships aBoardWith: aBoxSequence distance: aDistance laps: aNumberOfLaps aDiceCup: aDiceCup and: aDeck [
 	deck:= aDeck.
-	self createStatusFor:spaceships.
+	boxEffectApplicator:=BoxEffectsApplicator new.
+	self createHandFor:spaceships.
 	board := Board2
+		         ships: spaceships
 		         with: aBoxSequence
 		         distance: aDistance
 		         laps: aNumberOfLaps.
@@ -123,22 +115,32 @@ SpaceRaceGame2 >> initializeWith: spaceships aBoardWith: aBoxSequence distance: 
 { #category : #actions }
 SpaceRaceGame2 >> playATurn [
 
-	| diceResult newSpaceshipPosition currentSpaceshipStatus |
+	| diceResult |
 	self assertGameIsNotFinished.
 	diceResult := diceCup roll.
-	currentSpaceshipStatus := self statusOf: turnSequence whoPlays.
 	"effectsOnCurrentSpaceship := (board spaceshipOf: currentSpaceship)
 		                        effectsOnSpaceship sumOfCardsEffects ."
-	newSpaceshipPosition:=board move: currentSpaceshipStatus position to: diceResult.
-	self updateSpaceshipPositionOf: currentSpaceshipStatus to: newSpaceshipPosition.
-	self sortPositionsByRanking.
+	board move: turnSequence whoPlays with: diceResult.
+	turnSequence next
+]
+
+{ #category : #actions }
+SpaceRaceGame2 >> playATurn2 [
+
+	| diceResult position |
+	self assertGameIsNotFinished.
+	diceResult := diceCup roll.
+	"effectsOnCurrentSpaceship := (board spaceshipOf: currentSpaceship)
+		                        effectsOnSpaceship sumOfCardsEffects ."
+	position:= board moveDef: turnSequence whoPlays to: diceResult.
+	boxEffectApplicator applyTo:position.
 	turnSequence next
 ]
 
 { #category : #action }
 SpaceRaceGame2 >> positionOf: aSpaceship [
 
-	^ (allSpaceshipsStatuses detect: [ :each | each name = aSpaceship ]) position
+	^ board positionOf:aSpaceship.
 ]
 
 { #category : #action }
