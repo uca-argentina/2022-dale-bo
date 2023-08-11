@@ -28,7 +28,9 @@ MoonwalkEffect >> initializeWith: aNumberOfBoxesToSendBack [
 ]
 
 { #category : #action }
-MoonwalkEffect >> triggeredBy: aSpaceship with: aBoard [
-	
-	aBoard moveBackwards: (retroPositions negated) allSpaceshipsExcept:aSpaceship.
+MoonwalkEffect >> triggeredBy: aSpaceship with: aGame [
+
+	(aGame board)
+		moveBackwards: retroPositions negated
+		allSpaceshipsExcept: aSpaceship
 ]

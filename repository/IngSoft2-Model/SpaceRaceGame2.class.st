@@ -8,7 +8,8 @@ Class {
 		'cardEffectApplier',
 		'deck',
 		'allSpaceshipsStatuses',
-		'boxEffectApplicator'
+		'boxEffectApplicator',
+		'allSpaceshipsHands'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -68,16 +69,20 @@ SpaceRaceGame2 >> assertGameIsNotFinished [
 ]
 
 { #category : #actions }
+SpaceRaceGame2 >> board [
+
+	^board.
+]
+
+{ #category : #actions }
 SpaceRaceGame2 >> createHandFor: aCollectionOfShips [
 
-	| hand spaceshipEffects cards allSpaceshipsHands |
+	| hand cards |
 	allSpaceshipsHands := aCollectionOfShips collect: [ :ship | 
 		              cards := OrderedCollection new.
 		              cards add: deck giveCard.
 		              cards add: deck giveCard.
-		              hand := SpaceshipHand with: cards.
-		              spaceshipEffects := SpaceshipEffects with:
-			                                  OrderedCollection new.]
+		              hand := SpaceshipHand with: cards for:ship.]
 ]
 
 { #category : #action }
@@ -86,10 +91,18 @@ SpaceRaceGame2 >> distanceInBoxOf: aSpaceship [
 	^ (board spaceshipOf:aSpaceship) position distanceInBox.
 ]
 
+{ #category : #actions }
+SpaceRaceGame2 >> giveTo: aSpaceship card: aCard [
+
+	| aSpaceshipHand |
+	aSpaceshipHand:= self handOf: aSpaceship.
+	aSpaceshipHand recieveCard:aCard.
+]
+
 { #category : #action }
 SpaceRaceGame2 >> handOf: aSpaceship [
 
-	^ (board spaceshipOf:aSpaceship) hand.
+	^ allSpaceshipsHands detect: [:each | (each name) = aSpaceship].
 ]
 
 { #category : #accessing }
@@ -115,25 +128,15 @@ SpaceRaceGame2 >> initializeWith: spaceships aBoardWith: aBoxSequence distance: 
 { #category : #actions }
 SpaceRaceGame2 >> playATurn [
 
-	| diceResult |
+	| diceResult whoPlays |
 	self assertGameIsNotFinished.
 	diceResult := diceCup roll.
+	whoPlays:=turnSequence whoPlays.
 	"effectsOnCurrentSpaceship := (board spaceshipOf: currentSpaceship)
 		                        effectsOnSpaceship sumOfCardsEffects ."
-	board move: turnSequence whoPlays with: diceResult.
-	turnSequence next
-]
-
-{ #category : #actions }
-SpaceRaceGame2 >> playATurn2 [
-
-	| diceResult position |
-	self assertGameIsNotFinished.
-	diceResult := diceCup roll.
-	"effectsOnCurrentSpaceship := (board spaceshipOf: currentSpaceship)
-		                        effectsOnSpaceship sumOfCardsEffects ."
-	position:= board moveDef: turnSequence whoPlays to: diceResult.
-	boxEffectApplicator applyTo:position.
+	board move: turnSequence whoPlays to: diceResult.
+	boxEffectApplicator applyTo:(board positionOf:whoPlays) using:self.
+	board sortPositionsByRanking.
 	turnSequence next
 ]
 
@@ -150,28 +153,10 @@ SpaceRaceGame2 >> rankingOf: aShip [
 			^ board rankingOf: aShip.
 ]
 
-{ #category : #actions }
-SpaceRaceGame2 >> sortPositionsByRanking [
-
-	allSpaceshipsStatuses sort: [ :spaceship1 :spaceship2 | 
-		spaceship1 position > spaceship2 position ]
-]
-
 { #category : #action }
 SpaceRaceGame2 >> statusOf: aSpaceship [
 
 	^ (allSpaceshipsStatuses detect: [ :each | each name = aSpaceship ])
-]
-
-{ #category : #action }
-SpaceRaceGame2 >> updateSpaceshipPositionOf: aSpaceshipOldStatus to: spaceshipNewPosition [
-
-
-	allSpaceshipsStatuses replaceAll: aSpaceshipOldStatus with: (SpaceshipStatus
-			 of: aSpaceshipOldStatus name
-			 position: spaceshipNewPosition
-			 cards: aSpaceshipOldStatus hand
-			 effects: aSpaceshipOldStatus effectsOnSpaceship).
 ]
 
 { #category : #actions }

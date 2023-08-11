@@ -2,14 +2,15 @@ Class {
 	#name : #SpaceshipHand,
 	#superclass : #Object,
 	#instVars : [
-		'hand'
+		'hand',
+		'name'
 	],
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #'instance creation' }
-SpaceshipHand class >> with: aCollectionOfCards [
-	^self new initializeWith:aCollectionOfCards.
+SpaceshipHand class >> with: aCollectionOfCards for:aSpaceship [
+	^self new initializeWith:aCollectionOfCards for:aSpaceship.
 ]
 
 { #category : #initialization }
@@ -26,11 +27,23 @@ SpaceshipHand >> cards [
 ]
 
 { #category : #initialization }
-SpaceshipHand >> initializeWith: aCollectionOfCards [
+SpaceshipHand >> initializeWith: aCollectionOfCards for:aSpaceship [
 	hand:= aCollectionOfCards.
+	name:= aSpaceship.
+]
+
+{ #category : #accessing }
+SpaceshipHand >> name [
+^name.
 ]
 
 { #category : #accessing }
 SpaceshipHand >> numberOfCards [
 	^hand size.
+]
+
+{ #category : #accessing }
+SpaceshipHand >> recieveCard:aCard [
+	hand add:aCard.
+	
 ]

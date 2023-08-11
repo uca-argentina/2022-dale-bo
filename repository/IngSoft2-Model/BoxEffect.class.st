@@ -5,6 +5,7 @@ Class {
 }
 
 { #category : #action }
-BoxEffect >> triggeredBy: aSpaceship with: aBoard [
- self subclassResponsibility.
+BoxEffect >> triggeredBy: aSpaceship with: aGame [
+
+	self subclassResponsibility
 ]

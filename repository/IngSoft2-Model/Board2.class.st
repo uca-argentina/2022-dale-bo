@@ -34,13 +34,6 @@ Board2 >> createPositionsFor: aCollectionOfSpaceships [
 			                                      laps: 1 ]
 ]
 
-{ #category : #accessing }
-Board2 >> effectAt: aBoxNumber appliedBy: aSpacehip [
-
-	(boxes at: aBoxNumber) triggeredBy: aSpacehip with: self.
-	lastBoxEffect := boxes at: aBoxNumber
-]
-
 { #category : #'class initialization' }
 Board2 >> initializeWithShips: aCollectionOfSpaceships with: aBoxSequence distance: aDistance laps: numberOfLaps [
 	self createPositionsFor:aCollectionOfSpaceships.
@@ -69,6 +62,7 @@ Board2 >> move: aSpaceship to: aBox [
 	spaceshipNewLapNumber := spaceshipAuxLapNumber min: laps.
 	(spaceshipAuxLapNumber > laps or: spaceshipNewBoxNumber = 0) ifTrue: [ 
 		spaceshipNewBoxNumber := distanceOfBoard ].
+	lastBoxEffect := boxes at: spaceshipNewBoxNumber.
 	self
 		updateSpaceshipPositionOf: oldSpaceshipPosition
 		to: (SpaceshipPosition2
@@ -76,6 +70,7 @@ Board2 >> move: aSpaceship to: aBox [
 				 at: spaceshipNewBoxNumber
 				 distance: oldSpaceshipPosition distanceInBox
 				 laps: spaceshipNewLapNumber)
+	
 ]
 
 { #category : #actions }
@@ -96,46 +91,11 @@ Board2 >> move: aSpaceship toFinalDistance: aDistanceNumber [
 ]
 
 { #category : #actions }
-Board2 >> move: aSpaceship with: aDiceResult [
-
-	| spaceshipPositionWithoutEffectsApplied |
-	self move: aSpaceship to: aDiceResult.
-	spaceshipPositionWithoutEffectsApplied:= self positionOf: aSpaceship.
-	self
-		effectAt: spaceshipPositionWithoutEffectsApplied boxNumber
-		appliedBy: aSpaceship.
-	self sortPositionsByRanking.
-	
-]
-
-{ #category : #actions }
 Board2 >> moveBackwards: aNumberOfBoxes allSpaceshipsExcept: aSpaceship [
 
 	allSpaceshipsPositions do: [ :each | 
 		each name ~= aSpaceship ifTrue: [ 
 			self move: each name to: aNumberOfBoxes ] ].
-]
-
-{ #category : #accessing }
-Board2 >> moveDef: aSpaceship to: aBox [
-
-	| spaceshipNewBoxNumber spaceshipNewLapNumber auxNewBoxNumber spaceshipAuxLapNumber oldSpaceshipPosition |
-	oldSpaceshipPosition := self positionOf:aSpaceship.
-	auxNewBoxNumber := self
-		                   newBoxNumberFor: oldSpaceshipPosition
-		                   with: aBox.
-	spaceshipNewBoxNumber := auxNewBoxNumber % distanceOfBoard.
-	spaceshipAuxLapNumber := auxNewBoxNumber - 1 // distanceOfBoard + 1.
-	spaceshipNewLapNumber := spaceshipAuxLapNumber min: laps.
-	(spaceshipAuxLapNumber > laps or: spaceshipNewBoxNumber = 0) ifTrue: [ 
-		spaceshipNewBoxNumber := distanceOfBoard ].
-	lastBoxEffect := boxes at: spaceshipNewBoxNumber.
-	^SpaceshipPosition2
-				 for: oldSpaceshipPosition name
-				 at: spaceshipNewBoxNumber
-				 distance: oldSpaceshipPosition distanceInBox
-				 laps: spaceshipNewLapNumber
-	
 ]
 
 { #category : #action }

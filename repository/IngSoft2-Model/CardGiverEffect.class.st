@@ -18,9 +18,7 @@ CardGiverEffect >> initializeWith: aDeck [
 ]
 
 { #category : #action }
-CardGiverEffect >> triggeredBy: aSpaceship with: aBoard [
+CardGiverEffect >> triggeredBy: aSpaceship with: aGame [
 
-	aBoard 
-		giveTo: aSpaceship
-		card: deck giveCard.
+	aGame giveTo: aSpaceship card: deck giveCard
 ]

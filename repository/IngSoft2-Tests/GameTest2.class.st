@@ -12,6 +12,11 @@ Class {
 	#category : #'IngSoft2-Tests'
 }
 
+{ #category : #tests }
+GameTest2 >> assert: aSpaceship handHas: aNumberOfCards in: aGame [ 
+	self assert: (aGame handOf: aSpaceship) numberOfCards equals: aNumberOfCards.
+]
+
 { #category : #accessing }
 GameTest2 >> assert: aSpaceshipName isAt: aPositionNumber with: aLapNumber in: aGame [
 
@@ -85,12 +90,12 @@ GameTest2 >> should: aBlock raise: anError withMessage: anErrorMessage [
 { #category : #tests }
 GameTest2 >> testAGameCannotBePlayedAfterItHasFinished [
 
-	| die game boxSequence noEffect |
+	| game boxSequence noEffect |
 	die := LoadedDie with: 6.
 	noEffect := DiscreteProbabilityEvent for: NoEffect new with: 100.
 	boxSequence := (BoxesEffectsGenerator generate: 13 for: { noEffect })
 		               boxSequence.
-	game := SpaceRaceGame
+	game := SpaceRaceGame2
 		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
@@ -112,7 +117,7 @@ GameTest2 >> testAGameCannotBePlayedAfterItHasFinished [
 { #category : #tests }
 GameTest2 >> testAGameHasABoardWithAAtomicBombInPositionElevenAndTheEffectDoenstChangeLaps [
 
-	| die game boxSequence |
+	| game boxSequence |
 	die := LoadedDie with: 5.
 	boxSequence := self
 		               sequenceOfNoEffectsOf: 13
@@ -125,11 +130,11 @@ GameTest2 >> testAGameHasABoardWithAAtomicBombInPositionElevenAndTheEffectDoenst
 		        laps: 2
 		        diceCup: die
 		        and: (Deck with: { SpeedCard new }).
-	game playATurn.
+	game playATurn .
 	self assert:  'Spaceship Alpha' isAt: 6 with: 1 in: game.
 	game playATurn.
 	self assert:  'Spaceship Beta' isAt: 6 with:1 in:game.
-	game playATurn.
+	game playATurn .
 	game playATurn.
 	self assert:  'Spaceship Beta' isAt: 1 with:1 in:game.
 	self assert:  'Spaceship Alpha' isAt: 1 with: 1 in: game.
@@ -138,7 +143,7 @@ GameTest2 >> testAGameHasABoardWithAAtomicBombInPositionElevenAndTheEffectDoenst
 { #category : #tests }
 GameTest2 >> testAGameReturnsPositionOfShipAfterItMoves [
 
-	| die game boxSequence noEffect |
+	|  game boxSequence noEffect |
 	die := LoadedDie with: 6.
 	noEffect := DiscreteProbabilityEvent for: NoEffect new with: 100.
 	boxSequence := (BoxesEffectsGenerator generate: 13 for: { noEffect })
@@ -150,7 +155,7 @@ GameTest2 >> testAGameReturnsPositionOfShipAfterItMoves [
 		        laps: 2
 		        diceCup: die
 		        and: (Deck with: { SpeedCard new }).
-	game playATurn.
+	game playATurn .
 	self
 		assert: 'Spaceship Alpha'
 		isAt: 7
@@ -161,7 +166,7 @@ GameTest2 >> testAGameReturnsPositionOfShipAfterItMoves [
 { #category : #tests }
 GameTest2 >> testAllPlayersLandInHyperJumpAtBoxFiveAndTheyMoveFirstFiveParsecsAndThenFourAndTheSequenceRestarts [
 
-	| die game boxSequence |
+	|  game boxSequence |
 	die:= LoadedDie with: 4.
 	boxSequence := self
 		               sequenceOfNoEffectsOf: 10
@@ -176,21 +181,21 @@ GameTest2 >> testAllPlayersLandInHyperJumpAtBoxFiveAndTheyMoveFirstFiveParsecsAn
 		        laps: 2
 		        diceCup: die
 		        and: (Deck with: { SpeedCard new }).
-	game playATurn.
+	game playATurn .
 	self
 		assert: 'Spaceship Alpha'
 		isAtPostion: 7
 		with: 1
 		atDistance: 1
 		in: game.
-	game playATurn.
+	game playATurn .
 	self
 		assert: 'Spaceship Beta'
 		isAtPostion: 7
 		with: 1
 		atDistance: 0
 		in: game.
-	game playATurn.
+	game playATurn .
 	self
 		assert: 'Spaceship Gamma'
 		isAtPostion: 7
@@ -244,12 +249,12 @@ GameTest2 >> testSpaceshipAlphaLandsInAMoonwalkAtBoxSevenAndMakeTheOthersGoBackT
 		        laps: 2
 		        diceCup: aDiceCup
 		        and: (Deck with: { SpeedCard new }).
-	game playATurn.
-	game playATurn.
+	game playATurn .
+	game playATurn .
 	self assert:'Spaceship Beta' isAt:4 with:1 in: game.
-	game playATurn.
+	game playATurn .
 	self assert:'Spaceship Gamma' isAt:4 with:1 in: game.
-	game playATurn.
+	game playATurn .
 	self assert:'Spaceship Alpha' isAt:7 with:1 in: game.
 	self assert:'Spaceship Beta' isAt:2 with:1 in: game.
 	self assert:'Spaceship Gamma' isAt:2 with:1 in: game.
@@ -298,7 +303,7 @@ GameTest2 >> testSpaceshipAlphaPlaysASpeedCardToSpaceshipBetaAndAddsOneToSpacesh
 		        and: deck.
 
 	speedCard playedOn: game by: 'Spaceship Alpha' to: 'Spaceship Beta'.
-	game playATurn.
+	game playATurn .
 	game playATurn.
 	self
 		assert: 'Spaceship Beta'
@@ -309,7 +314,7 @@ GameTest2 >> testSpaceshipAlphaPlaysASpeedCardToSpaceshipBetaAndAddsOneToSpacesh
 
 { #category : #tests }
 GameTest2 >> testSpeedup [
-	| die game boxSequence speedUpEffect |
+	|  game boxSequence speedUpEffect |
 	die := LoadedDie with: 6.
 	speedUpEffect := DiscreteProbabilityEvent for: SpeedUpEffect new with: 100.
 	boxSequence := (BoxesEffectsGenerator generate: 13 for: { speedUpEffect })

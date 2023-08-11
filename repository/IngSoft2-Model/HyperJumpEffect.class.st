@@ -43,9 +43,9 @@ HyperJumpEffect >> numberOfDistanceByHyperJump [
 ]
 
 { #category : #action }
-HyperJumpEffect >> triggeredBy: aSpaceship with: aBoard [
+HyperJumpEffect >> triggeredBy: aSpaceship with: aGame [
 
-	aBoard 
+	(aGame board)
 		move: aSpaceship
 		toFinalDistance: self numberOfDistanceByHyperJump
 ]

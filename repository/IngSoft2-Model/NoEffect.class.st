@@ -8,9 +8,7 @@ Class {
 }
 
 { #category : #action }
-NoEffect >> triggeredBy: aSpaceship with: aBoard [
+NoEffect >> triggeredBy: aSpaceship with: aGame [
 
-	aBoard
-		move: aSpaceship
-		to: 0.
+	(aGame board) move: aSpaceship to: 0
 ]

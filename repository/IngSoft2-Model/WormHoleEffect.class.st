@@ -5,9 +5,7 @@ Class {
 }
 
 { #category : #action }
-WormHoleEffect >> triggeredBy: aSpaceship with: aBoard [
+WormHoleEffect >> triggeredBy: aSpaceship with: aGame [
 
-	aBoard
-		move: aSpaceship
-		to: -4.
+	(aGame board) move: aSpaceship to: -4
 ]
