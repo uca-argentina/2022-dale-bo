@@ -34,6 +34,14 @@ Board2 >> createPositionsFor: aCollectionOfSpaceships [
 			                                      laps: 1 ]
 ]
 
+{ #category : #accesing }
+Board2 >> effectAt:aSpaceshipPosition [
+
+	| positionOfSpaceship |
+	positionOfSpaceship:= self positionOf: aSpaceshipPosition.
+	^boxes at:(positionOfSpaceship boxNumber).
+]
+
 { #category : #'class initialization' }
 Board2 >> initializeWithShips: aCollectionOfSpaceships with: aBoxSequence distance: aDistance laps: numberOfLaps [
 	self createPositionsFor:aCollectionOfSpaceships.
@@ -62,7 +70,7 @@ Board2 >> move: aSpaceship to: aBox [
 	spaceshipNewLapNumber := spaceshipAuxLapNumber min: laps.
 	(spaceshipAuxLapNumber > laps or: spaceshipNewBoxNumber = 0) ifTrue: [ 
 		spaceshipNewBoxNumber := distanceOfBoard ].
-	lastBoxEffect := boxes at: spaceshipNewBoxNumber.
+	
 	self
 		updateSpaceshipPositionOf: oldSpaceshipPosition
 		to: (SpaceshipPosition2

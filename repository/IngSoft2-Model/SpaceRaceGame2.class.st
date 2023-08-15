@@ -9,7 +9,8 @@ Class {
 		'deck',
 		'boxEffectApplicator',
 		'allSpaceshipsHands',
-		'lastCardPlay'
+		'lastCardPlay',
+		'lastBoxEffect'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -91,7 +92,7 @@ SpaceRaceGame2 >> createHandFor: aCollectionOfShips [
 { #category : #action }
 SpaceRaceGame2 >> distanceInBoxOf: aSpaceship [
 
-	^ (board spaceshipOf:aSpaceship) position distanceInBox.
+	^ (board positionOf:aSpaceship) distanceInBox.
 ]
 
 { #category : #actions }
@@ -128,6 +129,17 @@ SpaceRaceGame2 >> initializeWith: spaceships aBoardWith: aBoxSequence distance: 
 	lastCardPlay:= InvalidCardPlay new.
 ]
 
+{ #category : #accessing }
+SpaceRaceGame2 >> lastBoxEffect [
+	^ lastBoxEffect
+]
+
+{ #category : #actions }
+SpaceRaceGame2 >> lastCardPlayed [
+
+	^lastCardPlay.
+]
+
 { #category : #actions }
 SpaceRaceGame2 >> playATurn [
 
@@ -138,7 +150,8 @@ SpaceRaceGame2 >> playATurn [
 	"effectsOnCurrentSpaceship := (board spaceshipOf: currentSpaceship)
 		                        effectsOnSpaceship sumOfCardsEffects."
 	effectsOnCurrentSpaceship:= (self handOf:whoPlays) sumOfCardsEffects.
-	board move: turnSequence whoPlays to: diceResult+effectsOnCurrentSpaceship.
+	board move: whoPlays to: diceResult+effectsOnCurrentSpaceship.
+	lastBoxEffect:= board effectAt:(whoPlays).
 	boxEffectApplicator applyTo:(board positionOf:whoPlays) using:self.
 	board sortPositionsByRanking.
 	turnSequence next

@@ -5,6 +5,11 @@ Class {
 }
 
 { #category : #actions }
+RedoCard >> applyUsing: aCardEffectApplicator [
+	aCardEffectApplicator applyRedoCard.
+]
+
+{ #category : #actions }
 RedoCard >> applyUsing: aCardEffectApplicator basedOn: aCardPlay [ 
 	aCardEffectApplicator applyRedoBasedOn:aCardPlay.
 ]
@@ -24,5 +29,5 @@ RedoCard >> playedOn: aGame by: aSpaceship to: anotherSpaceship [
 		             card: self
 		             to: anotherSpaceship
 		             itsRedo: false.
-	aGame applyCardPlay: aCardPlay
+	aGame applyCardPlayFor: aCardPlay
 ]

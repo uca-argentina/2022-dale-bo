@@ -7,7 +7,8 @@ Class {
 		'cancelationCard',
 		'overloadCard',
 		'speedCard',
-		'redoCard'
+		'redoCard',
+		'repeatCard'
 	],
 	#category : #'IngSoft2-Tests'
 }
@@ -45,6 +46,14 @@ GameTest2 >> generateBoxesWith: cardGiverBox [
 ]
 
 { #category : #tests }
+GameTest2 >> generateCardGiverBoxWith: deckForCardGiver [
+
+	^ DiscreteProbabilityEvent
+		  for: (CardGiverEffect with: deckForCardGiver)
+		  with: 100
+]
+
+{ #category : #tests }
 GameTest2 >> playUntilFinshed: game [
 
 	[ game hasFinished ] whileFalse: [ game playATurn ]
@@ -71,6 +80,7 @@ GameTest2 >> setUp [
 	overloadCard := OverloadCard new.
 	speedCard := SpeedCard new.
 	redoCard := RedoCard new.
+	repeatCard := RepeatCard new.
 ]
 
 { #category : #asserting }
@@ -353,6 +363,109 @@ GameTest2 >> testSpaceshipAlphaPlaysAnAccelerationCardToAllPlayersAndTheyAddOneT
 		isAt: 2
 		with: 2
 		in: game
+]
+
+{ #category : #tests }
+GameTest2 >> testSpaceshipAlphaPlaysAnOverloadCardToSpaceshipBetaAndReduceItsDieRollByOne [
+
+	| game boxSequence deck cardGiverBox |
+	deck := Deck with: { overloadCard }.
+	cardGiverBox := DiscreteProbabilityEvent
+		                for: (CardGiverEffect with: deck)
+		                with: 100.
+	boxSequence := self generateBoxesWith: cardGiverBox.
+	game := SpaceRaceGame2
+		        with:
+		        { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
+		        boardWith: boxSequence
+		        distance: (Parsecs with: 200)
+		        laps: 2
+		        diceCup: die
+		        and: deck.
+	overloadCard
+		playedOn: game
+		by: 'Spaceship Alpha'
+		to: 'Spaceship Beta'.
+	game playATurn.
+	game playATurn.
+	self
+		assert: 'Spaceship Beta'
+		isAt: 5
+		with: 1
+		in: game
+]
+
+{ #category : #tests }
+GameTest2 >> testSpaceshipBetaPlaysARedoCardAfterHePlaysAOverloadCard [
+
+	| game boxSequence deckForGame deckForCardGiver cardGiverBox |
+	deckForGame := Deck with: { overloadCard }.
+	deckForCardGiver := Deck with: { redoCard }.
+	cardGiverBox := self generateCardGiverBoxWith: deckForCardGiver.
+	boxSequence := self generateBoxesWith: cardGiverBox.
+	game := SpaceRaceGame2
+		        with:
+		        { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
+		        boardWith: boxSequence
+		        distance: (Parsecs with: 200)
+		        laps: 2
+		        diceCup: die
+		        and: deckForGame.
+	game playATurn.
+	game playATurn.
+	game playATurn.
+	game playATurn.
+	self
+		assert: 'Spaceship Gamma'
+		isAt: 7
+		with: 1
+		in: game.
+	overloadCard
+		playedOn: game
+		by: 'Spaceship Beta'
+		to: 'Spaceship Gamma'.
+	redoCard playedOn: game by: 'Spaceship Beta' to: 'Spaceship Gamma'.
+	game playATurn.
+	game playATurn.
+	self
+		assert: 'Spaceship Gamma'
+		isAt: 9
+		with: 1
+		in: game
+]
+
+{ #category : #tests }
+GameTest2 >> testSpaceshipBetaPlaysARepeatCardAfterSpaceshipAlphaLandsInAAtomicBombEffect [
+
+	| dieOne dieTwo dieThree aDiceCup game boxSequence deck |
+	dieOne := LoadedDie with: 3.
+	dieTwo := LoadedDie with: 2.
+	dieThree := LoadedDie with: 1.
+	aDiceCup := DiceCup withAll: { 
+			            dieOne.
+			            dieTwo.
+			            dieThree }.
+	deck := Deck with: { repeatCard }.
+
+	boxSequence := self
+		               sequenceOfNoEffectsOf: 15
+		               with: AtomicBombEffect new
+		               at: 7.
+	game := SpaceRaceGame2
+		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
+		        boardWith: boxSequence
+		        distance: (Parsecs with: 200)
+		        laps: 2
+		        diceCup: aDiceCup
+		        and: deck.
+	game playATurn.
+	self assert:'Spaceship Alpha' isAt:1 with:1 in:game.
+	repeatCard
+		playedOn: game
+		by: 'Spaceship Beta'
+		to: 'Spaceship Alpha'.
+	self assert:'Spaceship Beta' isAt:1 with:1 in:game.
+	self assert:'Spaceship Alpha' isAt:1 with:1 in:game.
 ]
 
 { #category : #tests }

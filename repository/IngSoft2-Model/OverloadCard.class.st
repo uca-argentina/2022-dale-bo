@@ -5,6 +5,11 @@ Class {
 }
 
 { #category : #actions }
+OverloadCard >> applyUsing: aCardEffectApplicator [
+	aCardEffectApplicator applyOverloadCard.
+]
+
+{ #category : #actions }
 OverloadCard >> applyUsing: aCardEffectApplicator basedOn: aCardPlay [ 
 	aCardEffectApplicator applyEffectBasedOn:aCardPlay.
 ]
@@ -30,5 +35,5 @@ OverloadCard >> playedOn: aGame by: aSpaceship to: anotherSpaceship [
 		             to: anotherSpaceship
 		             itsRedo: false.
 
-	aGame applyCardPlay: aCardPlay
+	aGame applyCardPlayFor: aCardPlay
 ]

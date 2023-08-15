@@ -4,6 +4,11 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #operations }
+RepeatCard >> applyUsing: aCardEffectApplicator [
+	aCardEffectApplicator applyRepeatCard.
+]
+
 { #category : #actions }
 RepeatCard >> applyUsing: aCardEffectApplicator basedOn: aCardPlay [
 
@@ -25,5 +30,5 @@ RepeatCard >> playedOn: aGame by: aSpaceship to: anotherSpaceship [
 		             card: self
 		             to: anotherSpaceship
 		             itsRedo: false.
-	aGame applyCardPlay: aCardPlay
+	aGame applyCardPlayFor: aCardPlay
 ]

@@ -26,7 +26,7 @@ CardEffectApplicator >> applyAccelerationBasedOn: aCardPlay [
 	| aCard spaceshipNameThatPlaysCard |
 	aCard := aCardPlay card.
 	spaceshipNameThatPlaysCard := aCardPlay playedBy.
-	self assert: aCard canBePlayedBy: spaceshipNameThatPlaysCard.
+	self assertSpaceship: spaceshipNameThatPlaysCard has: aCard.
 	self applyToAll: aCard.
 	self checkIfIsRedo: aCardPlay.
 	lastCardPlay := aCardPlay
@@ -39,7 +39,7 @@ CardEffectApplicator >> applyCancellationBasedOn: aCardPlay [
 	spaceshipNameThatPlaysCard := aCardPlay playedBy.
 	aCard := aCardPlay card.
 	cardPlayToBeRemoved := aCardPlay target.
-	self assert: aCard canBePlayedBy: spaceshipNameThatPlaysCard.
+	self assertSpaceship: spaceshipNameThatPlaysCard has: aCard.
 	affectedSpaceship := board spaceshipOf: cardPlayToBeRemoved target.
 	effectsOnSpaceship := affectedSpaceship effectsOnSpaceship
 		                      effectsOnMe.
@@ -58,7 +58,7 @@ CardEffectApplicator >> applyCancellationBasedOn: aCardPlay [
 CardEffectApplicator >> applyEffectBasedOn: aCardPlay [
 
 	| affectedSpaceship effectsOnSpaceship |
-	self assert: aCardPlay card canBePlayedBy: aCardPlay playedBy.
+	self assertSpaceship: aCardPlay playedBy has: aCardPlay card.
 	affectedSpaceship := board spaceshipOf: aCardPlay target.
 	effectsOnSpaceship := affectedSpaceship effectsOnSpaceship
 		                      effectsOnMe.
@@ -97,7 +97,7 @@ CardEffectApplicator >> applyRedoBasedOn: aCardPlay [
 CardEffectApplicator >> applyRepeatBasedOn: aCardPlay [
 
 	| lastBoxEffect |
-	self assert: aCardPlay card canBePlayedBy: aCardPlay playedBy.
+	self assertSpaceship: aCardPlay playedBy has: aCardPlay card.
 	lastBoxEffect := board lastBoxEffect.
 	lastBoxEffect triggeredBy: aCardPlay target with: board.
 	self checkIfIsRedo: aCardPlay.
@@ -117,7 +117,7 @@ CardEffectApplicator >> applyToAll: aCardEffect [
 ]
 
 { #category : #private }
-CardEffectApplicator >> assert: aCard canBePlayedBy: spaceshipNameThatPlaysCard [
+CardEffectApplicator >> assertSpaceship: spaceshipNameThatPlaysCard has: aCard [
 
 	(board spaceshipOf: spaceshipNameThatPlaysCard) hand 
 		assertSpaceshipHas: aCard.

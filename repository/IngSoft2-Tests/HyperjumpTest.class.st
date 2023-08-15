@@ -52,7 +52,7 @@ HyperjumpTest >> testAllPlayersLandInHyperJumpAtBoxFiveAndTheyMoveFirstFiveParse
 					                (Parsecs with: 5).
 					                (Lightyear with: 12) })
 		               at: 5.
-	game := SpaceRaceGame
+	game := SpaceRaceGame2
 		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
 		        distance: (Lightyear with: 60)
@@ -111,7 +111,7 @@ HyperjumpTest >> testHyperjumpDistanceSequenceIsAlwaysInDecreasingOrder [
 					                (Parsecs with: 5).
 					                (Lightyear with: 21) })
 		               at: 5.
-	game := SpaceRaceGame
+	game := SpaceRaceGame2
 		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
 		        distance: (Lightyear with: 60)

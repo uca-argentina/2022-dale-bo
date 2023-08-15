@@ -81,7 +81,7 @@ RedoCardTest >> testSpaceshipBetaPlaysARedoAfterACancelation [
 	boxSequence
 		add: (CardGiverEffect with: deckForCardGiver)
 		afterIndex: 12.
-	game := SpaceRaceGame
+	game := SpaceRaceGame2
 		        with:
 		        { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
@@ -122,7 +122,7 @@ RedoCardTest >> testSpaceshipBetaPlaysARedoAfterSpaceshipAlphaPlaysAnAccellerati
 	deckForGame := Deck with: { accelerationCard }.
 	cardGiverBox := self generateCardGiverBoxWith: deckForCardGiver.
 	boxSequence := self generateBoxesWith: cardGiverBox.
-	game := SpaceRaceGame
+	game := SpaceRaceGame2
 		        with:
 		        { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
@@ -154,7 +154,7 @@ RedoCardTest >> testSpaceshipBetaPlaysARedoAfterValenPlaysARepeat [
 	deckForGame := Deck with: { repeatCard }.
 	cardGiverBox := self generateCardGiverBoxWith: deckForCardGiver.
 	boxSequence := self generateBoxesWith: cardGiverBox.
-	game := SpaceRaceGame
+	game := SpaceRaceGame2
 		        with:
 		        { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
@@ -178,7 +178,7 @@ RedoCardTest >> testSpaceshipBetaPlaysARedoCardAfterHePlaysAOverloadCard [
 	deckForCardGiver := Deck with: { redoCard }.
 	cardGiverBox := self generateCardGiverBoxWith: deckForCardGiver.
 	boxSequence := self generateBoxesWith: cardGiverBox.
-	game := SpaceRaceGame
+	game := SpaceRaceGame2
 		        with:
 		        { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
@@ -217,7 +217,7 @@ RedoCardTest >> testSpaceshipBetaPlaysARedoWhenNoCardWasPlayedPreviously [
 	deckForGame := Deck with: { cancelationCard }.
 	cardGiverBox := self generateCardGiverBoxWith: deckForCardGiver.
 	boxSequence := self generateBoxesWith: cardGiverBox.
-	game := SpaceRaceGame
+	game := SpaceRaceGame2
 		        with:
 		        { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
@@ -241,7 +241,7 @@ RedoCardTest >> testSpaceshipBetaPlaysTwoRedoCardsAfterPlaysASpeedCard [
 	deckForGame := Deck with: { redoCard }.
 	cardGiverBox := self generateCardGiverBoxWith: deckForCardGiver.
 	boxSequence := self generateBoxesWith: cardGiverBox.
-	game := SpaceRaceGame
+	game := SpaceRaceGame2
 		        with:
 		        { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
@@ -282,7 +282,7 @@ RedoCardTest >> testSpaceshipBetaTriesToPlaysARedoCardNotInHisTurnAfterBetaPlays
 	deckForCardGiver := Deck with: { redoCard }.
 	cardGiverBox := self generateCardGiverBoxWith: deckForCardGiver.
 	boxSequence := self generateBoxesWith: cardGiverBox.
-	game := SpaceRaceGame
+	game := SpaceRaceGame2
 		        with:
 		        { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
