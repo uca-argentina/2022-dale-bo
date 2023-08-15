@@ -7,9 +7,9 @@ Class {
 		'turnSequence',
 		'cardEffectApplier',
 		'deck',
-		'allSpaceshipsStatuses',
 		'boxEffectApplicator',
-		'allSpaceshipsHands'
+		'allSpaceshipsHands',
+		'lastCardPlay'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -55,11 +55,14 @@ SpaceRaceGame2 >> allSpaceships [
 	^board allSpaceships.
 ]
 
+{ #category : #accessing }
+SpaceRaceGame2 >> allSpaceshipsHands [
+	^allSpaceshipsHands.
+]
+
 { #category : #actions }
-SpaceRaceGame2 >> applyCardPlay: aCardPlay [
-	
-	
-	cardEffectApplier apply:aCardPlay
+SpaceRaceGame2 >> applyCardPlayFor:aCardPlay [
+	 ^ (CardEffectApplicator2 with:aCardPlay using:self) execute
 ]
 
 { #category : #actions }
@@ -122,19 +125,20 @@ SpaceRaceGame2 >> initializeWith: spaceships aBoardWith: aBoxSequence distance: 
 		         laps: aNumberOfLaps.
 	diceCup := aDiceCup.
 	turnSequence := TurnSequence with: spaceships.
-	cardEffectApplier:= CardEffectApplicator with:board using:turnSequence.
+	lastCardPlay:= InvalidCardPlay new.
 ]
 
 { #category : #actions }
 SpaceRaceGame2 >> playATurn [
 
-	| diceResult whoPlays |
+	| diceResult whoPlays effectsOnCurrentSpaceship |
 	self assertGameIsNotFinished.
 	diceResult := diceCup roll.
 	whoPlays:=turnSequence whoPlays.
 	"effectsOnCurrentSpaceship := (board spaceshipOf: currentSpaceship)
-		                        effectsOnSpaceship sumOfCardsEffects ."
-	board move: turnSequence whoPlays to: diceResult.
+		                        effectsOnSpaceship sumOfCardsEffects."
+	effectsOnCurrentSpaceship:= (self handOf:whoPlays) sumOfCardsEffects.
+	board move: turnSequence whoPlays to: diceResult+effectsOnCurrentSpaceship.
 	boxEffectApplicator applyTo:(board positionOf:whoPlays) using:self.
 	board sortPositionsByRanking.
 	turnSequence next
@@ -153,10 +157,15 @@ SpaceRaceGame2 >> rankingOf: aShip [
 			^ board rankingOf: aShip.
 ]
 
-{ #category : #action }
-SpaceRaceGame2 >> statusOf: aSpaceship [
+{ #category : #actions }
+SpaceRaceGame2 >> turnSequence [
 
-	^ (allSpaceshipsStatuses detect: [ :each | each name = aSpaceship ])
+	^turnSequence .
+]
+
+{ #category : #actions }
+SpaceRaceGame2 >> updateLastCardPlayed:aCard [
+	lastCardPlay := aCard.
 ]
 
 { #category : #actions }

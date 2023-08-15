@@ -313,6 +313,49 @@ GameTest2 >> testSpaceshipAlphaPlaysASpeedCardToSpaceshipBetaAndAddsOneToSpacesh
 ]
 
 { #category : #tests }
+GameTest2 >> testSpaceshipAlphaPlaysAnAccelerationCardToAllPlayersAndTheyAddOneToTheirRoll [
+
+	| game boxSequence deck noEffect |
+	deck := Deck with: { accelerationCard }.
+	noEffect := DiscreteProbabilityEvent for: NoEffect new with: 100.
+	boxSequence := self generateBoxesWith: noEffect.
+	game := SpaceRaceGame2 
+		        with:
+		        { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
+		        boardWith: boxSequence
+		        distance: (Parsecs with: 200)
+		        laps: 2
+		        diceCup: die
+		        and: deck.
+	accelerationCard playedOn: game by: 'Spaceship Alpha'.
+	game playATurn.
+	self
+		assert: 'Spaceship Beta'
+		isAt: 1
+		with: 1
+		in: game.
+	self
+		assert: 'Spaceship Alpha'
+		isAt: 8
+		with: 1
+		in: game.
+	game playATurn.
+	self
+		assert: 'Spaceship Beta'
+		isAt: 8
+		with: 1
+		in: game.
+	game playATurn.
+	game playATurn.
+	game playATurn.
+	self
+		assert: 'Spaceship Beta'
+		isAt: 2
+		with: 2
+		in: game
+]
+
+{ #category : #tests }
 GameTest2 >> testSpeedup [
 	|  game boxSequence speedUpEffect |
 	die := LoadedDie with: 6.

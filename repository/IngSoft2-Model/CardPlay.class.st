@@ -23,7 +23,7 @@ CardPlay class >> by: aSpaceship card: aCard to: aTarget itsRedo: isRedo [
 { #category : #actions }
 CardPlay >> applyUsing: aCardEffectApplicator [
 
-	card applyUsing: aCardEffectApplicator basedOn: self
+	card applyUsing: aCardEffectApplicator
 ]
 
 { #category : #accessing }

@@ -3,7 +3,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'hand',
-		'name'
+		'name',
+		'effectsOnMe'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -11,6 +12,11 @@ Class {
 { #category : #'instance creation' }
 SpaceshipHand class >> with: aCollectionOfCards for:aSpaceship [
 	^self new initializeWith:aCollectionOfCards for:aSpaceship.
+]
+
+{ #category : #accessing }
+SpaceshipHand >> addEffectFrom: aCard [
+	effectsOnMe add: aCard.
 ]
 
 { #category : #initialization }
@@ -26,9 +32,16 @@ SpaceshipHand >> cards [
 	^ hand
 ]
 
+{ #category : #accessing }
+SpaceshipHand >> effectsOnMe [
+
+	^ effectsOnMe
+]
+
 { #category : #initialization }
 SpaceshipHand >> initializeWith: aCollectionOfCards for:aSpaceship [
 	hand:= aCollectionOfCards.
+	effectsOnMe:=OrderedCollection new.
 	name:= aSpaceship.
 ]
 
@@ -46,4 +59,17 @@ SpaceshipHand >> numberOfCards [
 SpaceshipHand >> recieveCard:aCard [
 	hand add:aCard.
 	
+]
+
+{ #category : #accessing }
+SpaceshipHand >> removeFromHand:aCard [
+	hand remove:aCard.
+]
+
+{ #category : #accessing }
+SpaceshipHand >> sumOfCardsEffects [
+
+	| cardEffects |
+	cardEffects:=effectsOnMe collect:[:card| card effect].
+	cardEffects ifNotEmpty:[^cardEffects sum] ifEmpty:[^0] .
 ]

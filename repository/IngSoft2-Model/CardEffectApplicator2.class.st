@@ -1,27 +1,27 @@
 Class {
-	#name : #CardEffectApplicator,
+	#name : #CardEffectApplicator2,
 	#superclass : #Object,
 	#instVars : [
-		'board',
 		'lastCardPlay',
-		'turnSequence'
+		'game',
+		'cardPlay'
 	],
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #'instance creation' }
-CardEffectApplicator class >> with: aBoard using:aTurnSequence [
-	^self new initializeWith:aBoard and:aTurnSequence.
+CardEffectApplicator2 class >> with: aCardPlay using:aGame [
+	^self new initializeWith:aCardPlay and:aGame.
 ]
 
 { #category : #actions }
-CardEffectApplicator >> apply: aCardPlay [ 
+CardEffectApplicator2 >> apply: aCardPlay [ 
 	
 	aCardPlay applyUsing:self.
 ]
 
 { #category : #actions }
-CardEffectApplicator >> applyAccelerationBasedOn: aCardPlay [
+CardEffectApplicator2 >> applyAccelerationBasedOn: aCardPlay [
 
 	| aCard spaceshipNameThatPlaysCard |
 	aCard := aCardPlay card.
@@ -33,9 +33,22 @@ CardEffectApplicator >> applyAccelerationBasedOn: aCardPlay [
 ]
 
 { #category : #actions }
-CardEffectApplicator >> applyCancellationBasedOn: aCardPlay [
+CardEffectApplicator2 >> applyAccelerationCard [
 
-	| affectedSpaceship effectsOnSpaceship spaceshipNameThatPlaysCard aCard cardPlayToBeRemoved |
+	| aCard spaceshipNameThatPlaysCard |
+	aCard := cardPlay card.
+	spaceshipNameThatPlaysCard := cardPlay playedBy.
+	self assert: cardPlay card canBePlayedBy: cardPlay playedBy.
+	self applyToAll: aCard.
+	"self checkIfIsRedo: cardPlay."
+	game updateLastCardPlayed: cardPlay card.
+   (game handOf: cardPlay playedBy) removeFromHand: cardPlay card .
+]
+
+{ #category : #actions }
+CardEffectApplicator2 >> applyCancellationBasedOn: aCardPlay [
+
+	| affectedSpaceship effectsOnSpaceship spaceshipNameThatPlaysCard aCard cardPlayToBeRemoved board|
 	spaceshipNameThatPlaysCard := aCardPlay playedBy.
 	aCard := aCardPlay card.
 	cardPlayToBeRemoved := aCardPlay target.
@@ -55,9 +68,9 @@ CardEffectApplicator >> applyCancellationBasedOn: aCardPlay [
 ]
 
 { #category : #actions }
-CardEffectApplicator >> applyEffectBasedOn: aCardPlay [
+CardEffectApplicator2 >> applyEffectBasedOn: aCardPlay [
 
-	| affectedSpaceship effectsOnSpaceship |
+	| affectedSpaceship effectsOnSpaceship board|
 	self assert: aCardPlay card canBePlayedBy: aCardPlay playedBy.
 	affectedSpaceship := board spaceshipOf: aCardPlay target.
 	effectsOnSpaceship := affectedSpaceship effectsOnSpaceship
@@ -71,9 +84,9 @@ CardEffectApplicator >> applyEffectBasedOn: aCardPlay [
 ]
 
 { #category : #actions }
-CardEffectApplicator >> applyRedoBasedOn: aCardPlay [
+CardEffectApplicator2 >> applyRedoBasedOn: aCardPlay [
 
-	| redoPlay targetedCard |
+	| redoPlay targetedCard board|
 	targetedCard := lastCardPlay card.
 	(board spaceshipOf: aCardPlay playedBy) hand assertSpaceshipHas:
 		aCardPlay card.
@@ -94,9 +107,9 @@ CardEffectApplicator >> applyRedoBasedOn: aCardPlay [
 ]
 
 { #category : #actions }
-CardEffectApplicator >> applyRepeatBasedOn: aCardPlay [
+CardEffectApplicator2 >> applyRepeatBasedOn: aCardPlay [
 
-	| lastBoxEffect |
+	| lastBoxEffect board|
 	self assert: aCardPlay card canBePlayedBy: aCardPlay playedBy.
 	lastBoxEffect := board lastBoxEffect.
 	lastBoxEffect triggeredBy: aCardPlay target with: board.
@@ -104,40 +117,53 @@ CardEffectApplicator >> applyRepeatBasedOn: aCardPlay [
 	lastCardPlay := aCardPlay
 ]
 
-{ #category : #private }
-CardEffectApplicator >> applyToAll: aCardEffect [
+{ #category : #actions }
+CardEffectApplicator2 >> applySpeedCard [
 
-	| effectsOnSpaceship |
-	board allSpaceships do: [ :each | 
-		effectsOnSpaceship := each effectsOnSpaceship effectsOnMe.
-		effectsOnSpaceship add: aCardEffect.
-		board
-			updateSpaceshipEffectsOf: each
-			to: (SpaceshipEffects with: effectsOnSpaceship) ]
+	| affectedSpaceship |
+	self assert: cardPlay card canBePlayedBy: cardPlay playedBy.
+	affectedSpaceship := game handOf: cardPlay target.
+	affectedSpaceship addEffectFrom: cardPlay card.
+	game updateLastCardPlayed: cardPlay card.
+   (game handOf: cardPlay playedBy) removeFromHand: cardPlay card .
 ]
 
 { #category : #private }
-CardEffectApplicator >> assert: aCard canBePlayedBy: spaceshipNameThatPlaysCard [
+CardEffectApplicator2 >> applyToAll: aCardEffect [
 
-	(board spaceshipOf: spaceshipNameThatPlaysCard) hand 
+	| effectsOnSpaceship |
+	game allSpaceshipsHands do: [ :each | 
+		effectsOnSpaceship := each effectsOnMe.
+		effectsOnSpaceship add: aCardEffect. ]
+]
+
+{ #category : #private }
+CardEffectApplicator2 >> assert: aCard canBePlayedBy: spaceshipNameThatPlaysCard [
+
+	(game handOf: spaceshipNameThatPlaysCard ) 
 		assertSpaceshipHas: aCard.
 
 	self
 		assertValidTurnFor: spaceshipNameThatPlaysCard
-		andCardType: aCard
 ]
 
 { #category : #asserting }
-CardEffectApplicator >> assertSpaceship: effectsOnSpaceship hasBeenAffectedBy: aCard [
+CardEffectApplicator2 >> assertSpaceship: effectsOnSpaceship hasBeenAffectedBy: aCard [
 
 	(effectsOnSpaceship occurrencesOf: aCard) >= 1
 		ifFalse: [ Error signal: 'The spaceship does not have this effect applied on' ]
 ]
 
 { #category : #actions }
-CardEffectApplicator >> assertValidTurnFor: aSpaceship andCardType: aCard [
+CardEffectApplicator2 >> assertValidTurnFor: aSpaceship [
 
-	| whoWantsToPlay |
+	(game turnSequence) assertSpaceshipTurn: aSpaceship.
+]
+
+{ #category : #actions }
+CardEffectApplicator2 >> assertValidTurnFor: aSpaceship andCardType: aCard [
+
+	| whoWantsToPlay board turnSequence|
 	whoWantsToPlay := board spaceshipOf: aSpaceship.
 	(turnSequence whoPlays ~= whoWantsToPlay name and:
 		 aCard isPermanent) ifTrue: [ 
@@ -146,14 +172,14 @@ CardEffectApplicator >> assertValidTurnFor: aSpaceship andCardType: aCard [
 ]
 
 { #category : #actions }
-CardEffectApplicator >> checkIfIsRedo: aCardPlay [
+CardEffectApplicator2 >> checkIfIsRedo: aCardPlay [
 
 	aCardPlay isRedo ifFalse: [ 
 		self removeCardOf: aCardPlay ]
 ]
 
 { #category : #actions }
-CardEffectApplicator >> createRedoPlay: targetedCard with: aCardPlay [
+CardEffectApplicator2 >> createRedoPlay: targetedCard with: aCardPlay [
 
 	^ CardPlay
 		  by: aCardPlay playedBy
@@ -162,14 +188,21 @@ CardEffectApplicator >> createRedoPlay: targetedCard with: aCardPlay [
 		  itsRedo: true
 ]
 
+{ #category : #actions }
+CardEffectApplicator2 >> execute [ 
+	
+	cardPlay applyUsing:self.
+]
+
 { #category : #initialization }
-CardEffectApplicator >> initializeWith: aBoard and: aTurnSequence [ 
-	board:= aBoard.
+CardEffectApplicator2 >> initializeWith: aCardPlay and: aGame [ 
+	game:= aGame.
+	cardPlay:= aCardPlay.
 	lastCardPlay:= InvalidCardPlay new.
-	turnSequence:=aTurnSequence.
 ]
 
 { #category : #actions }
-CardEffectApplicator >> removeCardOf: aCardPlay [
+CardEffectApplicator2 >> removeCardOf: aCardPlay [
+|board|
 	board remove: aCardPlay card from:aCardPlay playedBy .
 ]
