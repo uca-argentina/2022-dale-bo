@@ -62,6 +62,11 @@ SpaceshipHand >> recieveCard:aCard [
 ]
 
 { #category : #accessing }
+SpaceshipHand >> removeEffect:aCardEffect [
+	effectsOnMe remove:aCardEffect.
+]
+
+{ #category : #accessing }
 SpaceshipHand >> removeFromHand:aCard [
 	hand remove:aCard.
 ]

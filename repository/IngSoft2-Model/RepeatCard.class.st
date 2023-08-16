@@ -29,6 +29,6 @@ RepeatCard >> playedOn: aGame by: aSpaceship to: anotherSpaceship [
 		             by: aSpaceship
 		             card: self
 		             to: anotherSpaceship
-		             itsRedo: false.
+		             needsRemove: false.
 	aGame applyCardPlayFor: aCardPlay
 ]

@@ -102,15 +102,14 @@ PermanentCardTest >> testAlphaPlaysAnAccelerationCardAndBetaUseCancelationCardTo
 		in: game.
 	game playATurn.
 	self
-		assert: 'Spaceship Alpha'
+		assert: 'Spaceship Beta'
 		isAt: 8
 		with: 1
 		in: game.
 	cancelationCard
 		playedOn: game
 		by: 'Spaceship Beta'
-		to: 'Spaceship Alpha'
-		for: accelerationCard.
+		to: accelerationCard.
 	game playATurn.
 	game playATurn.
 	self
@@ -121,7 +120,7 @@ PermanentCardTest >> testAlphaPlaysAnAccelerationCardAndBetaUseCancelationCardTo
 	game playATurn.
 	self
 		assert: 'Spaceship Beta'
-		isAt: 2
+		isAt: 1
 		with: 2
 		in: game
 ]
@@ -174,37 +173,6 @@ PermanentCardTest >> testSpaceshipAlphaCantPlayACardThatIsNotInHisHand [
 				to: 'Spaceship Beta' ]
 		raise: Error
 		withMessage: 'The spaceship does not have this card'
-]
-
-{ #category : #tests }
-PermanentCardTest >> testSpaceshipAlphaCantPlayCancellationBecauseThereWasntACardPlayedBefore [
-
-	| game boxSequence deckForGame deckForCardGiver cardGiverBox |
-	deckForCardGiver := Deck with: { redoCard }.
-	deckForGame := Deck with: { cancelationCard }.
-	cardGiverBox := DiscreteProbabilityEvent
-		                for: (CardGiverEffect with: deckForCardGiver)
-		                with: 100.
-	boxSequence := self generateBoxesWith: cardGiverBox.
-	game := SpaceRaceGame
-		        with:
-		        { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
-		        boardWith: boxSequence
-		        distance: (Parsecs with: 200)
-		        laps: 2
-		        diceCup: die
-		        and: deckForGame.
-	game playATurn.
-
-	self
-		should: [ 
-			cancelationCard
-				playedOn: game
-				by: 'Spaceship Alpha'
-				to: 'Spaceship Alpha'
-				for: SpeedCard new ]
-		raise: Error
-		withMessage: 'The spaceship does not have this effect applied on'
 ]
 
 { #category : #tests }

@@ -63,7 +63,7 @@ RepeatCardTest >> testSpaceshipBetaPlaysARepeatCardAfterSpaceshipAlphaLandsInAAt
 		               sequenceOfNoEffectsOf: 15
 		               with: AtomicBombEffect new
 		               at: 7.
-	game := SpaceRaceGame2
+	game := SpaceRaceGame
 		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
@@ -89,7 +89,7 @@ RepeatCardTest >> testSpaceshipBetaPlaysARepeatCardAfterSpaceshipAlphaLandsInACa
 		               sequenceOfNoEffectsOf: 16
 		               with: (CardGiverEffect with: deck)
 		               at: 7.
-	game := SpaceRaceGame2
+	game := SpaceRaceGame
 		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
@@ -117,7 +117,7 @@ RepeatCardTest >> testSpaceshipBetaPlaysARepeatCardAfterSpaceshipAlphaLandsInAHy
 					                (Parsecs with: 5).
 					                (Lightyear with: 12) })
 		               at: 7.
-	game := SpaceRaceGame2
+	game := SpaceRaceGame
 		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 20)
@@ -145,7 +145,7 @@ RepeatCardTest >> testSpaceshipBetaPlaysARepeatCardAfterSpaceshipAlphaLandsInAMo
 		               sequenceOfNoEffectsOf: 10
 		               with: (MoonwalkEffect with: 2)
 		               at: 7.
-	game := SpaceRaceGame2
+	game := SpaceRaceGame
 		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
@@ -171,7 +171,7 @@ RepeatCardTest >> testSpaceshipBetaPlaysARepeatCardAfterSpaceshipAlphaLandsInANo
 	noEffect := DiscreteProbabilityEvent for: NoEffect new with: 100.
 	boxSequence := (BoxesEffectsGenerator generate: 16 for: { noEffect })
 		               boxSequence.
-	game := SpaceRaceGame2
+	game := SpaceRaceGame
 		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
@@ -203,7 +203,7 @@ RepeatCardTest >> testSpaceshipBetaPlaysARepeatCardAfterSpaceshipAlphaLandsInASp
 		               sequenceOfNoEffectsOf: 15
 		               with: SpeedUpEffect new
 		               at: 7.
-	game := SpaceRaceGame2
+	game := SpaceRaceGame
 		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
@@ -230,7 +230,7 @@ RepeatCardTest >> testSpaceshipBetaPlaysARepeatCardAfterSpaceshipAlphaLandsInAWo
 		               sequenceOfNoEffectsOf: 15
 		               with: WormHoleEffect new
 		               at: 7.
-	game := SpaceRaceGame2
+	game := SpaceRaceGame
 		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
@@ -264,7 +264,7 @@ RepeatCardTest >> testSpaceshipBetaPlaysARepeatCardBeforeDiceAreThrown [
 		               sequenceOfNoEffectsOf: 15
 		               with: AtomicBombEffect new
 		               at: 7.
-	game := SpaceRaceGame2
+	game := SpaceRaceGame
 		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)

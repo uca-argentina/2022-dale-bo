@@ -28,7 +28,7 @@ CardEffectApplicator2 >> applyAccelerationBasedOn: aCardPlay [
 	spaceshipNameThatPlaysCard := aCardPlay playedBy.
 	self assertSpaceship: spaceshipNameThatPlaysCard has: aCard.
 	self applyToAll: aCard.
-	self checkIfIsRedo: aCardPlay.
+	self checkCardNeedsToBeRemoved.
 	lastCardPlay := aCardPlay
 ]
 
@@ -43,7 +43,7 @@ CardEffectApplicator2 >> applyAccelerationCard [
 	self applyToAll: aCard.
 	"self checkIfIsRedo: cardPlay."
 	game updateLastCardPlayed: cardPlay card.
-	(game handOf: cardPlay playedBy) removeFromHand: cardPlay card
+	self checkCardNeedsToBeRemoved
 ]
 
 { #category : #actions }
@@ -64,8 +64,18 @@ CardEffectApplicator2 >> applyCancellationBasedOn: aCardPlay [
 	board
 		updateSpaceshipEffectsOf: affectedSpaceship
 		to: (SpaceshipEffects with: effectsOnSpaceship).
-	self checkIfIsRedo: aCardPlay.
+	self checkCardNeedsToBeRemoved.
 	lastCardPlay := aCardPlay
+]
+
+{ #category : #actions }
+CardEffectApplicator2 >> applyCancellationCard [
+
+	| spaceshipsAffected |
+	self assertSpaceship: cardPlay playedBy has: cardPlay card.
+	spaceshipsAffected:= game allSpaceshipsHands select: [ :each | (each effectsOnMe) includes:(cardPlay target) ].
+	spaceshipsAffected do: [ :each | each removeEffect: cardPlay target ].
+	self checkCardNeedsToBeRemoved
 ]
 
 { #category : #actions }
@@ -80,7 +90,7 @@ CardEffectApplicator2 >> applyEffectBasedOn: aCardPlay [
 	board
 		updateSpaceshipEffectsOf: affectedSpaceship
 		to: (SpaceshipEffects with: effectsOnSpaceship).
-	self checkIfIsRedo: aCardPlay.
+	self checkCardNeedsToBeRemoved.
 	lastCardPlay := aCardPlay
 ]
 
@@ -93,13 +103,13 @@ CardEffectApplicator2 >> applyOverloadCard [
 	affectedSpaceship := game handOf: cardPlay target.
 	affectedSpaceship addEffectFrom: cardPlay card.
 	game updateLastCardPlayed: cardPlay card.
-	(game handOf: cardPlay playedBy) removeFromHand: cardPlay card
+	self checkCardNeedsToBeRemoved
 ]
 
 { #category : #actions }
 CardEffectApplicator2 >> applyRedoBasedOn: aCardPlay [
 
-	| redoPlay targetedCard board|
+	| redoPlay targetedCard board |
 	targetedCard := lastCardPlay card.
 	(board spaceshipOf: aCardPlay playedBy) hand assertSpaceshipHas:
 		aCardPlay card.
@@ -113,9 +123,10 @@ CardEffectApplicator2 >> applyRedoBasedOn: aCardPlay [
 				            (self
 					             createRedoPlay: lastCardPlay target card
 					             with: aCardPlay)
-				            itsRedo: true ]
-		ifFalse: [ redoPlay := self createRedoPlay: targetedCard with: aCardPlay ].
-	self checkIfIsRedo: aCardPlay.
+				            needsRemove: true ]
+		ifFalse: [ 
+		redoPlay := self createRedoPlay: targetedCard with: aCardPlay ].
+	self checkCardNeedsToBeRemoved.
 	targetedCard applyUsing: self basedOn: redoPlay
 ]
 
@@ -124,9 +135,9 @@ CardEffectApplicator2 >> applyRedoCard [
 
 	| newCardPlay |
 	self assertSpaceship: cardPlay playedBy has: cardPlay card.
-	newCardPlay := CardPlay by: (cardPlay playedBy) card:(game lastCardPlayed )  to:(cardPlay target)  itsRedo:false.
+	newCardPlay := CardPlay by: (cardPlay playedBy) card:(game lastCardPlayed )  to:(cardPlay target)  needsRemove:true.
 	game applyCardPlayFor: newCardPlay.
-	(game handOf: cardPlay playedBy) removeFromHand: cardPlay card.
+	self checkCardNeedsToBeRemoved
 ]
 
 { #category : #actions }
@@ -136,7 +147,7 @@ CardEffectApplicator2 >> applyRepeatBasedOn: aCardPlay [
 	self assertSpaceship: aCardPlay playedBy has: aCardPlay card.
 	lastBoxEffect := board lastBoxEffect.
 	lastBoxEffect triggeredBy: aCardPlay target with: board.
-	self checkIfIsRedo: aCardPlay.
+	self checkCardNeedsToBeRemoved.
 	lastCardPlay := aCardPlay
 ]
 
@@ -148,7 +159,7 @@ CardEffectApplicator2 >> applyRepeatCard [
 	lastBoxEffect := game lastBoxEffect.
 	lastBoxEffect triggeredBy: cardPlay target with: game.
 	game updateLastCardPlayed: cardPlay card.
-   (game handOf: cardPlay playedBy) removeFromHand: cardPlay card .
+	self checkCardNeedsToBeRemoved
 ]
 
 { #category : #actions }
@@ -160,7 +171,7 @@ CardEffectApplicator2 >> applySpeedCard [
 	affectedSpaceship := game handOf: cardPlay target.
 	affectedSpaceship addEffectFrom: cardPlay card.
 	game updateLastCardPlayed: cardPlay card.
-	(game handOf: cardPlay playedBy) removeFromHand: cardPlay card
+	self checkCardNeedsToBeRemoved
 ]
 
 { #category : #private }
@@ -204,10 +215,9 @@ CardEffectApplicator2 >> assertValidTurnFor: aSpaceship andCardType: aCard [
 ]
 
 { #category : #actions }
-CardEffectApplicator2 >> checkIfIsRedo: aCardPlay [
+CardEffectApplicator2 >> checkCardNeedsToBeRemoved [
 
-	aCardPlay isRedo ifFalse: [ 
-		self removeCardOf: aCardPlay ]
+	cardPlay needsRemove ifFalse: [ (game handOf: cardPlay playedBy) removeFromHand: cardPlay card ]
 ]
 
 { #category : #actions }
@@ -217,7 +227,7 @@ CardEffectApplicator2 >> createRedoPlay: targetedCard with: aCardPlay [
 		  by: aCardPlay playedBy
 		  card: targetedCard
 		  to: aCardPlay target
-		  itsRedo: true
+		  needsRemove: true
 ]
 
 { #category : #actions }
@@ -230,11 +240,5 @@ CardEffectApplicator2 >> execute [
 CardEffectApplicator2 >> initializeWith: aCardPlay and: aGame [ 
 	game:= aGame.
 	cardPlay:= aCardPlay.
-	lastCardPlay:= InvalidCardPlay new.
-]
-
-{ #category : #actions }
-CardEffectApplicator2 >> removeCardOf: aCardPlay [
-|board|
-	board remove: aCardPlay card from:aCardPlay playedBy .
+	lastCardPlay:= InvalidCard new.
 ]

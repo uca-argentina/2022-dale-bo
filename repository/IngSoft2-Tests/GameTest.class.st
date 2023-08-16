@@ -56,7 +56,7 @@ GameTest >> testAGameCannotBeCreatedWithABoardWithNegativeDistance [
 		                generate: 13
 		                for: { noEffect }) boxSequence.
 	self
-		should: [ SpaceRaceGame
+		should: [ SpaceRaceGameViejo
 		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: -200)
@@ -376,7 +376,7 @@ GameTest >> testGameCannotBeInitializedWithLessThanTwoShips [
 
 	self
 		should: [ 
-			SpaceRaceGame
+			SpaceRaceGameViejo
 				with: { 'Spaceship Alpha' }
 				boardWith: boxSequence
 				distance: 200

@@ -8,6 +8,11 @@ Class {
 }
 
 { #category : #actions }
+CancellationCard >> applyUsing: aCardEffectApplicator [
+	aCardEffectApplicator applyCancellationCard.
+]
+
+{ #category : #actions }
 CancellationCard >> applyUsing: aCardEffectApplicator basedOn: aCardPlay [
 
 	aCardEffectApplicator applyCancellationBasedOn: aCardPlay.
@@ -17,6 +22,18 @@ CancellationCard >> applyUsing: aCardEffectApplicator basedOn: aCardPlay [
 CancellationCard >> isPermanent [
 
 	^false.
+]
+
+{ #category : #actions }
+CancellationCard >> playedOn: aGame by: aSpaceship to: aCard [
+
+	| aCardPlay |
+	aCardPlay := CardPlay
+		             by: aSpaceship
+		             card: self
+		             to: aCard
+		             needsRemove: false.
+	aGame applyCardPlayFor: aCardPlay
 ]
 
 { #category : #actions }
@@ -30,7 +47,7 @@ CancellationCard >> playedOn: aGame by: aSpaceship to: anotherSpaceship for: aCa
 				              by: aSpaceship
 				              card: aCard
 				              to: anotherSpaceship
-				              itsRedo: false)
-		             itsRedo: false.
-	aGame applyCardPlay: aCardPlay
+				              needsRemove: false)
+		             needsRemove: false.
+	aGame applyCardPlayFor: aCardPlay
 ]

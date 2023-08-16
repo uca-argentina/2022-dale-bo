@@ -105,7 +105,7 @@ GameTest2 >> testAGameCannotBePlayedAfterItHasFinished [
 	noEffect := DiscreteProbabilityEvent for: NoEffect new with: 100.
 	boxSequence := (BoxesEffectsGenerator generate: 13 for: { noEffect })
 		               boxSequence.
-	game := SpaceRaceGame2
+	game := SpaceRaceGame
 		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
@@ -133,7 +133,7 @@ GameTest2 >> testAGameHasABoardWithAAtomicBombInPositionElevenAndTheEffectDoenst
 		               sequenceOfNoEffectsOf: 13
 		               with: AtomicBombEffect new
 		               at: 11.
-	game := SpaceRaceGame2
+	game := SpaceRaceGame
 		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
@@ -158,7 +158,7 @@ GameTest2 >> testAGameReturnsPositionOfShipAfterItMoves [
 	noEffect := DiscreteProbabilityEvent for: NoEffect new with: 100.
 	boxSequence := (BoxesEffectsGenerator generate: 13 for: { noEffect })
 		               boxSequence.
-	game := SpaceRaceGame2 
+	game := SpaceRaceGame 
 		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
@@ -184,7 +184,7 @@ GameTest2 >> testAllPlayersLandInHyperJumpAtBoxFiveAndTheyMoveFirstFiveParsecsAn
 					                (Parsecs with: 5).
 					                (Lightyear with: 12) })
 		               at: 5.
-	game := SpaceRaceGame2
+	game := SpaceRaceGame
 		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
 		        distance: (Lightyear with: 60)
@@ -225,7 +225,7 @@ GameTest2 >> testPlayerLandsInABoxAndReceivesACard [
 		                for: (CardGiverEffect with: deck)
 		                with: 100.
 	boxSequence := self generateBoxesWith: cardGiverBox.
-	game := SpaceRaceGame2
+	game := SpaceRaceGame
 		        with:
 		        { 'Spacehip Alpha'. 'Spacehip Beta'. 'Spacehip Gamma' }
 		        boardWith: boxSequence
@@ -252,7 +252,7 @@ GameTest2 >> testSpaceshipAlphaLandsInAMoonwalkAtBoxSevenAndMakeTheOthersGoBackT
 		               sequenceOfNoEffectsOf: 10
 		               with: (MoonwalkEffect with: 2)
 		               at: 7.
-	game := SpaceRaceGame2
+	game := SpaceRaceGame
 		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
@@ -285,7 +285,7 @@ GameTest2 >> testSpaceshipAlphaLandsInWormholeAtBoxThreeOfLapTwoAndGoesBackOneLa
 		               sequenceOfNoEffectsOf: 10
 		               with: WormHoleEffect new
 		               at: 3.
-	game := SpaceRaceGame2 
+	game := SpaceRaceGame 
 		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
@@ -303,7 +303,7 @@ GameTest2 >> testSpaceshipAlphaPlaysASpeedCardToSpaceshipBetaAndAddsOneToSpacesh
 	deck := Deck with: { speedCard }.
 	noEffect := DiscreteProbabilityEvent for: NoEffect new with: 100.
 	boxSequence := self generateBoxesWith: noEffect.
-	game := SpaceRaceGame2
+	game := SpaceRaceGame
 		        with:
 		        { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
@@ -329,7 +329,7 @@ GameTest2 >> testSpaceshipAlphaPlaysAnAccelerationCardToAllPlayersAndTheyAddOneT
 	deck := Deck with: { accelerationCard }.
 	noEffect := DiscreteProbabilityEvent for: NoEffect new with: 100.
 	boxSequence := self generateBoxesWith: noEffect.
-	game := SpaceRaceGame2 
+	game := SpaceRaceGame 
 		        with:
 		        { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
@@ -374,7 +374,7 @@ GameTest2 >> testSpaceshipAlphaPlaysAnOverloadCardToSpaceshipBetaAndReduceItsDie
 		                for: (CardGiverEffect with: deck)
 		                with: 100.
 	boxSequence := self generateBoxesWith: cardGiverBox.
-	game := SpaceRaceGame2
+	game := SpaceRaceGame
 		        with:
 		        { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
@@ -403,7 +403,7 @@ GameTest2 >> testSpaceshipBetaPlaysARedoCardAfterHePlaysAOverloadCard [
 	deckForCardGiver := Deck with: { redoCard }.
 	cardGiverBox := self generateCardGiverBoxWith: deckForCardGiver.
 	boxSequence := self generateBoxesWith: cardGiverBox.
-	game := SpaceRaceGame2
+	game := SpaceRaceGame
 		        with:
 		        { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
@@ -451,7 +451,7 @@ GameTest2 >> testSpaceshipBetaPlaysARepeatCardAfterSpaceshipAlphaLandsInAAtomicB
 		               sequenceOfNoEffectsOf: 15
 		               with: AtomicBombEffect new
 		               at: 7.
-	game := SpaceRaceGame2
+	game := SpaceRaceGame
 		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
@@ -475,7 +475,7 @@ GameTest2 >> testSpeedup [
 	speedUpEffect := DiscreteProbabilityEvent for: SpeedUpEffect new with: 100.
 	boxSequence := (BoxesEffectsGenerator generate: 13 for: { speedUpEffect })
 		               boxSequence.
-	game := SpaceRaceGame2 
+	game := SpaceRaceGame 
 		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
