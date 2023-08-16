@@ -1,9 +1,6 @@
 Class {
 	#name : #Lightyear,
 	#superclass : #Distance,
-	#instVars : [
-		'amount'
-	],
 	#category : #'IngSoft2-Model'
 }
 

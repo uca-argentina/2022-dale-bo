@@ -3,7 +3,6 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'card',
-		'affectedSpaceship',
 		'playedBy',
 		'appliedTo',
 		'needsRemove'

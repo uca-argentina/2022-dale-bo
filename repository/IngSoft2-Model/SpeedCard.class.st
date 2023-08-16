@@ -9,21 +9,10 @@ SpeedCard >> applyUsing: aCardEffectApplicator [
 	aCardEffectApplicator applySpeedCard.
 ]
 
-{ #category : #actions }
-SpeedCard >> applyUsing: aCardEffectApplicator basedOn: aCardPlay [ 
-	aCardEffectApplicator applySpeedCard.
-]
-
 { #category : #accesing }
 SpeedCard >> effect [
 
 	^ 1
-]
-
-{ #category : #operations }
-SpeedCard >> isPermanent [
-
-	^true.
 ]
 
 { #category : #actions }

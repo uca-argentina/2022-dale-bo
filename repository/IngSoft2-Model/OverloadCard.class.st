@@ -9,20 +9,9 @@ OverloadCard >> applyUsing: aCardEffectApplicator [
 	aCardEffectApplicator applyOverloadCard.
 ]
 
-{ #category : #actions }
-OverloadCard >> applyUsing: aCardEffectApplicator basedOn: aCardPlay [ 
-	aCardEffectApplicator applyEffectBasedOn:aCardPlay.
-]
-
 { #category : #action }
 OverloadCard >> effect [
 	^-2.
-]
-
-{ #category : #operations }
-OverloadCard >> isPermanent [
-
-	^true.
 ]
 
 { #category : #actions }

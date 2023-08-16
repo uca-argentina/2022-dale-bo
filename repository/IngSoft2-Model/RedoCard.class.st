@@ -10,17 +10,6 @@ RedoCard >> applyUsing: aCardEffectApplicator [
 ]
 
 { #category : #actions }
-RedoCard >> applyUsing: aCardEffectApplicator basedOn: aCardPlay [ 
-	aCardEffectApplicator applyRedoBasedOn:aCardPlay.
-]
-
-{ #category : #operations }
-RedoCard >> isPermanent [
-
-	^false.
-]
-
-{ #category : #actions }
 RedoCard >> playedOn: aGame by: aSpaceship to: anotherSpaceship [
 
 	| aCardPlay |

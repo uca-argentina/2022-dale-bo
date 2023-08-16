@@ -97,8 +97,9 @@ RedoCardTest >> testSpaceshipBetaPlaysARedoAfterACancelation [
 	cancelationCard
 		playedOn: game
 		by: 'Spaceship Beta'
-		to: 'Spaceship Beta'
-		for: accelerationCard.
+		to: accelerationCard.
+	game playATurn.
+	game playATurn.
 	game playATurn.
 	redoCard playedOn: game by: 'Spaceship Beta' to: 'Spaceship Gamma'.
 	self

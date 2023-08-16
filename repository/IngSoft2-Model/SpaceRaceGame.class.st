@@ -5,7 +5,6 @@ Class {
 		'board',
 		'diceCup',
 		'turnSequence',
-		'cardEffectApplier',
 		'deck',
 		'boxEffectApplicator',
 		'allSpaceshipsHands',
@@ -63,7 +62,7 @@ SpaceRaceGame >> allSpaceshipsHands [
 
 { #category : #actions }
 SpaceRaceGame >> applyCardPlayFor:aCardPlay [
-	 ^ (CardEffectApplicator2 with:aCardPlay using:self) execute
+	 ^ (CardEffectApplicator with:aCardPlay using:self) execute
 ]
 
 { #category : #actions }
@@ -119,7 +118,7 @@ SpaceRaceGame >> initializeWith: spaceships aBoardWith: aBoxSequence distance: a
 	deck:= aDeck.
 	boxEffectApplicator:=BoxEffectsApplicator new.
 	self createHandFor:spaceships.
-	board := Board2
+	board := Board
 		         ships: spaceships
 		         with: aBoxSequence
 		         distance: aDistance

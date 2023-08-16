@@ -4,18 +4,20 @@ Class {
 	#instVars : [
 		'boxNumber',
 		'lapNumber',
-		'distance'
+		'distance',
+		'spaceshipName'
 	],
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #'instance creation' }
-SpaceshipPosition class >> at: aBoxNumber distance: aDistance laps: aLapNumber [
+SpaceshipPosition class >> for: aSpaceship at: aBoxNumber distance: aDistance laps: aLapNumber [
 
 	^ self new
-		  initializeAt: aBoxNumber
+		  initialize: aSpaceship
+		  at: aBoxNumber
 		  distance: aDistance
-		  lap: aLapNumber.
+		  lap: aLapNumber
 ]
 
 { #category : #accessing }
@@ -36,8 +38,8 @@ SpaceshipPosition >> distanceInBox [
 ]
 
 { #category : #initialization }
-SpaceshipPosition >> initializeAt: aBoxNumber distance: aDistance lap: aLapNumber [
-
+SpaceshipPosition >> initialize: aSpaceship at: aBoxNumber distance: aDistance lap: aLapNumber [
+	spaceshipName:= aSpaceship.
 	boxNumber := aBoxNumber.
 	distance := aDistance.
 	lapNumber := aLapNumber
@@ -46,4 +48,9 @@ SpaceshipPosition >> initializeAt: aBoxNumber distance: aDistance lap: aLapNumbe
 { #category : #accessing }
 SpaceshipPosition >> lapNumber [
 	^ lapNumber
+]
+
+{ #category : #accessing }
+SpaceshipPosition >> name [
+	^ spaceshipName
 ]

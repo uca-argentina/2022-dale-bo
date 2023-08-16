@@ -9,21 +9,10 @@ AccelerationCard >> applyUsing: aCardEffectApplicator [
 	aCardEffectApplicator applyAccelerationCard.
 ]
 
-{ #category : #actions }
-AccelerationCard >> applyUsing: aCardEffectApplicator basedOn: aCardPlay [ 
-	aCardEffectApplicator applyAccelerationBasedOn:aCardPlay.
-]
-
 { #category : #operations }
 AccelerationCard >> effect [
 
 	^ 1
-]
-
-{ #category : #operations }
-AccelerationCard >> isPermanent [
-
-	^true.
 ]
 
 { #category : #actions }

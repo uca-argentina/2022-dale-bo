@@ -3,7 +3,6 @@ Class {
 	#superclass : #BoxEffect,
 	#instVars : [
 		'posibleMoves',
-		'parsecs',
 		'index'
 	],
 	#category : #'IngSoft2-Model'

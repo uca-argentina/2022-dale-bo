@@ -10,18 +10,6 @@ RepeatCard >> applyUsing: aCardEffectApplicator [
 ]
 
 { #category : #actions }
-RepeatCard >> applyUsing: aCardEffectApplicator basedOn: aCardPlay [
-
-	aCardEffectApplicator applyRepeatBasedOn: aCardPlay
-]
-
-{ #category : #operations }
-RepeatCard >> isPermanent [
-
-	^false.
-]
-
-{ #category : #actions }
 RepeatCard >> playedOn: aGame by: aSpaceship to: anotherSpaceship [
 
 	| aCardPlay |

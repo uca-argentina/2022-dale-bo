@@ -1,9 +1,6 @@
 Class {
 	#name : #NoEffect,
 	#superclass : #BoxEffect,
-	#instVars : [
-		'parsecs'
-	],
 	#category : #'IngSoft2-Model'
 }
 

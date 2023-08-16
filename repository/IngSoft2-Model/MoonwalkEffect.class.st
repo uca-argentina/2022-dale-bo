@@ -2,8 +2,7 @@ Class {
 	#name : #MoonwalkEffect,
 	#superclass : #BoxEffect,
 	#instVars : [
-		'retroPositions',
-		'parsecs'
+		'retroPositions'
 	],
 	#category : #'IngSoft2-Model'
 }
