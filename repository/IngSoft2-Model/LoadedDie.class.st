@@ -25,6 +25,12 @@ LoadedDie >> initializeWith: aNumberOfSides [
 ]
 
 { #category : #actions }
+LoadedDie >> maxToss [
+
+	^ numberOfSides
+]
+
+{ #category : #actions }
 LoadedDie >> roll [
 
 	^ numberOfSides

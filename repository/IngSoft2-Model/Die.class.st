@@ -25,7 +25,7 @@ Die >> initializeWith: aNumberOfSides [
 ]
 
 { #category : #accesing }
-Die >> numberOfSides [
+Die >> maxToss [
 
 	^ numberOfSides
 ]

@@ -25,6 +25,12 @@ DiceCup >> initializeWithAll: aDice [
 ]
 
 { #category : #actions }
+DiceCup >> maxToss [
+
+	^ dice sum: [ :die | die maxToss ]
+]
+
+{ #category : #actions }
 DiceCup >> roll [
 
 	^ dice sum: [ :die | die roll ]

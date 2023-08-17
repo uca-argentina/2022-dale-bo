@@ -9,7 +9,8 @@ Class {
 		'boxEffectApplicator',
 		'allSpaceshipsHands',
 		'lastCardPlay',
-		'lastBoxEffect'
+		'lastBoxEffect',
+		'spaceshipsInPrison'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -78,6 +79,28 @@ SpaceRaceGame >> board [
 ]
 
 { #category : #actions }
+SpaceRaceGame >> calculateNewBoxNumberWith: aDiceResult [
+
+	| whoPlays effectsOnCurrentSpaceship |
+	whoPlays := turnSequence whoPlays.
+	effectsOnCurrentSpaceship := (self handOf: whoPlays)
+		                             sumOfCardsEffects.
+	(spaceshipsInPrison includes: whoPlays)
+		ifTrue: [ self checkSpaceshipCanLeaveJailWith: aDiceResult ]
+		ifFalse: [
+			board move: whoPlays to: aDiceResult + effectsOnCurrentSpaceship.
+			lastBoxEffect:= board effectAt:(turnSequence whoPlays).
+			boxEffectApplicator
+				applyTo: (board positionOf: whoPlays)
+				using: self ]
+]
+
+{ #category : #actions }
+SpaceRaceGame >> checkSpaceshipCanLeaveJailWith: aDiceResult [
+	(aDiceResult = diceCup maxToss) ifTrue:[spaceshipsInPrison remove:turnSequence whoPlays]
+]
+
+{ #category : #actions }
 SpaceRaceGame >> createHandFor: aCollectionOfShips [
 
 	| hand cards |
@@ -127,6 +150,7 @@ SpaceRaceGame >> initializeWith: spaceships aBoardWith: aBoxSequence distance: a
 	turnSequence := TurnSequence with: spaceships.
 	lastBoxEffect := InvalidEffect new.
 	lastCardPlay:= InvalidCard new.
+	spaceshipsInPrison:= OrderedCollection new.
 ]
 
 { #category : #accessing }
@@ -143,16 +167,10 @@ SpaceRaceGame >> lastCardPlayed [
 { #category : #actions }
 SpaceRaceGame >> playATurn [
 
-	| diceResult whoPlays effectsOnCurrentSpaceship |
+	| diceResult|
 	self assertGameIsNotFinished.
 	diceResult := diceCup roll.
-	whoPlays:=turnSequence whoPlays.
-	"effectsOnCurrentSpaceship := (board spaceshipOf: currentSpaceship)
-		                        effectsOnSpaceship sumOfCardsEffects."
-	effectsOnCurrentSpaceship:= (self handOf:whoPlays) sumOfCardsEffects.
-	board move: whoPlays to: diceResult+effectsOnCurrentSpaceship.
-	lastBoxEffect:= board effectAt:(whoPlays).
-	boxEffectApplicator applyTo:(board positionOf:whoPlays) using:self.
+	self calculateNewBoxNumberWith: diceResult.
 	board sortPositionsByRanking.
 	turnSequence next
 ]
@@ -168,6 +186,16 @@ SpaceRaceGame >> rankingOf: aShip [
 
 
 			^ board rankingOf: aShip.
+]
+
+{ #category : #actions }
+SpaceRaceGame >> sendToJail: aSpaceship [ 
+	spaceshipsInPrison add:aSpaceship. 
+]
+
+{ #category : #accessing }
+SpaceRaceGame >> spaceshipsInPrison [
+	^ spaceshipsInPrison
 ]
 
 { #category : #actions }
