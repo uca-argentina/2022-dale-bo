@@ -116,6 +116,30 @@ RedoCardTest >> testSpaceshipBetaPlaysARedoAfterACancelation [
 ]
 
 { #category : #tests }
+RedoCardTest >> testSpaceshipBetaPlaysARedoAfterAlphaPlaysARepeat [
+
+	| game boxSequence deckForGame deckForCardGiver cardGiverBox |
+	deckForCardGiver := Deck with: { redoCard }.
+	deckForGame := Deck with: { repeatCard }.
+	cardGiverBox := self generateCardGiverBoxWith: deckForCardGiver.
+	boxSequence := self generateBoxesWith: cardGiverBox.
+	game := SpaceRaceGame
+		        with:
+		        { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
+		        boardWith: boxSequence
+		        distance: (Parsecs with: 200)
+		        laps: 2
+		        diceCup: die
+		        and: deckForGame.
+	game playATurn.
+	repeatCard playedOn: game by: 'Spaceship Alpha' to: 'Spaceship Alpha'.
+	game playATurn.
+	redoCard playedOn: game by: 'Spaceship Beta' to: 'Spaceship Beta'.
+	self assert: 'Spaceship Alpha' handHas: 3 in: game.
+	self assert: 'Spaceship Beta' handHas: 3 in: game
+]
+
+{ #category : #tests }
 RedoCardTest >> testSpaceshipBetaPlaysARedoAfterSpaceshipAlphaPlaysAnAccellerationCard [
 
 	| game boxSequence deckForGame deckForCardGiver cardGiverBox |
@@ -145,30 +169,6 @@ RedoCardTest >> testSpaceshipBetaPlaysARedoAfterSpaceshipAlphaPlaysAnAccellerati
 		isAt: 16
 		with: 1
 		in: game
-]
-
-{ #category : #tests }
-RedoCardTest >> testSpaceshipBetaPlaysARedoAfterValenPlaysARepeat [
-
-	| game boxSequence deckForGame deckForCardGiver cardGiverBox |
-	deckForCardGiver := Deck with: { redoCard }.
-	deckForGame := Deck with: { repeatCard }.
-	cardGiverBox := self generateCardGiverBoxWith: deckForCardGiver.
-	boxSequence := self generateBoxesWith: cardGiverBox.
-	game := SpaceRaceGame
-		        with:
-		        { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
-		        boardWith: boxSequence
-		        distance: (Parsecs with: 200)
-		        laps: 2
-		        diceCup: die
-		        and: deckForGame.
-	game playATurn.
-	repeatCard playedOn: game by: 'Spaceship Alpha' to: 'Spaceship Alpha'.
-	game playATurn.
-	redoCard playedOn: game by: 'Spaceship Beta' to: 'Spaceship Beta'.
-	self assert: 'Spaceship Alpha' handHas: 3 in: game.
-	self assert: 'Spaceship Beta' handHas: 3 in: game
 ]
 
 { #category : #tests }

@@ -47,6 +47,20 @@ RepeatCardTest >> setUp [
 ]
 
 { #category : #tests }
+RepeatCardTest >> should: aBlock raise: anError withMessage: anErrorMessage [
+
+	| tmp2 tmp3 |
+	aBlock
+		on: anError
+		do: [ :error | 
+			tmp2 := true.
+			tmp3 := error messageText ].
+	self
+		assert: tmp2;
+		assert: tmp3 equals: anErrorMessage
+]
+
+{ #category : #tests }
 RepeatCardTest >> testSpaceshipBetaPlaysARepeatCardAfterSpaceshipAlphaLandsInAAtomicBombEffect [
 
 	| dieOne dieTwo dieThree aDiceCup game boxSequence deck |
@@ -271,10 +285,16 @@ RepeatCardTest >> testSpaceshipBetaPlaysARepeatCardBeforeDiceAreThrown [
 		        laps: 2
 		        diceCup: aDiceCup
 		        and: deck.
-	repeatCard
+	self
+		should: [ 
+		repeatCard
 		playedOn: game
 		by: 'Spaceship Beta'
-		to: 'Spaceship Alpha'.
+		to: 'Spaceship Alpha'. ]
+		raise: Error
+		withMessage:
+		'Game has not started, no spaceship has move yet'
+	
 	
 	
 ]

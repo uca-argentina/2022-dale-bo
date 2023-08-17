@@ -125,7 +125,7 @@ SpaceRaceGame >> initializeWith: spaceships aBoardWith: aBoxSequence distance: a
 		         laps: aNumberOfLaps.
 	diceCup := aDiceCup.
 	turnSequence := TurnSequence with: spaceships.
-	lastBoxEffect := NoEffect new.
+	lastBoxEffect := InvalidEffect new.
 	lastCardPlay:= InvalidCard new.
 ]
 

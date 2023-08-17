@@ -126,29 +126,6 @@ PermanentCardTest >> testAlphaPlaysAnAccelerationCardAndBetaUseCancelationCardTo
 ]
 
 { #category : #tests }
-PermanentCardTest >> testPlayerLandsInABoxAndReceivesACard [
-
-	| game boxSequence deck cardGiverBox |
-	deck := Deck with: { 
-			        speedCard.
-			        overloadCard }.
-	cardGiverBox := DiscreteProbabilityEvent
-		                for: (CardGiverEffect with: deck)
-		                with: 100.
-	boxSequence := self generateBoxesWith: cardGiverBox.
-	game := SpaceRaceGame
-		        with:
-		        { 'Spacehip Alpha'. 'Spacehip Beta'. 'Spacehip Gamma' }
-		        boardWith: boxSequence
-		        distance: (Parsecs with: 200)
-		        laps: 2
-		        diceCup: die
-		        and: deck.
-	game playATurn.
-	self assert: 'Spacehip Alpha' handHas: 3 in: game
-]
-
-{ #category : #tests }
 PermanentCardTest >> testSpaceshipAlphaCantPlayACardThatIsNotInHisHand [
 
 	| game boxSequence deck cardGiverBox |
@@ -173,6 +150,29 @@ PermanentCardTest >> testSpaceshipAlphaCantPlayACardThatIsNotInHisHand [
 				to: 'Spaceship Beta' ]
 		raise: Error
 		withMessage: 'The spaceship does not have this card'
+]
+
+{ #category : #tests }
+PermanentCardTest >> testSpaceshipAlphaLandsInABoxAndReceivesACard [
+
+	| game boxSequence deck cardGiverBox |
+	deck := Deck with: { 
+			        speedCard.
+			        overloadCard }.
+	cardGiverBox := DiscreteProbabilityEvent
+		                for: (CardGiverEffect with: deck)
+		                with: 100.
+	boxSequence := self generateBoxesWith: cardGiverBox.
+	game := SpaceRaceGame
+		        with:
+		        { 'Spacehip Alpha'. 'Spacehip Beta'. 'Spacehip Gamma' }
+		        boardWith: boxSequence
+		        distance: (Parsecs with: 200)
+		        laps: 2
+		        diceCup: die
+		        and: deck.
+	game playATurn.
+	self assert: 'Spacehip Alpha' handHas: 3 in: game
 ]
 
 { #category : #tests }

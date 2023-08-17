@@ -6,7 +6,6 @@ Class {
 		'laps',
 		'distanceOfBoard',
 		'distancePerBox',
-		'lastBoxEffect',
 		'allSpaceshipsPositions'
 	],
 	#category : #'IngSoft2-Model'
@@ -48,12 +47,6 @@ Board >> initializeWithShips: aCollectionOfSpaceships with: aBoxSequence distanc
 	distanceOfBoard :=boxes size.
 	distancePerBox := Parsecs with:((aDistance amountInParsecs) / distanceOfBoard).
 	laps := numberOfLaps.
-	lastBoxEffect := NoEffect new.
-]
-
-{ #category : #accessing }
-Board >> lastBoxEffect [
-	^lastBoxEffect .
 ]
 
 { #category : #accessing }

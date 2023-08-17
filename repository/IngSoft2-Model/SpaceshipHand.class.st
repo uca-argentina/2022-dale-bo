@@ -74,7 +74,6 @@ SpaceshipHand >> removeFromHand:aCard [
 { #category : #accessing }
 SpaceshipHand >> sumOfCardsEffects [
 
-	| cardEffects |
-	cardEffects:=effectsOnMe collect:[:card| card effect].
-	cardEffects ifNotEmpty:[^cardEffects sum] ifEmpty:[^0] .
+	effectsOnMe ifEmpty: [ ^0 ].
+	^effectsOnMe sum:[:card| card effect].
 ]
