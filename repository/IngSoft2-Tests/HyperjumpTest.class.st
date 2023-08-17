@@ -8,11 +8,11 @@ Class {
 HyperjumpTest >> assert: aSpaceshipName isAtPostion: aPositionNumber with: aLapNumber atDistance: aDistance in: aGame [
 
 	| spaceshipPosition |
-	spaceshipPosition := (aGame spaceshipOf: aSpaceshipName) position.
+	spaceshipPosition := aGame positionOf: aSpaceshipName.
 	
 	self assert: spaceshipPosition boxNumber equals: aPositionNumber.
 	self assert: spaceshipPosition lapNumber equals: aLapNumber.
-	self assert: spaceshipPosition distance equals: aDistance.
+	self assert: spaceshipPosition distanceInBox equals: aDistance.
 ]
 
 { #category : #tests }
@@ -53,7 +53,7 @@ HyperjumpTest >> testAllPlayersLandInHyperJumpAtBoxFiveAndTheyMoveFirstFiveParse
 					                (Lightyear with: 12) })
 		               at: 5.
 	game := SpaceRaceGame
-		        with: { 'Valen'. 'Pablo'. 'Seba' }
+		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
 		        distance: (Lightyear with: 60)
 		        laps: 2
@@ -61,21 +61,21 @@ HyperjumpTest >> testAllPlayersLandInHyperJumpAtBoxFiveAndTheyMoveFirstFiveParse
 		        and: (Deck with: { SpeedCard new }).
 	game playATurn.
 	self
-		assert: 'Valen'
+		assert: 'Spaceship Alpha'
 		isAtPostion: 7
 		with: 1
 		atDistance: 1
 		in: game.
 	game playATurn.
 	self
-		assert: 'Pablo'
+		assert: 'Spaceship Beta'
 		isAtPostion: 7
 		with: 1
 		atDistance: 0
 		in: game.
 	game playATurn.
 	self
-		assert: 'Seba'
+		assert: 'Spaceship Gamma'
 		isAtPostion: 7
 		with: 1
 		atDistance: 1
@@ -112,7 +112,7 @@ HyperjumpTest >> testHyperjumpDistanceSequenceIsAlwaysInDecreasingOrder [
 					                (Lightyear with: 21) })
 		               at: 5.
 	game := SpaceRaceGame
-		        with: { 'Valen'. 'Pablo'. 'Seba' }
+		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
 		        distance: (Lightyear with: 60)
 		        laps: 2
@@ -120,21 +120,21 @@ HyperjumpTest >> testHyperjumpDistanceSequenceIsAlwaysInDecreasingOrder [
 		        and: (Deck with: { SpeedCard new }).
 	game playATurn.
 	self
-		assert: 'Valen'
+		assert: 'Spaceship Alpha'
 		isAtPostion: 8
 		with: 1
 		atDistance: 1
 		in: game.
 	game playATurn.
 	self
-		assert: 'Pablo'
+		assert: 'Spaceship Beta'
 		isAtPostion: 7
 		with: 1
 		atDistance: 1
 		in: game.
 	game playATurn.
 	self
-		assert: 'Seba'
+		assert: 'Spaceship Gamma'
 		isAtPostion: 8
 		with: 1
 		atDistance: 1

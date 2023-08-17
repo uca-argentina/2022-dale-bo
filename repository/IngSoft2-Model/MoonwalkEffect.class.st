@@ -2,8 +2,7 @@ Class {
 	#name : #MoonwalkEffect,
 	#superclass : #BoxEffect,
 	#instVars : [
-		'retroPositions',
-		'parsecs'
+		'retroPositions'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -28,7 +27,9 @@ MoonwalkEffect >> initializeWith: aNumberOfBoxesToSendBack [
 ]
 
 { #category : #action }
-MoonwalkEffect >> triggeredBy: aSpaceship with: aBoard [
-	
-	aBoard moveBackwards:retroPositions AllSpaceshipsExcept:aSpaceship.
+MoonwalkEffect >> triggeredBy: aSpaceship with: aGame [
+
+	(aGame board)
+		moveBackwards: retroPositions negated
+		allSpaceshipsExcept: aSpaceship
 ]

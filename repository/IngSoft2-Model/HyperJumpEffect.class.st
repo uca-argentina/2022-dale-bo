@@ -3,7 +3,6 @@ Class {
 	#superclass : #BoxEffect,
 	#instVars : [
 		'posibleMoves',
-		'parsecs',
 		'index'
 	],
 	#category : #'IngSoft2-Model'
@@ -12,7 +11,7 @@ Class {
 { #category : #'class initialization' }
 HyperJumpEffect class >> assertPosibleMovesAreValid: aCollectionOfPosiblesMoves [
 
-	aCollectionOfPosiblesMoves size < 1 ifTrue: [ 
+	aCollectionOfPosiblesMoves isEmpty ifTrue: [ 
 		Error signal: 'There are no posible moves' ].
 ]
 
@@ -22,7 +21,7 @@ HyperJumpEffect class >> with: aCollectionOfPosiblesMoves [
 	^ self new initializeWith: aCollectionOfPosiblesMoves
 ]
 
-{ #category : #accessing }
+{ #category : #private }
 HyperJumpEffect >> decreasingSort: aCollectionOfPosibleMoves [
 
 	^aCollectionOfPosibleMoves sort: [ :distance1 :distance2 | 
@@ -35,7 +34,7 @@ HyperJumpEffect >> initializeWith: aCollectionOfPosiblesMoves [
 	posibleMoves:= (self decreasingSort:aCollectionOfPosiblesMoves).
 ]
 
-{ #category : #initialization }
+{ #category : #private }
 HyperJumpEffect >> numberOfDistanceByHyperJump [
 	index:= index+1.
 	(index > posibleMoves size) ifTrue:[index:=1.].
@@ -43,9 +42,9 @@ HyperJumpEffect >> numberOfDistanceByHyperJump [
 ]
 
 { #category : #action }
-HyperJumpEffect >> triggeredBy: aSpaceship with: aBoard [
+HyperJumpEffect >> triggeredBy: aSpaceship with: aGame [
 
-	aBoard 
+	(aGame board)
 		move: aSpaceship
 		toFinalDistance: self numberOfDistanceByHyperJump
 ]

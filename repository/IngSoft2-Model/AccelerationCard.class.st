@@ -5,20 +5,14 @@ Class {
 }
 
 { #category : #actions }
-AccelerationCard >> applyUsing: aCardEffectApplicator basedOn: aCardPlay [ 
-	aCardEffectApplicator applyAccelerationBasedOn:aCardPlay.
+AccelerationCard >> applyUsing: aCardEffectApplicator [
+	aCardEffectApplicator applyAccelerationCard.
 ]
 
 { #category : #operations }
 AccelerationCard >> effect [
 
 	^ 1
-]
-
-{ #category : #operations }
-AccelerationCard >> isPermanent [
-
-	^true.
 ]
 
 { #category : #actions }
@@ -28,7 +22,7 @@ AccelerationCard >> playedOn: aGame by: aSpaceship [
 	aCardPlay := CardPlay
 		             by: aSpaceship
 		             card: self
-		             to: aGame allSpaceships
-		             itsRedo: false.
-	aGame applyCardPlay: aCardPlay
+		             to: aGame allSpaceshipsHands
+		             needsRemove: false.
+	aGame applyCardPlayFor: aCardPlay
 ]

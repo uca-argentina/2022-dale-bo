@@ -25,6 +25,7 @@ BoxesGeneratorTest >> assert: aBoxSequence has: aCertainAmount occurrencesOf: aB
 
 { #category : #running }
 BoxesGeneratorTest >> setUp [
+	super setUp.
 	deck:= Deck with:{SpeedCard new}.
 	noEffect:= NoEffect new.
 	speedUpEffect:= SpeedUpEffect new.
@@ -86,7 +87,7 @@ BoxesGeneratorTest >> testBoxesGeneratorCantCreateASequenceBeacauseTheProbabilit
 		                        cardGiverBox }.
 	self
 		should: [ 
-		(BoxesGenerator generate: 10 for: effectsDistributions) boxSequence ]
+		(BoxesEffectsGenerator generate: 10 for: effectsDistributions) boxSequence ]
 		raise: Error
 		withMessage:
 		'Distribution of some boxes does not fit to create at least one box'
@@ -104,7 +105,7 @@ BoxesGeneratorTest >> testBoxesGeneratorCreatesOneHundredBoxesWithTheIndicatedDi
 	hyperjumpBox:= DiscreteProbabilityEvent for:(hyperjumpEffect) with:8.
 	cardGiverBox:= DiscreteProbabilityEvent for:(cardGiverEffect) with:10.
 	effectsDistributions:= { noEffectBox. speedUpBox. moonwalkBox.atomicBombBox. wormholeEffectBox. hyperjumpBox. cardGiverBox. }.
-	boxes:= (BoxesGenerator generate: 100 for: effectsDistributions) boxSequence.
+	boxes:= (BoxesEffectsGenerator generate: 100 for: effectsDistributions) boxSequence.
 	self assert: boxes size equals:100.
    self assert:boxes has: 8 occurrencesOf:hyperjumpEffect.
 	self assert:boxes has: 30 occurrencesOf:noEffect.
@@ -119,7 +120,7 @@ BoxesGeneratorTest >> testBoxesGeneratorCreatesOneHundredBoxesWithTheIndicatedDi
 { #category : #tests }
 BoxesGeneratorTest >> testBoxesGeneratorProbabilitiesCantBeLowerThanOneHundred [
 
-	| noEffectBox speedUpBox moonwalkBox effectsDistributions atomicBombBox wormholeEffectBox hyperjumpBox cardGiverBox deck |
+	| noEffectBox speedUpBox moonwalkBox effectsDistributions atomicBombBox wormholeEffectBox hyperjumpBox cardGiverBox  |
 	deck:= Deck with:{SpeedCard new}.
 	noEffectBox := DiscreteProbabilityEvent for: NoEffect new with: 30.
 	speedUpBox := DiscreteProbabilityEvent
@@ -152,7 +153,7 @@ BoxesGeneratorTest >> testBoxesGeneratorProbabilitiesCantBeLowerThanOneHundred [
 		                        cardGiverBox }.
 	self
 		should: [ 
-			(BoxesGenerator generate: 100 for: effectsDistributions)
+			(BoxesEffectsGenerator generate: 100 for: effectsDistributions)
 				boxSequence ]
 		raise: Error
 		withMessage: 'Distributions sum must be 100'

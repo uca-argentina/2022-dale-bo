@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : #action }
-AtomicBombEffect >> triggeredBy: aSpaceship with: aBoard [
+AtomicBombEffect >> triggeredBy: aSpaceship with: aGame [
 
-	aBoard moveSpaceshipsToTheFirstBox.
+	(aGame board) moveSpaceshipsToTheFirstBox
 ]

@@ -5,20 +5,14 @@ Class {
 }
 
 { #category : #actions }
-SpeedCard >> applyUsing: aCardEffectApplicator basedOn: aCardPlay [ 
-	aCardEffectApplicator applyEffectBasedOn:aCardPlay.
+SpeedCard >> applyUsing: aCardEffectApplicator [
+	aCardEffectApplicator applySpeedCard.
 ]
 
 { #category : #accesing }
 SpeedCard >> effect [
 
 	^ 1
-]
-
-{ #category : #operations }
-SpeedCard >> isPermanent [
-
-	^true.
 ]
 
 { #category : #actions }
@@ -29,6 +23,6 @@ SpeedCard >> playedOn: aGame by: aSpaceship to: anotherSpaceship [
 		             by: aSpaceship
 		             card: self
 		             to: anotherSpaceship
-		             itsRedo: false.
-	aGame applyCardPlay: aCardPlay
+		             needsRemove: false.
+	aGame applyCardPlayFor: aCardPlay
 ]

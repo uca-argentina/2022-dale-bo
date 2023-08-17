@@ -5,19 +5,13 @@ Class {
 }
 
 { #category : #actions }
-OverloadCard >> applyUsing: aCardEffectApplicator basedOn: aCardPlay [ 
-	aCardEffectApplicator applyEffectBasedOn:aCardPlay.
+OverloadCard >> applyUsing: aCardEffectApplicator [
+	aCardEffectApplicator applyOverloadCard.
 ]
 
 { #category : #action }
 OverloadCard >> effect [
 	^-2.
-]
-
-{ #category : #operations }
-OverloadCard >> isPermanent [
-
-	^true.
 ]
 
 { #category : #actions }
@@ -28,7 +22,7 @@ OverloadCard >> playedOn: aGame by: aSpaceship to: anotherSpaceship [
 		             by: aSpaceship
 		             card: self
 		             to: anotherSpaceship
-		             itsRedo: false.
+		             needsRemove: false.
 
-	aGame applyCardPlay: aCardPlay
+	aGame applyCardPlayFor: aCardPlay
 ]

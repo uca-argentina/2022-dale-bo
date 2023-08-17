@@ -1,16 +1,11 @@
 Class {
 	#name : #NoEffect,
 	#superclass : #BoxEffect,
-	#instVars : [
-		'parsecs'
-	],
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #action }
-NoEffect >> triggeredBy: aSpaceship with: aBoard [
+NoEffect >> triggeredBy: aSpaceship with: aGame [
 
-	aBoard
-		moveForward: aSpaceship
-		to: 0.
+	(aGame board) move: aSpaceship to: 0
 ]

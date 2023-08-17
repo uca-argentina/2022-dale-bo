@@ -5,14 +5,8 @@ Class {
 }
 
 { #category : #actions }
-RedoCard >> applyUsing: aCardEffectApplicator basedOn: aCardPlay [ 
-	aCardEffectApplicator applyRedoBasedOn:aCardPlay.
-]
-
-{ #category : #operations }
-RedoCard >> isPermanent [
-
-	^false.
+RedoCard >> applyUsing: aCardEffectApplicator [
+	aCardEffectApplicator applyRedoCard.
 ]
 
 { #category : #actions }
@@ -23,6 +17,6 @@ RedoCard >> playedOn: aGame by: aSpaceship to: anotherSpaceship [
 		             by: aSpaceship
 		             card: self
 		             to: anotherSpaceship
-		             itsRedo: false.
-	aGame applyCardPlay: aCardPlay
+		             needsRemove: false.
+	aGame applyCardPlayFor: aCardPlay
 ]
