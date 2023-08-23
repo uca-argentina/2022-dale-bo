@@ -44,6 +44,24 @@ CardEffectApplicator >> applyCancellationCard [
 ]
 
 { #category : #actions }
+CardEffectApplicator >> applyDoubleCard [
+	self assertSpaceship: cardPlay playedBy has: cardPlay card.
+	(game turnSequence) doubleTurn.
+	game updateLastCardPlayed: cardPlay card.
+	self checkCardNeedsToBeRemoved
+	
+]
+
+{ #category : #actions }
+CardEffectApplicator >> applyFreedomCard [
+
+	self assertSpaceship: cardPlay playedBy has: cardPlay card.
+	game freeFromJail: cardPlay target.
+	game updateLastCardPlayed: cardPlay card.
+	self checkCardNeedsToBeRemoved
+]
+
+{ #category : #actions }
 CardEffectApplicator >> applyOverloadCard [
 
 	| affectedSpaceship |
@@ -72,6 +90,24 @@ CardEffectApplicator >> applyRepeatCard [
 	self assertSpaceship: cardPlay playedBy has: cardPlay card.
 	lastBoxEffect := game lastBoxEffect.
 	lastBoxEffect triggeredBy: cardPlay target with: game.
+	game updateLastCardPlayed: cardPlay card.
+	self checkCardNeedsToBeRemoved
+]
+
+{ #category : #actions }
+CardEffectApplicator >> applyReverseCard [
+
+	self assertSpaceship: cardPlay playedBy has: cardPlay card.
+	(game turnSequence) reverseTurns.
+	game updateLastCardPlayed: cardPlay card.
+	self checkCardNeedsToBeRemoved
+]
+
+{ #category : #actions }
+CardEffectApplicator >> applySkipCard [
+
+	self assertSpaceship: cardPlay playedBy has: cardPlay card.
+	(game turnSequence) next.
 	game updateLastCardPlayed: cardPlay card.
 	self checkCardNeedsToBeRemoved
 ]

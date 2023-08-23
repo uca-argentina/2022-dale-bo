@@ -95,9 +95,16 @@ SpaceRaceGame >> calculateNewBoxNumberWith: aDiceResult [
 				using: self ]
 ]
 
+{ #category : #private }
+SpaceRaceGame >> checkIfPrisonIsOccupiedBy: aSpaceship [
+	^ spaceshipsInPrison
+		  detect: [ :each | each = aSpaceship]
+		  ifNone: [ Error signal: 'You cant free a spaceship thats not in prison' ]
+]
+
 { #category : #actions }
 SpaceRaceGame >> checkSpaceshipCanLeaveJailWith: aDiceResult [
-	(aDiceResult = diceCup maxToss) ifTrue:[spaceshipsInPrison remove:turnSequence whoPlays]
+	(aDiceResult = diceCup maxToss) ifTrue:[self freeFromJail:turnSequence whoPlays].
 ]
 
 { #category : #actions }
@@ -115,6 +122,12 @@ SpaceRaceGame >> createHandFor: aCollectionOfShips [
 SpaceRaceGame >> distanceInBoxOf: aSpaceship [
 
 	^ (board positionOf:aSpaceship) distanceInBox.
+]
+
+{ #category : #actions }
+SpaceRaceGame >> freeFromJail: aSpaceship [
+	self checkIfPrisonIsOccupiedBy:aSpaceship.
+	spaceshipsInPrison remove:aSpaceship. 
 ]
 
 { #category : #actions }

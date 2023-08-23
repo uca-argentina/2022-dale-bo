@@ -3,7 +3,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'turnNumber',
-		'spaceshipsNames'
+		'spaceshipsNames',
+		'doubledTurn'
 	],
 	#classInstVars : [
 		'ships',
@@ -25,18 +26,33 @@ TurnSequence >> assertSpaceshipTurn:aSpaceship [
 			'A permanent card cannot be played on another spaceship turn']
 ]
 
+{ #category : #actions }
+TurnSequence >> doubleTurn [
+
+	doubledTurn := true
+]
+
 { #category : #initialization }
 TurnSequence >> initializeWith: aCollectionOfNames [
 
 	spaceshipsNames := aCollectionOfNames.
-	turnNumber := 1
+	turnNumber := 1.
+	doubledTurn:= false.
 ]
 
 { #category : #action }
 TurnSequence >> next [
+	
+	doubledTurn ifTrue: [doubledTurn:= false ] ifFalse:[turnNumber:= (turnNumber%(spaceshipsNames size)) + 1.]
+	"turnNumber := turnNumber + numberOfTurns.
+	turnNumber > spaceshipsNames size ifTrue: [ turnNumber := 1 ].
+	turnNumber < 1 ifTrue: [ turnNumber := (spaceshipsNames size) ]."
+]
 
-	turnNumber := turnNumber + 1.
-	turnNumber > spaceshipsNames size ifTrue: [ turnNumber := 1 ]
+{ #category : #actions }
+TurnSequence >> reverseTurns [
+	spaceshipsNames reverse.
+	turnNumber := spaceshipsNames size - turnNumber +1
 ]
 
 { #category : #action }
