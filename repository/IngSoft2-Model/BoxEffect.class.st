@@ -7,5 +7,7 @@ Class {
 { #category : #action }
 BoxEffect >> triggeredBy: aSpaceship with: aGame [
 
-	self subclassResponsibility
+	| spaceshipHand |
+	spaceshipHand := (aGame handOf: aSpaceship) cards.
+	(aGame board) move: aSpaceship to: (spaceshipHand size)
 ]
