@@ -157,6 +157,26 @@ SpaceRaceGame >> playATurn [
 	turnSequence next
 ]
 
+{ #category : #actions }
+SpaceRaceGame >> playATurn2 [
+	| diceResult whoPlays effectsOnCurrentSpaceship |
+	self assertGameIsNotFinished.
+	diceResult := diceCup roll.
+	whoPlays:=turnSequence whoPlays.
+
+	effectsOnCurrentSpaceship:= (self handOf:whoPlays) sumOfCardsEffects.
+	
+	
+	"board move: whoPlays to: diceResult+effectsOnCurrentSpaceship.
+	lastBoxEffect:= board effectAt:(whoPlays).
+	boxEffectApplicator applyTo:(board positionOf:whoPlays) using:self.   LOS 4 LLAMAN A BOARD, DEBERIA SER 1 SOLO METODO EN BOARD QUE HAGA TODO
+	board sortPositionsByRanking."
+	
+	board move2: whoPlays to: diceResult+effectsOnCurrentSpaceship. "intente esto. REVISAR"
+	
+	turnSequence next
+]
+
 { #category : #action }
 SpaceRaceGame >> positionOf: aSpaceship [
 

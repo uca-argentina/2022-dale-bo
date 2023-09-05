@@ -49,6 +49,16 @@ Board >> initializeWithShips: aCollectionOfSpaceships with: aBoxSequence distanc
 	laps := numberOfLaps.
 ]
 
+{ #category : #actions }
+Board >> move2: aSpaceship to: aBox [ "podriamos poner un in: aGame"
+	| lastBoxEffect |
+	self move: aSpaceship to: aBox.
+	lastBoxEffect:= self effectAt:(aSpaceship).
+	"lastBoxEffect triggeredBy: (self positionOf: aSpaceship) name with: aGame. FALLA PORQUE LOS BOXES NECESITAN EL GAME (el cardgiver) y el board no lo tiene, por eso habiamos
+	creado el effectAplicator, pero solo tiene 1 metodo. Revisarlo. "
+	self sortPositionsByRanking.
+]
+
 { #category : #accessing }
 Board >> move: aSpaceship to: aBox [
 
