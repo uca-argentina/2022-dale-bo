@@ -7,5 +7,5 @@ Class {
 { #category : #action }
 WormHoleEffect >> triggeredBy: aSpaceship with: aGame [
 
-	(aGame board) move: aSpaceship to: -4
+	(aGame board) calculate: aSpaceship newpositionUsing: -4
 ]
