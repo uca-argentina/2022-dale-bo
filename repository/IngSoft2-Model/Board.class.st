@@ -74,6 +74,12 @@ Board >> initializeWithShips: aCollectionOfSpaceships with: aBoxSequence distanc
 	lastBoxEffect := InvalidEffect new.
 ]
 
+{ #category : #accessing }
+Board >> lastBoxEffect [
+
+	^ lastBoxEffect
+]
+
 { #category : #actions }
 Board >> move: aSpaceship to: aBox using: aGame [
 
