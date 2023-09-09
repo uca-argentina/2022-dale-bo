@@ -28,7 +28,6 @@ CardEffectApplicator >> applyAccelerationCard [
 	aCard := cardPlay card.
 	spaceshipNameThatPlaysCard := cardPlay playedBy.
 	self applyToAll: aCard.
-	"self checkIfIsRedo: cardPlay."
 	game updateLastCardPlayed: cardPlay card.
 	self checkCardNeedsToBeRemoved
 ]
@@ -88,7 +87,7 @@ CardEffectApplicator >> applyRepeatCard [
 
 	| lastBoxEffect |
 	self assertSpaceship: cardPlay playedBy has: cardPlay card.
-	lastBoxEffect := game lastBoxEffect.
+	lastBoxEffect := (game board) lastBoxEffect.
 	lastBoxEffect triggeredBy: cardPlay target with: game.
 	game updateLastCardPlayed: cardPlay card.
 	self checkCardNeedsToBeRemoved

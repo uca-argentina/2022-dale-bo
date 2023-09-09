@@ -6,7 +6,8 @@ Class {
 		'laps',
 		'distanceOfBoard',
 		'distancePerBox',
-		'allSpaceshipsPositions'
+		'allSpaceshipsPositions',
+		'lastBoxEffect'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -18,6 +19,29 @@ Board class >> ships: aCollectionOfSpacships with: aBoxSequence distance: aDista
 		  with: aBoxSequence
 		  distance: aDistance
 		  laps: laps
+]
+
+{ #category : #accessing }
+Board >> calculate: aSpaceship newpositionUsing: aSum [
+
+	| spaceshipNewBoxNumber spaceshipNewLapNumber auxNewBoxNumber spaceshipAuxLapNumber oldSpaceshipPosition |
+	oldSpaceshipPosition := self positionOf: aSpaceship.
+	auxNewBoxNumber := self
+		                   newBoxNumberFor: oldSpaceshipPosition
+		                   with: aSum.
+	spaceshipNewBoxNumber := auxNewBoxNumber % distanceOfBoard.
+	spaceshipAuxLapNumber := auxNewBoxNumber - 1 // distanceOfBoard + 1.
+	spaceshipNewLapNumber := spaceshipAuxLapNumber min: laps.
+	(spaceshipAuxLapNumber > laps or: spaceshipNewBoxNumber = 0) ifTrue: [ 
+		spaceshipNewBoxNumber := distanceOfBoard ].
+
+	self
+		updateSpaceshipPositionOf: oldSpaceshipPosition
+		to: (SpaceshipPosition
+				 for: oldSpaceshipPosition name
+				 at: spaceshipNewBoxNumber
+				 distance: oldSpaceshipPosition distanceInBox
+				 laps: spaceshipNewLapNumber)
 ]
 
 { #category : #accessing }
@@ -47,29 +71,22 @@ Board >> initializeWithShips: aCollectionOfSpaceships with: aBoxSequence distanc
 	distanceOfBoard :=boxes size.
 	distancePerBox := Parsecs with:((aDistance amountInParsecs) / distanceOfBoard).
 	laps := numberOfLaps.
+	lastBoxEffect := InvalidEffect new.
+]
+
+{ #category : #accesing }
+Board >> lastBoxEffect [
+
+	^ lastBoxEffect
 ]
 
 { #category : #accessing }
-Board >> move: aSpaceship to: aBox [
+Board >> move: aSpaceship to: aBox using: aGame [
 
-	| spaceshipNewBoxNumber spaceshipNewLapNumber auxNewBoxNumber spaceshipAuxLapNumber oldSpaceshipPosition |
-	oldSpaceshipPosition := self positionOf:aSpaceship.
-	auxNewBoxNumber := self
-		                   newBoxNumberFor: oldSpaceshipPosition
-		                   with: aBox.
-	spaceshipNewBoxNumber := auxNewBoxNumber % distanceOfBoard.
-	spaceshipAuxLapNumber := auxNewBoxNumber - 1 // distanceOfBoard + 1.
-	spaceshipNewLapNumber := spaceshipAuxLapNumber min: laps.
-	(spaceshipAuxLapNumber > laps or: spaceshipNewBoxNumber = 0) ifTrue: [ 
-		spaceshipNewBoxNumber := distanceOfBoard ].
-	
-	self
-		updateSpaceshipPositionOf: oldSpaceshipPosition
-		to: (SpaceshipPosition
-				 for: oldSpaceshipPosition name
-				 at: spaceshipNewBoxNumber
-				 distance: oldSpaceshipPosition distanceInBox
-				 laps: spaceshipNewLapNumber)
+	self calculate: aSpaceship newpositionUsing: aBox.
+	lastBoxEffect:= self effectAt:(aSpaceship).
+	lastBoxEffect triggeredBy: (self positionOf: aSpaceship) name with: aGame. 
+	self sortPositionsByRanking.
 	
 ]
 
@@ -86,8 +103,8 @@ Board >> move: aSpaceship toFinalDistance: aDistanceNumber [
 				 distance: spaceshipNewDistanceInBox % (distancePerBox amountInParsecs) 
 				 laps: oldSpaceshipPosition lapNumber).
 	self
-		move: aSpaceship
-		to: spaceshipNewDistanceInBox // (distancePerBox amountInParsecs).
+		calculate: aSpaceship
+		newpositionUsing: spaceshipNewDistanceInBox // (distancePerBox amountInParsecs).
 ]
 
 { #category : #actions }
@@ -95,7 +112,7 @@ Board >> moveBackwards: aNumberOfBoxes allSpaceshipsExcept: aSpaceship [
 
 	allSpaceshipsPositions do: [ :each | 
 		each name ~= aSpaceship ifTrue: [ 
-			self move: each name to: aNumberOfBoxes ] ].
+			self calculate: each name newpositionUsing: aNumberOfBoxes ] ].
 ]
 
 { #category : #action }

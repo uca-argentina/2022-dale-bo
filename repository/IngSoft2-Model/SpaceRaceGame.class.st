@@ -6,10 +6,8 @@ Class {
 		'diceCup',
 		'turnSequence',
 		'deck',
-		'boxEffectApplicator',
 		'allSpaceshipsHands',
 		'lastCardPlay',
-		'lastBoxEffect',
 		'spaceshipsInPrison'
 	],
 	#category : #'IngSoft2-Model'
@@ -78,8 +76,8 @@ SpaceRaceGame >> board [
 	^board.
 ]
 
-{ #category : #actions }
-SpaceRaceGame >> calculateNewBoxNumberWith: aDiceResult [
+{ #category : #private }
+SpaceRaceGame >> calculateNewBoxNumberWith: aDiceResult [ 
 
 	| whoPlays effectsOnCurrentSpaceship |
 	whoPlays := turnSequence whoPlays.
@@ -88,11 +86,7 @@ SpaceRaceGame >> calculateNewBoxNumberWith: aDiceResult [
 	(spaceshipsInPrison includes: whoPlays)
 		ifTrue: [ self checkSpaceshipCanLeaveJailWith: aDiceResult ]
 		ifFalse: [
-			board move: whoPlays to: aDiceResult + effectsOnCurrentSpaceship.
-			lastBoxEffect:= board effectAt:(turnSequence whoPlays).
-			boxEffectApplicator
-				applyTo: (board positionOf: whoPlays)
-				using: self ]
+			board move: whoPlays to: (aDiceResult + effectsOnCurrentSpaceship) using:self. ]
 ]
 
 { #category : #private }
@@ -152,7 +146,6 @@ SpaceRaceGame >> hasFinished [
 { #category : #initialize }
 SpaceRaceGame >> initializeWith: spaceships aBoardWith: aBoxSequence distance: aDistance laps: aNumberOfLaps aDiceCup: aDiceCup and: aDeck [
 	deck:= aDeck.
-	boxEffectApplicator:=BoxEffectsApplicator new.
 	self createHandFor:spaceships.
 	board := Board
 		         ships: spaceships
@@ -161,14 +154,8 @@ SpaceRaceGame >> initializeWith: spaceships aBoardWith: aBoxSequence distance: a
 		         laps: aNumberOfLaps.
 	diceCup := aDiceCup.
 	turnSequence := TurnSequence with: spaceships.
-	lastBoxEffect := InvalidEffect new.
 	lastCardPlay:= InvalidCard new.
-	spaceshipsInPrison:= OrderedCollection new.
-]
-
-{ #category : #accessing }
-SpaceRaceGame >> lastBoxEffect [
-	^ lastBoxEffect
+	spaceshipsInPrison:= Set new.
 ]
 
 { #category : #actions }
