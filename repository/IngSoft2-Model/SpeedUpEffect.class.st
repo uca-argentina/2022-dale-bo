@@ -4,8 +4,14 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #initialization }
+SpeedUpEffect >> initialize [
+	polarity:= true.
+]
+
 { #category : #actions }
 SpeedUpEffect >> triggeredBy: aSpaceship with: aGame [
-
-	(aGame board) calculate: aSpaceship newpositionUsing: 4
+	
+	polarity ifTrue: [ (aGame board) calculate: aSpaceship newpositionUsing: 4 ] ifFalse:  [ (aGame board) calculateForSpaceshipsExcept: aSpaceship newpositionUsing: 4 ]. 
+	
 ]

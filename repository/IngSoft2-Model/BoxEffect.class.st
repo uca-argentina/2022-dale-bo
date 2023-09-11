@@ -1,13 +1,13 @@
 Class {
 	#name : #BoxEffect,
 	#superclass : #Object,
+	#instVars : [
+		'polarity'
+	],
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #action }
-BoxEffect >> triggeredBy: aSpaceship with: aGame [
-
-	| spaceshipHand |
-	spaceshipHand := (aGame handOf: aSpaceship) cards.
-	(aGame board) calculate: aSpaceship newpositionUsing: (spaceshipHand size)
+{ #category : #actions }
+BoxEffect >> changePolarity [
+	polarity := polarity not.
 ]

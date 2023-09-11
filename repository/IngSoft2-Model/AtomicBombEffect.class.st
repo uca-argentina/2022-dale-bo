@@ -5,7 +5,13 @@ Class {
 }
 
 { #category : #action }
+AtomicBombEffect >> initialize [
+	polarity:= true.
+]
+
+{ #category : #action }
 AtomicBombEffect >> triggeredBy: aSpaceship with: aGame [
 
-	(aGame board) moveSpaceshipsToTheFirstBox
+	polarity ifTrue:  [ (aGame board) moveSpaceshipsToTheFirstBox]
+	
 ]

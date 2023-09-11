@@ -44,6 +44,13 @@ Board >> calculate: aSpaceship newpositionUsing: aSum [
 				 laps: spaceshipNewLapNumber)
 ]
 
+{ #category : #actions }
+Board >> calculateForSpaceshipsExcept: aSpaceship newpositionUsing: aNumber [ 
+	allSpaceshipsPositions do: [ :each | 
+		each name ~= aSpaceship ifTrue: [ 
+			self calculate: each name newpositionUsing: aNumber ] ].
+]
+
 { #category : #accessing }
 Board >> createPositionsFor: aCollectionOfSpaceships [
 
@@ -57,11 +64,9 @@ Board >> createPositionsFor: aCollectionOfSpaceships [
 ]
 
 { #category : #accesing }
-Board >> effectAt:aSpaceshipPosition [
+Board >> effectAt:aBoxNumber [
 
-	| positionOfSpaceship |
-	positionOfSpaceship:= self positionOf: aSpaceshipPosition.
-	^boxes at:(positionOfSpaceship boxNumber).
+	^boxes at: aBoxNumber.
 ]
 
 { #category : #'class initialization' }
@@ -83,8 +88,8 @@ Board >> lastBoxEffect [
 Board >> move: aSpaceship to: aBox using: aGame [
 
 	self calculate: aSpaceship newpositionUsing: aBox.
-	lastBoxEffect:= self effectAt:(aSpaceship).
-	lastBoxEffect triggeredBy: (self positionOf: aSpaceship) name with: aGame. 
+	lastBoxEffect:= self effectAt:(self positionOf: aSpaceship) boxNumber.
+	lastBoxEffect triggeredBy: (self positionOf: aSpaceship) name  with: aGame. 
 	self sortPositionsByRanking.
 	
 ]
