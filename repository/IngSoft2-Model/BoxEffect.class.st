@@ -9,5 +9,5 @@ BoxEffect >> triggeredBy: aSpaceship with: aGame [
 
 	| spaceshipHand |
 	spaceshipHand := (aGame handOf: aSpaceship) cards.
-	(aGame board) move: aSpaceship to: (spaceshipHand size)
+	(aGame board) calculate: aSpaceship newpositionUsing: (spaceshipHand size)
 ]

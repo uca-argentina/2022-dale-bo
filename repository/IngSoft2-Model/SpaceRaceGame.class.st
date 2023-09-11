@@ -6,10 +6,8 @@ Class {
 		'diceCup',
 		'turnSequence',
 		'deck',
-		'boxEffectApplicator',
 		'allSpaceshipsHands',
-		'lastCardPlay',
-		'lastBoxEffect'
+		'lastCardPlay'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -116,7 +114,6 @@ SpaceRaceGame >> hasFinished [
 { #category : #initialize }
 SpaceRaceGame >> initializeWith: spaceships aBoardWith: aBoxSequence distance: aDistance laps: aNumberOfLaps aDiceCup: aDiceCup and: aDeck [
 	deck:= aDeck.
-	boxEffectApplicator:=BoxEffectsApplicator new.
 	self createHandFor:spaceships.
 	board := Board
 		         ships: spaceships
@@ -125,13 +122,7 @@ SpaceRaceGame >> initializeWith: spaceships aBoardWith: aBoxSequence distance: a
 		         laps: aNumberOfLaps.
 	diceCup := aDiceCup.
 	turnSequence := TurnSequence with: spaceships.
-	lastBoxEffect := InvalidEffect new.
 	lastCardPlay:= InvalidCard new.
-]
-
-{ #category : #accessing }
-SpaceRaceGame >> lastBoxEffect [
-	^ lastBoxEffect
 ]
 
 { #category : #actions }
@@ -141,20 +132,18 @@ SpaceRaceGame >> lastCardPlayed [
 ]
 
 { #category : #actions }
-SpaceRaceGame >> playATurn [
-
-	| diceResult whoPlays effectsOnCurrentSpaceship |
+SpaceRaceGame >> playATurn [	
+| diceResult whoPlays effectsOnCurrentSpaceship |
 	self assertGameIsNotFinished.
 	diceResult := diceCup roll.
-	whoPlays:=turnSequence whoPlays.
-	"effectsOnCurrentSpaceship := (board spaceshipOf: currentSpaceship)
-		                        effectsOnSpaceship sumOfCardsEffects."
-	effectsOnCurrentSpaceship:= (self handOf:whoPlays) sumOfCardsEffects.
-	board move: whoPlays to: diceResult+effectsOnCurrentSpaceship.
-	lastBoxEffect:= board effectAt:(whoPlays).
-	boxEffectApplicator applyTo:(board positionOf:whoPlays) using:self.
-	board sortPositionsByRanking.
-	turnSequence next
+	whoPlays := turnSequence whoPlays.
+	effectsOnCurrentSpaceship := (self handOf: whoPlays)
+		                             sumOfCardsEffects.
+	board
+		move: whoPlays
+		to: diceResult + effectsOnCurrentSpaceship
+		using: self.
+	turnSequence next.
 ]
 
 { #category : #action }
