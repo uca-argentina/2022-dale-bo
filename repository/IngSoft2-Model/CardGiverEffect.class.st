@@ -12,6 +12,11 @@ CardGiverEffect class >> with: aDeck [
 	^self new initializeWith:aDeck.
 ]
 
+{ #category : #actions }
+CardGiverEffect >> changePolarity [
+	^ CardGiverReversedEffect with: deck.
+]
+
 { #category : #initialization }
 CardGiverEffect >> initializeWith: aDeck [ 
 	deck:= aDeck.

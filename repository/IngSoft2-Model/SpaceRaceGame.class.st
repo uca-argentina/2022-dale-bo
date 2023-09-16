@@ -100,6 +100,14 @@ SpaceRaceGame >> giveTo: aSpaceship card: aCard [
 	aSpaceshipHand recieveCard:aCard.
 ]
 
+{ #category : #actions }
+SpaceRaceGame >> giveToAllExcept: aSpaceship card: aCard [
+
+	allSpaceshipsHands do: [ :each | 
+		each name ~= aSpaceship ifTrue: [ 
+			each recieveCard:aCard. ] ].
+]
+
 { #category : #action }
 SpaceRaceGame >> handOf: aSpaceship [
 

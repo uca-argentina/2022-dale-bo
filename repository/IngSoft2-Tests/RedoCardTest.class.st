@@ -8,7 +8,8 @@ Class {
 		'accelerationCard',
 		'repeatCard',
 		'overloadCard',
-		'aSpeedCard'
+		'aSpeedCard',
+		'reversePolarityCard'
 	],
 	#category : #'IngSoft2-Tests'
 }
@@ -51,6 +52,7 @@ RedoCardTest >> setUp [
 	repeatCard := RepeatCard new.
 	overloadCard := OverloadCard new.
 	aSpeedCard := SpeedCard new.
+	reversePolarityCard := ReversePolarityCard new.
 	
 ]
 

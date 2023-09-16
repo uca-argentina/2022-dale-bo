@@ -4,6 +4,11 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #actions }
+SprintEffect >> changePolarity [
+	^ SprintReversedEffect new.
+]
+
 { #category : #action }
 SprintEffect >> triggeredBy: aSpaceship with: aGame [
 

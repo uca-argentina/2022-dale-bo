@@ -4,6 +4,11 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #actions }
+InvalidEffect >> changePolarity [
+	^ self
+]
+
 { #category : #action }
 InvalidEffect >> triggeredBy: aSpaceship with: aGame [
 

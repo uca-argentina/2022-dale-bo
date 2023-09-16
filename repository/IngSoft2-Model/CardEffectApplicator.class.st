@@ -79,12 +79,10 @@ CardEffectApplicator >> applyRepeatCard [
 { #category : #actions }
 CardEffectApplicator >> applyReversePolarityCard [
 
-	| boxToChangePolarity |
 	self assertValidTurnFor: cardPlay playedBy.
 	self assertSpaceship: cardPlay playedBy has: cardPlay card.
-	boxToChangePolarity := (game board) effectAt: (cardPlay target).
-	boxToChangePolarity changePolarity.
-	"game updateLastCardPlayed: cardPlay card."
+	(game board) changePolarityOf: (cardPlay target).
+	game updateLastCardPlayed: cardPlay card.
 	self checkCardNeedsToBeRemoved
 ]
 

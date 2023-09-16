@@ -1,5 +1,5 @@
 Class {
-	#name : #HyperJumpEffect,
+	#name : #HyperJumpReversedEffect,
 	#superclass : #BoxEffect,
 	#instVars : [
 		'posibleMoves',
@@ -8,48 +8,48 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'class initialization' }
-HyperJumpEffect class >> assertPosibleMovesAreValid: aCollectionOfPosiblesMoves [
+{ #category : #asserting }
+HyperJumpReversedEffect class >> assertPosibleMovesAreValid: aCollectionOfPosiblesMoves [
 
 	aCollectionOfPosiblesMoves isEmpty ifTrue: [ 
 		Error signal: 'There are no posible moves' ].
 ]
 
-{ #category : #'class initialization' }
-HyperJumpEffect class >> with: aCollectionOfPosiblesMoves [
+{ #category : #asserting }
+HyperJumpReversedEffect class >> with: aCollectionOfPosiblesMoves [
 	self assertPosibleMovesAreValid:aCollectionOfPosiblesMoves.
 	^ self new initializeWith: aCollectionOfPosiblesMoves
 ]
 
 { #category : #actions }
-HyperJumpEffect >> changePolarity [
-	^ HyperJumpReversedEffect with: posibleMoves.
+HyperJumpReversedEffect >> changePolarity [
+	^ HyperJumpEffect with: posibleMoves 
 ]
 
 { #category : #private }
-HyperJumpEffect >> decreasingSort: aCollectionOfPosibleMoves [
+HyperJumpReversedEffect >> decreasingSort: aCollectionOfPosibleMoves [
 
 	^aCollectionOfPosibleMoves sort: [ :distance1 :distance2 | 
 		distance1 amountInParsecs >= distance2 amountInParsecs ].
 ]
 
-{ #category : #initialization }
-HyperJumpEffect >> initializeWith: aCollectionOfPosiblesMoves [
+{ #category : #private }
+HyperJumpReversedEffect >> initializeWith: aCollectionOfPosiblesMoves [
 	index:=0.
 	posibleMoves:= (self decreasingSort:aCollectionOfPosiblesMoves).
 ]
 
 { #category : #private }
-HyperJumpEffect >> numberOfDistanceByHyperJump [
+HyperJumpReversedEffect >> numberOfDistanceByHyperJump [
 	index:= index+1.
 	(index > posibleMoves size) ifTrue:[index:=1.].
 	^posibleMoves at: index.
 ]
 
-{ #category : #action }
-HyperJumpEffect >> triggeredBy: aSpaceship with: aGame [
+{ #category : #private }
+HyperJumpReversedEffect >> triggeredBy: aSpaceship with: aGame [
 
 	(aGame board)
-		move: aSpaceship
+		moveAllSpaceshipsExcept: aSpaceship
 		toFinalDistance: self numberOfDistanceByHyperJump
 ]

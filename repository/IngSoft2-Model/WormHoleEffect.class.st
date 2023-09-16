@@ -4,6 +4,11 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #actions }
+WormHoleEffect >> changePolarity [
+	^ WormHoleReversedEffect new.
+]
+
 { #category : #action }
 WormHoleEffect >> triggeredBy: aSpaceship with: aGame [
 

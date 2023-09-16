@@ -51,6 +51,22 @@ Board >> calculateForSpaceshipsExcept: aSpaceship newpositionUsing: aNumber [
 			self calculate: each name newpositionUsing: aNumber ] ].
 ]
 
+{ #category : #actions }
+Board >> calculateNewPositionsExceptFor: aSpaceship newpositionUsingHands:  allSpaceshipsHands [
+	allSpaceshipsHands do: [ :each | 
+		each name ~= aSpaceship ifTrue: [ 
+			self calculate: each name newpositionUsing: each cards size ] ].
+]
+
+{ #category : #accessing }
+Board >> changePolarityOf: numberOfBox [
+
+	boxes  at: numberOfBox put: ((self effectAt: numberOfBox) changePolarity ). 
+	 
+
+	
+]
+
 { #category : #accessing }
 Board >> createPositionsFor: aCollectionOfSpaceships [
 
@@ -109,6 +125,13 @@ Board >> move: aSpaceship toFinalDistance: aDistanceNumber [
 	self
 		calculate: aSpaceship
 		newpositionUsing: spaceshipNewDistanceInBox // (distancePerBox amountInParsecs).
+]
+
+{ #category : #actions }
+Board >> moveAllSpaceshipsExcept: aSpaceship toFinalDistance: aNumber [ 
+	allSpaceshipsPositions do: [ :each | 
+		each name ~= aSpaceship ifTrue: [ 
+			self move: each name toFinalDistance: aNumber ] ].
 ]
 
 { #category : #actions }

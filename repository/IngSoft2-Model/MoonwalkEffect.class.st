@@ -21,6 +21,11 @@ MoonwalkEffect class >> with: aNumberOfBoxesToSendBack [
 	^ self new initializeWith: aNumberOfBoxesToSendBack
 ]
 
+{ #category : #actions }
+MoonwalkEffect >> changePolarity [
+	^ MoonwalkReversedEffect with: retroPositions .
+]
+
 { #category : #initialization }
 MoonwalkEffect >> initializeWith: aNumberOfBoxesToSendBack [
 	retroPositions:= aNumberOfBoxesToSendBack.

@@ -4,14 +4,14 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #action }
-AtomicBombEffect >> initialize [
-	polarity:= true.
+{ #category : #actions }
+AtomicBombEffect >> changePolarity [
+	^ AtomicBombReversedEffect new.
 ]
 
 { #category : #action }
 AtomicBombEffect >> triggeredBy: aSpaceship with: aGame [
 
-	polarity ifTrue:  [ (aGame board) moveSpaceshipsToTheFirstBox]
+	(aGame board) moveSpaceshipsToTheFirstBox
 	
 ]
