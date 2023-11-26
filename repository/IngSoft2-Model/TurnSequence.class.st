@@ -51,7 +51,7 @@ TurnSequence >> next [
 
 { #category : #actions }
 TurnSequence >> reverseTurns [
-	spaceshipsNames reverse.
+	spaceshipsNames := spaceshipsNames  reverse.
 	turnNumber := spaceshipsNames size - turnNumber +1
 ]
 

@@ -7,7 +7,8 @@ Class {
 		'freedomCard',
 		'reverseCard',
 		'skipCard',
-		'doubleCard'
+		'doubleCard',
+		'redoCard'
 	],
 	#category : #'IngSoft2-Tests'
 }
@@ -34,6 +35,8 @@ BianchiFinalTest >> setUp [
 	freedomCard:= FreedomCard new.
 	reverseCard:= ReverseCard new.
 	skipCard:= SkipCard new.
+	redoCard:= RedoCard new.
+	repeatCard := RepeatCard new.
 	doubleCard:= DoubleCard new.
 ]
 
@@ -52,37 +55,36 @@ BianchiFinalTest >> should: aBlock raise: anError withMessage: anErrorMessage [
 ]
 
 { #category : #tests }
-BianchiFinalTest >> testRedoDouble [
-	| noEffect boxSequence game |
-	noEffect := DiscreteProbabilityEvent for: NoEffect new with: 100.
-	boxSequence := (BoxesEffectsGenerator generate: 13 for: { noEffect })
+BianchiFinalTest >> testAlphaLandsInJailAndPlaysARepeatToImprisionBeta [
+	| boxSequence game jailEffect |
+	jailEffect := DiscreteProbabilityEvent for: JailEffect new with: 100.
+	boxSequence := (BoxesEffectsGenerator generate: 13 for: { jailEffect  })
 		               boxSequence.
 	game := SpaceRaceGame
-		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. }
+		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
 		        laps: 2
 		        diceCup: die
-		        and: (Deck with: { doubleCard }).
-	"Juega Alpha"
+		        and: (Deck with: { repeatCard }).
+	"Juega Alpha y cae en la jail"
 	game playATurn.
-	"Juega Beta"
-	game playATurn.
-	"Tira carta y repite turno"
-	self assert:'Spaceship Alpha' isAt: 7  with:1  in:game.
-	doubleCard playedOn:game  by:'Spaceship Alpha'.
-	"Juega Alpha"
-	game playATurn.
-	game playATurn.
-	self assert:'Spaceship Alpha' isAt: 6  with:2  in:game.
+	"Juega Alpha su carta repeat para meter a Beta en la carcel"
+	repeatCard playedOn: game by:'Spaceship Alpha'  to: 'Spaceship Beta'.
+	"Caen las dos en prision y beta ni siquiera jugo"
+	self assert:((game spaceshipsInPrison) includes:'Spaceship Alpha') equals:true.
+	self assert:((game spaceshipsInPrison) includes:'Spaceship Beta') equals:true.
+	"Gamma no esta en prision"
+	self assert:((game spaceshipsInPrison) includes:'Spaceship Gamma') equals:false.
 	
 ]
 
 { #category : #tests }
-BianchiFinalTest >> testRedoReverse [
-	| noEffect boxSequence game |
-	noEffect := DiscreteProbabilityEvent for: NoEffect new with: 100.
-	boxSequence := (BoxesEffectsGenerator generate: 13 for: { noEffect })
+BianchiFinalTest >> testAlphaPlaysADoubleCardAndBetaRedoThePlayWithARedoCard [
+	| redoEffect boxSequence game deckForCardGiver |
+	deckForCardGiver := Deck with: { redoCard }.
+	redoEffect := DiscreteProbabilityEvent for: (CardGiverEffect with:deckForCardGiver) with: 100.
+	boxSequence := (BoxesEffectsGenerator generate: 13 for: { redoEffect  })
 		               boxSequence.
 	game := SpaceRaceGame
 		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. }
@@ -102,60 +104,81 @@ BianchiFinalTest >> testRedoReverse [
 	game playATurn.
 	game playATurn.
 	self assert:'Spaceship Alpha' isAt: 6  with:2  in:game.
+	redoCard playedOn: game by:'Spaceship Beta' to:'Spaceship Beta'.
+	game playATurn.
+	self assert:'Spaceship Beta' isAt: 13  with:1  in:game.
+	game playATurn.
+	self assert:'Spaceship Beta' isAt: 6  with:2  in:game.
+	
 	
 ]
 
 { #category : #tests }
-BianchiFinalTest >> testRedoSkip [
-	| noEffect boxSequence game |
-	noEffect := DiscreteProbabilityEvent for: NoEffect new with: 100.
-	boxSequence := (BoxesEffectsGenerator generate: 13 for: { noEffect })
-		               boxSequence.
+BianchiFinalTest >> testAlphaPlaysASkipCardAndARedoCardAndSkipsBetaAndGammasTurn [
+
+	| boxSequence game deckForCardGiver redoEffect |
+	deckForCardGiver := Deck with: { redoCard }.
+	redoEffect := DiscreteProbabilityEvent
+		              for: (CardGiverEffect with: deckForCardGiver)
+		              with: 100.
+	boxSequence := (BoxesEffectsGenerator
+		                generate: 13
+		                for: { redoEffect }) boxSequence.
 	game := SpaceRaceGame
-		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. }
+		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
 		        laps: 2
 		        diceCup: die
-		        and: (Deck with: { doubleCard }).
+		        and: (Deck with: { skipCard  }).
+	"Juega Alpha y tira carta skip"
+	game playATurn.
+	skipCard playedOn: game by: 'Spaceship Alpha'.
+	"Alpha tira redo y skipea tambien a gamma"
+	redoCard playedOn: game by: 'Spaceship Alpha' to:''.
 	"Juega Alpha"
 	game playATurn.
-	"Juega Beta"
-	game playATurn.
-	"Tira carta y repite turno"
-	self assert:'Spaceship Alpha' isAt: 7  with:1  in:game.
-	doubleCard playedOn:game  by:'Spaceship Alpha'.
-	"Juega Alpha"
-	game playATurn.
-	game playATurn.
-	self assert:'Spaceship Alpha' isAt: 6  with:2  in:game.
-	
+	self
+		assert: 'Spaceship Alpha'
+		isAt: 13
+		with: 1
+		in: game
 ]
 
 { #category : #tests }
-BianchiFinalTest >> testRepeatJail [
-	| noEffect boxSequence game |
-	noEffect := DiscreteProbabilityEvent for: NoEffect new with: 100.
-	boxSequence := (BoxesEffectsGenerator generate: 13 for: { noEffect })
+BianchiFinalTest >> testAlphaPlaysReverseAndThenBetaPlaysRedoAndTheSequenceRevertsAgain [
+	| redoEffect boxSequence game deckForCardGiver |
+	deckForCardGiver := Deck with: { redoCard }.
+	redoEffect := DiscreteProbabilityEvent for: (CardGiverEffect with:deckForCardGiver) with: 100.
+	boxSequence := (BoxesEffectsGenerator generate: 13 for: { redoEffect  })
 		               boxSequence.
 	game := SpaceRaceGame
-		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. }
+		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
 		        boardWith: boxSequence
 		        distance: (Parsecs with: 200)
 		        laps: 2
 		        diceCup: die
-		        and: (Deck with: { doubleCard }).
-	"Juega Alpha"
+		        and: (Deck with: { reverseCard  }).
+	"Juega A"
 	game playATurn.
+	"Juega B"
+	game playATurn.
+	self assert:'Spaceship Beta' isAt: 7  with:1  in:game.
+	reverseCard playedOn:game  by:'Spaceship Alpha'.
+	"Juega C porque ya es su turno y despues se invierte el sentido"
+	game playATurn.
+	"Juega B"
+	game playATurn.
+	self assert:'Spaceship Beta' isAt: 13  with:1  in:game.
+	redoCard playedOn: game by:'Spaceship Beta' to:''.
+	"Juega Alpha porque es su turno y despues ya se invierte"
+	game playATurn.
+	self assert:'Spaceship Alpha' isAt: 13  with:1  in:game.
 	"Juega Beta"
 	game playATurn.
-	"Tira carta y repite turno"
-	self assert:'Spaceship Alpha' isAt: 7  with:1  in:game.
-	doubleCard playedOn:game  by:'Spaceship Alpha'.
-	"Juega Alpha"
-	game playATurn.
-	game playATurn.
-	self assert:'Spaceship Alpha' isAt: 6  with:2  in:game.
+	self assert:'Spaceship Beta' isAt: 6  with:2  in:game.
+	
+	
 	
 ]
 
@@ -257,7 +280,7 @@ BianchiFinalTest >> testSpaceshipAlphaLandsInJailGetsMaxSumAndKeepMovingOn [
 ]
 
 { #category : #tests }
-BianchiFinalTest >> testSpaceshipAlphaPlays2ReverseCard [
+BianchiFinalTest >> testSpaceshipAlphaPlaysAReverseAndThenBetaPlaysAReverseAndTheSequenceIsReverted2Times [
 	| noEffect boxSequence game |
 	"Revisar abajo cosas"
 	noEffect := DiscreteProbabilityEvent for: NoEffect new with: 100.
@@ -270,23 +293,27 @@ BianchiFinalTest >> testSpaceshipAlphaPlays2ReverseCard [
 		        laps: 2
 		        diceCup: die
 		        and: (Deck with: { reverseCard }).
-	"Juega A"
+	"Juega Alpha"
 	game playATurn.
-	"Juega B"
+	"Juega Beta"
 	game playATurn.
 	self assert:'Spaceship Beta' isAt: 7  with:1  in:game.
 	reverseCard playedOn:game  by:'Spaceship Alpha'.
-	"Juega C"
+	"Juega Gamma porque es su turno y despues se invierte"
 	game playATurn.
 	reverseCard playedOn:game  by:'Spaceship Gamma'.
-	"Juega A"
+	"Juega Beta"
 	game playATurn.
-	self assert:'Spaceship Alpha' isAt: 13  with:1  in:game.
+	self assert:'Spaceship Beta' isAt: 13  with:1  in:game.
+	"Ahora juega Gamma"
+	game playATurn.
+	self assert:'Spaceship Gamma' isAt: 13  with:1  in:game.
+	
 	
 ]
 
 { #category : #tests }
-BianchiFinalTest >> testSpaceshipAlphaPlaysDoubleCard [
+BianchiFinalTest >> testSpaceshipAlphaPlaysDoubleCardAndCanPlayTwoTurns [
 	| noEffect boxSequence game |
 	noEffect := DiscreteProbabilityEvent for: NoEffect new with: 100.
 	boxSequence := (BoxesEffectsGenerator generate: 13 for: { noEffect })
@@ -333,7 +360,7 @@ BianchiFinalTest >> testSpaceshipAlphaPlaysFreedomCardWhileNotInJailAndGetsError
 ]
 
 { #category : #tests }
-BianchiFinalTest >> testSpaceshipAlphaPlaysReverseCard [
+BianchiFinalTest >> testSpaceshipAlphaPlaysReverseCardAndRevertsTheTurnSeq [
 	| noEffect boxSequence game |
 	noEffect := DiscreteProbabilityEvent for: NoEffect new with: 100.
 	boxSequence := (BoxesEffectsGenerator generate: 13 for: { noEffect })
@@ -351,7 +378,7 @@ BianchiFinalTest >> testSpaceshipAlphaPlaysReverseCard [
 	game playATurn.
 	self assert:'Spaceship Beta' isAt: 7  with:1  in:game.
 	reverseCard playedOn:game  by:'Spaceship Alpha'.
-	"Juega C"
+	"Juega C porque ya es su turno y despues se invierte el sentido"
 	game playATurn.
 	"Juega B"
 	game playATurn.
