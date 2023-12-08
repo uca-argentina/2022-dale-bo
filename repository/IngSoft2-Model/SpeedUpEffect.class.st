@@ -18,8 +18,8 @@ SpeedUpEffect >> reverse [
 	jumpPositions := jumpPositions negated.
 ]
 
-{ #category : #actions }
+{ #category : #action }
 SpeedUpEffect >> triggeredBy: aSpaceship with: aGame [
 
-	(aGame board) calculate: aSpaceship newpositionUsing: 4
+	(aGame board) calculate: aSpaceship newpositionUsing: jumpPositions 
 ]
