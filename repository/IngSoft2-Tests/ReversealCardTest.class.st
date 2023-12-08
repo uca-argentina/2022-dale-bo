@@ -40,6 +40,42 @@ ReversealCardTest >> setUp [
 ]
 
 { #category : #tests }
+ReversealCardTest >> testSpaceshipAlphaPlaysReversealCardInAMoonwalkBoxInFivePositionAndSpaceshipAlphaLandsInFivePositionAndAllSpaceshipsMovesToFourPositionExceptSpaceshipAlpha [
+
+	| dieOne game boxSequence deckForGame |
+	dieOne := LoadedDie with: 4.
+	deckForGame := Deck with: { reversealCard }.
+	boxSequence := self
+		               sequenceOfNoEffectsOf: 13
+		               with: (MoonwalkEffect with: 3)
+		               at: 5.
+	game := SpaceRaceGame
+		        with: { 'Spaceship Alpha'. 'Spaceship Beta' . 'Spaceship Gamma' }
+		        boardWith: boxSequence
+		        distance: (Parsecs with: 200)
+		        laps: 2
+		        diceCup: dieOne
+		        and: deckForGame.	
+	reversealCard playedOn: game by: 'Spaceship Alpha' onBox: 5.
+	game playATurn.
+	self
+		assert: 'Spaceship Alpha'
+		isAt: 5
+		with: 1
+		in: game.
+	self
+		assert: 'Spaceship Beta'
+		isAt: 4
+		with: 1
+		in: game.
+	self
+		assert: 'Spaceship Gamma'
+		isAt: 4
+		with: 1
+		in: game.
+]
+
+{ #category : #tests }
 ReversealCardTest >> testSpaceshipBetaPlaysReversealCardInASpeedupBoxInPositionFiveAndSpaceshipAlphaLandsOnItAndMovesToPositionOne [ 
 
 	| dieOne game boxSequence deckForGame |
@@ -73,6 +109,37 @@ ReversealCardTest >> testSpaceshipBetaPlaysReversealCardInASpeedupBoxInPositionF
 	self
 		assert: 'Spaceship Alpha'
 		isAt: 5
+		with: 1
+		in: game.
+]
+
+{ #category : #tests }
+ReversealCardTest >> testSpaceshipBetaPlaysReversealCardInAWormholeBoxInPositionFiveAndSpaceshipAlphaLandsOnItAndMovesToPositionNine [
+
+	| dieOne game boxSequence deckForGame |
+	dieOne := LoadedDie with: 4.
+	deckForGame := Deck with: { reversealCard }.
+	boxSequence := self
+		               sequenceOfNoEffectsOf: 15
+		               with: WormHoleEffect new
+		               at: 5.
+	game := SpaceRaceGame
+		        with: { 'Spaceship Alpha'. 'Spaceship Beta' }
+		        boardWith: boxSequence
+		        distance: (Parsecs with: 200)
+		        laps: 2
+		        diceCup: dieOne
+		        and: deckForGame.
+	reversealCard playedOn: game by: 'Spaceship Alpha' onBox: 5.
+	game playATurn.
+	self
+		assert: 'Spaceship Alpha'
+		isAt: 9
+		with: 1
+		in: game.
+	self
+		assert: 'Spaceship Beta'
+		isAt: 1
 		with: 1
 		in: game.
 ]
