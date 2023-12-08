@@ -76,6 +76,20 @@ CardEffectApplicator >> applyRepeatCard [
 	self checkCardNeedsToBeRemoved
 ]
 
+{ #category : #action }
+CardEffectApplicator >> applyReversealCard [
+
+	| boxEffect aPosition|
+	self assertSpaceship: cardPlay playedBy has: cardPlay card.
+	"boxEffect := (game board )lastBoxEffect.
+	boxEffect triggeredBy: cardPlay target with: game."
+	aPosition := 5.
+	boxEffect := ( game board ) boxAt: aPosition.
+	boxEffect reverse.
+	game updateLastCardPlayed: cardPlay card.
+	self checkCardNeedsToBeRemoved
+]
+
 { #category : #actions }
 CardEffectApplicator >> applySpeedCard [
 
