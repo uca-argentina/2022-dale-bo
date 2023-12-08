@@ -7,6 +7,12 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #initialization }
+WormHoleEffect >> initialize [
+	
+	retroPositions := -4.
+]
+
 { #category : #action }
 WormHoleEffect >> reverse [
 	retroPositions := retroPositions negated.
