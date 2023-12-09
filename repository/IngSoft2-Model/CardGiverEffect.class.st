@@ -18,6 +18,11 @@ CardGiverEffect >> initializeWith: aDeck [
 ]
 
 { #category : #action }
+CardGiverEffect >> reverse [
+	
+]
+
+{ #category : #action }
 CardGiverEffect >> triggeredBy: aSpaceship with: aGame [
 
 	aGame giveTo: aSpaceship card: deck giveCard

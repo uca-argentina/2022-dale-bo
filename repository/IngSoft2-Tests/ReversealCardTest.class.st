@@ -9,6 +9,18 @@ Class {
 }
 
 { #category : #tests }
+ReversealCardTest >> assert: aSpaceshipName isAt: aPositionNumber with: aLapNumber having: aHand in: aGame [
+
+	| spaceshipPosition |
+	spaceshipPosition := aGame positionOf: aSpaceshipName.
+	self assert: spaceshipPosition boxNumber equals: aPositionNumber.
+	self assert: spaceshipPosition lapNumber equals: aLapNumber.
+	"self assert: aGame handOf: aSpaceshipName equals: aHand."
+
+
+]
+
+{ #category : #tests }
 ReversealCardTest >> assert: aSpaceshipName isAt: aPositionNumber with: aLapNumber in: aGame [
 
 	| spaceshipPosition |
@@ -37,6 +49,35 @@ ReversealCardTest >> setUp [
 	die := LoadedDie with:6.
 	reversealCard := ReversealCard new.
 	"Put here a common initialization logic for tests"
+]
+
+{ #category : #tests }
+ReversealCardTest >> testSpaceshipAlphaPlaysReversealCardInACardGiverBoxInPositionFiveAndSpaceshipAlphaLandsOnItAndNoCardIsReceived [
+
+	| dieOne game boxSequence deckForGame |
+	dieOne := LoadedDie with: 4.
+	deckForGame := Deck with: { reversealCard }.
+	boxSequence := self
+		               sequenceOfNoEffectsOf: 15
+		               with: (CardGiverEffect with: deckForGame)
+							"with: NoEffect new"
+		               at: 5.
+	game := SpaceRaceGame
+		        with: { 'Spaceship Alpha'. 'Spaceship Beta' }
+		        boardWith: boxSequence
+		        distance: (Parsecs with: 200)
+		        laps: 2
+		        diceCup: dieOne
+		        and: deckForGame.
+	reversealCard playedOn: game by: 'Spaceship Alpha' onBox: 5.
+	game playATurn.
+	self assert: (game handOf: 'Spaceship Alpha') cards size equals: 2.
+	"self
+		assert: 'Spaceship Alpha'
+		isAt: 5
+		with: 1
+		having: {  }
+		in: game."
 ]
 
 { #category : #tests }
