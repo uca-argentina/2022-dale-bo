@@ -2,24 +2,26 @@ Class {
 	#name : #WormHoleEffect,
 	#superclass : #BoxEffect,
 	#instVars : [
-		'retroPositions'
+		'state'
 	],
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #initialization }
 WormHoleEffect >> initialize [
-	
-	retroPositions := -4.
+
+	state := NormalWormholeState new.
 ]
 
 { #category : #action }
 WormHoleEffect >> reverse [
-	retroPositions := retroPositions negated.
+	state := state reverse.
+	"retroPositions := retroPositions negated."
 ]
 
 { #category : #action }
 WormHoleEffect >> triggeredBy: aSpaceship with: aGame [
 
-	(aGame board) calculate: aSpaceship newpositionUsing: retroPositions 
+	state triggeredBy: aSpaceship  with: aGame
+	"(aGame board) calculate: aSpaceship newpositionUsing: retroPositions "
 ]
