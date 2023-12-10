@@ -2,7 +2,7 @@ Class {
 	#name : #SpeedUpEffect,
 	#superclass : #BoxEffect,
 	#instVars : [
-		'jumpPositions'
+		'state'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -10,16 +10,16 @@ Class {
 { #category : #initialization }
 SpeedUpEffect >> initialize [ 
 	super initialize.
-	jumpPositions := 4.
+	state := NormalSpeedUpEffectState new.
 ]
 
 { #category : #action }
 SpeedUpEffect >> reverse [
-	jumpPositions := jumpPositions negated.
+	state := state reverse.
 ]
 
 { #category : #action }
 SpeedUpEffect >> triggeredBy: aSpaceship with: aGame [
 
-	(aGame board) calculate: aSpaceship newpositionUsing: jumpPositions 
+	state triggeredBy: aSpaceship with: aGame.
 ]
