@@ -2,7 +2,7 @@ Class {
 	#name : #CardGiverEffect,
 	#superclass : #BoxEffect,
 	#instVars : [
-		'deck'
+		'state'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -14,16 +14,16 @@ CardGiverEffect class >> with: aDeck [
 
 { #category : #initialization }
 CardGiverEffect >> initializeWith: aDeck [ 
-	deck:= aDeck.
+	state := NormalCardGiverEffectState with: aDeck.
 ]
 
 { #category : #action }
 CardGiverEffect >> reverse [
-	
+	state := state reverse.
 ]
 
 { #category : #action }
 CardGiverEffect >> triggeredBy: aSpaceship with: aGame [
 
-	aGame giveTo: aSpaceship card: deck giveCard
+	state triggeredBy: aSpaceship  with: aGame.
 ]

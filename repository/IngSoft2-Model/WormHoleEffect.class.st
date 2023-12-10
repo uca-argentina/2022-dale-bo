@@ -23,5 +23,4 @@ WormHoleEffect >> reverse [
 WormHoleEffect >> triggeredBy: aSpaceship with: aGame [
 
 	state triggeredBy: aSpaceship  with: aGame
-	"(aGame board) calculate: aSpaceship newpositionUsing: retroPositions "
 ]

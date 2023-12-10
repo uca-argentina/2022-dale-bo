@@ -37,7 +37,4 @@ MoonwalkEffect >> reverse [
 MoonwalkEffect >> triggeredBy: aSpaceship with: aGame [
 
 	state triggeredBy: aSpaceship  with: aGame 
-	"(aGame board)
-		moveBackwards: retroPositions negated
-		allSpaceshipsExcept: aSpaceship"
 ]

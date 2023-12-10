@@ -91,6 +91,31 @@ ReversealCardTest >> testReversealCardIsPlayedToTimesInASpeedupBoxInPositionNine
 ]
 
 { #category : #tests }
+ReversealCardTest >> testReversealCardIsPlayedTwoTimesInACardGiverBoxInPositionFiveAndSpaceshipBetaLandsOnItAndReceivesACard [
+
+	| dieOne game boxSequence deckForGame |
+	dieOne := LoadedDie with: 4.
+	deckForGame := Deck with: { reversealCard }.
+	boxSequence := self
+		               sequenceOfNoEffectsOf: 15
+		               with: (CardGiverEffect with: deckForGame)
+		               at: 5.
+	game := SpaceRaceGame
+		        with: { 'Spaceship Alpha'. 'Spaceship Beta' }
+		        boardWith: boxSequence
+		        distance: (Parsecs with: 200)
+		        laps: 2
+		        diceCup: dieOne
+		        and: deckForGame.
+	reversealCard playedOn: game by: 'Spaceship Alpha' onBox: 5.
+	game playATurn.
+	self assert: (game handOf: 'Spaceship Alpha') cards size equals: 1.
+	reversealCard playedOn: game by: 'Spaceship Beta' onBox: 5.
+	game playATurn.
+	self assert: (game handOf: 'Spaceship Beta') cards size equals: 2.
+]
+
+{ #category : #tests }
 ReversealCardTest >> testReversealCardIsPlayedTwoTimesInAMoonwalkBoxInFivePosition [
 
 	| dieOne game boxSequence deckForGame |
@@ -176,7 +201,6 @@ ReversealCardTest >> testSpaceshipAlphaPlaysReversealCardInACardGiverBoxInPositi
 	boxSequence := self
 		               sequenceOfNoEffectsOf: 15
 		               with: (CardGiverEffect with: deckForGame)
-							"with: NoEffect new"
 		               at: 5.
 	game := SpaceRaceGame
 		        with: { 'Spaceship Alpha'. 'Spaceship Beta' }
@@ -187,13 +211,7 @@ ReversealCardTest >> testSpaceshipAlphaPlaysReversealCardInACardGiverBoxInPositi
 		        and: deckForGame.
 	reversealCard playedOn: game by: 'Spaceship Alpha' onBox: 5.
 	game playATurn.
-	self assert: (game handOf: 'Spaceship Alpha') cards size equals: 2.
-	"self
-		assert: 'Spaceship Alpha'
-		isAt: 5
-		with: 1
-		having: {  }
-		in: game."
+	self assert: (game handOf: 'Spaceship Alpha') cards size equals: 1.
 ]
 
 { #category : #tests }
