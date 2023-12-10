@@ -5,6 +5,11 @@ Class {
 }
 
 { #category : #action }
+NoEffect >> reverse [
+	"do nothing"
+]
+
+{ #category : #action }
 NoEffect >> triggeredBy: aSpaceship with: aGame [
 
 	(aGame board) calculate: aSpaceship newpositionUsing: 0

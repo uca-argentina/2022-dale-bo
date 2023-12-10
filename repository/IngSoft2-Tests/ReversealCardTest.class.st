@@ -251,6 +251,32 @@ ReversealCardTest >> testSpaceshipAlphaPlaysReversealCardInAMoonwalkBoxInFivePos
 ]
 
 { #category : #tests }
+ReversealCardTest >> testSpaceshipBetaPlaysReversealCardInANoEffectBoxInPositionFiveAndEffectDoesNotChange [
+
+	| dieOne game boxSequence deckForGame |
+	dieOne := LoadedDie with: 4.
+	deckForGame := Deck with: { reversealCard }.
+	boxSequence := self
+		               sequenceOfNoEffectsOf: 15
+		               with: NoEffect new
+		               at: 5.
+	game := SpaceRaceGame
+		        with: { 'Spaceship Alpha'. 'Spaceship Beta' }
+		        boardWith: boxSequence
+		        distance: (Parsecs with: 200)
+		        laps: 2
+		        diceCup: dieOne
+		        and: deckForGame.
+	reversealCard playedOn: game by: 'Spaceship Alpha' onBox: 5.
+	game playATurn.
+	self
+		assert: 'Spaceship Alpha'
+		isAt: 5
+		with: 1
+		in: game.
+]
+
+{ #category : #tests }
 ReversealCardTest >> testSpaceshipBetaPlaysReversealCardInASpeedupBoxInPositionFiveAndSpaceshipAlphaLandsOnItAndMovesToPositionOne [ 
 
 	| dieOne game boxSequence deckForGame |
@@ -310,6 +336,49 @@ ReversealCardTest >> testSpaceshipBetaPlaysReversealCardInAWormholeBoxInPosition
 	self
 		assert: 'Spaceship Alpha'
 		isAt: 9
+		with: 1
+		in: game.
+	self
+		assert: 'Spaceship Beta'
+		isAt: 1
+		with: 1
+		in: game.
+]
+
+{ #category : #tests }
+ReversealCardTest >> testSpaceshipBetaPlaysReversealCardInAnAtomicBombEffecttBoxInPositionFiveAndAtomicBombEffectIsTheSame [
+
+	| dieOne game boxSequence deckForGame |
+	dieOne := LoadedDie with: 4.
+	deckForGame := Deck with: { reversealCard }.
+	boxSequence := self
+		               sequenceOfNoEffectsOf: 15
+		               with: AtomicBombEffect new
+		               at: 9.
+	game := SpaceRaceGame
+		        with: { 'Spaceship Alpha'. 'Spaceship Beta' }
+		        boardWith: boxSequence
+		        distance: (Parsecs with: 200)
+		        laps: 2
+		        diceCup: dieOne
+		        and: deckForGame.
+	reversealCard playedOn: game by: 'Spaceship Alpha' onBox: 9.
+	game playATurn.
+	self
+		assert: 'Spaceship Alpha'
+		isAt: 5
+		with: 1
+		in: game.
+	game playATurn.
+	self
+		assert: 'Spaceship Beta'
+		isAt: 5
+		with: 1
+		in: game.
+	game playATurn.
+	self
+		assert: 'Spaceship Alpha'
+		isAt: 1
 		with: 1
 		in: game.
 	self
