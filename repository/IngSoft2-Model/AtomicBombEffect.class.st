@@ -5,6 +5,11 @@ Class {
 }
 
 { #category : #action }
+AtomicBombEffect >> reverse [
+	"do nothing"
+]
+
+{ #category : #action }
 AtomicBombEffect >> triggeredBy: aSpaceship with: aGame [
 
 	(aGame board) moveSpaceshipsToTheFirstBox

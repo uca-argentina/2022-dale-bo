@@ -5,6 +5,6 @@ Class {
 }
 
 { #category : #accessing }
-Card >> applyUsing: arg1 [ 
-	^ self subclassResponsibility
+Card >> applyUsing: aCardEffectApplicator [ 
+	aCardEffectApplicator applyReversealCard.
 ]

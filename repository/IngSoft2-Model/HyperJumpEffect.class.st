@@ -42,6 +42,11 @@ HyperJumpEffect >> numberOfDistanceByHyperJump [
 ]
 
 { #category : #action }
+HyperJumpEffect >> reverse [
+	"do nothing"
+]
+
+{ #category : #action }
 HyperJumpEffect >> triggeredBy: aSpaceship with: aGame [
 
 	(aGame board)

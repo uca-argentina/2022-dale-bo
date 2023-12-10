@@ -22,6 +22,11 @@ Board class >> ships: aCollectionOfSpacships with: aBoxSequence distance: aDista
 ]
 
 { #category : #accessing }
+Board >> boxAt: aPosition [ 
+	^boxes at: aPosition.
+]
+
+{ #category : #accessing }
 Board >> calculate: aSpaceship newpositionUsing: aSum [
 
 	| spaceshipNewBoxNumber spaceshipNewLapNumber auxNewBoxNumber spaceshipAuxLapNumber oldSpaceshipPosition |
