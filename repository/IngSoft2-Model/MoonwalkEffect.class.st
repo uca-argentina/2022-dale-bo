@@ -2,7 +2,7 @@ Class {
 	#name : #MoonwalkEffect,
 	#superclass : #BoxEffect,
 	#instVars : [
-		'retroPositions'
+		'state'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -23,19 +23,21 @@ MoonwalkEffect class >> with: aNumberOfBoxesToSendBack [
 
 { #category : #initialization }
 MoonwalkEffect >> initializeWith: aNumberOfBoxesToSendBack [
-	retroPositions:= aNumberOfBoxesToSendBack.
+	state := (NormalMoonwalkEffectState with: aNumberOfBoxesToSendBack) .
 ]
 
 { #category : #action }
 MoonwalkEffect >> reverse [ 
 	
-	retroPositions := retroPositions negated.
+	state := state reverse.
+	"retroPositions := retroPositions negated."
 ]
 
 { #category : #action }
 MoonwalkEffect >> triggeredBy: aSpaceship with: aGame [
 
-	(aGame board)
+	state triggeredBy: aSpaceship  with: aGame 
+	"(aGame board)
 		moveBackwards: retroPositions negated
-		allSpaceshipsExcept: aSpaceship
+		allSpaceshipsExcept: aSpaceship"
 ]

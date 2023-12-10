@@ -6,7 +6,7 @@ Class {
 
 { #category : #action }
 BoxEffect >> reverse [
-	self subclassResponsibility.
+
 ]
 
 { #category : #action }

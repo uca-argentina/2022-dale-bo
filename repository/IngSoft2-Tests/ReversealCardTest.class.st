@@ -91,6 +91,50 @@ ReversealCardTest >> testReversealCardIsPlayedToTimesInASpeedupBoxInPositionNine
 ]
 
 { #category : #tests }
+ReversealCardTest >> testReversealCardIsPlayedTwoTimesInAMoonwalkBoxInFivePosition [
+
+	| dieOne game boxSequence deckForGame |
+	dieOne := LoadedDie with: 4.
+	deckForGame := Deck with: { reversealCard }.
+	boxSequence := self
+		               sequenceOfNoEffectsOf: 13
+		               with: (MoonwalkEffect with: 3)
+		               at: 9.
+	game := SpaceRaceGame
+		        with: { 'Spaceship Alpha'. 'Spaceship Beta' }
+		        boardWith: boxSequence
+		        distance: (Parsecs with: 200)
+		        laps: 2
+		        diceCup: dieOne
+		        and: deckForGame.
+	game playATurn.
+	self
+		assert: 'Spaceship Alpha'
+		isAt: 5
+		with: 1
+		in: game.
+	reversealCard playedOn: game by: 'Spaceship Beta' onBox: 9.
+	game playATurn.
+	self
+		assert: 'Spaceship Beta'
+		isAt: 5
+		with: 1
+		in: game.
+	reversealCard playedOn: game by: 'Spaceship Alpha' onBox: 9.
+	game playATurn.
+	self
+		assert: 'Spaceship Alpha'
+		isAt: 9
+		with: 1
+		in: game.
+	self
+		assert: 'Spaceship Beta'
+		isAt: 2
+		with: 1
+		in: game.
+]
+
+{ #category : #tests }
 ReversealCardTest >> testReversealCardIsPlayedTwoTimesInAWormholeBoxInPositionFiveAndSpaceshipAlphaLandsOnItAndMovesToPositionNine [
 
 	| dieOne game boxSequence deckForGame |
