@@ -119,6 +119,13 @@ Board >> moveBackwards: aNumberOfBoxes allSpaceshipsExcept: aSpaceship [
 			self calculate: each name newpositionUsing: aNumberOfBoxes ] ].
 ]
 
+{ #category : #actions }
+Board >> moveBackwards: aSpaceship by: numberOfBoxes [ 
+
+	self calculate: aSpaceship newpositionUsing: (numberOfBoxes negated).
+	self sortPositionsByRanking.
+]
+
 { #category : #action }
 Board >> moveSpaceshipsToTheFirstBox [
 

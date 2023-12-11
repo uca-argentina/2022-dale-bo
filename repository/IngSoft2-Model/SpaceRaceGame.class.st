@@ -156,6 +156,11 @@ SpaceRaceGame >> positionOf: aSpaceship [
 	^ board positionOf:aSpaceship.
 ]
 
+{ #category : #actions }
+SpaceRaceGame >> punishPlayer: aSpaceship [
+	board moveBackwards: aSpaceship by: 2
+]
+
 { #category : #action }
 SpaceRaceGame >> rankingOf: aShip [
 

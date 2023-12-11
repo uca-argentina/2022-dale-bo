@@ -1,6 +1,6 @@
 Class {
 	#name : #ReversealCard,
-	#superclass : #Card,
+	#superclass : #PermanentCard,
 	#category : #'IngSoft2-Model'
 }
 
@@ -12,5 +12,5 @@ ReversealCard >> playedOn: aGame by: aSpaceship onBox: aPosition [
 		             card: self
 		             to: aPosition 
 		             needsRemove: false.
-	aGame applyCardPlayFor: aCardPlay
+	self applyStrategyFor: aSpaceship in: aGame using: aCardPlay.
 ]

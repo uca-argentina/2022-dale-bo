@@ -1,6 +1,6 @@
 Class {
 	#name : #RepeatCard,
-	#superclass : #Card,
+	#superclass : #InstantCard,
 	#category : #'IngSoft2-Model'
 }
 
@@ -18,5 +18,5 @@ RepeatCard >> playedOn: aGame by: aSpaceship to: anotherSpaceship [
 		             card: self
 		             to: anotherSpaceship
 		             needsRemove: false.
-	aGame applyCardPlayFor: aCardPlay
+	self applyStrategyFor: aSpaceship in: aGame using: aCardPlay.
 ]

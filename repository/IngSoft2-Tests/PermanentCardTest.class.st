@@ -7,7 +7,8 @@ Class {
 		'overloadCard',
 		'speedCard',
 		'redoCard',
-		'cancelationCard'
+		'cancelationCard',
+		'reversealCard'
 	],
 	#category : #'IngSoft2-Tests'
 }
@@ -44,6 +45,7 @@ PermanentCardTest >> setUp [
 	overloadCard := OverloadCard new.
 	speedCard := SpeedCard new.
 	redoCard := RedoCard new.
+	reversealCard := ReversealCard new.
 ]
 
 { #category : #tests }
@@ -275,7 +277,33 @@ PermanentCardTest >> testSpaceshipAlphaPlaysAnOverloadCardToSpaceshipBetaAndRedu
 ]
 
 { #category : #tests }
-PermanentCardTest >> testSpaceshipAlphaTriesToPlayACardInSpaceshipBetaTurnAndHeCantsBecauseItAPermanentCard [
+PermanentCardTest >> testSpaceshipAlphaTriesToPlayAReversealCardInSpaceshipBetaTurnAndGoesBackTwoPositions [
+
+	| game boxSequence deck cardGiverBox |
+	deck := Deck with: { reversealCard }.
+	cardGiverBox := DiscreteProbabilityEvent
+		                for: (CardGiverEffect with: deck)
+		                with: 100.
+	boxSequence := self generateBoxesWith: cardGiverBox.
+	game := SpaceRaceGame
+		        with:
+		        { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
+		        boardWith: boxSequence
+		        distance: (Parsecs with: 200)
+		        laps: 2
+		        diceCup: die
+		        and: deck.
+	game playATurn.
+	reversealCard playedOn: game by: 'Spaceship Alpha' onBox: 9.
+	self
+		assert: 'Spaceship Alpha'
+		isAt: 5
+		with: 1
+		in: game
+]
+
+{ #category : #tests }
+PermanentCardTest >> testSpaceshipAlphaTriesToPlayASpeedCardInSpaceshipBetaTurnAndGoesBackTwoPositions [
 
 	| game boxSequence deck cardGiverBox |
 	deck := Deck with: { speedCard }.
@@ -292,10 +320,62 @@ PermanentCardTest >> testSpaceshipAlphaTriesToPlayACardInSpaceshipBetaTurnAndHeC
 		        diceCup: die
 		        and: deck.
 	game playATurn.
+	speedCard playedOn: game by: 'Spaceship Alpha' to: 'Spaceship Beta'.
 	self
-		should: [ 
-		speedCard playedOn: game by: 'Spaceship Alpha' to: 'Spaceship Beta' ]
-		raise: Error
-		withMessage:
-		'A permanent card cannot be played on another spaceship turn'
+		assert: 'Spaceship Alpha'
+		isAt: 5
+		with: 1
+		in: game
+]
+
+{ #category : #tests }
+PermanentCardTest >> testSpaceshipAlphaTriesToPlayAnAccelerationCardInSpaceshipBetaTurnAndGoesBackTwoPositions [
+
+	| game boxSequence deck cardGiverBox |
+	deck := Deck with: { accelerationCard }.
+	cardGiverBox := DiscreteProbabilityEvent
+		                for: (CardGiverEffect with: deck)
+		                with: 100.
+	boxSequence := self generateBoxesWith: cardGiverBox.
+	game := SpaceRaceGame
+		        with:
+		        { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
+		        boardWith: boxSequence
+		        distance: (Parsecs with: 200)
+		        laps: 2
+		        diceCup: die
+		        and: deck.
+	game playATurn.
+	accelerationCard playedOn: game by: 'Spaceship Alpha'.
+	self
+		assert: 'Spaceship Alpha'
+		isAt: 5
+		with: 1
+		in: game
+]
+
+{ #category : #tests }
+PermanentCardTest >> testSpaceshipAlphaTriesToPlayAnOverloadCardInSpaceshipBetaTurnAndGoesBackTwoPositions [
+
+	| game boxSequence deck cardGiverBox |
+	deck := Deck with: { overloadCard }.
+	cardGiverBox := DiscreteProbabilityEvent
+		                for: (CardGiverEffect with: deck)
+		                with: 100.
+	boxSequence := self generateBoxesWith: cardGiverBox.
+	game := SpaceRaceGame
+		        with:
+		        { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
+		        boardWith: boxSequence
+		        distance: (Parsecs with: 200)
+		        laps: 2
+		        diceCup: die
+		        and: deck.
+	game playATurn.
+	overloadCard playedOn: game by: 'Spaceship Alpha' to: 'Spaceship Beta'.
+	self
+		assert: 'Spaceship Alpha'
+		isAt: 5
+		with: 1
+		in: game
 ]
