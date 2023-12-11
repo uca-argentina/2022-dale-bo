@@ -32,6 +32,17 @@ ReversealCardTest >> assert: aSpaceshipName isAt: aPositionNumber with: aLapNumb
 ]
 
 { #category : #tests }
+ReversealCardTest >> assert: aSpaceshipName isAtPostion: aPositionNumber with: aLapNumber atDistance: aDistance in: aGame [
+
+	| spaceshipPosition |
+	spaceshipPosition := aGame positionOf: aSpaceshipName.
+	
+	self assert: spaceshipPosition boxNumber equals: aPositionNumber.
+	self assert: spaceshipPosition lapNumber equals: aLapNumber.
+	self assert: spaceshipPosition distanceInBox equals: aDistance.
+]
+
+{ #category : #tests }
 ReversealCardTest >> sequenceOfNoEffectsOf: boardSize with: effectToBePlaced at: positionOfEffectToBePlaced [
 
 	| boxSequence |
@@ -193,6 +204,37 @@ ReversealCardTest >> testReversealCardIsPlayedTwoTimesInAWormholeBoxInPositionFi
 ]
 
 { #category : #tests }
+ReversealCardTest >> testSpaceshipAlphaAndBetaPlaysReversealCardInAHyperjumpEffecttBoxInPositionFiveAndSpaceshipBetaGoesToPositionSeven [
+
+	| dieOne game boxSequence deckForGame |
+	dieOne := LoadedDie with: 4.
+	deckForGame := Deck with: { reversealCard }.
+	boxSequence := self
+		               sequenceOfNoEffectsOf: 10
+		               with: (HyperJumpEffect with: { 
+					                (Parsecs with: 5).
+					                (Lightyear with: 12) })
+		               at: 5.
+	game := SpaceRaceGame
+		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
+		        boardWith: boxSequence
+		        distance: (Lightyear with: 60)
+		        laps: 2
+		        diceCup: dieOne
+		        and: deckForGame.
+	reversealCard playedOn: game by: 'Spaceship Alpha' onBox: 5.
+	game playATurn.
+	reversealCard playedOn: game by: 'Spaceship Beta' onBox: 5.
+	game playATurn.
+	self
+		assert: 'Spaceship Beta'
+		isAtPostion: 7
+		with: 1
+		atDistance: 1
+		in: game.
+]
+
+{ #category : #tests }
 ReversealCardTest >> testSpaceshipAlphaPlaysReversealCardInACardGiverBoxInPositionFiveAndSpaceshipAlphaLandsOnItAndNoCardIsReceived [
 
 	| dieOne game boxSequence deckForGame |
@@ -212,6 +254,35 @@ ReversealCardTest >> testSpaceshipAlphaPlaysReversealCardInACardGiverBoxInPositi
 	reversealCard playedOn: game by: 'Spaceship Alpha' onBox: 5.
 	game playATurn.
 	self assert: (game handOf: 'Spaceship Alpha') cards size equals: 1.
+]
+
+{ #category : #tests }
+ReversealCardTest >> testSpaceshipAlphaPlaysReversealCardInAHyperjumpEffecttBoxInPositionFiveAndSpaceshipAlphaGoesToPositionTwo [
+
+	| dieOne game boxSequence deckForGame |
+	dieOne := LoadedDie with: 4.
+	deckForGame := Deck with: { reversealCard }.
+	boxSequence := self
+		               sequenceOfNoEffectsOf: 10
+		               with: (HyperJumpEffect with: { 
+					                (Parsecs with: 5).
+					                (Lightyear with: 12) })
+		               at: 5.
+	game := SpaceRaceGame
+		        with: { 'Spaceship Alpha'. 'Spaceship Beta'. 'Spaceship Gamma' }
+		        boardWith: boxSequence
+		        distance: (Lightyear with: 60)
+		        laps: 2
+		        diceCup: dieOne
+		        and: deckForGame.
+	reversealCard playedOn: game by: 'Spaceship Alpha' onBox: 5.
+	game playATurn.
+	self
+		assert: 'Spaceship Alpha'
+		isAtPostion: 2
+		with: 1
+		atDistance: 1
+		in: game.
 ]
 
 { #category : #tests }
