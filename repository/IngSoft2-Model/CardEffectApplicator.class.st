@@ -23,7 +23,7 @@ CardEffectApplicator >> apply: aCardPlay [
 CardEffectApplicator >> applyAccelerationCard [
 
 	| aCard spaceshipNameThatPlaysCard |
-	self assertValidTurnFor: cardPlay playedBy.
+	"self assertValidTurnFor: cardPlay playedBy."
 	self assertSpaceship: cardPlay playedBy has: cardPlay card.
 	aCard := cardPlay card.
 	spaceshipNameThatPlaysCard := cardPlay playedBy.
@@ -47,7 +47,7 @@ CardEffectApplicator >> applyCancellationCard [
 CardEffectApplicator >> applyOverloadCard [
 
 	| affectedSpaceship |
-	self assertValidTurnFor: cardPlay playedBy.
+	"self assertValidTurnFor: cardPlay playedBy."
 	self assertSpaceship: cardPlay playedBy has: cardPlay card.
 	affectedSpaceship := game handOf: cardPlay target.
 	affectedSpaceship addEffectFrom: cardPlay card.
@@ -93,7 +93,7 @@ CardEffectApplicator >> applyReversealCard [
 CardEffectApplicator >> applySpeedCard [
 
 	| affectedSpaceship |
-	self assertValidTurnFor: cardPlay playedBy.
+	"self assertValidTurnFor: cardPlay playedBy."
 	self assertSpaceship: cardPlay playedBy has: cardPlay card.
 	affectedSpaceship := game handOf: cardPlay target.
 	affectedSpaceship addEffectFrom: cardPlay card.

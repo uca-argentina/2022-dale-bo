@@ -1,6 +1,6 @@
 Class {
 	#name : #CancellationCard,
-	#superclass : #Card,
+	#superclass : #InstantCard,
 	#category : #'IngSoft2-Model'
 }
 
@@ -18,5 +18,7 @@ CancellationCard >> playedOn: aGame by: aSpaceship to: aCard [
 		             card: self
 		             to: aCard
 		             needsRemove: false.
-	aGame applyCardPlayFor: aCardPlay
+	
+	self applyStrategyFor: aSpaceship in: aGame using: aCardPlay.
+	
 ]

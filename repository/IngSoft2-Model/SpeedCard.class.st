@@ -1,6 +1,6 @@
 Class {
 	#name : #SpeedCard,
-	#superclass : #Card,
+	#superclass : #PermanentCard,
 	#category : #'IngSoft2-Model'
 }
 
@@ -24,5 +24,6 @@ SpeedCard >> playedOn: aGame by: aSpaceship to: anotherSpaceship [
 		             card: self
 		             to: anotherSpaceship
 		             needsRemove: false.
-	aGame applyCardPlayFor: aCardPlay
+	self applyStrategyFor: aSpaceship in: aGame using: aCardPlay.
+	"aGame applyCardPlayFor: aCardPlay"
 ]
