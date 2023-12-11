@@ -4,7 +4,7 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #actions }
 PermanentCard >> applyStrategyFor: aSpaceship in: aGame using: aCardPlay [
 	aGame turnSequence whoPlays = aSpaceship 
 	ifFalse: [ aGame punishPlayer: aSpaceship ]
