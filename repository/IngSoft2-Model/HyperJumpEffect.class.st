@@ -22,26 +22,10 @@ HyperJumpEffect class >> with: aCollectionOfPosiblesMoves [
 	^ self new initializeWith: aCollectionOfPosiblesMoves
 ]
 
-{ #category : #private }
-HyperJumpEffect >> decreasingSort: aCollectionOfPosibleMoves [
-
-	^aCollectionOfPosibleMoves sort: [ :distance1 :distance2 | 
-		distance1 amountInParsecs >= distance2 amountInParsecs ].
-]
-
 { #category : #initialization }
 HyperJumpEffect >> initializeWith: aCollectionOfPosiblesMoves [
 
 	state := NormalHyperJumpEffect with: aCollectionOfPosiblesMoves.
-	"index:=0.
-	posibleMoves:= (self decreasingSort:aCollectionOfPosiblesMoves)."
-]
-
-{ #category : #private }
-HyperJumpEffect >> numberOfDistanceByHyperJump [
-	index:= index+1.
-	(index > posibleMoves size) ifTrue:[index:=1.].
-	^posibleMoves at: index.
 ]
 
 { #category : #action }
