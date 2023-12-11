@@ -126,6 +126,23 @@ Board >> moveBackwards: aSpaceship by: numberOfBoxes [
 	self sortPositionsByRanking.
 ]
 
+{ #category : #actions }
+Board >> moveBackwards: aSpaceship toFinalDistance: aDistanceNumber [ 
+	| oldSpaceshipPosition  spaceshipNewDistanceInBox |
+	oldSpaceshipPosition := allSpaceshipsPositions detect: [ :each | each name = aSpaceship ].
+	spaceshipNewDistanceInBox :=oldSpaceshipPosition  distanceInBox + (aDistanceNumber amountInParsecs) negated.
+
+	self updateSpaceshipPositionOf: oldSpaceshipPosition
+		to: (SpaceshipPosition
+				for:aSpaceship
+				 at: oldSpaceshipPosition boxNumber
+				 distance: spaceshipNewDistanceInBox % (distancePerBox amountInParsecs) 
+				 laps: oldSpaceshipPosition lapNumber).
+	self
+		calculate: aSpaceship
+		newpositionUsing: spaceshipNewDistanceInBox // (distancePerBox amountInParsecs).
+]
+
 { #category : #action }
 Board >> moveSpaceshipsToTheFirstBox [
 

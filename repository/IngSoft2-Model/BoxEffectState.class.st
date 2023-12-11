@@ -12,5 +12,7 @@ BoxEffectState >> reverse [
 { #category : #action }
 BoxEffectState >> triggeredBy: aSpaceship with: aGame [
 
-	self subclassResponsibility
+	(aGame board)
+		move: aSpaceship
+		toFinalDistance: self numberOfDistanceByHyperJump
 ]

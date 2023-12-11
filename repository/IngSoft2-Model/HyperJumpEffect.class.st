@@ -3,7 +3,8 @@ Class {
 	#superclass : #BoxEffect,
 	#instVars : [
 		'posibleMoves',
-		'index'
+		'index',
+		'state'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -30,8 +31,10 @@ HyperJumpEffect >> decreasingSort: aCollectionOfPosibleMoves [
 
 { #category : #initialization }
 HyperJumpEffect >> initializeWith: aCollectionOfPosiblesMoves [
-	index:=0.
-	posibleMoves:= (self decreasingSort:aCollectionOfPosiblesMoves).
+
+	state := NormalHyperJumpEffect with: aCollectionOfPosiblesMoves.
+	"index:=0.
+	posibleMoves:= (self decreasingSort:aCollectionOfPosiblesMoves)."
 ]
 
 { #category : #private }
@@ -43,13 +46,15 @@ HyperJumpEffect >> numberOfDistanceByHyperJump [
 
 { #category : #action }
 HyperJumpEffect >> reverse [
-	"do nothing"
+	state := state reverse.
 ]
 
 { #category : #action }
 HyperJumpEffect >> triggeredBy: aSpaceship with: aGame [
 
-	(aGame board)
+	state triggeredBy: aSpaceship with: aGame.
+
+	"(aGame board)
 		move: aSpaceship
-		toFinalDistance: self numberOfDistanceByHyperJump
+		toFinalDistance: self numberOfDistanceByHyperJump"
 ]

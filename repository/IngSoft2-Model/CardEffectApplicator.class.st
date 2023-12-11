@@ -80,8 +80,6 @@ CardEffectApplicator >> applyRepeatCard [
 CardEffectApplicator >> applyReversealCard [
 	| boxEffect aPosition|
 	self assertSpaceship: cardPlay playedBy has: cardPlay card.
-	"boxEffect := (game board )lastBoxEffect.
-	boxEffect triggeredBy: cardPlay target with: game."
 	aPosition := cardPlay target.
 	boxEffect := ( game board ) boxAt: aPosition.
 	boxEffect reverse.
