@@ -118,12 +118,6 @@ CardEffectApplicator >> assertSpaceship: spaceshipNameThatPlaysCard has: aCard [
 ]
 
 { #category : #actions }
-CardEffectApplicator >> assertValidTurnFor: aSpaceship [
-
-	(game turnSequence) assertSpaceshipTurn: aSpaceship.
-]
-
-{ #category : #actions }
 CardEffectApplicator >> checkCardNeedsToBeRemoved [
 
 	cardPlay needsRemove ifFalse: [ (game handOf: cardPlay playedBy) removeFromHand: cardPlay card ]
