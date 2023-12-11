@@ -18,13 +18,6 @@ TurnSequence class >> with: aCollectionOfNames [
 	^ self new initializeWith: aCollectionOfNames
 ]
 
-{ #category : #action }
-TurnSequence >> assertSpaceshipTurn:aSpaceship [
-
-	(self whoPlays = aSpaceship) ifFalse:[Error signal:
-			'A permanent card cannot be played on another spaceship turn']
-]
-
 { #category : #initialization }
 TurnSequence >> initializeWith: aCollectionOfNames [
 
