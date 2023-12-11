@@ -1,6 +1,6 @@
 Class {
 	#name : #AccelerationCard,
-	#superclass : #Card,
+	#superclass : #PermanentCard,
 	#category : #'IngSoft2-Model'
 }
 
@@ -24,5 +24,5 @@ AccelerationCard >> playedOn: aGame by: aSpaceship [
 		             card: self
 		             to: aGame allSpaceshipsHands
 		             needsRemove: false.
-	aGame applyCardPlayFor: aCardPlay
+	self applyStrategyFor: aSpaceship in: aGame using: aCardPlay.
 ]

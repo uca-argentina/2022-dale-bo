@@ -302,10 +302,10 @@ RedoCardTest >> testSpaceshipBetaTriesToPlaysARedoCardNotInHisTurnAfterBetaPlays
 		by: 'Spaceship Beta'
 		to: 'Spaceship Alpha'.
 	game playATurn.
-	self
-		should: [ 
-		redoCard playedOn: game by: 'Spaceship Beta' to: 'Spaceship Alpha' ]
-		raise: Error
-		withMessage:
-		'A permanent card cannot be played on another spaceship turn'
+	redoCard playedOn: game by: 'Spaceship Beta' to: 'Spaceship Alpha'.
+		self
+		assert: 'Spaceship Beta'
+		isAt: 5
+		with: 1
+		in: game.
 ]

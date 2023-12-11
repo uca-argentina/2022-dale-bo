@@ -1,6 +1,6 @@
 Class {
 	#name : #RedoCard,
-	#superclass : #Card,
+	#superclass : #InstantCard,
 	#category : #'IngSoft2-Model'
 }
 
@@ -18,5 +18,6 @@ RedoCard >> playedOn: aGame by: aSpaceship to: anotherSpaceship [
 		             card: self
 		             to: anotherSpaceship
 		             needsRemove: false.
-	aGame applyCardPlayFor: aCardPlay
+	(aGame lastCardPlayed) applyStrategyFor: aSpaceship in: aGame using: aCardPlay.
+	"self applyStrategyFor: aSpaceship in: aGame using: aCardPlay."
 ]
